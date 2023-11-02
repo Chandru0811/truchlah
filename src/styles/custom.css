@@ -1021,7 +1021,7 @@ color: #656D9F;
 }
 
 .psd {
-   position: sticky;
+   /* position: sticky; */
    margin-bottom: -30px;
 }
 
