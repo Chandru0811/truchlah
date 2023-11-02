@@ -22,6 +22,7 @@ import Rewards from "./Components/Rewards";
 import Cancel from "./Components/Cancel";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   AOS.init({
@@ -30,6 +31,7 @@ function App() {
   });
   return (
     <Router>
+      <ToastContainer />
       <Head />
       <div className="content">
         <Routes>
