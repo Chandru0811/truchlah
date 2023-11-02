@@ -1,0 +1,39 @@
+#bun {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 45px;
+    text-align: center;
+
+    color: #106EEA;
+}
+
+.cardpay {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 31px;
+
+    color: #00387A;
+}
+
+
+.accordion-button::after {
+    content: none;
+}
+
+.tab tr {
+    border: none;
+}
+
+.table>:not(caption)>*>* {
+    padding: 0;
+}
+
+.amount #rupees {
+    background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+    border-radius: 47px;
+    color: #fff;
+}

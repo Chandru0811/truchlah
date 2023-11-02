@@ -1,0 +1,44 @@
+.me{
+    background-color: rgba(194, 194, 194, 0.07);
+}
+.me #one {
+    align-items: center;
+    width: 475.99px;
+    height: 612.25px;
+    left: 104px;
+}
+
+.me h4 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 47px;
+
+
+    color: #106EEA;
+}
+
+.me #two{
+    font-family: 'Enriqueta';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 130%;
+    /* or 36px */
+
+    letter-spacing: 1px;
+
+    color: #282D6C;
+}
+.me #three{
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 130%;
+/* or 23px */
+
+
+color: #656D9F;
+}

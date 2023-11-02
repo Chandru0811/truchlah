@@ -1,0 +1,39 @@
+#ContactForm form {
+    box-shadow: none;
+    border: none;
+    background-color: #fff;
+    border-radius: 0;
+    border-top: 15px solid #8423ca9a;
+    border-bottom: 15px solid #80bdffb7;
+}
+
+#ContactForm .form-group {
+    margin-bottom: 1rem;
+}
+
+#ContactForm .form-control {
+    border: none;
+    border-bottom: 2px solid #5d5c5c;
+    border-radius: 0;
+    padding: 0.5rem 0;
+    background-color: transparent;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#ContactForm .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+#ContactForm label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+}
+
+#Contactbtt {
+    background: #34517E;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 50px;
+    width: 60%;
+}

@@ -1,0 +1,28 @@
+#heros {
+    background-color: #fcf3f6;
+}
+
+#heros .btn-outline-secondary {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 33px;
+    text-align: left;
+    margin-left: 6px;
+    color: #808080;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50px;
+}
+
+#heros button img {
+    height: 40px;
+    width: 40px;
+    float: left;
+}
+
+#heros #ShiftBtn:hover {
+    background-color: #808080;
+    color: #FFFFFF;
+}

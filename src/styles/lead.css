@@ -1,0 +1,48 @@
+.we {
+    background-color: rgba(194, 194, 194, 0.07);
+
+}
+
+.we h4 {
+    font-family: 'raleway';
+}
+
+.we h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 47px;
+    color: rgba(16, 110, 234, 1);
+}
+
+.we li {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 38px;
+
+    color: rgba(0, 0, 0, 0.79);
+}
+
+.we ul {
+    margin-top: 100px;
+
+}
+
+.we #point {
+
+    background: rgba(194, 194, 194, 0.07);
+    border-style: groove;
+    border: 8px solid #C3BFF0;
+    border-top: none;
+    border-right: none;
+}
+
+.we #icon {
+    width: 555px;
+    height: 420px;
+    left: 15px;
+    border-radius: 14px;
+}

@@ -1,0 +1,83 @@
+footer {
+
+    background: linear-gradient(89.87deg, rgba(116, 0, 255, 0.211156) 0.11%, rgba(97, 0, 255, 0.211156) 49.6%, rgba(0, 41, 255, 0.211156) 99.89%);
+}
+
+footer p {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+footer span {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+footer hr {
+color: #ff2e2e;   
+
+border: px solid  #ff2e2e;
+
+}
+
+
+.help a {
+    text-decoration: none;
+}
+
+.help .h {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+.help .b {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+.a img {
+    width: 168px;
+}
+
+.f hr {
+    border: 1px solid #131313;
+    width: 100%;
+}
+
+@media only screen and(max-width:768px) {
+    .mb-4 h5 {
+
+        align-content: center;
+        justify-content: center;
+    }
+   
+}
+
+@media only screen and(max-width:414px) {
+    .mb-4 h5 {
+
+        align-content: center;
+        justify-content: center;
+    }
+}
+    

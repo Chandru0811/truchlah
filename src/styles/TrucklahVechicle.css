@@ -1,0 +1,108 @@
+#AvaHeading {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 47px;
+  color: #106EEA;
+}
+
+#Vechicle .btn-primary {
+  position: relative;
+  background-color: transparent;
+  color: #000;
+  border: 2px solid #00000051;
+  padding: 10px 20px;
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 1em;
+}
+
+#Vechicle .btn-primary:before {
+  /* content: '\2192'; */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  font-size: 1em;
+}
+
+#Vechicle .btn-primary:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+#VehCaro {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#VehCaroMain {
+  background-color: rgba(188, 169, 169, 0.1);
+  padding-left: 0%;
+  padding-right: 0%;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-menu {
+  background-color: white;
+  /* padding: 20px; */
+  /* width: 400px; */
+  max-width: 70%;
+  border-radius: 5px;
+}
+
+.close-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+#vehicleForm {
+  padding-left: 5%;
+padding-right: 5%;
+  background: linear-gradient(180deg, #8F6CF9 0%, rgba(194, 49, 240, 0.211156) 99.42%, rgba(200, 33, 234, 0.0414754) 99.74%, rgba(179, 62, 198, 0) 100%);
+
+}
+
+#vehicleForm form {
+  box-shadow: none;
+  border: none;
+}
+
+#vehicleForm #VehicleButton {
+  background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+  border-radius: 28px;
+  color: #fff;
+  border: none;
+  width: 70%;
+}
+
+@media screen and (max-width: 767px) {
+  .popup-overlay {
+    position: relative;
+    justify-content: center;
+    align-items:first baseline;
+    margin-top: 10%;
+    background-color: rgba(0, 0, 0, 0);
+    bottom: auto;
+    
+  }
+  .popup-menu {
+    max-width: 90%;
+  }
+}

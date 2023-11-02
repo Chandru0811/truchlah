@@ -1,0 +1,69 @@
+#accordion #AccoMos{
+      font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 47px;
+  color: #106EEA;
+}
+#accordion{
+background-color: #F9F9F9;
+}
+
+#accordion #break {
+    margin-top: 4%;
+}
+
+#accordion #brk {
+    margin-top: 4%;
+}
+
+#accordion hr {
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1.5px;
+    border-color: black;
+}
+
+
+#accordion #one {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 49px;
+    color: #656FE0;
+}
+
+#accordion #two {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 27px;
+    letter-spacing: 0.04em;
+    color: #000000;
+}
+
+#accordion #three {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0.04em;
+    color: rgba(0, 0, 0, 0.53);
+    background: rgba(217, 217, 217, 0.24);
+}
+
+#accordion button {
+    box-shadow: 1px 1px 6px #d3d2d2;
+}
+
+#accordion #land {
+    margin-bottom: 20px;
+}

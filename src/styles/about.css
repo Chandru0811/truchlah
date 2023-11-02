@@ -1,0 +1,79 @@
+.what {
+    background-color: rgba(194, 194, 194, 0.07);
+}
+
+.what h4 {
+    font-family: 'raleway';
+}
+
+.what h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 47px;
+    color: rgba(16, 110, 234, 1);
+}
+
+.go img {
+    width: 547px;
+    height: 410px;
+   
+}
+
+.go h4 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 42px;
+
+    color: #000000;
+}
+
+.go h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 38px;
+
+    color: #000000;
+}
+
+.commit #one {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 35px;
+    letter-spacing: 0.01em;
+
+    color: #000000;
+}
+
+.commit #two {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 33px;
+    letter-spacing: 0.01em;
+
+    color: #000000;
+}
+
+.commit li {
+    list-style-type: none
+}
+
+.commit li {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 3.0;
+    letter-spacing: 0.01em;
+
+    color: #000000;
+}

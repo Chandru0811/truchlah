@@ -1,0 +1,64 @@
+.LoginHeader {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 33px;
+    line-height: 65px;
+    text-align: center;
+    color: #000000;
+}
+
+.LoginTitle {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 49px;
+    color: #0E2063;
+
+}
+
+.LoginSubHead {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 33px;
+    /* identical to box height */
+    color: #0E2063;
+}
+
+.LoginContent {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 27px;
+    color: #4E4E54;
+}
+
+.LoginOR {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 35px;
+
+    color: #0E2063;
+}
+
+.or-line-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .or-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #000;
+  }
+  
+  .or-line-text {
+    padding: 0 10px;
+  }
+  
