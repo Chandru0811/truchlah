@@ -1,0 +1,1287 @@
+/* About css  */
+
+
+.what {
+    background-color: rgba(194, 194, 194, 0.07);
+}
+
+.what h4 {
+    font-family: 'raleway';
+}
+
+.what h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 47px;
+    color: rgba(16, 110, 234, 1);
+}
+
+.go img {
+    width: 547px;
+    height: 410px;
+   
+}
+
+.go h4 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 42px;
+
+    color: #000000;
+}
+
+.go h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 38px;
+
+    color: #000000;
+}
+
+.commit #one {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 35px;
+    letter-spacing: 0.01em;
+
+    color: #000000;
+}
+
+.commit #two {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 33px;
+    letter-spacing: 0.01em;
+
+    color: #000000;
+}
+
+.commit li {
+    list-style-type: none
+}
+
+.commit li {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 3.0;
+    letter-spacing: 0.01em;
+
+    color: #000000;
+}
+
+/* Accordian  */
+
+#accordion #AccoMos{
+    font-family: 'Raleway';
+font-style: normal;
+font-weight: 600;
+font-size: 34px;
+line-height: 47px;
+color: #106EEA;
+}
+#accordion{
+background-color: #F9F9F9;
+}
+
+#accordion #break {
+  margin-top: 4%;
+}
+
+#accordion #brk {
+  margin-top: 4%;
+}
+
+#accordion hr {
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1.5px;
+  border-color: black;
+}
+
+
+#accordion #one {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 49px;
+  color: #656FE0;
+}
+
+#accordion #two {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 27px;
+  letter-spacing: 0.04em;
+  color: #000000;
+}
+
+#accordion #three {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.04em;
+  color: rgba(0, 0, 0, 0.53);
+  background: rgba(217, 217, 217, 0.24);
+}
+
+#accordion button {
+  box-shadow: 1px 1px 6px #d3d2d2;
+}
+
+#accordion #land {
+  margin-bottom: 20px;
+}
+
+/* BacktoTop  */
+
+.back-to-top-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #03036e;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .back-to-top-button:hover{
+    background-color: #0a0abf;
+  }
+  
+  .back-to-top-button.visible {
+    opacity: 1;
+  }
+
+  /* Cancel  */
+
+  .Cancel{
+    background-color: #faf5f6;
+}
+
+.Cancel .checkmark{
+   font-size: 50px;
+   color: #FF6D6D;
+}
+
+.Cancel #button{
+    background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);;
+    border-radius: 30px;
+}
+
+.Cancel .circle {
+    width: 100px;
+    height: 100px;
+    background-color: #fff; 
+    border-radius: 50%;
+    border: 1px solid #d6cbcb;
+  }
+  
+  .Cancel .text {
+    margin: auto;
+  }
+
+  /* Check Details  */
+
+  .summary #Ace {
+    background-color: #faf5f6;
+}
+
+.summary #address {
+    background-color: #fff;
+}
+
+.summary #NextMove {
+    background-color: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+}
+
+.summary #PickUp {
+    border: none;
+    border-right: 1px solid #e4e2e2;
+}
+
+.summary .line {
+    border-top: 1px solid #e4e2e2;
+}
+
+.summary .row>* {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Contact Us  */
+
+#ContactForm form {
+    box-shadow: none;
+    border: none;
+    background-color: #fff;
+    border-radius: 0;
+    border-top: 15px solid #8423ca9a;
+    border-bottom: 15px solid #80bdffb7;
+}
+
+#ContactForm .form-group {
+    margin-bottom: 1rem;
+}
+
+#ContactForm .form-control {
+    border: none;
+    border-bottom: 2px solid #5d5c5c;
+    border-radius: 0;
+    padding: 0.5rem 0;
+    background-color: transparent;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#ContactForm .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+#ContactForm label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+}
+
+#Contactbtt {
+    background: #34517E;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 50px;
+    width: 60%;
+}
+
+/* Footer  */
+
+footer {
+
+    background: linear-gradient(89.87deg, rgba(116, 0, 255, 0.211156) 0.11%, rgba(97, 0, 255, 0.211156) 49.6%, rgba(0, 41, 255, 0.211156) 99.89%);
+}
+
+footer p {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+footer span {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+footer hr {
+color: #ff2e2e;   
+
+border: px solid  #ff2e2e;
+
+}
+
+
+.help a {
+    text-decoration: none;
+}
+
+.help .h {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+.help .b {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #131313;
+}
+
+.a img {
+    width: 168px;
+}
+
+.f hr {
+    border: 1px solid #131313;
+    width: 100%;
+}
+
+@media only screen and(max-width:768px) {
+    .mb-4 h5 {
+
+        align-content: center;
+        justify-content: center;
+    }
+   
+}
+
+@media only screen and(max-width:414px) {
+    .mb-4 h5 {
+
+        align-content: center;
+        justify-content: center;
+    }
+}
+    
+
+/* Header  */
+
+html,
+body {
+    scroll-behavior: smooth;
+    scroll-padding-top: 20%;
+}
+
+.navbar {
+    display: flex;
+    color: rgba(255, 255, 255, 0.72);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.navbar img {
+    width: 150px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    padding-left: 30px;
+    line-height: 18px;
+    color: #161515;
+
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #fff;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    background-color: #02046b;
+    border-radius: 5px;
+
+}
+
+.nav-link.active {
+    background-color: #02046b;
+}
+
+.btn-outline-success {
+    width: 140px;
+    height: 44px;
+    color: #fff !important;
+    background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+    border-radius: 28px;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 18px;
+
+    color: #FFFFFF;
+}
+
+@media only screen and(max-width:414px) {
+    .navbar-collapse {
+        padding-left: 30px;
+    }
+
+
+}
+
+@media only screen and(max-width:768px) {
+    .navbar-collapse {
+        padding-left: 30px;
+    }
+
+
+}
+
+.navbar-light .navbar-nav .Links {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    padding-left: 30px;
+    line-height: 18px;
+    color: #161515;
+}
+
+.Links {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.Links {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    background: 0 0;
+    border: 0;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
+.navbar-light .navbar-nav .Links:hover {
+    color: #fff;
+    font-weight: 500;
+}
+
+.Links:hover {
+    background-color: #02046b;
+    border-radius: 5px;
+
+}
+
+.Links:active {
+    background-color: #02046b;
+}
+
+@media (min-width: 992px) {
+    .navbar-expand-lg .navbar-nav .Links {
+        padding-right: var(--bs-navbar-nav-link-padding-x);
+        padding-left: var(--bs-navbar-nav-link-padding-x);
+    }
+}
+
+/* Hero  */
+
+#HeroHed {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 56px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.62);
+}
+
+#HeroTex {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 33px;
+    text-align: center;
+    letter-spacing: 0.02em;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+#HeroBtn {
+    background: #3E4D6A;
+    border-radius: 47px;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+    padding: 7px;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #FFFFFF;
+}
+
+/* House Shift  */
+
+#MapContainer {
+    width: 100%;
+    height: 60vh;
+}
+
+
+
+.lab Label {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 23px;
+
+    color: #808080;
+
+
+}
+
+.lab img {
+    height: 20px;
+    width: 20px;
+    float: left;
+}
+
+
+#AddStop {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #b9b9b9;
+}
+
+
+#NextMove {
+    background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+    border-radius: 28px;
+}
+
+/* Invoice  */
+
+
+.invoice {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+  }
+  
+  .invoice h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .invoice strong {
+    font-weight: bold;
+  }
+  
+  .invoice table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .invoice th,
+  .invoice td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .invoice tfoot td {
+    font-weight: bold;
+    border-top: 2px solid #ccc;
+  }
+  
+  .invoice button {
+    margin-top: 20px;
+    
+  }
+
+  #BackToHome{
+
+    text-decoration: none;
+  }
+  
+
+
+  .invoice .pick{
+    float: left;
+  }
+
+  .invoice .drop{
+    float: right;
+  }
+  
+  /* Invoices  */
+
+  #closeWhat {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 30px;
+
+    color: #31547E;
+}
+
+#closeBefore {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 30px;
+
+    color: #747373;
+
+}
+
+/* Lead  */
+
+.we {
+    background-color: rgba(194, 194, 194, 0.07);
+
+}
+
+.we h4 {
+    font-family: 'raleway';
+}
+
+.we h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 47px;
+    color: rgba(16, 110, 234, 1);
+}
+
+.we li {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 38px;
+
+    color: rgba(0, 0, 0, 0.79);
+}
+
+.we ul {
+    margin-top: 100px;
+
+}
+
+.we #point {
+
+    background: rgba(194, 194, 194, 0.07);
+    border-style: groove;
+    border: 8px solid #C3BFF0;
+    border-top: none;
+    border-right: none;
+}
+
+.we #icon {
+    width: 555px;
+    height: 420px;
+    left: 15px;
+    border-radius: 14px;
+}
+
+/* Login  */
+
+.LoginHeader {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 33px;
+    line-height: 65px;
+    text-align: center;
+    color: #000000;
+}
+
+.LoginTitle {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 49px;
+    color: #0E2063;
+
+}
+
+.LoginSubHead {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 33px;
+    /* identical to box height */
+    color: #0E2063;
+}
+
+.LoginContent {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 27px;
+    color: #4E4E54;
+}
+
+.LoginOR {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 35px;
+
+    color: #0E2063;
+}
+
+.or-line-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .or-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #000;
+  }
+  
+  .or-line-text {
+    padding: 0 10px;
+  }
+  
+/* Map  */
+
+#MapContainer {
+    width: 100%;
+    height: 60vh;
+}
+
+
+
+.lab Label {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 23px;
+
+    color: #808080;
+
+
+}
+
+.lab img {
+    height: 20px;
+    width: 20px;
+    float: left;
+}
+
+
+#AddStop {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #b9b9b9;
+}
+
+
+#NextMove {
+    background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+    border-radius: 28px;
+}
+
+/* Mobile  */
+
+.me{
+    background-color: rgba(194, 194, 194, 0.07);
+}
+.me #one {
+    align-items: center;
+    width: 475.99px;
+    height: 612.25px;
+    left: 104px;
+}
+
+.me h4 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 47px;
+
+
+    color: #106EEA;
+}
+
+.me #two{
+    font-family: 'Enriqueta';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 130%;
+    /* or 36px */
+
+    letter-spacing: 1px;
+
+    color: #282D6C;
+}
+.me #three{
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 130%;
+/* or 23px */
+
+
+color: #656D9F;
+}
+
+/* Payment  */
+
+#bun {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 45px;
+    text-align: center;
+
+    color: #106EEA;
+}
+
+.cardpay {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 31px;
+
+    color: #00387A;
+}
+
+
+.accordion-button::after {
+    content: none;
+}
+
+.tab tr {
+    border: none;
+}
+
+.table>:not(caption)>*>* {
+    padding: 0;
+}
+
+.amount #rupees {
+    background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+    border-radius: 47px;
+    color: #fff;
+}
+
+/* Register  */
+
+.LoginHeader {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 33px;
+    line-height: 65px;
+    text-align: center;
+    color: #000000;
+}
+
+.LoginTitle {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 49px;
+    color: #0E2063;
+
+}
+
+.LoginSubHead {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 33px;
+    /* identical to box height */
+    color: #0E2063;
+}
+
+.LoginContent {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 27px;
+    color: #4E4E54;
+}
+
+.LoginOR {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 35px;
+
+    color: #0E2063;
+}
+
+.or-line-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .or-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #000;
+  }
+  
+  .or-line-text {
+    padding: 0 10px;
+  }
+  
+/* Rewards  */
+
+.my-custom-popup {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Shift  */
+
+  #heros {
+    background-color: #fcf3f6;
+}
+
+#heros .btn-outline-secondary {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 33px;
+    text-align: left;
+    margin-left: 6px;
+    color: #808080;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50px;
+}
+
+#heros button img {
+    height: 40px;
+    width: 40px;
+    float: left;
+}
+
+#heros #ShiftBtn:hover {
+    background-color: #808080;
+    color: #FFFFFF;
+}
+
+/* Shift Pack Deliver  */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap');
+
+.fullbody {
+   background-color: white;
+}
+
+.bottom {
+   background-color: #ece1f2;
+}
+
+#cardimg {
+   width: 70px;
+}
+
+.psd {
+   position: sticky;
+   margin-bottom: -30px;
+}
+
+.psd h1 {
+   color: rgb(28, 80, 139);
+
+}
+
+.firstcard {
+   padding-top: 50px;
+}
+
+.initalcard {
+   width: 85%;
+
+   background-color: white;
+   box-shadow: 1px 1px 1px 1px rgb(205, 207, 207);
+   border: 0.6px solid rgb(252, 250, 250);
+}
+
+.initalcard .container p {
+   align-content: start;
+   font-size: 16px;
+   color: #918f8f;
+   padding: 10px;
+}
+
+.servicecardcontainer {
+   padding-bottom: 30px;
+}
+
+.initalcard .container .row h6 span {
+   background-color: #e33955;
+   padding-left: 5px;
+   padding-right: 5px;
+   margin-right: 10px;
+   color: white;
+   border-radius: 2px;
+}
+
+.container .row .shiftingcard {
+
+   border-radius: 2px;
+   padding-top: 20px;
+   padding-bottom: 20px;
+   background-color: white;
+}
+
+
+.dividerdiv h2 {
+   color: rgb(28, 80, 139);
+}
+
+.dividerdiv {
+   margin: 60px 0px;
+}
+
+.dividerdiv h6 {
+   font-size: 22px;
+   font-weight: bold;
+   font-family: 'Cormorant Garamond', serif;
+}
+
+.shiftingcard div,
+.imgul {
+   align-items: end;
+   width: 50px;
+   height: 2px;
+   background-color: #e33955;
+
+}
+
+.shiftingcard p {
+   padding: 0px 10px;
+}
+
+.servicecardcontainer .shiftingcard {
+   box-shadow: 1px 1px 1px 1px rgb(205, 207, 207);
+   border: .6px solid rgb(252, 250, 250);
+}
+
+.servicecardcontainer .shiftingcard hr {
+   color: #9e9d9d;
+}
+
+@-webkit-keyframes pop-on-hover {
+   50% {
+      -webkit-transform: scale(1.2);
+      transform: scale(1.2);
+   }
+}
+
+@keyframes pop-on-hover {
+   50% {
+      -webkit-transform: scale(1.2);
+      transform: scale(1.2);
+   }
+}
+
+.pop-on-hover {
+   display: inline-block;
+   vertical-align: middle;
+   -webkit-transform: perspective(1px) translateZ(0);
+   transform: perspective(1px) translateZ(0);
+   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+
+.pop-on-hover:hover,
+.pop-on-hover:focus,
+.pop-on-hover:active {
+   -webkit-animation-name: pop-on-hover;
+   animation-name: pop-on-hover;
+   -webkit-animation-duration: 0.3s;
+   animation-duration: 0.3s;
+   -webkit-animation-timing-function: linear;
+   animation-timing-function: linear;
+   -webkit-animation-iteration-count: 1;
+   animation-iteration-count: 1;
+}
+
+/* Success Full  */
+
+.Success{
+    background-color: #faf5f6;
+}
+
+.Success .checkmark{
+   font-size: 50px;
+   color: #4D96ED;
+}
+
+.Success #button{
+    background-color: #1BC24A;
+    border-radius: 30px;
+}
+
+.Success .circle {
+    width: 100px;
+    height: 100px;
+    background-color: #fff; 
+    border-radius: 50%;
+    border: 1px solid #d6cbcb;
+  }
+  
+  .Success .text {
+    margin: auto;
+  }
+
+  /* Trucklah Vechicle  */
+
+  #AvaHeading {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 47px;
+    color: #106EEA;
+  }
+  
+  #Vechicle .btn-primary {
+    position: relative;
+    background-color: transparent;
+    color: #000;
+    border: 2px solid #00000051;
+    padding: 10px 20px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 1em;
+  }
+  
+  #Vechicle .btn-primary:before {
+    /* content: '\2192'; */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-size: 1em;
+  }
+  
+  #Vechicle .btn-primary:hover {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  #VehCaro {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  #VehCaroMain {
+    background-color: rgba(188, 169, 169, 0.1);
+    padding-left: 0%;
+    padding-right: 0%;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-menu {
+    background-color: white;
+    /* padding: 20px; */
+    /* width: 400px; */
+    max-width: 70%;
+    border-radius: 5px;
+  }
+  
+  .close-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  #vehicleForm {
+    padding-left: 5%;
+  padding-right: 5%;
+    background: linear-gradient(180deg, #8F6CF9 0%, rgba(194, 49, 240, 0.211156) 99.42%, rgba(200, 33, 234, 0.0414754) 99.74%, rgba(179, 62, 198, 0) 100%);
+  
+  }
+  
+  #vehicleForm form {
+    box-shadow: none;
+    border: none;
+  }
+  
+  #vehicleForm #VehicleButton {
+    background: linear-gradient(180deg, #6C54FF 0%, #AD00FF 100%);
+    border-radius: 28px;
+    color: #fff;
+    border: none;
+    width: 70%;
+  }
+  
+  @media screen and (max-width: 767px) {
+    .popup-overlay {
+      position: relative;
+      justify-content: center;
+      align-items:first baseline;
+      margin-top: 10%;
+      background-color: rgba(0, 0, 0, 0);
+      bottom: auto;
+      
+    }
+    .popup-menu {
+      max-width: 90%;
+    }
+  }
+
+  
+
+
+
+
+
+
+  
