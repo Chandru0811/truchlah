@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/about.css";
+import "../styles/custom.css";
 import packers from "../asset/packers.png";
 import icon from "../asset/icon.svg";
 function Lead() {
