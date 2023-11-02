@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/Login.css";
+import "../styles/custom.css";
 import Logins from "../asset/Login.png";
 import { AiOutlineGoogle } from "react-icons/ai";
 import FloatingLabel from "react-bootstrap/FloatingLabel";

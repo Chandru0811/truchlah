@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/ConfirmLocation.css";
+import "../styles/custom.css";
 import { BsSearch } from "react-icons/bs";
 
 import {

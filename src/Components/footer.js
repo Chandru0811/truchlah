@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/footer.css";
+import "../styles/custom.css";
 import google from "../asset/google play.png";
 import app from "../asset/app store.png";
 import { FaTwitter, FaFacebookF, FaLinkedin } from "react-icons/fa";

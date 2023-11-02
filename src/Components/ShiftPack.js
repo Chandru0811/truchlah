@@ -1,5 +1,5 @@
 import Container from "react-bootstrap/Container";
-import "../styles/Shiftpackdeliver.css";
+import "../styles/custom.css";
 import boxImg from "../asset/boxicon.png";
 import monitorImg from "../asset/monitorImg.png";
 import calenderImg from "../asset/itemShifting.png";

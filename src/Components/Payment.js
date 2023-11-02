@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Table } from 'react-bootstrap';
-import '../styles/Payment.css';
+import "../styles/custom.css";
 import card from "../asset/card.png";
 import upi from "../asset/UPI.png";
 import phpay from "../asset/phonePay (2).png";

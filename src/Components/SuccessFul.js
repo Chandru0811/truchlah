@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/SuccessFul.css";
+import "../styles/custom.css";
 import { Link } from "react-router-dom";
 
 function Successfull() {

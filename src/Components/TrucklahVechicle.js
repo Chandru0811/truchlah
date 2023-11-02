@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/TrucklahVechicle.css";
+import "../styles/custom.css";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Carousel from "react-multi-carousel";

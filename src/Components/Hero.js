@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Hero.css";
+import "../styles/custom.css";
 import HeroImg from "../asset/TrucklahHeroImage.png";
 import HeroVideoImg from "../asset/HeroVideoImage-removebg-preview.png";
 import { Link } from "react-router-dom";

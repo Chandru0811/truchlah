@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Map.css";
+import "../styles/custom.css";
 import Green from "../asset/Ellipse 2.png";
 import red from "../asset/Ellipse 3.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";

@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/mobile.css";
+import "../styles/custom.css";
 import mobile from "../asset/mobile.png";
 import google from "../asset/google play.png";
 import app from "../asset/app store.png";

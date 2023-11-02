@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Shift.css";
+import "../styles/custom.css";
 import home from "../asset/Rectangle 19 (1).png";
 import item from "../asset/icons8-open-box-48 1.png";
 import truck from "../asset/Logistic workers delivering meds 1.png";
