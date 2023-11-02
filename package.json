@@ -20,7 +20,9 @@
     "react-multi-carousel": "^2.8.3",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "stable": "latest_version",
+    "rollup-plugin-terser": "latest_version" 
   },
   "scripts": {
     "start": "react-scripts start",
