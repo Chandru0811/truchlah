@@ -23,6 +23,9 @@ import Cancel from "./Components/Cancel";
 import User from "./Components/Profile";
 import Coupons from "./Components/Coupons";
 import Order from "./Components/Rides";
+import About from "./Components/home/about";
+import ContactUs from "./Components/home/ContactUs";
+import ShiftPack from "./Components/home/ShiftPack";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ToastContainer } from "react-toastify";
@@ -41,6 +44,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/ShiftPack" element={<ShiftPack />} />
+          <Route path="/about" element={ <About />} />
+          <Route path="/contact" element={ <ContactUs />} />
           <Route path="/forgetpassword" element={<ForgotPassword />} />
           <Route path="/otp" element={<OTP />} />
           <Route path="/map" element={<Maps />} />

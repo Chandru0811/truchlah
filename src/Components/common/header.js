@@ -49,7 +49,7 @@ function OffcanvasExample() {
                               </Link>
                             </li>
                             <li class="nav-item px-2">
-                              <Link className="Links" to="">
+                              <Link className="Links" to="/ShiftPack">
                                 OUR SERVICES
                               </Link>
                             </li>
