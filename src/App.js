@@ -20,6 +20,9 @@ import Payment from "./Components/Payment";
 import Invoices from "./Components/Invoices";
 import Rewards from "./Components/Rewards";
 import Cancel from "./Components/Cancel";
+import User from "./Components/Profile";
+import Coupons from "./Components/Coupons";
+import Order from "./Components/Rides";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ToastContainer } from "react-toastify";
@@ -51,6 +54,9 @@ function App() {
           <Route path="/invoice" element={<Invoices />} />
           <Route path="/rewards" element={<Rewards />} />
           <Route path="/cancelorder" element={<Cancel />} />
+          <Route path="/user" element={<User />} />
+          <Route path="/rides" element={<Order />} />
+          <Route path="/coupons" element={<Coupons />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
