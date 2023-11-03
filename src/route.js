@@ -22,6 +22,9 @@ import Cancel from "./pages/common_pages/Cancel";
 import User from "./pages/profile/Profile";
 import Coupons from "./pages/profile/Coupons";
 import Order from "./pages/profile/Rides";
+import ShiftPack from "./Components/home/ShiftPack";
+import About from "./Components/home/about";
+import ContactUs from "./Components/home/ContactUs";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ToastContainer } from "react-toastify";
@@ -40,6 +43,9 @@ function UserRoute() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/ShiftPack" element={<ShiftPack />} />
+          <Route path="/about" element={ <About />} />
+          <Route path="/contact" element={ <ContactUs />} />
           <Route path="/forgetpassword" element={<ForgotPassword />} />
           <Route path="/otp" element={<OTP />} />
           <Route path="/map" element={<Maps />} />
