@@ -1,6 +1,6 @@
 import React from "react";
-import ContactImg from '../asset/contact image.png';
-import "../styles/custom.css";
+import ContactImg from '../../asset/contact image.png';
+import "../../styles/custom.css";
 
 function Section3() {
     return (

@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/custom.css";
-import packers from "../asset/packers.png";
-import icon from "../asset/icon.svg";
+import "../../styles/custom.css";
+import packers from "../../asset/packers.png";
+import icon from "../../asset/icon.svg";
 function Lead() {
   return (
     <div className="container-fluid what" id="About">

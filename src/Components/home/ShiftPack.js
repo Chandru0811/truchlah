@@ -1,13 +1,13 @@
 import Container from "react-bootstrap/Container";
-import "../styles/custom.css";
-import boxImg from "../asset/boxicon.png";
-import monitorImg from "../asset/monitorImg.png";
-import calenderImg from "../asset/itemShifting.png";
-import moversImg from "../asset/moversImg.png";
-import itemShiftingImg from "../asset/itemShifting.png";
-import houseshiftingImg from "../asset/houseShifting.png";
-import industrialMoveImg from "../asset/industrialMoveImg.png";
-import commercialImg from "../asset/commercialShifting.png";
+import "../../styles/custom.css";
+import boxImg from "../../asset/boxicon.png";
+import monitorImg from "../../asset/monitorImg.png";
+import calenderImg from "../../asset/itemShifting.png";
+import moversImg from "../../asset/moversImg.png";
+import itemShiftingImg from "../../asset/itemShifting.png";
+import houseshiftingImg from "../../asset/houseShifting.png";
+import industrialMoveImg from "../../asset/industrialMoveImg.png";
+import commercialImg from "../../asset/commercialShifting.png";
 
 
 function Containerpsd() {

@@ -1,6 +1,6 @@
 import React from "react";
-import "../styles/custom.css";
-import truck from "../asset/delivery-trucks-road.jpg";
+import "../../styles/custom.css";
+import truck from "../../asset/delivery-trucks-road.jpg";
 function Lead() {
     return (
         <div className="container-fluid we py-5">

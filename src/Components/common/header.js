@@ -2,10 +2,10 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import logo from "../asset/logo.png";
+import logo from "../../asset/logo.png";
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
-import "../styles/custom.css";
+import "../../styles/custom.css";
 
 function OffcanvasExample() {
   return (
@@ -49,7 +49,7 @@ function OffcanvasExample() {
                               </Link>
                             </li>
                             <li class="nav-item px-2">
-                              <Link className="Links" to="/ShiftPack">
+                              <Link className="Links" to="">
                                 OUR SERVICES
                               </Link>
                             </li>

@@ -1,12 +1,12 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Head from "./Components/header";
-import Foot from "./Components/footer";
-import Home from "./Components/Home";
+import Head from "./Components/common/header";
+import Foot from "./Components/common/footer";
+import Home from "./pages/Home";
 import NotFound from "./Components/NotFound";
-import BackToTopButton from "./Components/BacktoTop";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
+import BackToTopButton from "./Components/common/BacktoTop";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import ForgotPassword from "./Components/ForgetPassword";
 import OTP from "./Components/OTP";
 import Maps from "./Components/Map";

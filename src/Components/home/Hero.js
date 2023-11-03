@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/custom.css";
-import HeroImg from "../asset/TrucklahHeroImage.png";
-import HeroVideoImg from "../asset/HeroVideoImage-removebg-preview.png";
+import "../../styles/custom.css";
+import HeroImg from "../../asset/TrucklahHeroImage.png";
+import HeroVideoImg from "../../asset/HeroVideoImage-removebg-preview.png";
 import { Link } from "react-router-dom";
 
 function Section1() {

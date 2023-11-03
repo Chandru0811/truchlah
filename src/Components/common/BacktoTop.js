@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaArrowUp } from 'react-icons/fa';
-import "../styles/custom.css";
+import "../../styles/custom.css";
 
 
 const BackToTopButton = () => {

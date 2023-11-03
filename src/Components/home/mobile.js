@@ -1,8 +1,8 @@
 import React from "react";
-import "../styles/custom.css";
-import mobile from "../asset/mobile.png";
-import google from "../asset/google play.png";
-import app from "../asset/app store.png";
+import "../../styles/custom.css";
+import mobile from "../../asset/mobile.png";
+import google from "../../asset/google play.png";
+import app from "../../asset/app store.png";
 function mob() {
   const navigateToGooglePlayStore = () => {
     window.open(
