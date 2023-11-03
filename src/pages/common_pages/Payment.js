@@ -37,7 +37,7 @@ const CardValidity = () => {
 
     return (
 
-        <div className="row" style={{backgroundColor: "#faf5f6"}}>
+        <div className="container-fluid" style={{backgroundColor: "#faf5f6"}}>
             <div className="container-fluid" style={{padding:'0%',margin: '0%'}}>
                 <div>
                     <p className="col-12 text-center y py-5" id="bun">MAKE YOUR PAYMENT</p>
@@ -157,7 +157,7 @@ const CardValidity = () => {
                        <b> <div className=""><p className='mb-1'> &#8377; 750.00</p>view details</div></b>
                     </span>
                     <span>
-                        <div className="p-2"><Link to='/successful'> <button className='btn btn-info btn-lg py-2'id='rupees'>pay now    &#x2192;   </button></Link>
+                        <div className="p-2"><Link to='/successful'> <button className='btn'id='rupees'>pay now    &#x2192;</button></Link>
                         </div>
                     </span>
                 </div>

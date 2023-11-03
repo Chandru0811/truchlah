@@ -11,7 +11,7 @@ function Section3() {
                         <img className="img-fluid" src={ContactImg} alt="logo" data-aos="flip-up" style={{borderRadius: '5px'}} />
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 py-3" id="ContactForm">
-                        <form className="px-5">
+                        <form className="px-5 pt-4">
                             <div className="form-group">
                                 <label>Name</label>
                                 <input type="text" className="form-control" />
