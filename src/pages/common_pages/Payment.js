@@ -13,8 +13,8 @@ import discount from "../../asset/discount.png";
 import Accordion from 'react-bootstrap/Accordion';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import Captcha from '../../Components/Captcha';
-import Mandy from '../../Components/Mandy';
+import Captcha from '../../Components/common/Captcha';
+import Mandy from '../../Components/common/Mandy';
 import { Link } from "react-router-dom";
 
 const CardValidity = () => {
