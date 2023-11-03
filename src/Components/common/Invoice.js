@@ -1,8 +1,7 @@
 import React from "react";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import "../styles/custom.css";
-// import { ImDownload2 } from "react-icons/im";
+import "../../styles/custom.css";
 import { RiDownload2Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 

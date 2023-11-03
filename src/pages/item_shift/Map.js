@@ -1,9 +1,9 @@
 import React from "react";
-import "../styles/custom.css";
-import Green from "../asset/Ellipse 2.png";
-import red from "../asset/Ellipse 3.png";
+import "../../styles/custom.css";
+import Green from "../../asset/Ellipse 2.png";
+import red from "../../asset/Ellipse 3.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { FaMinus } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -12,12 +12,10 @@ import {
   useJsApiLoader,
   GoogleMap,
   PolylineF,
-  Marker,
   Autocomplete,
-  DirectionsRenderer,
   MarkerF,
 } from "@react-google-maps/api";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 const center = { lat: 13.05, lng: 80.2824 };
 const left = { lat: 13.0397, lng: 80.2792 };
@@ -224,8 +222,7 @@ function Maps() {
 
 export default Maps;
 
-{
-  /* <Modal
+/* <Modal
                 isOpen={selectedVehicle !== null}
                 onRequestClose={() => setSelectedVehicle(null)}
                 className="Modal"
@@ -252,4 +249,3 @@ export default Maps;
                     </div>
                 )}
             </Modal> */
-}

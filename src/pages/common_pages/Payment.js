@@ -1,20 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { Table } from 'react-bootstrap';
-import "../styles/custom.css";
-import card from "../asset/card.png";
-import upi from "../asset/UPI.png";
-import phpay from "../asset/phonePay (2).png";
-import paytm from "../asset/paytm (2).png";
-import apay from "../asset/amazonpay (2).png";
-import gpay from "../asset/gpay (2).png";
-import netbank from "../asset/netBanking.png";
-import cash from "../asset/cashOnDelivery.png";
-import discount from "../asset/discount.png";
+import "../../styles/custom.css";
+import card from "../../asset/card.png";
+import upi from "../../asset/UPI.png";
+import phpay from "../../asset/phonePay (2).png";
+import paytm from "../../asset/paytm (2).png";
+import apay from "../../asset/amazonpay (2).png";
+import gpay from "../../asset/gpay (2).png";
+import netbank from "../../asset/netBanking.png";
+import cash from "../../asset/cashOnDelivery.png";
+import discount from "../../asset/discount.png";
 import Accordion from 'react-bootstrap/Accordion';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import Captcha from '../Components/Captcha';
-import Mandy from '../Components/Mandy';
+import Captcha from '../../Components/common/Captcha';
+import Mandy from '../../Components/common/Mandy';
 import { Link } from "react-router-dom";
 
 const CardValidity = () => {

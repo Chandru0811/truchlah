@@ -1,17 +1,15 @@
 import React from "react";
-import "../styles/custom.css";
+import "../../styles/custom.css";
 import { BsSearch } from "react-icons/bs";
 
 import {
   useJsApiLoader,
   GoogleMap,
   PolylineF,
-  Marker,
   Autocomplete,
-  DirectionsRenderer,
   MarkerF,
 } from "@react-google-maps/api";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const center = { lat: 13.05, lng: 80.2824 };
@@ -20,7 +18,7 @@ const left = { lat: 13.0397, lng: 80.2792 };
 function ConfirmLocation() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"], // add the libraries prop here
+    libraries: ["places"],
   });
 
   const [origin, setOrigin] = useState(null);

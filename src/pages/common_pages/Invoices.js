@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Invoice from "../Components/Invoice";
-import "../styles/custom.css";
+import Invoice from "../../Components/common/Invoice";
+import "../../styles/custom.css";
 import { MdCancel } from "react-icons/md";
 import { Link } from "react-router-dom";
 function Invoices() {

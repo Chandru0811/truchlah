@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import Logins from "../asset/Login.png";
+import Logins from "../../asset/Login.png";
 import { Button, Form } from "react-bootstrap";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 // import OTPIMG from '../asset/OTP.png';

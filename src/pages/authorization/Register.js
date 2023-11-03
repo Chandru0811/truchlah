@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../styles/custom.css";
-import Logins from "../asset/Login.png";
+import "../../styles/custom.css";
+import Logins from "../../asset/Login.png";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";

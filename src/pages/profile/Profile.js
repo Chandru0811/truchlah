@@ -1,15 +1,15 @@
 import React from "react";
-import "../styles/custom.css";
+import "../../styles/custom.css";
 import { Table } from "react-bootstrap";
-import wallet from "../asset/wallet.png";
-import rides from "../asset/my rides.png";
-import refer from "../asset/refer and earn.png";
-import rewards from "../asset/rewards.png";
-import notification from "../asset/notification.png";
-import support from "../asset/support.png";
-import about from "../asset/about.png";
+import wallet from "../../asset/wallet.png";
+import rides from "../../asset/my rides.png";
+import refer from "../../asset/refer and earn.png";
+import rewards from "../../asset/rewards.png";
+import notification from "../../asset/notification.png";
+import support from "../../asset/support.png";
+import about from "../../asset/about.png";
 import { Link } from "react-router-dom";
-import pro from "../asset/profile.png";
+import pro from "../../asset/profile.png";
 
 function User() {
   return (

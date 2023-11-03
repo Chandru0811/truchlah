@@ -3,26 +3,25 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Head from "./Components/common/header";
 import Foot from "./Components/common/footer";
 import Home from "./pages/Home";
-import NotFound from "./Components/NotFound";
+import NotFound from "./Components/common/NotFound";
 import BackToTopButton from "./Components/common/BacktoTop";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ForgotPassword from "./Components/ForgetPassword";
-import OTP from "./Components/OTP";
-import Maps from "./Components/Map";
-import Shift from "./Components/Shift";
-import HouseShift from "./Components/HouseShift";
-import ConfirmLocation from "./Components/ConfirmLocation";
-import Service from "./Components/Service";
-import SuccessFul from "./Components/SuccessFul";
-import Summary from "./Components/CheckDetails";
-import Payment from "./Components/Payment";
-import Invoices from "./Components/Invoices";
-import Rewards from "./Components/Rewards";
-import Cancel from "./Components/Cancel";
-import User from "./Components/Profile";
-import Coupons from "./Components/Coupons";
-import Order from "./Components/Rides";
+import Login from "./pages/authorization/Login";
+import Register from "./pages/authorization/Register";
+import ForgotPassword from "./pages/authorization/ForgetPassword";
+import OTP from "./pages/authorization/OTP";
+import Maps from "./pages/item_shift/Map";
+import Shift from "./pages/Shift";
+import HouseShift from "./pages/house_shift/HouseShift";
+import ConfirmLocation from "./pages/common_pages/ConfirmLocation";
+import Service from "./pages/common_pages/Service";
+import SuccessFul from "./pages/common_pages/SuccessFul";
+import Summary from "./pages/common_pages/CheckDetails";
+import Payment from "./pages/common_pages/Payment";
+import Invoices from "./pages/common_pages/Invoices";
+import Cancel from "./pages/common_pages/Cancel";
+import User from "./pages/profile/Profile";
+import Coupons from "./pages/profile/Coupons";
+import Order from "./pages/profile/Rides";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ToastContainer } from "react-toastify";
@@ -52,7 +51,6 @@ function App() {
           <Route path="/summary" element={<Summary />} />
           <Route path="/payments" element={<Payment />} />
           <Route path="/invoice" element={<Invoices />} />
-          <Route path="/rewards" element={<Rewards />} />
           <Route path="/cancelorder" element={<Cancel />} />
           <Route path="/user" element={<User />} />
           <Route path="/rides" element={<Order />} />

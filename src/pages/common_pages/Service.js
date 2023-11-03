@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "../styles/custom.css";
+import "../../styles/custom.css";
 import { Link } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa";
 

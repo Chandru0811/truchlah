@@ -1,21 +1,18 @@
 import React from "react";
-import "../styles/custom.css";
-import Green from "../asset/Ellipse 2.png";
-import red from "../asset/Ellipse 3.png";
+import "../../styles/custom.css";
+import Green from "../../asset/Ellipse 2.png";
+import red from "../../asset/Ellipse 3.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Button, Form } from "react-bootstrap";
-import { FaMinus } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
+import { Form } from "react-bootstrap";
+
 import {
   useJsApiLoader,
   GoogleMap,
   PolylineF,
-  Marker,
   Autocomplete,
-  DirectionsRenderer,
   MarkerF,
 } from "@react-google-maps/api";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const center = { lat: 13.05, lng: 80.2824 };
@@ -24,7 +21,7 @@ const left = { lat: 13.0397, lng: 80.2792 };
 function HouseShift() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"], // add the libraries prop here
+    libraries: ["places"], 
   });
 
   const [origin, setOrigin] = useState(null);

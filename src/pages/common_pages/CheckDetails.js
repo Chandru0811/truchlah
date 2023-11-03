@@ -1,6 +1,6 @@
 import React from "react";
-import Ace from "../asset/Rectangle 42.png";
-import "../styles/custom.css";
+import Ace from "../../asset/Rectangle 42.png";
+import "../../styles/custom.css";
 import { Link } from "react-router-dom";
 
 function Summary() {

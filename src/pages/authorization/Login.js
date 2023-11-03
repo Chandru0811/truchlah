@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../styles/custom.css";
-import Logins from "../asset/Login.png";
+import "../../styles/custom.css";
+import Logins from "../../asset/Login.png";
 import { AiOutlineGoogle } from "react-icons/ai";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import Logins from "../asset/Login.png";
+import Logins from "../../asset/Login.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 
 function ForgotPassword() {

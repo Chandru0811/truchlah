@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/custom.css";
+import "../../styles/custom.css";
 
 function Coupon() {
   const [showFirstSection, setShowFirstSection] = useState(true);
