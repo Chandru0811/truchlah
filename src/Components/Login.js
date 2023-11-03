@@ -20,7 +20,6 @@ function Login() {
 
   async function handelLogin(event) {
     event.preventDefault();
-
     try {
       const response = await fetch("https://reqres.in/api/login", {
         method: "POST",
