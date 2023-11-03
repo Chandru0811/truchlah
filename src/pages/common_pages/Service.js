@@ -214,9 +214,9 @@ function Service() {
                       <span>{item.size}</span>
                     </div>
                     <center>
-                      <div class="form-check">
+                      <div className="form-check">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="radio"
                           name="selectedItem"
                           id="flexRadioDefault1"
@@ -239,12 +239,12 @@ function Service() {
           }}
         >
           <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-center">
-            <div class="form-check">
-              <label class="form-check-label" for="flexRadioDefault1">
+            <div className="form-check">
+              <label className="form-check-label" for="flexRadioDefault1">
                 <b> Driver as a helper</b>
               </label>
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault1"
@@ -252,12 +252,12 @@ function Service() {
             </div>
           </div>
           <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-center">
-            <div class="form-check">
-              <label class="form-check-label" for="flexRadioDefault1">
+            <div className="form-check">
+              <label className="form-check-label" for="flexRadioDefault1">
                 <b> Driver as man power</b>
               </label>
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault1"

@@ -147,8 +147,8 @@ const Invoice = () => {
         </div>
         <div className="row">
           <div className="table-responsive">
-            <table class="table table-striped table-bordered">
-              <thead class="table-primary">
+            <table className="table table-striped table-bordered">
+              <thead className="table-primary">
                 <tr>
                   <th>Category</th>
                   <th>Date&Time</th>
@@ -168,7 +168,7 @@ const Invoice = () => {
                   </tr>
                 ))}
               </tbody>
-              <tfoot class="table-striped table-bordered table-light">
+              <tfoot className="table-striped table-bordered table-light">
                 <tr>
                   <td colspan="4">Total</td>
                   <td>{getSubtotal().toFixed(2)}</td>

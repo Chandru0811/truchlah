@@ -10,7 +10,7 @@ function Lead() {
                 <h2 className="text-center" data-aos="fade-down">LEADING POSITION</h2>
                 <div className="row d-flex align-items-center">
 
-                    <div class="col-lg-5 col-md-6 col-12 d-flex justify-content-center">
+                    <div className="col-lg-5 col-md-6 col-12 d-flex justify-content-center">
                         <img id="icon" src={truck} alt="img" data-aos="zoom-in" className="img-fluid " />
                     </div>
                     <div className="col-lg-6 col-md-6 col-12" id="point" >

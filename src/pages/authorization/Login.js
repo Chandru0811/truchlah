@@ -4,8 +4,9 @@ import Logins from "../../asset/Login.png";
 import { AiOutlineGoogle } from "react-icons/ai";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
+import { toast } from "react-toastify";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +18,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   async function handelLogin(event) {
     event.preventDefault();
@@ -32,9 +34,10 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Login successfull !");
+        toast.success('Login Successfull!')
+        navigate('/');
       } else {
-        setMessage("wrong User Name or Password");
+        toast.error("Logined Failed!")
       }
     } catch (error) {
       console.error("Error:", error);

@@ -138,7 +138,7 @@ function Invoices() {
                 </label>
               </div>
               <textarea
-                class="form-control"
+                className="form-control"
                 placeholder="write your reason here............"
                 id="floatingTextarea"
               ></textarea>

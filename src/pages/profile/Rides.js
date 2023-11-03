@@ -44,12 +44,12 @@ function Order() {
                 <p>Tata ace - today</p>
                 <p style={{ color: "#DFAE00" }}>On process</p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
+                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
                   tower,anna salai,chennai-600008<br></br>
-                  <span class="line"></span>
+                  <span className="line"></span>
                 </p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot2"></span>
+                  <span className="dot2"></span>
                   &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
                 </p>
               </div>
@@ -69,12 +69,12 @@ function Order() {
                 <p>Truck - 1 month ago</p>
                 <p style={{ color: "#DF0000" }}>Cancelled</p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
+                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
                   tower,anna salai,chennai-600008<br></br>
-                  <span class="line"></span>
+                  <span className="line"></span>
                 </p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot2"></span>
+                  <span className="dot2"></span>
                   &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
                 </p>
               </div>
@@ -94,12 +94,12 @@ function Order() {
                 <p>Tata ace - today</p>
                 <p style={{ color: "#0D64CD" }}>Dropped</p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
+                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
                   tower,anna salai,chennai-600008<br></br>
-                  <span class="line"></span>
+                  <span className="line"></span>
                 </p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot2"></span>
+                  <span className="dot2"></span>
                   &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
                 </p>
               </div>
@@ -119,12 +119,12 @@ function Order() {
                 <p>Tata ace - today</p>
                 <p style={{ color: "#DFAE00" }}>On process</p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
+                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
                   tower,anna salai,chennai-600008<br></br>
-                  <span class="line"></span>
+                  <span className="line"></span>
                 </p>
                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span class="dot2"></span>
+                  <span className="dot2"></span>
                   &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
                 </p>
               </div>
@@ -148,12 +148,12 @@ function Order() {
                   <p>Tata ace - today</p>
                   <p style={{ color: "#DFAE00" }}>On process</p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
+                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
                     street,mount road,chennai-600005<br></br>
-                    <span class="line"></span>
+                    <span className="line"></span>
                   </p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot2"></span>
+                    <span className="dot2"></span>
                     &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
                     salai,chennai-600008
                   </p>
@@ -174,12 +174,12 @@ function Order() {
                   <p>Tata ace - today</p>
                   <p style={{ color: "#DF0000" }}>Cancelled</p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
+                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
                     street,mount road,chennai-600005<br></br>
-                    <span class="line"></span>
+                    <span className="line"></span>
                   </p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot2"></span>
+                    <span className="dot2"></span>
                     &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
                     salai,chennai-600008
                   </p>
@@ -200,12 +200,12 @@ function Order() {
                   <p>Tata ace - today</p>
                   <p style={{ color: "#0D64CD" }}>Dropped</p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
+                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
                     street,mount road,chennai-600005<br></br>
-                    <span class="line"></span>
+                    <span className="line"></span>
                   </p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot2"></span>
+                    <span className="dot2"></span>
                     &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
                     salai,chennai-600008
                   </p>
@@ -226,12 +226,12 @@ function Order() {
                   <p>Tata ace - today</p>
                   <p style={{ color: "#DFAE00" }}>On process</p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
+                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
                     street,mount road,chennai-600005<br></br>
-                    <span class="line"></span>
+                    <span className="line"></span>
                   </p>
                   <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span class="dot2"></span>
+                    <span className="dot2"></span>
                     &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
                     salai,chennai-600008
                   </p>

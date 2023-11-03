@@ -85,7 +85,7 @@ const MultiCarousel = () => {
                 </div>
 
                 <form >
-                  <div class="form mb-3">
+                  <div className="form mb-3">
                     <FloatingLabel
                       controlId="floatingInput"
                       label="Name*"
@@ -95,7 +95,7 @@ const MultiCarousel = () => {
                       <Form.Control type="text" placeholder="Enter your name" />
                     </FloatingLabel>
                   </div>
-                  <div class="form mb-3">
+                  <div className="form mb-3">
                     <FloatingLabel
                       controlId="floatingInput"
                       label="Pick up Location*"
@@ -108,7 +108,7 @@ const MultiCarousel = () => {
                       />
                     </FloatingLabel>
                   </div>
-                  <div class="form mb-3">
+                  <div className="form mb-3">
                     <FloatingLabel
                       controlId="floatingInput"
                       label="Drop up Location*"
@@ -121,7 +121,7 @@ const MultiCarousel = () => {
                       />
                     </FloatingLabel>
                   </div>
-                  <div class="form mb-3">
+                  <div className="form mb-3">
                     <FloatingLabel
                       controlId="floatingInput"
                       label="Phone number*"

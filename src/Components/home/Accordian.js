@@ -8,17 +8,17 @@ function Section2() {
         <section id="accordion" className='py-3'>
             <div className='container'>
                 <h2 className='py-4 text-center' id='AccoMos' data-aos="zoom-in">MOSTLY ASKED</h2>
-                <div class="accordion accordion-flush" id="accordionFlushExample">
-                    <div class="accordion-item" id="land" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button id="two" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                <div className="accordion accordion-flush" id="accordionFlushExample">
+                    <div className="accordion-item" id="land" data-aos="fade-up">
+                        <h2 className="accordion-header">
+                            <button id="two" className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                 How much does it cost ?
                             </button>
                         </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                        <div id="flush-collapseOne" className="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
-                            <div id="three" class="accordion-body">It really depends on the features & functionalities of
+                            <div id="three" className="accordion-body">It really depends on the features & functionalities of
                                 the
                                 mobile app
                                 will
@@ -28,16 +28,16 @@ function Section2() {
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item" id="land" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button id="two" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    <div className="accordion-item" id="land" data-aos="fade-up">
+                        <h2 className="accordion-header">
+                            <button id="two" className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                                 How long it takes to go live ?
                             </button>
                         </h2>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                        <div id="flush-collapseTwo" className="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
-                            <div id="three" class="accordion-body">Go-live is the time at which something becomes available
+                            <div id="three" className="accordion-body">Go-live is the time at which something becomes available
                                 for
                                 use. In
                                 software development, for example, go-live is the point at which code moves from the test
@@ -47,17 +47,17 @@ function Section2() {
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item" id="land" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button id="two" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    <div className="accordion-item" id="land" data-aos="fade-up">
+                        <h2 className="accordion-header">
+                            <button id="two" className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseThree" aria-expanded="false"
                                 aria-controls="flush-collapseThree">
                                 How often does your team provide builds ?
                             </button>
                         </h2>
-                        <div id="flush-collapseThree" class="accordion-collapse collapse"
+                        <div id="flush-collapseThree" className="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
-                            <div id="three" class="accordion-body">Good teamwork is one of the key components that leads a
+                            <div id="three" className="accordion-body">Good teamwork is one of the key components that leads a
                                 business to
                                 success.
                                 class. This is the third item's accordion body. The ability to hire
@@ -68,17 +68,17 @@ function Section2() {
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item" id="land" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button id="two" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    <div className="accordion-item" id="land" data-aos="fade-up">
+                        <h2 className="accordion-header">
+                            <button id="two" className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseFour" aria-expanded="false"
                                 aria-controls="flush-collapseThree">
                                 Does ECS only work with established companies ?
                             </button>
                         </h2>
-                        <div id="flush-collapseFour" class="accordion-collapse collapse"
+                        <div id="flush-collapseFour" className="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
-                            <div id="three" class="accordion-body">Loan providers use this facility to debit loan EMIs on a
+                            <div id="three" className="accordion-body">Loan providers use this facility to debit loan EMIs on a
                                 fixed date from
                                 the
                                 bank account of the borrower.
@@ -89,17 +89,17 @@ function Section2() {
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item" id="land" data-aos="fade-up">
-                        <h2 class="accordion-header">
-                            <button id="two" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    <div className="accordion-item" id="land" data-aos="fade-up">
+                        <h2 className="accordion-header">
+                            <button id="two" className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapseFive" aria-expanded="false"
                                 aria-controls="flush-collapseThree">
                                 How many resources are allocated to the project ?
                             </button>
                         </h2>
-                        <div id="flush-collapseFive" class="accordion-collapse collapse"
+                        <div id="flush-collapseFive" className="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
-                            <div id="three" class="accordion-body">Resource allocation is the process of assigning and
+                            <div id="three" className="accordion-body">Resource allocation is the process of assigning and
                                 managing
                                 assets in a
                                 manner that supports an organization's strategic planning goals.

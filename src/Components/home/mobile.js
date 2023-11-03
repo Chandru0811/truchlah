@@ -14,7 +14,7 @@ function mob() {
     <div className="container-fluid me">
       <div className="container">
         <div className="row">
-          <div class="col-lg-6 col-md-6 col-12" data-aos="zoom-in">
+          <div className="col-lg-6 col-md-6 col-12" data-aos="zoom-in">
             <img id="one" src={mobile} alt="img" className="img-fluid" />
           </div>
           <div

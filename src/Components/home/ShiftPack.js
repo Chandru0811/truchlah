@@ -13,15 +13,15 @@ import commercialImg from "../../asset/commercialShifting.png";
 function Containerpsd() {
   return (
     <div className="psd" id="Service">
-      <div class="container text-center">
-        <div class="row">
-          <div class="col">
+      <div className="container text-center">
+        <div className="row">
+          <div className="col">
             <h1 data-aos="fade-up"> PACK </h1>
           </div>
-          <div class="col">
+          <div className="col">
             <h1 data-aos="fade-up">SHIFT </h1>
           </div>
-          <div class="col">
+          <div className="col">
             <h1 data-aos="fade-up"> DELIVER</h1>
           </div>
         </div>
@@ -34,10 +34,10 @@ function Card() {
     <center>
       <Container>
         <div className="firstcard">
-          <div class="initalcard" data-aos="fade-up-right">
-            <div class="container text-start">
-              <div class="row ">
-                <div class="col-lg-3 col-md-6 col-12">
+          <div className="initalcard" data-aos="fade-up-right">
+            <div className="container text-start">
+              <div className="row ">
+                <div className="col-lg-3 col-md-6 col-12">
                   <img src={boxImg} className="img-fluid my-3" id="cardimg" />
                   <h6>
                     <span>01</span> Give us a Details
@@ -48,7 +48,7 @@ function Card() {
                   </p>
                 </div>
 
-                <div class="col-lg-3 col-md-6 col-12">
+                <div className="col-lg-3 col-md-6 col-12">
                   <img
                     src={monitorImg}
                     className="img-fluid my-3"
@@ -60,7 +60,7 @@ function Card() {
                   </h6>
                   <p>Book manpower, shrink wrapping or assembly service</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
+                <div className="col-lg-3 col-md-6 col-12">
                   <img
                     src={calenderImg}
                     className="img-fluid my-3"
@@ -75,7 +75,7 @@ function Card() {
                     Trucklah will match your booking with a reputable driver
                   </p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
+                <div className="col-lg-3 col-md-6 col-12">
                   
                   <img
                     src={moversImg}
@@ -103,12 +103,12 @@ function Card() {
 function Servicedivider() {
   return (
     <div className="dividerdiv">
-      <div class="container text-center align-center">
-        <div class="row">
-          <div class="col">
+      <div className="container text-center align-center">
+        <div className="row">
+          <div className="col">
             <hr></hr>
           </div>
-          <div class="col">
+          <div className="col">
             <div classname="dividerdivcontainer">
               <h6 data-aos="fade-up"> What We Do</h6>{" "}
             </div>
@@ -116,7 +116,7 @@ function Servicedivider() {
               <h2 > SERVICES</h2>
             </div>
           </div>
-          <div class="col">
+          <div className="col">
             <hr></hr>
           </div>
         </div>
@@ -128,9 +128,9 @@ function Servicedivider() {
 function Servicescard() {
   return (
     <div className="servicecardcontainer">
-      <div class="container text-center justify-content-center">
-        <div class="row">
-          <div class="col-lg-3 col-md-6 pt-3 col-12">
+      <div className="container text-center justify-content-center">
+        <div className="row">
+          <div className="col-lg-3 col-md-6 pt-3 col-12">
             <div className="card pop-on-hover" data-aos="flip-left">
               <div className="shiftingcard">
                 <img src={itemShiftingImg} />
@@ -144,7 +144,7 @@ function Servicescard() {
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6 pt-3 col-12">
+          <div className="col-lg-3 col-md-6 pt-3 col-12">
             <div className="card pop-on-hover" data-aos="flip-right">
               <div className="shiftingcard ">
                 <img src={houseshiftingImg} />
@@ -158,7 +158,7 @@ function Servicescard() {
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6 pt-3 col-12">
+          <div className="col-lg-3 col-md-6 pt-3 col-12">
             <div className="card pop-on-hover" data-aos="flip-left">
               <div className="shiftingcard">
                 <img src={industrialMoveImg} />
@@ -172,7 +172,7 @@ function Servicescard() {
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 pt-3 col-12">
+          <div className="col-lg-3 col-md-6 pt-3 col-12">
             <div className="card pop-on-hover" data-aos="flip-right">
               <div className="shiftingcard">
                 <img src={commercialImg} />

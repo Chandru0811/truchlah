@@ -34,7 +34,7 @@ function foot() {
                                 <a href="/" className="h text-dark  text-decoration-none">Log in</a>
                             </li>
                             <li>
-                                <a href="/" class="h text-dark  text-decoration-none">Career</a>
+                                <a href="/" className="h text-dark  text-decoration-none">Career</a>
                             </li>
                             <li>
                                 <a href="/" className="h text-dark  text-decoration-none">Privacy Policy</a>

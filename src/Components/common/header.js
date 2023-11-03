@@ -42,33 +42,33 @@ function OffcanvasExample() {
                       <Nav className="flex-grow-1 pe-3">
                         <div className="col-2"></div>
                         <div className="col-lg-9">
-                          <ul class=" navbar-nav">
-                            <li class="nav-item px-2">
+                          <ul className=" navbar-nav">
+                            <li className="nav-item px-2">
                               <Link className="Links" to="/">
                                 HOME
                               </Link>
                             </li>
-                            <li class="nav-item px-2">
+                            <li className="nav-item px-2">
                               <Link className="Links" to="/ShiftPack">
                                 OUR SERVICES
                               </Link>
                             </li>
-                            <li class="nav-item px-2">
+                            <li className="nav-item px-2">
                               <Link className="Links" to="/about">
                                 ABOUT US
                               </Link>
                             </li>
-                            <li class="nav-item px-2">
+                            <li className="nav-item px-2">
                               <Link className="Links" to="/contact">
                                 CONTACT US
                               </Link>
                             </li>
-                            <li class="nav-item px-2">
+                            <li className="nav-item px-2">
                               <Link className="Links" to="/register">
                                 REGISTER
                               </Link>
                             </li>
-                            <li class="nav-item px-2">
+                            <li className="nav-item px-2">
                               <Link className="Links" to="/login">
                                 LOGIN
                               </Link>

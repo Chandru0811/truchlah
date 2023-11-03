@@ -26,7 +26,7 @@ function Shift() {
                 type="button"
                 id="ShiftBtn"
                 style={{ width: "100%" }}
-                class="btn btn-outline-secondary btn-lg p-3 "
+                className="btn btn-outline-secondary btn-lg p-3 "
                 data-mdb-ripple-color="dark"
               >
                 {" "}
@@ -47,7 +47,7 @@ function Shift() {
               <button
                 type="button"
                 style={{ width: "100%" }}
-                class="btn btn-outline-secondary btn-lg p-3 "
+                className="btn btn-outline-secondary btn-lg p-3 "
                 data-mdb-ripple-color="dark"
                 id="ShiftBtn"
               >

@@ -154,7 +154,7 @@ function HouseShift() {
               </div>
               <div className="pt-4 pb-3">
                 <select
-                  class="form-select form-select-lg mb-3 py-2"
+                  className="form-select form-select-lg mb-3 py-2"
                   aria-label=".form-select-lg example"
                   style={{ borderRadius: "25px", color: "#6f7877" }}
                 >

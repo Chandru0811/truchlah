@@ -48,7 +48,7 @@ const SimpleCaptcha = () => {
                             ref={captchaRef}
                         />
                     </div>
-                    <button type="submit" class="btn btn-primary my-3">Submit</button>
+                    <button type="submit" className="btn btn-primary my-3">Submit</button>
                 </form>
                 {isCaptchaValid ? (
                     <p style={{ color: 'GREEN' }}>CAPTCHA is valid!</p>
