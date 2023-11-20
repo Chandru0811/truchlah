@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -20,30 +19,58 @@ function Login() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  const isValidate = () => {
+    let isProcess = true;
+    let errorMessage = "Please enter value in ";
+
+    if (email === "null" || email === "") {
+      isProcess = false;
+      errorMessage += " Email";
+    }
+
+    if (!isProcess) {
+      toast.warning(errorMessage);
+    } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+      isProcess = false;
+      toast.warning("Please enter a valid email");
+    }
+    return isProcess;
+  };
+
   async function handelLogin(event) {
     event.preventDefault();
-    try {
-      const response = await fetch("https://reqres.in/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success('Login Successfull!')
-        navigate('/');
-      } else {
-        toast.error("Logined Failed!")
+    
+    if (isValidate()) {
+      try {
+        const response = await fetch("http://139.84.133.106:9095/trucklah/api/auth/signin/ROLE_USER", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+    
+          if (data && data.token) {
+            toast.success("Login Successful!");
+            navigate("/");
+          } else {
+            toast.error("Login Failed!");
+          }
+        } else {
+          toast.error("Login Failed!");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setMessage(`An error occurred: ${error.message}`);
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("An error occurred. Please try again");
     }
   }
+  
+  
+  
 
   return (
     <div className="container-fluid">
@@ -57,7 +84,7 @@ function Login() {
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
           style={{
             backgroundColor: "#9AB8DD",
-            height: "100%", // Set height to 100% to fill the container
+            height: "100%",
           }}
         >
           <div className="d-flex flex-column align-items-center h-100">
@@ -157,7 +184,7 @@ function Login() {
                     </div>
                     <div className="text-end">
                       <p>
-                       <Link to="/forgetpassword">Forget Password</Link>
+                        <Link to="/forgetpassword">Forget Password</Link>
                       </p>
                     </div>
                     <div className="text-center">
