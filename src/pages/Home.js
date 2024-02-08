@@ -1,6 +1,6 @@
 import React from "react";
 import Accod from "../Components/home/Accordian";
-import Vechicle from "../Components/home/TrucklahVechicle";
+// import Vechicle from "../Components/home/TrucklahVechicle";
 import ContactUs from "../Components/home/ContactUs";
 import Hero from "../Components/home/Hero";
 import Lead from "../Components/home/lead";
@@ -13,7 +13,7 @@ function Home() {
     <div>
       <Hero />
       <ShiftPack />
-      <Vechicle />
+      {/* <Vechicle /> */}
       <Lead />
       <Mob />
       <About />

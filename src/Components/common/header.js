@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import logo from "../../asset/logo.png";
 import { Link } from "react-router-dom";
-import { CgProfile } from "react-icons/cg";
+// import { CgProfile } from "react-icons/cg";
 import "../../styles/custom.css";
 
 function OffcanvasExample() {
@@ -63,7 +63,7 @@ function OffcanvasExample() {
                                 CONTACT US
                               </Link>
                             </li>
-                            <li className="nav-item px-2">
+                            {/* <li className="nav-item px-2">
                               <Link className="Links" to="/register">
                                 REGISTER
                               </Link>
@@ -72,16 +72,16 @@ function OffcanvasExample() {
                               <Link className="Links" to="/login">
                                 LOGIN
                               </Link>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
-                        <div className="col-lg-1">
+                        {/* <div className="col-lg-1">
                           <div id="pro-btn">
                             <Link to="/user">
                               <CgProfile style={{ color: "#3E4D6A" }} />
                             </Link>
                           </div>
-                        </div>
+                        </div> */}
                       </Nav>
                     </div>
                   </div>
