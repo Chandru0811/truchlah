@@ -1,5 +1,4 @@
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Head from "./Components/common/header";
 import Foot from "./Components/common/footer";
 import Home from "./pages/Home";
@@ -28,46 +27,62 @@ import ContactUs from "./Components/home/ContactUs";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ToastContainer } from "react-toastify";
+import TermsCondition from "./pages/TermsCondition";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function UserRoute() {
   AOS.init({
     duration: 800,
     delay: 200,
   });
+
   return (
     <Router>
       <ToastContainer />
-      <Head />
-      <div className="content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/ShiftPack" element={<ShiftPack />} />
-          <Route path="/about" element={ <About />} />
-          <Route path="/contact" element={ <ContactUs />} />
-          <Route path="/forgetpassword" element={<ForgotPassword />} />
-          <Route path="/otp" element={<OTP />} />
-          <Route path="/map" element={<Maps />} />
-          <Route path="/shift" element={<Shift />} />
-          <Route path="/houseshift" element={<HouseShift />} />
-          <Route path="/confirmlocation" element={<ConfirmLocation />} />
-          <Route path="/service" element={<Service />} />
-          <Route path="/successful" element={<SuccessFul />} />
-          <Route path="/summary" element={<Summary />} />
-          <Route path="/payments" element={<Payment />} />
-          <Route path="/invoice" element={<Invoices />} />
-          <Route path="/cancelorder" element={<Cancel />} />
-          <Route path="/user" element={<User />} />
-          <Route path="/rides" element={<Order />} />
-          <Route path="/coupons" element={<Coupons />} />
-
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-      <BackToTopButton />
-      <Foot />
+      <Routes>
+        <Route
+          path="/"
+          element={<AppLayout><Home /></AppLayout>}
+        />
+        <Route path="/login" element={<AppLayout><Login /></AppLayout>} />
+        <Route path="/register" element={<AppLayout><Register /></AppLayout>} />
+        <Route path="/ShiftPack" element={<AppLayout><ShiftPack /></AppLayout>} />
+        <Route path="/about" element={<AppLayout><About /></AppLayout>} />
+        <Route path="/contact" element={<AppLayout><ContactUs /></AppLayout>} />
+        <Route path="/forgetpassword" element={<AppLayout><ForgotPassword /></AppLayout>} />
+        <Route path="/otp" element={<AppLayout><OTP /></AppLayout>} />
+        <Route path="/map" element={<AppLayout><Maps /></AppLayout>} />
+        <Route path="/shift" element={<AppLayout><Shift /></AppLayout>} />
+        <Route path="/houseshift" element={<AppLayout><HouseShift /></AppLayout>} />
+        <Route path="/confirmlocation" element={<AppLayout><ConfirmLocation /></AppLayout>} />
+        <Route path="/service" element={<AppLayout><Service /></AppLayout>} />
+        <Route path="/successful" element={<AppLayout><SuccessFul /></AppLayout>} />
+        <Route path="/summary" element={<AppLayout><Summary /></AppLayout>} />
+        <Route path="/payments" element={<AppLayout><Payment /></AppLayout>} />
+        <Route path="/invoice" element={<AppLayout><Invoices /></AppLayout>} />
+        <Route path="/cancelorder" element={<AppLayout><Cancel /></AppLayout>} />
+        <Route path="/user" element={<AppLayout><User /></AppLayout>} />
+        <Route path="/rides" element={<AppLayout><Order /></AppLayout>} />
+        <Route path="/coupons" element={<AppLayout><Coupons /></AppLayout>} />
+        <Route path="/termsandcondition" element={<TermsCondition />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </Router>
+  );
+}
+
+function AppLayout({ children }) {
+  const location = useLocation();
+  const hideHeaderFooter = location.pathname === "/termsandcondition" || location.pathname === "/privacypolicy";
+
+  return (
+    <>
+      {!hideHeaderFooter && <Head />}
+      <div className="content">{children}</div>
+      {!hideHeaderFooter && <BackToTopButton />}
+      {!hideHeaderFooter && <Foot />}
+    </>
   );
 }
 
