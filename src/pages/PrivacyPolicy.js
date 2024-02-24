@@ -7,6 +7,7 @@ function PrivacyPolicy() {
         <div className="row">
           <div className="offset-md-1 col-md-10 col-12">
             <div>
+            <h2 className="text-center mb-5">Privacy Policy</h2>
               <h4>1. Introduction</h4>
               <div>
                 <p className="mt-3">
