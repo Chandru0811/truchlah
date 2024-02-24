@@ -4,6 +4,7 @@ import google from "../../asset/google play.png";
 import app from "../../asset/app store.png";
 import { FaTwitter, FaFacebookF, FaLinkedin } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 function foot() {
   const navigateToGooglePlayStore = () => {
@@ -50,9 +51,20 @@ function foot() {
                 </a>
               </li>
               <li>
-                <a href="/" className="h text-dark  text-decoration-none">
+                <Link
+                  to="/termsandcondition"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/privacypolicy"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -110,9 +122,15 @@ function foot() {
 
       <div className="text-center p-3 f">
         <hr></hr>
-        <a className="text-dark text-decoration-none" href="/">
-          2023 © Copyright Trucklah Pte Ltd. All Rights Reserved.
-        </a>
+        <p className="text-dark text-decoration-none" href="/">
+          2023 © Copyright Trucklah Pte Ltd. All Rights Reserved.&nbsp;
+          <Link to="/termsandcondition" style={{ textDecoration: "none" }}>
+            Terms & Conditions
+          </Link> &nbsp;
+          <Link to="/privacypolicy" style={{ textDecoration: "none" }}>
+            Privacy Policy
+          </Link>
+        </p>
       </div>
     </footer>
   );
