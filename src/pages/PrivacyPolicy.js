@@ -7,7 +7,7 @@ function PrivacyPolicy() {
         <div className="row">
           <div className="offset-md-1 col-md-10 col-12">
             <div>
-            <h2 className="text-center mb-5">Privacy Policy</h2>
+              <h2 className="text-center mb-5">Privacy Policy</h2>
               <h4>1. Introduction</h4>
               <div>
                 <p className="mt-3">
@@ -27,11 +27,11 @@ function PrivacyPolicy() {
                   access our web applications, mobile applications (collectively
                   referred to as “Applications”), and our website at &nbsp;
                   <a
-                    href="https://www.trucklah.com/sg/"
+                    href="https://trucklah.com"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    https://www.trucklah.com/sg/
+                    https://trucklah.com
                   </a>
                 </p>
                 <p>
@@ -698,12 +698,12 @@ function PrivacyPolicy() {
                   </ol>
                 </p>
                 <p>
-                  <b>13.2 </b>We will not use your personal data for direct
-                  marketing activities described in this paragraph 14.2 unless
+                  <b>13.3 </b>We will not use your personal data for direct
+                  marketing activities described in this paragraph 13.3 unless
                   we have obtained your consent.
                 </p>
                 <p>
-                  <b>13.3 </b>You may request us to stop using your personal
+                  <b>13.4 </b>You may request us to stop using your personal
                   data for direct marketing purposes at any time by clicking
                   unsubscribe at the bottom of the email or replying with
                   "unsubscribe" to any direct marketing communication from us.
@@ -722,7 +722,7 @@ function PrivacyPolicy() {
             </div>
             <div className="mt-4 d-flex flex-column align-items-center justify-content-center">
               <h4>APPENDIX 1 JURISDICTION SPECIFIC TERMS</h4>
-              <h4>APPENDIX 2 LALAMOVE ENTITIES</h4>
+              <h4>APPENDIX 2 TRUCKLAH ENTITIES</h4>
             </div>
             <table class="table table-bordered text-center">
               <thead>
@@ -736,12 +736,12 @@ function PrivacyPolicy() {
                 <tr>
                   <th scope="row">1</th>
                   <td>Singapore</td>
-                  <td>Trucklah Pte Ltd</td>
+                  <td>Trucklah Private Limited</td>
                 </tr>
                 <tr>
                   <th scope="row">2</th>
                   <td>India</td>
-                  <td>Yuaa Logistics Private Limitedsg</td>
+                  <td>Yuaa Logistics Private Limited</td>
                 </tr>
               </tbody>
             </table>
