@@ -38,17 +38,23 @@ function Invoices() {
           </span>
         </div>
         {show && (
-          <div className="popup-overlay">
+          <div className="popup-overlay" style={{ marginTop: "75px" }}>
             <div
               className="popup-content p-3"
               style={{ backgroundColor: "#FFF", borderRadius: "5px" }}
             >
-              <div className="text-end">
-                <button className="btn " onClick={handleClose}>
-                  <MdCancel style={{ fontSize: "20px", color: "red" }} />
-                </button>
+              <div className="row my-2">
+                <div className="col-md-6 col-12 mt-2">
+                  <h5 id="closeWhat">What’s making you cancel ?</h5>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="text-end">
+                    <button className="btn " onClick={handleClose}>
+                      <MdCancel style={{ fontSize: "20px", color: "red" }} />
+                    </button>
+                  </div>
+                </div>
               </div>
-              <h5 id="closeWhat">What’s making you cancel ?</h5>
               <p id="closeBefore">
                 Before canceling,let us know why you’re leaving.Your response
                 may be shared with the subscription provider
