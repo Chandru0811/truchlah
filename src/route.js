@@ -29,6 +29,11 @@ import "aos/dist/aos.css";
 import { ToastContainer } from "react-toastify";
 import TermsCondition from "./pages/TermsCondition";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Wallet from "./pages/profile/Wallet";
+import Notification from "./pages/profile/Notification";
+import Invoice from "./pages/profile/invoice";
+import Support from "./pages/profile/Support";
+import Refer from "./pages/profile/Refer&Earn";
 
 function UserRoute() {
   AOS.init({
@@ -66,6 +71,18 @@ function UserRoute() {
         <Route path="/coupons" element={<AppLayout><Coupons /></AppLayout>} />
         <Route path="/termsandcondition" element={<TermsCondition />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        <Route path="/wallet" element={<AppLayout><Wallet /></AppLayout>} />
+        <Route path="/notification" element={<AppLayout><Notification /></AppLayout>} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/referearn" element={<Refer />} />
+        <Route
+          path="/invoice"
+          element={
+            <AppLayout>
+              <Invoice />
+            </AppLayout>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
