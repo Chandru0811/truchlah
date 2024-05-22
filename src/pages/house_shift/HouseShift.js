@@ -3,7 +3,11 @@ import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Form } from "react-bootstrap";
+import { Form, Modal, Button } from "react-bootstrap";
+import { FaLocationDot } from "react-icons/fa6";
+import { FaRegAddressCard } from "react-icons/fa6";
+import { IoMdContact } from "react-icons/io";
+import { FaPhoneVolume } from "react-icons/fa6";
 
 import {
   useJsApiLoader,
@@ -21,11 +25,13 @@ const left = { lat: 13.0397, lng: 80.2792 };
 function HouseShift() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"], 
+    libraries: ["places"],
   });
 
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [ModalPickUp, setModalPickUp] = useState(false);
+  const [ModalDropOff, setModalDropOff] = useState(false);
 
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
@@ -54,6 +60,22 @@ function HouseShift() {
     return;
   }
 
+  const openModal = () => {
+    setModalPickUp(true);
+  };
+
+  const closeModal = () => {
+    setModalPickUp(false);
+  };
+
+  const openModal2 = () => {
+    setModalDropOff(true);
+  };
+
+  const closeModal2 = () => {
+    setModalDropOff(false);
+  };
+
   return (
     <div className="container-fluid" style={{ backgroundColor: "#fcf3f6" }}>
       <div className="row">
@@ -64,10 +86,10 @@ function HouseShift() {
             zoom={15}
             mapContainerStyle={{ width: "100%", height: "100%" }}
             options={{
-              zoomControl: false,
-              streetViewControl: false,
-              mapTypeControl: false,
-              fullscreenControl: false,
+              zoomControl: true,
+              streetViewControl: true,
+              mapTypeControl: true,
+              fullscreenControl: true,
             }}
           >
             <MarkerF position={center} />
@@ -114,6 +136,7 @@ function HouseShift() {
                         type="text"
                         placeholder="Drop off Location"
                         style={{ borderRadius: "30px" }}
+                        onClick={openModal}
                       />
                     </FloatingLabel>
                   </Autocomplete>
@@ -147,6 +170,7 @@ function HouseShift() {
                         type="text"
                         placeholder="Drop up Location"
                         style={{ borderRadius: "30px" }}
+                        onClick={openModal2}
                       />
                     </FloatingLabel>
                   </Autocomplete>
@@ -171,7 +195,7 @@ function HouseShift() {
                 </select>
               </div>
               <div className="text-center">
-                <Link to="/confirmlocation">
+                <Link to="/service">
                   <button className="btn btn-primary px-5 py-2" id="NextMove">
                     Next
                   </button>
@@ -182,6 +206,134 @@ function HouseShift() {
           </div>
         </div>
       </div>
+      <Modal show={ModalPickUp} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Pick Up Location</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container">
+            <div className="row py-4">
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Location<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <FaLocationDot />
+                    &nbsp;
+                  </div>
+                  <input type="text" className="form-control" />
+                </div>
+              </div>
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Address<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <FaRegAddressCard />
+                    &nbsp;
+                  </div>
+                  <textarea type="text" className="form-control" />
+                </div>
+              </div>
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Contact Name<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <IoMdContact />
+                    &nbsp;
+                  </div>
+                  <input type="text" className="form-control" />
+                </div>
+              </div>
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Contact Number<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <FaPhoneVolume />
+                    &nbsp;
+                  </div>
+                  <input type="text" className="form-control" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button id="NextMove" onClick={closeModal}>
+            next
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={ModalDropOff} onHide={closeModal2}>
+        <Modal.Header closeButton>
+          <Modal.Title>Drop Location</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="container">
+            <div className="row py-4">
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Location<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <FaLocationDot />
+                    &nbsp;
+                  </div>
+                  <input type="text" className="form-control" />
+                </div>
+              </div>
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Address<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <FaRegAddressCard />
+                    &nbsp;
+                  </div>
+                  <textarea type="text" className="form-control" />
+                </div>
+              </div>
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Contact Name<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <IoMdContact />
+                    &nbsp;
+                  </div>
+                  <input type="text" className="form-control" />
+                </div>
+              </div>
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-label">
+                  Contact Number<span className="text-danger">*</span>
+                </label>
+                <div className="d-flex">
+                  <div className="d-flex justify-content-center align-items-center">
+                    <FaPhoneVolume />
+                    &nbsp;
+                  </div>
+                  <input type="text" className="form-control" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button id="NextMove" onClick={closeModal}>
+            next
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

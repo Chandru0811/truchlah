@@ -238,6 +238,13 @@ background-color: #F9F9F9;
     padding-right: 0;
 }
 
+@media screen and (min-width: 767px) {
+    .summary #drop{
+        border: none;
+        border-left: 1px solid #e4e2e2;
+    }   
+}
+
 /* Contact Us  */
 
 #ContactForm form {
@@ -1496,9 +1503,64 @@ color: #000000;
   }
 
   
+  .table {
+    width: 100%;
+    background-color: #fff;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .table-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    font-size: 1rem;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
 
 
+  .offcanvas-header {
+    position: relative;
+  }
+  
+  .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  #shift-btn.active {
+    background-color: #007bff; /* Change this to your desired active color */
+    color: white;
+  }
 
+  .password-wrapper {
+    position: relative;
+  }
+  
+  .password-wrapper input {
+    padding-right: 2.5rem; 
+  }
+  
+  .password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem; 
+    transform: translateY(-50%);
+  }
+  
 
 
 
