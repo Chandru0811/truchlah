@@ -7,6 +7,21 @@ import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import { toast } from "react-toastify";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "*Enter a valid email address"
+    )
+    .required("*Email is required"),
+
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,63 +29,70 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const isValidate = () => {
-    let isProcess = true;
-    let errorMessage = "Please enter value in ";
 
-    if (email === "null" || email === "") {
-      isProcess = false;
-      errorMessage += " Email";
-    }
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+      },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.log("values", values);
+      //   try {
+      //     const response = await api.post("/createCenter", values, {
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     });
+      //     if (response.status === 201) {
+      //       toast.success(response.data.message);
+      //       navigate("/center");
+      //     } else {
+      //       toast.error(response.data.message);
+      //     }
+      //   } catch (error) {
+      //     toast.error(error);
+      //   } finally {
 
-    if (!isProcess) {
-      toast.warning(errorMessage);
-    } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-      isProcess = false;
-      toast.warning("Please enter a valid email");
-    }
-    return isProcess;
-  };
+      //   }
+    },
+  });
 
-  async function handelLogin(event) {
-    event.preventDefault();
-    
-    if (isValidate()) {
-      try {
-        const response = await fetch("http://139.84.133.106:9095/trucklah/api/auth/signin/ROLE_USER", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        });
-    
-        if (response.ok) {
-          const data = await response.json();
-    
-          if (data && data.token) {
-            toast.success("Login Successful!");
-            navigate("/");
-          } else {
-            toast.error("Login Failed!");
-          }
-        } else {
-          toast.error("Login Failed!");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        setMessage(`An error occurred: ${error.message}`);
-      }
-    }
-  }
-  
-  
-  
+  // async function handelLogin(event) {
+  //   event.preventDefault();
+
+  //   try {
+  //     const response = await fetch(
+  //       "http://139.84.133.106:9095/trucklah/api/auth/signin/ROLE_USER",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({}),
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+
+  //       if (data && data.token) {
+  //         toast.success("Login Successful!");
+  //         navigate("/");
+  //       } else {
+  //         toast.error("Login Failed!");
+  //       }
+  //     } else {
+  //       toast.error("Login Failed!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     setMessage(`An error occurred: ${error.message}`);
+  //   }
+  // }
 
   return (
     <div className="container-fluid">
@@ -130,7 +152,7 @@ function Login() {
                     </span>
                     <div className="or-line"></div>
                   </div>
-                  <form>
+                  <form onClick={formik.handleSubmit}>
                     <div className="form mb-3 d-flex justify-content-center">
                       <FloatingLabel
                         controlId="floatingInput"
@@ -140,10 +162,19 @@ function Login() {
                       >
                         <Form.Control
                           type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          className={`form-control  ${
+                            formik.touched.email && formik.errors.email
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("email")}
                           placeholder="Enter your name"
                         />
+                        {formik.touched.email && formik.errors.email && (
+                          <div className="invalid-feedback">
+                            {formik.errors.email}
+                          </div>
+                        )}
                       </FloatingLabel>
                     </div>
                     <div className="form mb-3 d-flex justify-content-center">
@@ -155,9 +186,13 @@ function Login() {
                       >
                         <Form.Control
                           type={showPassword ? "text" : "password"}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Enter your password"
+                          className={`form-control ${
+                            formik.touched.password && formik.errors.password
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("password")}
+                         placeholder="Enter your password"
                         />
                         {showPassword ? (
                           <RiEyeOffLine
@@ -180,6 +215,11 @@ function Login() {
                             }}
                           />
                         )}
+                        {formik.touched.password && formik.errors.password && (
+                          <div className="invalid-feedback">
+                            {formik.errors.password}
+                          </div>
+                        )}
                       </FloatingLabel>
                     </div>
                     <div className="text-end">
@@ -192,8 +232,7 @@ function Login() {
                         className="btn btn-primary py-2"
                         style={{ width: "100%" }}
                         id="VehicleButton"
-                        onClick={handelLogin}
-                      >
+                        >
                         Login{" "}
                       </button>
                       {message && <p>{message}</p>}

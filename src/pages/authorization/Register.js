@@ -4,105 +4,126 @@ import Logins from "../../asset/Login.png";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
+import axios from "axios";
+
+const validationSchema = Yup.object().shape({
+  firstName: Yup.string().required("*First Name is required"),
+  lastName: Yup.string().required("*Last Name is required"),
+  email: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "*Enter a valid email address"
+    )
+    .required("*Email is required"),
+  mobile: Yup.string()
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .required("*Mobile Number is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+  confirmPassword: Yup.string()
+    .required("Confirm Password is required")
+    .oneOf([Yup.ref("password")], "Passwords must match"),
+  country: Yup.string().required("*Country is required"),
+  referalCode: Yup.string().required("*Referal Code is required"),
+});
 
 function Register() {
-  const [firstName, setFirstname] = useState("");
-  const [lastName, setLastname] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobileNo, setMobile] = useState("");
-  const [countryCode, setCountry] = useState("+91");
-  const [refCode, setRefCode] = useState(" ");
   const [role, setRole] = useState(["User"]);
-
-  const isMobileValid = (mobile) => {
-    return /^\d{10}$/.test(mobile);
-  };
-
-  const isPasswordValid = (password) => {
-    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
-  };
-
   const navigate = useNavigate();
+  const [Password, setShowPassword] = useState(false);
+  const [cPassword, setCShowPassword] = useState(false);
 
-  const isValidate = () => {
-    let isProcess = true;
-    let errorMessage = "Please Enter Value in ";
-
-    if (firstName === null || firstName === "") {
-      isProcess = false;
-      errorMessage += " FirstName";
-    }
-    if (lastName === null || lastName === "") {
-      isProcess = false;
-      errorMessage += " LastName";
-    }
-    if (password === null || password === "") {
-      isProcess = false;
-      errorMessage += " Password";
-    } else if (!isPasswordValid(password)) {
-      isProcess = false;
-      errorMessage += " Password (must have 8 characters, one uppercase, one lowercase, one number)";
-    }
-    if (email === null || email === "") {
-      isProcess = false;
-      errorMessage += " Email";
-    }
-    if (mobileNo === null || mobileNo === "") {
-      isProcess = false;
-      errorMessage += " Mobile Number";
-    } else if (!isMobileValid(mobileNo)) {
-      isProcess = false;
-      errorMessage += " Mobile Number must be Numeric (must be 10 digits)";
-    }
-
-
-    const termsCheckbox = document.getElementById("termsCheckbox");
-    const privacyCheckbox = document.getElementById("privacyCheckbox");
-  
-    if (!termsCheckbox.checked || !privacyCheckbox.checked) {
-      isProcess = false;
-      errorMessage += " Terms and Privacy checkboxes";
-    }
-
-
-    if (!isProcess) {
-      toast.warning(errorMessage);
-    } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-      isProcess = false;
-      toast.warning("Please enter a valid email");
-    }
-    return isProcess;
+  const showPassword = () => {
+    setShowPassword(!Password);
+  };
+  const confirmShowPassword = () => {
+    setCShowPassword(!cPassword);
   };
 
-  const handelsubmit = (e) => {
-    e.preventDefault();
-    if (isValidate()) {
-      let regsub = {
-        firstName,
-        lastName,
-        password,
-        email,
-        mobileNo,
-        countryCode,
-        refCode,
-        role,
-      };
-      console.log(regsub);
-      fetch("http://139.84.133.106:9095/trucklah/api/auth/signup", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(regsub),
-      })
-        .then((res) => {
-          toast.success("Register Successfully.");
-          navigate("/login");
-        })
-        .catch((err) => {
-          toast.error("Failed :" + err.message);
-        });
-    }
-  };
+  // const handelsubmit = (e) => {
+  //   e.preventDefault();
+  //   // if (isValidate())
+  //   {
+  //     let regsub = {
+  //       firstName,
+  //       lastName,
+  //       password,
+  //       email,
+  //       mobileNo,
+  //       countryCode,
+  //       refCode,
+  //       role,
+  //     };
+  //     console.log(regsub);
+  //     fetch("http://139.84.133.106:9095/trucklah/api/auth/signup", {
+  //       method: "POST",
+  //       headers: { "content-type": "application/json" },
+  //       body: JSON.stringify(regsub),
+  //     })
+  //       .then((res) => {
+  //         toast.success("Register Successfully.");
+  //         // navigate("/login");
+  //       })
+  //       .catch((err) => {
+  //         toast.error("Failed :" + err.message);
+  //       });
+  //   }
+  // };
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobile: "",
+      password: "",
+      confirmPassword: "",
+      country: "",
+      referalCode: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.log("values", values);
+      navigate("/otp")
+
+      // fetch("http://139.84.133.106:9095/trucklah/api/auth/signup", {
+      //         method: "POST",
+      //         headers: { "content-type": "application/json" },
+      //         body: JSON.stringify(values),
+      //       })
+      //         .then((res) => {
+      //           toast.success("Register Successfully.");
+      //           navigate("/otp");
+      //         })
+      //         .catch((err) => {
+      //           toast.error("Failed :" + err.message);
+      //         });
+        // try {
+        //   const response = await axios.post("/http://139.84.133.106:9095/trucklah/api/auth/signup", values, {
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   });
+        //   if (response.status === 201) {
+        //     toast.success("Register successfully");
+        //     navigate("/otp");
+        //   } else {
+        //     toast.error(response.data.message);
+        //   }
+        // } catch (error) {
+        //   toast.error(error);
+        // } finally {
+
+        // }
+    },
+  });
   return (
     <div className="container-fluid">
       <div
@@ -163,7 +184,7 @@ function Register() {
               </div>
               <div className="col-lg-3 col-md-2 col-12"></div>
               <div className="container">
-                <form onSubmit={handelsubmit}>
+                <form onSubmit={formik.handleSubmit}>
                   <div className="row my-3">
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
@@ -171,92 +192,215 @@ function Register() {
                           First Name <span className="errmsg">*</span>
                         </label>
                         <input
-                          value={firstName}
-                          onChange={(e) => setFirstname(e.target.value)}
-                          className="form-control"
-                        ></input>
+                          type="text"
+                          name="firstName"
+                          className={`form-control  ${
+                            formik.touched.firstName && formik.errors.firstName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("firstName")}
+                        />
+                        {formik.touched.firstName &&
+                          formik.errors.firstName && (
+                            <div className="invalid-feedback">
+                              {formik.errors.firstName}
+                            </div>
+                          )}
                       </div>
                     </div>
-
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label>
                           Last Name <span className="errmsg">*</span>
                         </label>
                         <input
-                          value={lastName}
-                          onChange={(e) => setLastname(e.target.value)}
-                          className="form-control"
-                        ></input>
+                          type="text"
+                          name="lastName"
+                          className={`form-control  ${
+                            formik.touched.lastName && formik.errors.lastName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("lastName")}
+                        />
+                        {formik.touched.lastName && formik.errors.lastName && (
+                          <div className="invalid-feedback">
+                            {formik.errors.lastName}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 col-12 pb-2">
+                      <div className="form-group">
+                        <label>
+                          Email<span className="errmsg">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="email"
+                          className={`form-control  ${
+                            formik.touched.email && formik.errors.email
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("email")}
+                        />
+                        {formik.touched.email && formik.errors.email && (
+                          <div className="invalid-feedback">
+                            {formik.errors.email}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-lg-6 col-12 pb-2">
+                      <div className="form-group">
+                        <label>
+                          MobilNo<span className="errmsg">*</span>
+                        </label>
+                        <div className="input-group">
+                          <div className="input-group-prepend">
+                            <select
+                              name="countryCode"
+                              className="form-control"
+                              {...formik.getFieldProps("countryCode")}
+                            >
+                              <option value="+65">+65</option>
+                              <option value="+91">+91</option>
+                            </select>
+                          </div>
+                          <input
+                            type="text"
+                            name="mobile"
+                            className={`form-control ${
+                              formik.touched.mobile && formik.errors.mobile
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            {...formik.getFieldProps("mobile")}
+                          />
+                        </div>
+                        {formik.touched.mobile && formik.errors.mobile && (
+                          <div className="invalid-feedback">
+                            {formik.errors.mobile}
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label>
-                          Password <span className="errmsg">*</span>
+                          Password<span className="errmsg">*</span>
                         </label>
-                        <input
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          type="password"
-                          className="form-control"
-                        ></input>
+                        <div className="password-wrapper">
+                          <input
+                            type={Password ? "text" : "password"}
+                            name="password"
+                            className={`form-control ${
+                              formik.touched.password && formik.errors.password
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            {...formik.getFieldProps("password")}
+                            style={{backgroundImage:"none"}}
+                          />
+                          <span
+                            className="password-toggle-icon"
+                            onClick={showPassword}
+                            style={{ cursor: "pointer" }}
+                          >
+                            {Password ? <RiEyeOffLine /> : <RiEyeLine />}
+                          </span>
+                        </div>
+                        {formik.touched.password && formik.errors.password && (
+                          <div className="invalid-feedback">
+                            {formik.errors.password}
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label>
-                          Email <span className="errmsg">*</span>
+                          Confirm Password<span className="errmsg">*</span>
                         </label>
-                        <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="form-control"
-                        ></input>
+                        <div className="password-wrapper">
+                          <input
+                            type={cPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            className={`form-control ${
+                              formik.touched.confirmPassword &&
+                              formik.errors.confirmPassword
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            {...formik.getFieldProps("confirmPassword")}
+                          />
+                          <div className="input-group-append">
+                            <span
+                              className="password-toggle-icon"
+                              onClick={confirmShowPassword}
+                              style={{ cursor: "pointer" }}
+                            >
+                              {cPassword ?<RiEyeOffLine /> : <RiEyeLine />}
+                            </span>
+                          </div>
+                        </div>
+                        {formik.touched.confirmPassword &&
+                          formik.errors.confirmPassword && (
+                            <div className="invalid-feedback">
+                              {formik.errors.confirmPassword}
+                            </div>
+                          )}
                       </div>
                     </div>
 
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label>
-                          Mobile <span className="errmsg">*</span>
+                          Country<span className="errmsg">*</span>
                         </label>
                         <input
-                          value={mobileNo}
-                          onChange={(e) => setMobile(e.target.value)}
-                          type="tel"
-                          className="form-control"
-                        ></input>
+                          type="text"
+                          name="country"
+                          className={`form-control  ${
+                            formik.touched.country && formik.errors.country
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("country")}
+                        />
+                        {formik.touched.country && formik.errors.country && (
+                          <div className="invalid-feedback">
+                            {formik.errors.country}
+                          </div>
+                        )}
                       </div>
                     </div>
-
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label>
-                          Country <span className="errmsg">*</span>
+                          Referal Code<span className="errmsg">*</span>
                         </label>
-                        <select
-                          value={countryCode}
-                          onChange={(e) => setCountry(e.target.value)}
-                          className="form-select"
-                        >
-                          <option value="+91">India</option>
-                          <option value="+63">Singapore</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="col-lg-6 col-12 pb-2">
-                      <div className="form-group">
-                        <label>Referal Code</label>
                         <input
-                          value={refCode}
-                          onChange={(e) => setRefCode(e.target.value)}
-                          className="form-control"
-                          placeholder="(optional)"
-                        ></input>
+                          type="text"
+                          name="referalCode"
+                          className={`form-control  ${
+                            formik.touched.referalCode &&
+                            formik.errors.referalCode
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("referalCode")}
+                        />
+                        {formik.touched.referalCode &&
+                          formik.errors.referalCode && (
+                            <div className="invalid-feedback">
+                              {formik.errors.referalCode}
+                            </div>
+                          )}
                       </div>
                     </div>
                   </div>
