@@ -1,16 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "../../styles/custom.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function Service() {
-  const [selectedDate, setSelectedDate] = useState("2023-05-26");
-  const [selectedTime, setSelectedTime] = useState("12:00");
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  function handleCardClick(index) {
+    setSelectedItemId(index);
+  }
+  const [showQuantity, setShowQuantity] = useState(false);
+  const handleCheckboxClick = () => {
+    setShowQuantity(!showQuantity);
+  };
+  const navigate = useNavigate();
   const [manpowerQuantity, setManpowerQuantity] = useState(0);
   const [trolleyQuantity, setTrolleyQuantity] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    // Get current date and time
+    const now = new Date();
+    const formattedDate = now.toISOString().split('T')[0];
+    const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5);
+
+    // Set the current date and time
+    setSelectedDate(formattedDate);
+    setSelectedTime(formattedTime);
+  }, []);
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
@@ -21,12 +41,13 @@ function Service() {
   };
 
   const handleGetDetails = (item) => {
-    if (selectedItem && selectedItem.image === item.image) {
-      setSelectedItem(null); // Uncheck the selected item
+    if (selectedItemId && selectedItemId.image === item.image) {
+      setSelectedItemId(null);
     } else {
-      setSelectedItem(item); // Set the clicked item as the selected item
+      setSelectedItemId(item);
     }
   };
+
 
   const increaseManpowerQuantity = () => {
     setManpowerQuantity(manpowerQuantity + 1);
@@ -45,6 +66,23 @@ function Service() {
   const decreaseTrolleyQuantity = () => {
     if (trolleyQuantity > 0) {
       setTrolleyQuantity(trolleyQuantity - 1);
+    }
+  };
+
+  const handleNextClick = (e) => {
+    e.preventDefault();
+
+    const now = new Date();
+    const selectedDateTime = new Date(`${selectedDate}T${selectedTime}`);
+
+    const diffInMs = selectedDateTime - now;
+    const diffInHours = diffInMs / (1000 * 60 * 60);
+
+    if (diffInHours < 3) {
+      toast.warning("Please Select time at least 3 hours in advance.");
+    } else {
+      setErrorMessage("");
+      navigate("/summary");
     }
   };
 
@@ -191,77 +229,64 @@ function Service() {
           slidesToSlide={1}
           swipeable
         >
-          {carouselItems.map((item, index) => (
-            <div
-              className="container my-5"
-              key={index}
-              id={`Vechicle-${index}`}
-            >
-              <div className="card h-100 d-flex flex-column">
-                <img src={item.image} className="card-img-top" alt="Card" />
-                <div className="card-body">
-                  <div className="card-text">
-                    <div className="d-flex justify-content-between">
-                      <span>{item.text1}</span>
-                      <span>{item.price}</span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <span>{item.text2}</span>
-                      <span>{item.weight}</span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <span>{item.text3}</span>
-                      <span>{item.size}</span>
-                    </div>
-                    <center>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="selectedItem"
-                          id="flexRadioDefault1"
-                          // checked={selectedItem === item}
-                          // onChange={() => handleGetDetails(item)}
-                        />
+          {carouselItems.map(function (item, index) {
+            return (
+              <label
+                className="container my-5"
+                key={index}
+                id={`Vehicle-${index}`}
+                onClick={handleCardClick.bind(null, index)} // handle card click
+                style={{ cursor: 'pointer', display: 'block' }} // change cursor to pointer to indicate clickability
+              >
+                <div className="card h-100 d-flex flex-column">
+                  <img src={item.image} className="card-img-top" alt="Card" />
+                  <div className="card-body">
+                    <div className="card-text">
+                      <div className="d-flex justify-content-between">
+                        <span>{item.text1}</span>
+                        <span>{item.price}</span>
                       </div>
-                    </center>
+                      <div className="d-flex justify-content-between">
+                        <span>{item.text2}</span>
+                        <span>{item.weight}</span>
+                      </div>
+                      <div className="d-flex justify-content-between">
+                        <span>{item.text3}</span>
+                        <span>{item.size}</span>
+                      </div>
+                      <center>
+                        <div className="form-check plan">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="selectedItem"
+                            id={`flexRadioDefault${index}`}
+                            checked={selectedItemId === index} // check if the item is selected
+                            readOnly // make it read-only because we are managing the state
+                          />
+                        </div>
+                      </center>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </label>
+            );
+          })}
         </Carousel>
-        <div
-          className="row p-3 my-3"
-          style={{
-            backgroundColor: "#9AB8DD",
-            borderRadius: "5px",
-          }}
-        >
-          <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-center">
-            <div className="form-check">
-              <label className="form-check-label" for="flexRadioDefault1">
-                <b> Driver as a helper</b>
-              </label>
-              <input
-                className="form-check-input"
-                type="radio"
-                name="flexRadioDefault"
-                id="flexRadioDefault1"
-              />
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-6 col-12 d-flex justify-content-center">
-            <div className="form-check">
-              <label className="form-check-label" for="flexRadioDefault1">
-                <b> Driver as man power</b>
-              </label>
-              <input
-                className="form-check-input"
-                type="radio"
-                name="flexRadioDefault"
-                id="flexRadioDefault1"
-              />
+        <div className="row d-flex flex-column py-3">
+          <div
+            className="d-flex justify-content-between p-3"
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "5px",
+              alignItems: "center",
+            }}
+          >
+            <span>
+              <b>Driver as Manpower</b>
+            </span>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
             </div>
           </div>
         </div>
@@ -275,50 +300,73 @@ function Service() {
             }}
           >
             <span>
-              <b>ManPower Required</b>
+              <b>Extra Manpower</b>
             </span>
-            {/* Manpower increment/decrement input field */}
-            <div className="quantity-input">
-              <button
-                className="quantity-btn btn "
-                style={{
-                  borderRadius: "50%",
-                }}
-                onClick={decreaseManpowerQuantity}
-                // disabled={manpowerQuantity === 0}
-              >
-                <FaMinus style={{ fontSize: "8px" }} />
-              </button>
+            <div className="form-check">
               <input
-                type="number"
-                className="quantity-value"
-                value={manpowerQuantity}
-                min={1}
-                max={99}
-                readOnly
-                style={{
-                  width: '50px',
-                  padding: '5px',
-                  textAlign: 'center',
-                  border: '1px solid #ccc',
-                  borderRadius: '5px',
-                }}
+                className="form-check-input"
+                type="checkbox"
+                id="flexCheckChecked"
+                onClick={handleCheckboxClick}
               />
-              <button
-                className="quantity-btn btn "
-                onClick={increaseManpowerQuantity}
-                disabled={manpowerQuantity === 99}
-                style={{
-                  borderRadius: "50%",
-                }}
-              >
-                <FaPlus style={{ fontSize: "8px" }} />
-              </button>
             </div>
           </div>
         </div>
-
-        <div className="row d-flex flex-column  py-3">
+        {showQuantity && (
+          <div className="row d-flex flex-column py-3">
+            <div
+              className="d-flex justify-content-between p-3"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "5px",
+                alignItems: "center",
+              }}
+            >
+              <span>
+                <b>Quantity</b>
+              </span>
+              {/* Quantity increment/decrement input field */}
+              <div className="quantity-input">
+                <button
+                  className="quantity-btn btn "
+                  style={{
+                    borderRadius: "50%",
+                  }}
+                  onClick={decreaseManpowerQuantity}
+                // disabled={manpowerQuantity === 0}
+                >
+                  <FaMinus style={{ fontSize: "8px" }} />
+                </button>
+                <input
+                  type="number"
+                  className="quantity-value"
+                  value={manpowerQuantity}
+                  min={1}
+                  max={99}
+                  readOnly
+                  style={{
+                    width: '50px',
+                    padding: '5px',
+                    textAlign: 'center',
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                  }}
+                />
+                <button
+                  className="quantity-btn btn "
+                  onClick={increaseManpowerQuantity}
+                  disabled={manpowerQuantity === 99}
+                  style={{
+                    borderRadius: "50%",
+                  }}
+                >
+                  <FaPlus style={{ fontSize: "8px" }} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="row d-flex flex-column py-3">
           <div
             className="d-flex justify-content-between p-3"
             style={{
@@ -328,50 +376,32 @@ function Service() {
             }}
           >
             <span>
-              <b>Trolley Required</b>
+              <b>Trolly Required</b>
             </span>
-            {/* Trolley increment/decrement input field */}
-            <div className="quantity-input">
-              <button
-                className="quantity-btn btn "
-                onClick={decreaseTrolleyQuantity}
-                // disabled={trolleyQuantity === 0}
-                style={{
-                  borderRadius: "50%",
-                }}
-              >
-                <FaMinus style={{ fontSize: "8px" }} />
-              </button>
-              <input
-                type="number"
-                className="quantity-value"
-                value={trolleyQuantity}
-                min={0}
-                max={99}
-                readOnly
-                style={{
-                  width: '50px',
-                  padding: '5px',
-                  textAlign: 'center',
-                  border: '1px solid #ccc',
-                  borderRadius: '5px',
-                }}
-              />
-              <button
-                className="quantity-btn btn"
-                onClick={increaseTrolleyQuantity}
-                disabled={trolleyQuantity === 99}
-                style={{
-                  borderRadius: "50%",
-                }}
-              >
-                <FaPlus style={{ fontSize: "8px" }} />
-              </button>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
             </div>
           </div>
         </div>
-        <div className="form-group py-3">
-          <label htmlFor="exampleTextarea" className="pb-3"><b>Driver message Required</b></label>
+        <div className="row d-flex flex-column py-3">
+          <div
+            className="d-flex justify-content-between p-3"
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "5px",
+              alignItems: "center",
+            }}
+          >
+            <span>
+              <b>Round Trip Required</b>
+            </span>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
+            </div>
+          </div>
+        </div>
+        <div className="row d-flex flex-column py-3">
+          <label htmlFor="exampleTextarea" className="form-label"><b>Message to Driver</b></label>
           <textarea
             className="form-control"
             id="exampleTextarea"
@@ -381,7 +411,7 @@ function Service() {
         </div>
         <div className="text-center pb-5">
           <Link to="/summary">
-            <button className="btn btn-primary px-5 py-2" id="NextMove">
+            <button className="btn btn-primary px-5 py-2" onClick={handleNextClick} id="NextMove">
               Next
             </button>
           </Link>
