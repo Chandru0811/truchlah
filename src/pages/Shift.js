@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/custom.css";
 import home from "../asset/Rectangle 19 (1).png";
 import item from "../asset/icons8-open-box-48 1.png";
-import truck from "../asset/Logistic workers delivering meds 1.png";
+import truck from "../asset/delivery-service.png";
 import { Link } from "react-router-dom";
 
 function Shift() {
@@ -13,7 +13,7 @@ function Shift() {
           src={truck}
           alt="truck"
           className="img-fluid"
-          style={{ height: "75vh" }}
+          style={{ height: "80vh" }}
         />
       </div>
 
