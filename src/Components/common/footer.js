@@ -51,20 +51,24 @@ function foot() {
                 </a>
               </li>
               <li>
-                <Link
-                  to="/termsandcondition"
+                <a
+                  href="https://trucklah.com/termsandconditions/index.html"
+                  target="_blank"
                   style={{ textDecoration: "none", color: "black" }}
+                  rel="noreferrer"
                 >
                   Terms & Conditions
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  to="/privacypolicy"
+                <a
+                  href="https://trucklah.com/privacypolicy/index.html"
+                  target="_blank"
                   style={{ textDecoration: "none", color: "black" }}
+                  rel="noreferrer"
                 >
                   Privacy Policy
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -124,12 +128,23 @@ function foot() {
         <hr></hr>
         <p className="text-dark text-decoration-none" href="/">
           2023 © Copyright Trucklah Pte Ltd. All Rights Reserved.&nbsp;
-          <Link to="/termsandcondition" style={{ textDecoration: "none" }}>
+          <a
+            href="https://trucklah.com/termsandconditions/index.html"
+            target="_blank"
+            style={{ textDecoration: "none" }}
+            rel="noreferrer"
+          >
             Terms & Conditions
-          </Link> &nbsp;
-          <Link to="/privacypolicy" style={{ textDecoration: "none" }}>
+          </a>{" "}
+          &nbsp;
+          <a
+            href="https://trucklah.com/privacypolicy/index.html"
+            target="_blank"
+            style={{ textDecoration: "none" }}
+            rel="noreferrer"
+          >
             Privacy Policy
-          </Link>
+          </a>
         </p>
       </div>
     </footer>

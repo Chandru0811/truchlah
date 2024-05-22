@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/custom.css";
 import HeroImg from "../../asset/TrucklahHeroImage.png";
 // import HeroVideoImg from "../../asset/HeroVideoImage-removebg-preview.png";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Section1() {
   const navigateToGooglePlayStore = () => {
@@ -36,14 +36,14 @@ function Section1() {
                     Dowload App
                   </button>
                 </div>
-                {/* <div className="col-lg-4 col-6 py-2 text-center">
+                <div className="col-lg-4 col-6 py-2 text-center">
                   <Link to="/shift">
                     <button className="btn btn-primary" id="HeroBtn">
                       Get Started !
                     </button>
                   </Link>
                 </div>
-                <div className="col-lg-3 col-12 py-2 text-center">
+                {/* <div className="col-lg-3 col-12 py-2 text-center">
                   <img
                     src={HeroVideoImg}
                     alt="HeroImg"
