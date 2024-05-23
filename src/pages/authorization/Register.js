@@ -18,20 +18,25 @@ const validationSchema = Yup.object().shape({
       "*Enter a valid email address"
     )
     .required("*Email is required"),
-  mobile: Yup.string()
+  mobileNo: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "*Invalid Phone Number"
     )
-    .required("*Mobile Number is required"),
-  password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters"),
+    .required("*mobileNo Number is required"),
+    password: Yup.string()
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+    )
+    .required("Please Enter your password"),
+  
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
-  country: Yup.string().required("*Country is required"),
-  referalCode: Yup.string().required("*Referal Code is required"),
+  countryCode: Yup.string().required("*countryCode is required"),
+  refCode: Yup.string().required("*Referal Code is required"),
+  termsCondition: Yup.string().notRequired(),
 });
 
 function Register() {
@@ -56,7 +61,7 @@ function Register() {
   //       lastName,
   //       password,
   //       email,
-  //       mobileNo,
+  //       mobileNoNo,
   //       countryCode,
   //       refCode,
   //       role,
@@ -82,17 +87,26 @@ function Register() {
       firstName: "",
       lastName: "",
       email: "",
-      mobile: "",
+      mobileNo: "",
       password: "",
       confirmPassword: "",
-      country: "",
-      referalCode: "",
+      countryCode: "",
+      refCode: "",
+      termsCondition: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      const payload = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        mobileNo: values.mobileNo,
+        password: values.password,
+        countryCode: values.countryCode,
+        refCode: values.refCode,
+        termsCondition: values.termsCondition ? "y" : "N",
+      };
       console.log("values", values);
-      navigate("/otp")
-
       // fetch("http://139.84.133.106:9095/trucklah/api/auth/signup", {
       //         method: "POST",
       //         headers: { "content-type": "application/json" },
@@ -105,23 +119,40 @@ function Register() {
       //         .catch((err) => {
       //           toast.error("Failed :" + err.message);
       //         });
-        // try {
-        //   const response = await axios.post("/http://139.84.133.106:9095/trucklah/api/auth/signup", values, {
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   });
-        //   if (response.status === 201) {
-        //     toast.success("Register successfully");
-        //     navigate("/otp");
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // } finally {
+      // values.termsCondition=values.termsCondition?"y":"N";
+      try {
+        const response = await axios.post(
+          `https://trucklah.com/user-service/api/user/signup`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+         const mobileNo = `${values.countryCode}${values.mobileNo}`
+          try {
+            const response = await axios.post(
+              `https://trucklah.com/user-service/api/user/sendOTP?phone=${mobileNo}`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          }
+          catch (error) {
+            toast.error(error);
+          }
 
-        // }
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }
     },
   });
   return (
@@ -271,18 +302,18 @@ function Register() {
                           </div>
                           <input
                             type="text"
-                            name="mobile"
+                            name="mobileNo"
                             className={`form-control ${
-                              formik.touched.mobile && formik.errors.mobile
+                              formik.touched.mobileNo && formik.errors.mobileNo
                                 ? "is-invalid"
                                 : ""
                             }`}
-                            {...formik.getFieldProps("mobile")}
+                            {...formik.getFieldProps("mobileNo")}
                           />
                         </div>
-                        {formik.touched.mobile && formik.errors.mobile && (
+                        {formik.touched.mobileNo && formik.errors.mobileNo && (
                           <div className="invalid-feedback">
-                            {formik.errors.mobile}
+                            {formik.errors.mobileNo}
                           </div>
                         )}
                       </div>
@@ -303,7 +334,7 @@ function Register() {
                                 : ""
                             }`}
                             {...formik.getFieldProps("password")}
-                            style={{backgroundImage:"none"}}
+                            style={{ backgroundImage: "none" }}
                           />
                           <span
                             className="password-toggle-icon"
@@ -344,7 +375,7 @@ function Register() {
                               onClick={confirmShowPassword}
                               style={{ cursor: "pointer" }}
                             >
-                              {cPassword ?<RiEyeOffLine /> : <RiEyeLine />}
+                              {cPassword ? <RiEyeOffLine /> : <RiEyeLine />}
                             </span>
                           </div>
                         </div>
@@ -386,34 +417,45 @@ function Register() {
                         </label>
                         <input
                           type="text"
-                          name="referalCode"
+                          name="refCode"
                           className={`form-control  ${
-                            formik.touched.referalCode &&
-                            formik.errors.referalCode
+                            formik.touched.refCode && formik.errors.refCode
                               ? "is-invalid"
                               : ""
                           }`}
-                          {...formik.getFieldProps("referalCode")}
+                          {...formik.getFieldProps("refCode")}
                         />
-                        {formik.touched.referalCode &&
-                          formik.errors.referalCode && (
-                            <div className="invalid-feedback">
-                              {formik.errors.referalCode}
-                            </div>
-                          )}
+                        {formik.touched.refCode && formik.errors.refCode && (
+                          <div className="invalid-feedback">
+                            {formik.errors.refCode}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="form-check mb-3 d-flex ">
                     <input
                       type="checkbox"
-                      className="form-check-input"
                       id="termsCheckbox"
+                      name="termsCondition"
+                      className={`form-check-input ${
+                        formik.touched.termsCondition &&
+                        formik.errors.termsCondition
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("termsCondition")}
                     />
                     &nbsp; &nbsp;{" "}
                     <label className="form-check-label" htmlFor="termsCheckbox">
                       I agree all statements in Terms and Conditions.
                     </label>
+                    {formik.touched.termsCondition &&
+                      formik.errors.termsCondition && (
+                        <div className="invalid-feedback">
+                          {formik.errors.termsCondition}
+                        </div>
+                      )}
                   </div>
                   <div className="form-check mb-3 d-flex ">
                     <input
