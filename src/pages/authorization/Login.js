@@ -9,9 +9,10 @@ import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import axios from "axios";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string()
+  username: Yup.string()
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "*Enter a valid email address"
@@ -29,70 +30,39 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
-
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
-      },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log("values", values);
-      //   try {
-      //     const response = await api.post("/createCenter", values, {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     });
-      //     if (response.status === 201) {
-      //       toast.success(response.data.message);
-      //       navigate("/center");
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   } finally {
-
-      //   }
+      appCode: "TRUCK_USER"
     },
-  });
+    validationSchema: validationSchema,
+    onSubmit:async (data, { resetForm }) => {
+      console.log("Form submission data:", data);
+      data.appCode = "TRUCK_USER"
+    try {
+      const response = await axios.post(`https://trucklah.com/user-service/api/user/login`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status===200) {
+        toast.success("Login Successful!");
+        navigate("/"); 
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed: " + error.message);
+    }
 
-  // async function handelLogin(event) {
-  //   event.preventDefault();
-
-  //   try {
-  //     const response = await fetch(
-  //       "http://139.84.133.106:9095/trucklah/api/auth/signin/ROLE_USER",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({}),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-
-  //       if (data && data.token) {
-  //         toast.success("Login Successful!");
-  //         navigate("/");
-  //       } else {
-  //         toast.error("Login Failed!");
-  //       }
-  //     } else {
-  //       toast.error("Login Failed!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     setMessage(`An error occurred: ${error.message}`);
-  //   }
-  // }
+    // Pass email and password to onLogin
+    navigate("/");
+    resetForm();
+  },
+});
 
   return (
     <div className="container-fluid">
@@ -135,7 +105,6 @@ function Login() {
             <hr></hr>
             <div className="row">
               <div className="col-lg-3 col-md-2 col-12"></div>
-
               <div className="col-lg-6 col-md-8 col-12">
                 <div className="text-center">
                   <p className="LoginContent">
@@ -152,7 +121,7 @@ function Login() {
                     </span>
                     <div className="or-line"></div>
                   </div>
-                  <form onClick={formik.handleSubmit}>
+                  <form onSubmit={formik.handleSubmit}>
                     <div className="form mb-3 d-flex justify-content-center">
                       <FloatingLabel
                         controlId="floatingInput"
@@ -163,16 +132,16 @@ function Login() {
                         <Form.Control
                           type="email"
                           className={`form-control  ${
-                            formik.touched.email && formik.errors.email
+                            formik.touched.username && formik.errors.username
                               ? "is-invalid"
                               : ""
                           }`}
-                          {...formik.getFieldProps("email")}
-                          placeholder="Enter your name"
+                          {...formik.getFieldProps("username")}
+                          placeholder="Enter your email"
                         />
-                        {formik.touched.email && formik.errors.email && (
+                        {formik.touched.username && formik.errors.username && (
                           <div className="invalid-feedback">
-                            {formik.errors.email}
+                            {formik.errors.username}
                           </div>
                         )}
                       </FloatingLabel>
@@ -192,7 +161,7 @@ function Login() {
                               : ""
                           }`}
                           {...formik.getFieldProps("password")}
-                         placeholder="Enter your password"
+                          placeholder="Enter your password"
                         />
                         {showPassword ? (
                           <RiEyeOffLine
@@ -229,13 +198,13 @@ function Login() {
                     </div>
                     <div className="text-center">
                       <button
+                        type="submit"
                         className="btn btn-primary py-2"
                         style={{ width: "100%" }}
                         id="VehicleButton"
-                        >
+                      >
                         Login{" "}
                       </button>
-                      {message && <p>{message}</p>}
                     </div>
                   </form>
                   <p className="mt-4">
@@ -243,7 +212,6 @@ function Login() {
                   </p>
                 </div>
               </div>
-
               <div className="col-lg-3 col-md-2 col-12"></div>
             </div>
           </div>
