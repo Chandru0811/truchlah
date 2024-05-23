@@ -16,7 +16,7 @@ import notification from "../../asset/notification.png";
 import support from "../../asset/support.png";
 import about from "../../asset/about.png";
 // import logos from "../../asset/logos.png";
-import User from "../../asset/user.png";
+import User from "../../pages/profile/Profile";
 import invoice from "../../asset/invoicebg.png";
 
 
@@ -107,14 +107,15 @@ function OffcanvasExample() {
                               </li>
                             </ul>
                           </div>
-
-                          <div className="col-lg-1">
+                          <User />
+                          {/* <div className="col-lg-1">
                             <div id="pro-btn">
-                              <Link to="#" onClick={handleShowProfile}>
+                              <Link to="/user" onClick={handleShowProfile}>
                                 <CgProfile style={{ color: "#3E4D6A" }} />
                               </Link>
                             </div>
-                          </div>
+
+                          </div> */}
                         </Nav>
                       </div>
                     </div>
@@ -123,7 +124,7 @@ function OffcanvasExample() {
               </Container>
             </Navbar>
 
-            <Offcanvas show={showProfile} onHide={handleCloseProfile} placement="end">
+            {/* <Offcanvas show={showProfile} onHide={handleCloseProfile} placement="end">
               <Offcanvas.Header>
                 <button type="button" className="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onClick={handleCloseProfile}></button>
                 <div className="w-100 text-center">
@@ -204,9 +205,9 @@ function OffcanvasExample() {
                     </tr>
                   </tbody>
                 </Table>
-                {/* You can add more content related to the user profile here */}
+
               </Offcanvas.Body>
-            </Offcanvas>
+            </Offcanvas> */}
           </>
         ))}
       </>

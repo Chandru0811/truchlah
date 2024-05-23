@@ -23,10 +23,10 @@ function Coupon() {
           REWARDS & COUPONS
         </h2>
         <div className="d-flex justify-content-center but">
-          <button className="mx-3" id="coupenBtn" onClick={hideSecondSection}>
+          <button className={`mx-3 ${showFirstSection ? "underline" : ""}`} id="coupenBtn" onClick={hideSecondSection}>
             Coupons
           </button>
-          <button className="mx-3" id="coupenBtn" onClick={hideFirstSection}>
+          <button className={`mx-3 ${showSecondSection ? "underline" : ""}`} id="coupenBtn" onClick={hideFirstSection}>
             Promotion
           </button>
         </div>
