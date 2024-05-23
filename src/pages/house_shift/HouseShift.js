@@ -1,26 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
+import blueMarker from "../../asset/pinBlue.png"; // Add a blue marker image in your assets
+import RedMarker from "../../asset/pinRed.png"; // Add a blue marker image in your assets
+import GreyMarker from "../../asset/pinGrey.png"; // Add a blue marker image in your assets
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Form, Modal, Button, InputGroup } from "react-bootstrap";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaRegAddressCard } from "react-icons/fa6";
+import { FaRegAddressCard, FaPhoneVolume } from "react-icons/fa";
+import { IoLocationSharp } from "react-icons/io5";
 import { IoMdContact } from "react-icons/io";
-import { FaPhoneVolume } from "react-icons/fa6";
-
 import {
   useJsApiLoader,
   GoogleMap,
-  PolylineF,
+  DirectionsService,
+  DirectionsRenderer,
   Autocomplete,
   MarkerF,
 } from "@react-google-maps/api";
-import { useState } from "react";
 import { Link } from "react-router-dom";
-
-const center = { lat: 13.05, lng: 80.2824 };
-const left = { lat: 13.0397, lng: 80.2792 };
 
 function HouseShift() {
   const { isLoaded } = useJsApiLoader({
@@ -28,10 +26,15 @@ function HouseShift() {
     libraries: ["places"],
   });
 
+  const [center, setCenter] = useState("");
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [ModalPickUp, setModalPickUp] = useState(false);
   const [ModalDropOff, setModalDropOff] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState(null);
+  const [destinationMarkerPosition, setDestinationMarkerPosition] =
+    useState(null);
+  const [directions, setDirections] = useState(null);
 
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
@@ -41,28 +44,97 @@ function HouseShift() {
     setDestination(autocomplete);
   };
 
-  const path = [
-    { lat: 13.05, lng: 80.2824 },
-    { lat: 13.0397, lng: 80.2792 },
-    { lat: 13.0615, lng: 80.2614 },
-    { lat: 13.0633, lng: 80.2812 },
-    { lat: 13.05, lng: 80.2824 },
-  ];
-
   const onPlaceChanged = () => {
-    if (origin !== null && destination !== null) {
-      console.log(origin.getPlace());
-      console.log(destination.getPlace());
+    if (origin !== null) {
+      const originPlace = origin.getPlace();
+      console.log("Origin Place:", originPlace);
+      if (
+        originPlace &&
+        originPlace.geometry &&
+        originPlace.geometry.location
+      ) {
+        const location = {
+          lat: originPlace.geometry.location.lat(),
+          lng: originPlace.geometry.location.lng(),
+        };
+        setMarkerPosition(location);
+        setCenter(location);
+      }
+    }
+
+    if (destination !== null) {
+      const destinationPlace = destination.getPlace();
+      console.log("Destination Place:", destinationPlace);
+      if (
+        destinationPlace &&
+        destinationPlace.geometry &&
+        destinationPlace.geometry.location
+      ) {
+        const dropLocation = {
+          lat: destinationPlace.geometry.location.lat(),
+          lng: destinationPlace.geometry.location.lng(),
+        };
+        setDestinationMarkerPosition(dropLocation);
+        setCenter(dropLocation);
+      }
+    }
+
+    if (origin && destination) {
+      const originPlace = origin.getPlace();
+      const destinationPlace = destination.getPlace();
+
+      if (
+        originPlace &&
+        originPlace.geometry &&
+        originPlace.geometry.location &&
+        destinationPlace &&
+        destinationPlace.geometry &&
+        destinationPlace.geometry.location
+      ) {
+        const originLocation = {
+          lat: originPlace.geometry.location.lat(),
+          lng: originPlace.geometry.location.lng(),
+        };
+        const destinationLocation = {
+          lat: destinationPlace.geometry.location.lat(),
+          lng: destinationPlace.geometry.location.lng(),
+        };
+
+        setDirections({
+          origin: originLocation,
+          destination: destinationLocation,
+          travelMode: window.google.maps.TravelMode.DRIVING,
+        });
+      }
     }
   };
 
-  if (!isLoaded) {
-    return;
-  }
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log("Latitude: ", latitude);
+          console.log("Longitude: ", longitude);
+          setCenter({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error("Error fetching location: ", error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        }
+      );
+    } else {
+      console.error("Geolocation not supported");
+    }
+  }, []);
 
-  const openModal = () => {
-    setModalPickUp(true);
-  };
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
 
   const closeModal = () => {
     setModalPickUp(false);
@@ -92,16 +164,44 @@ function HouseShift() {
               fullscreenControl: true,
             }}
           >
-            <MarkerF position={center} />
-            <MarkerF position={left} />
-            <PolylineF
-              path={path}
-              options={{
-                strokeColor: "#39FF14",
-                strokeOpacity: 1,
-                strokeWeight: 3,
-              }}
-            />
+            {markerPosition ? (
+              <MarkerF
+                position={markerPosition}
+                icon={{
+                  url: RedMarker,
+                  scaledSize: new window.google.maps.Size(40, 40),
+                }}
+              />
+            ) : (
+              <MarkerF
+                position={center}
+                icon={{
+                  url: RedMarker,
+                  scaledSize: new window.google.maps.Size(40, 40),
+                }}
+              />
+            )}
+            {destinationMarkerPosition && (
+              <MarkerF
+                position={destinationMarkerPosition}
+                icon={{
+                  url: blueMarker,
+                  scaledSize: new window.google.maps.Size(40, 40),
+                }}
+              />
+            )}
+            {directions && (
+              <DirectionsRenderer
+                directions={directions}
+                options={{
+                  polylineOptions: {
+                    strokeColor: "#39FF14",
+                    strokeOpacity: 1,
+                    strokeWeight: 3,
+                  },
+                }}
+              />
+            )}
           </GoogleMap>
         </div>
 
@@ -110,12 +210,14 @@ function HouseShift() {
             <div className="col-lg-3 col-md-3 col-12"></div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="row pb-5">
-                <div className=" col-12 lab " id="one">
+                <div className="col-12 lab" id="one">
                   <Autocomplete
                     onLoad={onOriginLoad}
                     onPlaceChanged={onPlaceChanged}
-                    types={["(regions)"]}
-                    placeholder="Origin"
+                    options={{
+                      types: ["(regions)"],
+                      componentRestrictions: { country: ["sg", "in"] },
+                    }}
                   >
                     <FloatingLabel
                       controlId="floatingInput"
@@ -136,20 +238,21 @@ function HouseShift() {
                         type="text"
                         placeholder="Drop off Location"
                         style={{ borderRadius: "30px" }}
-                        onClick={openModal}
                       />
                     </FloatingLabel>
                   </Autocomplete>
                 </div>
               </div>
 
-              <div className="row ">
-                <div className=" col-12 lab " id="one">
+              <div className="row">
+                <div className="col-12 lab" id="one">
                   <Autocomplete
                     onLoad={onDestinationLoad}
                     onPlaceChanged={onPlaceChanged}
-                    types={["(regions)"]}
-                    placeholder="Destination"
+                    options={{
+                      types: ["(regions)"],
+                      componentRestrictions: { country: ["sg", "in"] },
+                    }}
                   >
                     <FloatingLabel
                       controlId="floatingInput"
@@ -170,7 +273,7 @@ function HouseShift() {
                         type="text"
                         placeholder="Drop up Location"
                         style={{ borderRadius: "30px" }}
-                        onClick={openModal2}
+                        // onClick={openModal2}
                       />
                     </FloatingLabel>
                   </Autocomplete>
@@ -218,8 +321,8 @@ function HouseShift() {
                   Location<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
-                    <FaLocationDot />
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
+                    <IoLocationSharp />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
                 </InputGroup>
@@ -229,7 +332,7 @@ function HouseShift() {
                   Address<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
                     <FaRegAddressCard />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
@@ -240,7 +343,7 @@ function HouseShift() {
                   Contact Name<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
                     <IoMdContact />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
@@ -251,7 +354,7 @@ function HouseShift() {
                   Contact Number<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
                     <FaPhoneVolume />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
@@ -278,8 +381,8 @@ function HouseShift() {
                   Location<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
-                    <FaLocationDot />
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
+                    <IoLocationSharp />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
                 </InputGroup>
@@ -289,7 +392,7 @@ function HouseShift() {
                   Address<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
                     <FaRegAddressCard />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
@@ -300,7 +403,7 @@ function HouseShift() {
                   Contact Name<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
                     <IoMdContact />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
@@ -311,7 +414,7 @@ function HouseShift() {
                   Contact Number<span className="text-danger">*</span>
                 </label>
                 <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
                     <FaPhoneVolume />
                   </InputGroup.Text>
                   <Form.Control type="text" className="form-control" />
@@ -321,7 +424,7 @@ function HouseShift() {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button id="NextMove" onClick={closeModal}>
+          <Button id="NextMove" onClick={closeModal2}>
             next
           </Button>
         </Modal.Footer>
