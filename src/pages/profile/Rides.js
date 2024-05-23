@@ -27,10 +27,18 @@ function Order() {
         </div>
         <div className="row mt-5">
           <div className="col-12 d-flex justify-content-center">
-            <button className="mx-3" id="shift-btn" onClick={hideSecondSection}>
+            <button
+              className={`mx-3 ${showFirstSection ? "underline" : ""}`}
+              id="shift-btn"
+              onClick={hideSecondSection}
+            >
               House Shifting
             </button>
-            <button className="mx-3" id="shift-btn" onClick={hideFirstSection}>
+            <button
+              className={`mx-3 ${showSecondSection ? "underline" : ""}`}
+              id="shift-btn"
+              onClick={hideFirstSection}
+            >
               Item Shifting
             </button>
           </div>

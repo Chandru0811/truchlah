@@ -1503,16 +1503,16 @@ color: #000000;
   }
 
   
-  .table {
+  .data {
     width: 100%;
     background-color: #fff;
   }
   
-  .table-hover tbody tr:hover {
+  .data-hover tbody tr:hover {
     background-color: #f1f1f1;
   }
   
-  .table-link {
+  .data-link {
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -1520,24 +1520,24 @@ color: #000000;
     font-size: 1rem;
   }
   
-  .icon {
+  .got {
     width: 24px;
     height: 24px;
   }
 
 
-  .offcanvas-header {
+  .view {
     position: relative;
   }
   
-  .btn-close {
+  .closed {
     position: absolute;
     top: 0;
     right: 0;
     margin: 1rem;
   }
   
-  .text-center {
+  .centered {
     text-align: center;
   }
   
@@ -1562,6 +1562,30 @@ color: #000000;
   }
   
 
+  #shift-btn {
+    border: none;
+    background: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  #shift-btn.underline {
+    border-bottom: 2px solid #000000; 
+  }
+  #coupenBtn {
+    border: none;
+    background: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  #coupenBtn.underline {
+    border-bottom: 2px solid #000000; 
+  }
 
-
+  .pac-container {
+    border-color: transparent;
+    box-shadow: none;
+    border-top: 0px;
+  }
   
