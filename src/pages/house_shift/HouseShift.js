@@ -3,7 +3,7 @@ import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Form, Modal, Button } from "react-bootstrap";
+import { Form, Modal, Button, InputGroup } from "react-bootstrap";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaRegAddressCard } from "react-icons/fa6";
 import { IoMdContact } from "react-icons/io";
@@ -217,49 +217,45 @@ function HouseShift() {
                 <label className="form-label">
                   Location<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <FaLocationDot />
-                    &nbsp;
-                  </div>
-                  <input type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
               <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">
                   Address<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <FaRegAddressCard />
-                    &nbsp;
-                  </div>
-                  <textarea type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
               <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">
                   Contact Name<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <IoMdContact />
-                    &nbsp;
-                  </div>
-                  <input type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
               <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">
                   Contact Number<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <FaPhoneVolume />
-                    &nbsp;
-                  </div>
-                  <input type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
             </div>
           </div>
@@ -281,49 +277,45 @@ function HouseShift() {
                 <label className="form-label">
                   Location<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <FaLocationDot />
-                    &nbsp;
-                  </div>
-                  <input type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
               <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">
                   Address<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <FaRegAddressCard />
-                    &nbsp;
-                  </div>
-                  <textarea type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
               <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">
                   Contact Name<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <IoMdContact />
-                    &nbsp;
-                  </div>
-                  <input type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
               <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">
                   Contact Number<span className="text-danger">*</span>
                 </label>
-                <div className="d-flex">
-                  <div className="d-flex justify-content-center align-items-center">
+                <InputGroup className="d-flex">
+                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
                     <FaPhoneVolume />
-                    &nbsp;
-                  </div>
-                  <input type="text" className="form-control" />
-                </div>
+                  </InputGroup.Text>
+                  <Form.Control type="text" className="form-control" />
+                </InputGroup>
               </div>
             </div>
           </div>
