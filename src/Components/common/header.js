@@ -139,7 +139,7 @@ function OffcanvasExample() {
                 <Table className="table table-hover">
                   <tbody>
                     <tr>
-                      <td className="">
+                      <td className="py-1">
                         <Link to="/wallet" onClick={handleCloseMain} className="table-link">
                           <img src={wallet} alt="wallet pic" className="icon mx-3" />
                           <span>WALLET</span>
@@ -147,7 +147,7 @@ function OffcanvasExample() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="">
+                      <td className="py-1">
                         <Link to="/rides" onClick={handleCloseMain} className="table-link">
                           <img src={rides} alt="rides pic" className="icon mx-3" />
                           <span>MY RIDES</span>
@@ -155,7 +155,7 @@ function OffcanvasExample() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2">
+                      <td className="py-1">
                         <Link to="/referearn" onClick={handleCloseMain} className="table-link">
                           <img src={refer} alt="refer pic" className="icon mx-3" />
                           <span>REFER AND EARN</span>
@@ -163,7 +163,7 @@ function OffcanvasExample() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2">
+                      <td className="py-1">
                         <Link to="/coupons" onClick={handleCloseMain} className="table-link">
                           <img src={rewards} alt="rewards pic" className="icon mx-3" />
                           <span>REWARDS</span>
@@ -171,15 +171,15 @@ function OffcanvasExample() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-4">
-                        <Link to="/invoice" style={{ textDecoration: "none" }}>
-                          <img src={invoice} alt="user pic" className="mx-4" />
+                      <td className="py-1">
+                        <Link to="/invoice" style={{ textDecoration: "none" }} className="table-link">
+                          <img src={invoice} alt="user pic" className="icon mx-3" />
                           <span>Invoice</span>
                         </Link>
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2">
+                      <td className="py-1">
                         <Link to="/notification" onClick={handleCloseMain} className="table-link">
                           <img src={notification} alt="notification pic" className="icon mx-3" />
                           <span>NOTIFICATION</span>
@@ -187,7 +187,7 @@ function OffcanvasExample() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2">
+                      <td className="py-1">
                         <Link to="/support" onClick={handleCloseMain} className="table-link">
                           <img src={support} alt="support pic" className="icon mx-3" />
                           <span>SUPPORT</span>
@@ -195,7 +195,7 @@ function OffcanvasExample() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2">
+                      <td className="py-1">
                         <Link to="/about" onClick={handleCloseMain} className="table-link">
                           <img src={about} alt="about pic" className="icon mx-3" />
                           <span>ABOUT</span>

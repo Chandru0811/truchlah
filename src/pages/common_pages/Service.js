@@ -257,7 +257,7 @@ function Service() {
                       <center>
                         <div className="form-check plan">
                           <input
-                            className="form-check-input"
+                            className="form-check-input border-info "
                             type="radio"
                             name="selectedItem"
                             id={`flexRadioDefault${index}`}
@@ -286,7 +286,7 @@ function Service() {
               <b>Driver as Manpower</b>
             </span>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
+              <input class="form-check-input border-info " type="checkbox" value="" id="flexCheckChecked" />
             </div>
           </div>
         </div>
@@ -304,7 +304,7 @@ function Service() {
             </span>
             <div className="form-check">
               <input
-                className="form-check-input"
+                className="form-check-input border-info"
                 type="checkbox"
                 id="flexCheckChecked"
                 onClick={handleCheckboxClick}
@@ -379,7 +379,7 @@ function Service() {
               <b>Trolly Required</b>
             </span>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
+              <input class="form-check-input border-info" type="checkbox" value="" id="flexCheckChecked" />
             </div>
           </div>
         </div>
@@ -396,7 +396,7 @@ function Service() {
               <b>Round Trip Required</b>
             </span>
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
+              <input class="form-check-input border-info" type="checkbox" value="" id="flexCheckChecked" />
             </div>
           </div>
         </div>
