@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
@@ -62,7 +62,9 @@ function HouseShift() {
   const [destinationMarkerPosition, setDestinationMarkerPosition] =
     useState(null);
   const [directions, setDirections] = useState(null);
-
+  const [distance, setDistance] = useState("");
+  const [duration, setDuration] = useState("");
+  // const mapRef = useRef(null);
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
   };
@@ -71,7 +73,95 @@ function HouseShift() {
     setDestination(autocomplete);
   };
 
-  const onPlaceChanged = (type) => {
+  // Test 1
+  // const onPlaceChanged = (type) => {
+  //   if (type === "origin") {
+  //     if (origin) {
+  //       const place = origin.getPlace();
+  //       if (place && place.formatted_address) {
+  //         setSelectedAddress(place.formatted_address);
+  //         console.log("Selected origin:", place.formatted_address);
+  //       }
+  //       handleOpenModal("Pick Up Location");
+  //     }
+  //   } else if (type === "destination") {
+  //     if (destination) {
+  //       const place = destination.getPlace();
+  //       if (place && place.formatted_address) {
+  //         setSelectedAddress(place.formatted_address);
+  //         console.log("Selected destination:", place.formatted_address);
+  //       }
+  //       handleOpenModal("Drop Location");
+  //     }
+  //   }
+  //   if (origin !== null) {
+  //     const originPlace = origin.getPlace();
+  //     console.log("Origin Place:", originPlace);
+  //     if (
+  //       originPlace &&
+  //       originPlace.geometry &&
+  //       originPlace.geometry.location
+  //     ) {
+  //       const location = {
+  //         lat: originPlace.geometry.location.lat(),
+  //         lng: originPlace.geometry.location.lng(),
+  //       };
+  //       setMarkerPosition(location);
+  //       setCenter(location);
+  //     }
+  //   }
+
+  //   if (destination !== null) {
+  //     const destinationPlace = destination.getPlace();
+  //     console.log("Destination Place:", destinationPlace);
+  //     if (
+  //       destinationPlace &&
+  //       destinationPlace.geometry &&
+  //       destinationPlace.geometry.location
+  //     ) {
+  //       const dropLocation = {
+  //         lat: destinationPlace.geometry.location.lat(),
+  //         lng: destinationPlace.geometry.location.lng(),
+  //       };
+  //       setDestinationMarkerPosition(dropLocation);
+  //       setCenter(dropLocation);
+  //     }
+  //   }
+
+  //   if (origin && destination) {
+  //     const originPlace = origin.getPlace();
+  //     const destinationPlace = destination.getPlace();
+
+  //     if (
+  //       originPlace &&
+  //       originPlace.geometry &&
+  //       originPlace.geometry.location &&
+  //       destinationPlace &&
+  //       destinationPlace.geometry &&
+  //       destinationPlace.geometry.location
+  //     ) {
+  //       const originLocation = {
+  //         lat: originPlace.geometry.location.lat(),
+  //         lng: originPlace.geometry.location.lng(),
+  //       };
+  //       const destinationLocation = {
+  //         lat: destinationPlace.geometry.location.lat(),
+  //         lng: destinationPlace.geometry.location.lng(),
+  //       };
+
+  //       setDirections({
+  //         origin: originLocation,
+  //         destination: destinationLocation,
+  //         travelMode: window.google.maps.TravelMode.DRIVING,
+  //       });
+  //     }
+  //   }
+  // };
+
+
+  // Test 2
+  
+  const onPlaceChanged = async (type) => {
     if (type === "origin") {
       if (origin) {
         const place = origin.getPlace();
@@ -91,6 +181,7 @@ function HouseShift() {
         handleOpenModal("Drop Location");
       }
     }
+
     if (origin !== null) {
       const originPlace = origin.getPlace();
       console.log("Origin Place:", originPlace);
@@ -146,15 +237,140 @@ function HouseShift() {
           lng: destinationPlace.geometry.location.lng(),
         };
 
-        setDirections({
-          origin: originLocation,
-          destination: destinationLocation,
-          travelMode: window.google.maps.TravelMode.DRIVING,
-        });
+        const directionsService = new window.google.maps.DirectionsService();
+        directionsService.route(
+          {
+            origin: originLocation,
+            destination: destinationLocation,
+            travelMode: window.google.maps.TravelMode.DRIVING,
+          },
+          (result, status) => {
+            if (status === window.google.maps.DirectionsStatus.OK) {
+              setDirections(result);
+
+              // Extract distance and duration
+              const route = result.routes[0].legs[0];
+              setDistance(route.distance.text);
+              setDuration(route.duration.text);
+            } else {
+              console.error(`Error fetching directions ${result}`);
+            }
+          }
+        );
       }
     }
   };
 
+
+  // Test 3
+  // const onPlaceChanged = async (type) => {
+  //   if (type === "origin") {
+  //     if (origin) {
+  //       const place = origin.getPlace();
+  //       if (place && place.formatted_address) {
+  //         setSelectedAddress(place.formatted_address);
+  //         console.log("Selected origin:", place.formatted_address);
+  //       }
+  //       handleOpenModal("Pick Up Location");
+  //     }
+  //   } else if (type === "destination") {
+  //     if (destination) {
+  //       const place = destination.getPlace();
+  //       if (place && place.formatted_address) {
+  //         setSelectedAddress(place.formatted_address);
+  //         console.log("Selected destination:", place.formatted_address);
+  //       }
+  //       handleOpenModal("Drop Location");
+  //     }
+  //   }
+  
+  //   if (origin !== null) {
+  //     const originPlace = origin.getPlace();
+  //     console.log("Origin Place:", originPlace);
+  //     if (originPlace && originPlace.geometry && originPlace.geometry.location) {
+  //       const location = {
+  //         lat: originPlace.geometry.location.lat(),
+  //         lng: originPlace.geometry.location.lng(),
+  //       };
+  //       setMarkerPosition(location);
+  //       setCenter(location);
+  //     }
+  //   }
+  
+  //   if (destination !== null) {
+  //     const destinationPlace = destination.getPlace();
+  //     console.log("Destination Place:", destinationPlace);
+  //     if (destinationPlace && destinationPlace.geometry && destinationPlace.geometry.location) {
+  //       const dropLocation = {
+  //         lat: destinationPlace.geometry.location.lat(),
+  //         lng: destinationPlace.geometry.location.lng(),
+  //       };
+  //       setDestinationMarkerPosition(dropLocation);
+  //       setCenter(dropLocation);
+  //     }
+  //   }
+  
+  //   if (origin && destination) {
+  //     const originPlace = origin.getPlace();
+  //     const destinationPlace = destination.getPlace();
+  
+  //     if (
+  //       originPlace &&
+  //       originPlace.geometry &&
+  //       originPlace.geometry.location &&
+  //       destinationPlace &&
+  //       destinationPlace.geometry &&
+  //       destinationPlace.geometry.location
+  //     ) {
+  //       const originLocation = {
+  //         lat: originPlace.geometry.location.lat(),
+  //         lng: originPlace.geometry.location.lng(),
+  //       };
+  //       const destinationLocation = {
+  //         lat: destinationPlace.geometry.location.lat(),
+  //         lng: destinationPlace.geometry.location.lng(),
+  //       };
+  
+  //       const directionsService = new window.google.maps.DirectionsService();
+  //       directionsService.route(
+  //         {
+  //           origin: originLocation,
+  //           destination: destinationLocation,
+  //           travelMode: window.google.maps.TravelMode.DRIVING,
+  //         },
+  //         (result, status) => {
+  //           if (status === window.google.maps.DirectionsStatus.OK) {
+  //             const directionsRenderer = new window.google.maps.DirectionsRenderer({
+  //               polylineOptions: {
+  //                 strokeColor: 'blue',
+  //                 strokeOpacity: 0.6,
+  //                 strokeWeight: 5,
+  //               },
+  //               markerOptions: {
+  //                 origin: {
+  //                   icon: 'path/to/custom-origin-icon.png',
+  //                 },
+  //                 destination: {
+  //                   icon: 'path/to/custom-destination-icon.png',
+  //                 },
+  //               },
+  //             });
+              
+  //             directionsRenderer.setMap(map);
+  //             directionsRenderer.setDirections(result);
+  
+  //             const route = result.routes[0].legs[0];
+  //             setDistance(route.distance.text);
+  //             setDuration(route.duration.text);
+  //           } else {
+  //             console.error(`Error fetching directions ${result}`);
+  //           }
+  //         }
+  //       );
+  //     }
+  //   }
+  // };
+  
   const handleOpenModal = (title) => {
     setModalTitle(title);
     setModalShow(true);
@@ -206,6 +422,7 @@ function HouseShift() {
               mapTypeControl: true,
               fullscreenControl: true,
             }}
+            // onLoad={map => mapRef.current = map}
           >
             {markerPosition ? (
               <MarkerF
@@ -224,7 +441,7 @@ function HouseShift() {
                 }}
               />
             )}
-            {destinationMarkerPosition && (
+            {/* {destinationMarkerPosition && (
               <MarkerF
                 position={(destinationMarkerPosition, left)}
                 icon={{
@@ -232,13 +449,13 @@ function HouseShift() {
                   scaledSize: new window.google.maps.Size(40, 40),
                 }}
               />
-            )}
+            )} */}
             {directions && (
               <DirectionsRenderer
                 directions={directions}
                 options={{
                   polylineOptions: {
-                    strokeColor: "#39FF14",
+                    strokeColor: "blue",
                     strokeOpacity: 1,
                     strokeWeight: 3,
                   },
@@ -249,6 +466,16 @@ function HouseShift() {
         </div>
 
         <div className="col-12 py-5">
+          <div className="row mb-4">
+            <div className="col-12">
+              {distance && duration && (
+                <div className="distance-time d-flex justify-content-center align-items-center">
+                  <p className="me-5">Distance : <b>{distance}</b></p>
+                  <p>Duration : <b>{duration}</b></p>
+                </div>
+              )}
+            </div>
+          </div>
           <div className="row">
             <div className="col-lg-3 col-md-3 col-12"></div>
             <div className="col-lg-6 col-md-6 col-12">
