@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
-import blueMarker from "../../asset/pinBlue.png"; // Add a blue marker image in your assets
-import RedMarker from "../../asset/pinRed.png"; // Add a blue marker image in your assets
-import GreyMarker from "../../asset/pinGrey.png"; // Add a blue marker image in your assets
+import blueMarker from "../../asset/pinBlue.png";
+import RedMarker from "../../asset/pinRed.png";
+import GreyMarker from "../../asset/pinGrey.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Form, Modal, Button, InputGroup } from "react-bootstrap";
-import { FaRegAddressCard, FaPhoneVolume } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoMdContact } from "react-icons/io";
+import {
+  FaLocationDot,
+  FaRegAddressCard,
+  FaPhoneVolume,
+} from "react-icons/fa6";
 import {
   useJsApiLoader,
   GoogleMap,
@@ -19,6 +23,26 @@ import {
   MarkerF,
 } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
+import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+const center = { lat: 13.05, lng: 80.2824 };
+const left = { lat: 13.0397, lng: 80.2792 };
+
+const path = [
+  { lat: 13.05, lng: 80.2824 },
+  { lat: 13.0397, lng: 80.2792 },
+  { lat: 13.0615, lng: 80.2614 },
+  { lat: 13.0633, lng: 80.2812 },
+  { lat: 13.05, lng: 80.2824 },
+];
+
+const validationSchema = Yup.object().shape({
+  location: Yup.string().required("!Location is required"),
+  address: Yup.string().required("!Address is required"),
+  contactName: Yup.string().required("!Contact Name is required"),
+  contactNumber: Yup.string().required("!Contact Number is required"),
+});
 
 function HouseShift() {
   const { isLoaded } = useJsApiLoader({
@@ -29,6 +53,9 @@ function HouseShift() {
   const [center, setCenter] = useState("");
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState("");
   const [ModalPickUp, setModalPickUp] = useState(false);
   const [ModalDropOff, setModalDropOff] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(null);
@@ -44,7 +71,26 @@ function HouseShift() {
     setDestination(autocomplete);
   };
 
-  const onPlaceChanged = () => {
+  const onPlaceChanged = (type) => {
+    if (type === "origin") {
+      if (origin) {
+        const place = origin.getPlace();
+        if (place && place.formatted_address) {
+          setSelectedAddress(place.formatted_address);
+          console.log("Selected origin:", place.formatted_address);
+        }
+        handleOpenModal("Pick Up Location");
+      }
+    } else if (type === "destination") {
+      if (destination) {
+        const place = destination.getPlace();
+        if (place && place.formatted_address) {
+          setSelectedAddress(place.formatted_address);
+          console.log("Selected destination:", place.formatted_address);
+        }
+        handleOpenModal("Drop Location");
+      }
+    }
     if (origin !== null) {
       const originPlace = origin.getPlace();
       console.log("Origin Place:", originPlace);
@@ -109,6 +155,15 @@ function HouseShift() {
     }
   };
 
+  const handleOpenModal = (title) => {
+    setModalTitle(title);
+    setModalShow(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalShow(false);
+  };
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -135,18 +190,6 @@ function HouseShift() {
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
-
-  const closeModal = () => {
-    setModalPickUp(false);
-  };
-
-  const openModal2 = () => {
-    setModalDropOff(true);
-  };
-
-  const closeModal2 = () => {
-    setModalDropOff(false);
-  };
 
   return (
     <div className="container-fluid" style={{ backgroundColor: "#fcf3f6" }}>
@@ -183,7 +226,7 @@ function HouseShift() {
             )}
             {destinationMarkerPosition && (
               <MarkerF
-                position={destinationMarkerPosition}
+                position={(destinationMarkerPosition, left)}
                 icon={{
                   url: blueMarker,
                   scaledSize: new window.google.maps.Size(40, 40),
@@ -213,7 +256,7 @@ function HouseShift() {
                 <div className="col-12 lab" id="one">
                   <Autocomplete
                     onLoad={onOriginLoad}
-                    onPlaceChanged={onPlaceChanged}
+                    onPlaceChanged={() => onPlaceChanged("origin")}
                     options={{
                       types: ["(regions)"],
                       componentRestrictions: { country: ["sg", "in"] },
@@ -248,7 +291,7 @@ function HouseShift() {
                 <div className="col-12 lab" id="one">
                   <Autocomplete
                     onLoad={onDestinationLoad}
-                    onPlaceChanged={onPlaceChanged}
+                    onPlaceChanged={() => onPlaceChanged("destination")}
                     options={{
                       types: ["(regions)"],
                       componentRestrictions: { country: ["sg", "in"] },
@@ -273,7 +316,6 @@ function HouseShift() {
                         type="text"
                         placeholder="Drop up Location"
                         style={{ borderRadius: "30px" }}
-                        // onClick={openModal2}
                       />
                     </FloatingLabel>
                   </Autocomplete>
@@ -309,125 +351,120 @@ function HouseShift() {
           </div>
         </div>
       </div>
-      <Modal show={ModalPickUp} onHide={closeModal}>
+      <Modal show={modalShow} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Pick Up Location</Modal.Title>
+          <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="container">
-            <div className="row py-4">
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Location<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <IoLocationSharp />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Address<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <FaRegAddressCard />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Contact Name<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <IoMdContact />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Contact Number<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <FaPhoneVolume />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-            </div>
-          </div>
+          <Formik
+            initialValues={{
+              location: selectedAddress,
+              address: "",
+              contactName: "",
+              contactNumber: "",
+            }}
+            validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting }) => {
+              console.log("Form submitted:", values);
+              setSubmitting(false);
+              handleCloseModal();
+            }}
+          >
+            {({ isSubmitting }) => (
+              <FormikForm>
+                <div className="container">
+                  <div className="row py-4">
+                    <div className="col-md-12 col-12 mb-2">
+                      <label className="form-label">
+                        Location<span className="text-danger">*</span>
+                      </label>
+                      <InputGroup className="d-flex">
+                        <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                          <FaLocationDot />
+                        </InputGroup.Text>
+                        <Field
+                          type="text"
+                          name="location"
+                          className="form-control"
+                        />
+                      </InputGroup>
+                      <ErrorMessage
+                        name="location"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </div>
+                    <div className="col-md-12 col-12 mb-2">
+                      <label className="form-label">
+                        Address<span className="text-danger">*</span>
+                      </label>
+                      <InputGroup className="d-flex">
+                        <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                          <FaRegAddressCard />
+                        </InputGroup.Text>
+                        <Field
+                          type="text"
+                          name="address"
+                          className="form-control"
+                        />
+                      </InputGroup>
+                      <ErrorMessage
+                        name="address"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </div>
+                    <div className="col-md-12 col-12 mb-2">
+                      <label className="form-label">
+                        Contact Name<span className="text-danger">*</span>
+                      </label>
+                      <InputGroup className="d-flex">
+                        <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                          <IoMdContact />
+                        </InputGroup.Text>
+                        <Field
+                          type="text"
+                          name="contactName"
+                          className="form-control"
+                        />
+                      </InputGroup>
+                      <ErrorMessage
+                        name="contactName"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </div>
+                    <div className="col-md-12 col-12 mb-2">
+                      <label className="form-label">
+                        Contact Number<span className="text-danger">*</span>
+                      </label>
+                      <InputGroup className="d-flex">
+                        <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white ">
+                          <FaPhoneVolume />
+                        </InputGroup.Text>
+                        <Field
+                          type="text"
+                          name="contactNumber"
+                          className="form-control"
+                        />
+                      </InputGroup>
+                      <ErrorMessage
+                        name="contactNumber"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <Modal.Footer>
+                  <Button id="NextMove" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Submitting..." : "Next"}
+                  </Button>
+                </Modal.Footer>
+              </FormikForm>
+            )}
+          </Formik>
         </Modal.Body>
-        <Modal.Footer>
-          <Button id="NextMove" onClick={closeModal}>
-            next
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={ModalDropOff} onHide={closeModal2}>
-        <Modal.Header closeButton>
-          <Modal.Title>Drop Location</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="container">
-            <div className="row py-4">
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Location<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <IoLocationSharp />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Address<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <FaRegAddressCard />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Contact Name<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <IoMdContact />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-              <div className="col-md-12 col-12 mb-2">
-                <label className="form-label">
-                  Contact Number<span className="text-danger">*</span>
-                </label>
-                <InputGroup className="d-flex">
-                  <InputGroup.Text className="d-flex justify-content-center align-items-center bg-white">
-                    <FaPhoneVolume />
-                  </InputGroup.Text>
-                  <Form.Control type="text" className="form-control" />
-                </InputGroup>
-              </div>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button id="NextMove" onClick={closeModal2}>
-            next
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
