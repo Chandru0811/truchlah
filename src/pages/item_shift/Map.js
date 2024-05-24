@@ -1,21 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Form } from "react-bootstrap";
-import { FaMinus } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
 import {
   useJsApiLoader,
   GoogleMap,
-  PolylineF,
   Autocomplete,
-  MarkerF,
+  DirectionsService,
+  DirectionsRenderer,
+  Marker,
 } from "@react-google-maps/api";
-import { useState } from "react";
 
 const center = { lat: 13.05, lng: 80.2824 };
 const left = { lat: 13.0397, lng: 80.2792 };
@@ -23,11 +21,13 @@ const left = { lat: 13.0397, lng: 80.2792 };
 function Maps() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"], // add the libraries prop here
+    libraries: ["places"],
   });
 
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [directions, setDirections] = useState(null);
+  const [stops, setStops] = useState([]);
 
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
@@ -37,7 +37,43 @@ function Maps() {
     setDestination(autocomplete);
   };
 
-  const [stops, setStops] = useState([]);
+  const handlePlaceChanged = () => {
+    if (origin && destination) {
+      calculateRoute();
+    }
+  };
+
+  const calculateRoute = () => {
+    const originPlace = origin.getPlace();
+    const destinationPlace = destination.getPlace();
+
+    if (
+      originPlace &&
+      originPlace.geometry &&
+      destinationPlace &&
+      destinationPlace.geometry
+    ) {
+      const directionsService = new window.google.maps.DirectionsService();
+      directionsService.route(
+        {
+          origin: originPlace.geometry.location,
+          destination: destinationPlace.geometry.location,
+          travelMode: "DRIVING",
+        },
+        (result, status) => {
+          if (status === "OK") {
+            setDirections(result);
+          } else {
+            console.error("Directions request failed due to ", status);
+          }
+        }
+      );
+    } else {
+      console.error(
+        "Origin or destination place details are undefined or invalid."
+      );
+    }
+  };
 
   const handleAddStop = () => {
     setStops([...stops, ""]);
@@ -55,25 +91,9 @@ function Maps() {
     setStops(updatedStops);
   };
 
-  const path = [
-    { lat: 13.05, lng: 80.2824 },
-    { lat: 13.0397, lng: 80.2792 },
-    { lat: 13.0615, lng: 80.2614 },
-    { lat: 13.0633, lng: 80.2812 },
-    { lat: 13.05, lng: 80.2824 },
-  ];
-
-  const onPlaceChanged = () => {
-    if (origin !== null && destination !== null) {
-      console.log(origin.getPlace());
-      console.log(destination.getPlace());
-    }
-  };
-
   if (!isLoaded) {
-    return;
+    return null; // Return null while loading
   }
-
   return (
     <div className="container-fluid" style={{ backgroundColor: "#fcf3f6" }}>
       <div className="row">
@@ -90,19 +110,15 @@ function Maps() {
               fullscreenControl: false,
             }}
           >
-            <MarkerF position={center} />
-            <MarkerF position={left} />
-            <PolylineF
-              path={path}
-              options={{
-                strokeColor: "#39FF14",
-                strokeOpacity: 1,
-                strokeWeight: 3,
-              }}
-            />
+            {origin && origin.getPlace() && (
+              <Marker position={origin.getPlace().geometry.location} />
+            )}
+            {destination && destination.getPlace() && (
+              <Marker position={destination.getPlace().geometry.location} />
+            )}
+            {directions && <DirectionsRenderer directions={directions} />}
           </GoogleMap>
         </div>
-
         <div className="col-12 py-5">
           <div className="row">
             <div className="col-lg-3 col-md-3 col-12"></div>
@@ -111,7 +127,7 @@ function Maps() {
                 <div className=" col-12 lab " id="one">
                   <Autocomplete
                     onLoad={onOriginLoad}
-                    onPlaceChanged={onPlaceChanged}
+                    onPlaceChanged={handlePlaceChanged}
                     types={["(regions)"]}
                     placeholder="Origin"
                   >
@@ -139,12 +155,11 @@ function Maps() {
                   </Autocomplete>
                 </div>
               </div>
-
               <div className="row ">
                 <div className=" col-12 lab " id="one">
                   <Autocomplete
                     onLoad={onDestinationLoad}
-                    onPlaceChanged={onPlaceChanged}
+                    onPlaceChanged={handlePlaceChanged}
                     types={["(regions)"]}
                     placeholder="Destination"
                   >
@@ -172,25 +187,6 @@ function Maps() {
                   </Autocomplete>
                 </div>
               </div>
-
-              {stops.map((stop, index) => (
-                <div key={index} className="d-flex align-items-center mt-3">
-                  <Form.Control
-                    id="AddStop"
-                    type="text"
-                    placeholder="Add more stops"
-                    value={stop}
-                    onChange={(e) => handleStopChange(index, e.target.value)}
-                    className="me-2"
-                  />
-                  <FaMinus
-                    className="text-danger"
-                    onClick={() => handleDeleteStop(index)}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-              ))}
-
               <div className="pt-4">
                 <button
                   className="btn btn-primary "
@@ -203,8 +199,25 @@ function Maps() {
                 >
                   Add Stop <FaPlus />
                 </button>
+                {stops.map((stop, index) => (
+                  <div key={index} className="d-flex align-items-center mt-3">
+                    <Form.Control
+                      id="AddStop"
+                      type="text"
+                      placeholder="Add more stops"
+                      value={stop}
+                      onChange={(e) => handleStopChange(index, e.target.value)}
+                      className="me-2"
+                    />
+                    <FaMinus
+                      className="text-danger"
+                      onClick={() => handleDeleteStop(index)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </div>
+                ))}
               </div>
-              <div className="text-center">
+              <div className="text-center mt-4">
                 <Link to="/confirmlocation">
                   <button className="btn btn-primary px-5 py-2" id="NextMove">
                     Next
@@ -221,31 +234,3 @@ function Maps() {
 }
 
 export default Maps;
-
-/* <Modal
-                isOpen={selectedVehicle !== null}
-                onRequestClose={() => setSelectedVehicle(null)}
-                className="Modal"
-                overlayClassName="Overlay"
-            >
-                {selectedVehicle && (
-                    <div>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <img src={selectedVehicle.image} alt="Vehicle" />
-                            </div>
-                            <div className="col-md-6">
-                                <h3>{selectedVehicle.text1}</h3>
-                                <p>Weight: {selectedVehicle.weight}</p>
-                                <p>Description: {selectedVehicle.description}</p>
-                            </div>
-                        </div>
-                        <div className="row mt-3">
-                            <div className="col-md-6">
-                                <h4>Basic Fare Estimation</h4>
-                               
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </Modal> */
