@@ -24,13 +24,13 @@ const validationSchema = Yup.object().shape({
       "*Invalid Phone Number"
     )
     .required("*mobileNo Number is required"),
-    password: Yup.string()
+  password: Yup.string()
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
     )
     .required("Please Enter your password"),
-  
+
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
@@ -132,7 +132,7 @@ function Register() {
         );
         if (response.status === 200) {
           toast.success(response.data.message);
-         const mobileNo = `${values.countryCode}${values.mobileNo}`
+          const mobileNo = `${values.countryCode}${values.mobileNo}`;
           try {
             const response = await axios.post(
               `https://trucklah.com/user-service/api/user/sendOTP?phone=${mobileNo}`,
@@ -142,11 +142,9 @@ function Register() {
                 },
               }
             );
-          }
-          catch (error) {
+          } catch (error) {
             toast.error(error);
           }
-
         } else {
           toast.error(response.data.message);
         }
