@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/authorization/ForgetPassword";
 import OTP from "./pages/authorization/OTP";
 // import Maps from "./pages/item_shift/Map";
 import Shift from "./pages/Shift";
+// import Shift from "./pages/Algorithm/AlgorithmSteps";
 import HouseShift from "./pages/house_shift/HouseShift";
 import ConfirmLocation from "./pages/common_pages/ConfirmLocation";
 import Service from "./pages/common_pages/Service";
@@ -31,7 +32,7 @@ import About from "./Components/home/about";
 import ContactUs from "./Components/home/ContactUs";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import TermsCondition from "./pages/TermsCondition";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Wallet from "./pages/profile/Wallet";
@@ -41,6 +42,9 @@ import Support from "./pages/profile/Support";
 import Refer from "./pages/profile/Refer&Earn";
 import Map from "./pages/item_shift/Map";
 import MapCopy from "./pages/item_shift/Map copy";
+import Priceing from "./pages/Priceing";
+import { useEffect, useState } from "react";
+import axios from "axios";
 // import MapCopy from "./pages/item_shift/Map copy";
 
 function UserRoute() {
@@ -48,234 +52,93 @@ function UserRoute() {
     duration: 800,
     delay: 200,
   });
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const handleLogin = () => {
+    sessionStorage.setItem("isAdmin", true);
+    setIsAdmin(true);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("roles");
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("isAdmin");
+    setIsAdmin(false);
+  };
+
+  useEffect(() => {
+    const isAdminFromStorage = sessionStorage.getItem("isAdmin");
+    const isAdminBoolean = isAdminFromStorage === "true";
+    if (isAdmin !== isAdminBoolean) {
+      setIsAdmin(isAdminBoolean);
+    }
+
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+
+      (error) => {
+        // console.log("Error is", error.response);
+        if (error.response?.status === 401) {
+          toast.warning("Session Expired!! Please Login");
+          handleLogout();
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Router>
       <ToastContainer />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <AppLayout>
-              <Home />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <AppLayout>
-              <Login />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <AppLayout>
-              <Register />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/ShiftPack"
-          element={
-            <AppLayout>
-              <ShiftPack />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/about"
-          element={
-            <AppLayout>
-              <About />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <AppLayout>
-              <ContactUs />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/forgetpassword"
-          element={
-            <AppLayout>
-              <ForgotPassword />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/otp"
-          element={
-            <AppLayout>
-              <OTP />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/map"
-          element={
-            <AppLayout>
-              <Map />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/mapcopy"
-          element={
-            <AppLayout>
-              <MapCopy />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/shift"
-          element={
-            <AppLayout>
-              <Shift />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/houseshift"
-          element={
-            <AppLayout>
-              <HouseShift />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/confirmlocation"
-          element={
-            <AppLayout>
-              <ConfirmLocation />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/service"
-          element={
-            <AppLayout>
-              <Service />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/successful"
-          element={
-            <AppLayout>
-              <SuccessFul />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/summary"
-          element={
-            <AppLayout>
-              <Summary />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/payments"
-          element={
-            <AppLayout>
-              <Payment />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/invoice"
-          element={
-            <AppLayout>
-              <Invoices />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/cancelorder"
-          element={
-            <AppLayout>
-              <Cancel />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/user"
-          element={
-            <AppLayout>
-              <User />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/rides"
-          element={
-            <AppLayout>
-              <Order />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/coupons"
-          element={
-            <AppLayout>
-              <Coupons />
-            </AppLayout>
-          }
-        />
-        <Route path="/termsandcondition" element={<TermsCondition />} />
-        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-        <Route
-          path="/wallet"
-          element={
-            <AppLayout>
-              <Wallet />
-            </AppLayout>
-          }
-        />
-        <Route
-          path="/notification"
-          element={
-            <AppLayout>
-              <Notification />
-            </AppLayout>
-          }
-        />
-        <Route path="/support" element={<Support />} />
-        <Route path="/referearn" element={<Refer />} />
-        <Route
-          path="/invoice"
-          element={
-            <AppLayout>
-              <Invoice />
-            </AppLayout>
-          }
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Head isAdmin={isAdmin} handleLogout={handleLogout} />
+      <div style={{ marginTop: "88px" }}>
+        <Routes>
+          <Route path="/" element={<Home isAdmin={isAdmin} />} />
+          <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/ShiftPack" element={<ShiftPack />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/forgetpassword" element={<ForgotPassword />} />
+          <Route path="/otp" element={<OTP />} />
+          <Route path="/termsandcondition" element={<TermsCondition />} />
+          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/pricing" element={<Priceing />} />
+          {isAdmin && (
+            <>
+              <Route path="/map" element={<Map />} />
+              <Route path="/mapcopy" element={<MapCopy />} />
+              <Route path="/wallet" element={<Wallet />} />
+              <Route path="/notification" element={<Notification />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/referearn" element={<Refer />} />
+              <Route path="/invoice" element={<Invoice />} />
+              <Route path="/shift" element={<Shift />} />
+              <Route path="/houseshift" element={<HouseShift />} />
+              <Route path="/confirmlocation" element={<ConfirmLocation />} />
+              <Route path="/service" element={<Service />} />
+              <Route path="/successful" element={<SuccessFul />} />
+              <Route path="/summary" element={<Summary />} />
+              <Route path="/payments" element={<Payment />} />
+              <Route path="/invoice" element={<Invoices />} />
+              <Route path="/cancelorder" element={<Cancel />} />
+              <Route path="/user" element={<User />} />
+              <Route path="/rides" element={<Order />} />
+              <Route path="/coupons" element={<Coupons />} />
+            </>
+          )}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+      <BackToTopButton />
+      <Foot />
     </Router>
-  );
-}
-
-function AppLayout({ children }) {
-  const location = useLocation();
-  const hideHeaderFooter =
-    location.pathname === "/termsandcondition" ||
-    location.pathname === "/privacypolicy";
-
-  return (
-    <>
-      {!hideHeaderFooter && <Head />}
-      <div className="content">{children}</div>
-      {!hideHeaderFooter && <BackToTopButton />}
-      {!hideHeaderFooter && <Foot />}
-    </>
   );
 }
 

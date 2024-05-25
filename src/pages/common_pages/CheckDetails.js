@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Ace from "../../asset/Rectangle 42.png";
 import "../../styles/custom.css";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { bookingApi } from "../../config/URL";
 
 function Summary() {
   const [data, setData] = useState({});
-  const token = "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoibGVlbGFjbG91ZDAxQGdtYWlsLmNvbSIsImlhdCI6MTcxNjQ1NDc5NywiZXhwIjoxNzE2NDU4Mzk3fQ.4vtqPSlMEhePlEk76AghcwA7NbCodHNnIchs7St1bpA3sD7kPwglDJv8MtrP3LhxBFYR8DxWBICLLvK0MWK5Rw";
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://trucklah.com/booking-service/api/booking/getBookingById/340`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
+        const response = await bookingApi.get(`booking/getBookingById/340`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setData(response.data);
       } catch (error) {
         toast.error("Error Fetching Data: " + error.message);
@@ -84,7 +81,9 @@ function Summary() {
                         <span style={{ color: "#00316B" }}>
                           <b>Contact:</b>{" "}
                         </span>
-                        <span style={{ color: "#494949" }}>{data.pickupMobile}</span>
+                        <span style={{ color: "#494949" }}>
+                          {data.pickupMobile}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -96,7 +95,9 @@ function Summary() {
                       <span style={{ color: "#00316B" }}>
                         <b>Name :</b>{" "}
                       </span>
-                      <span style={{ color: "#494949" }}>{data.dropoffContactName}</span>
+                      <span style={{ color: "#494949" }}>
+                        {data.dropoffContactName}
+                      </span>
                     </p>
                     <p>
                       <span style={{ color: "#00316B" }}>
@@ -110,7 +111,9 @@ function Summary() {
                       <span style={{ color: "#00316B" }}>
                         <b>Contact: </b>
                       </span>
-                      <span style={{ color: "#494949" }}>{data.dropoffMobile}</span>
+                      <span style={{ color: "#494949" }}>
+                        {data.dropoffMobile}
+                      </span>
                     </p>
                   </div>
                 </div>

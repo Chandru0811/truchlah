@@ -9,7 +9,7 @@ import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import axios from "axios";
+import { userApi } from "../../config/URL";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
     .min(6, "Password must be at least 6 characters"),
 });
 
-function Login() {
+function Login({ handleLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -36,33 +36,44 @@ function Login() {
     initialValues: {
       username: "",
       password: "",
-      appCode: "TRUCK_USER"
+      appCode: "TRUCK_USER",
     },
     validationSchema: validationSchema,
-    onSubmit:async (data, { resetForm }) => {
+    onSubmit: async (data, { resetForm }) => {
       console.log("Form submission data:", data);
-      data.appCode = "TRUCK_USER"
-    try {
-      const response = await axios.post(`https://trucklah.com/user-service/api/user/login`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.status===200) {
-        toast.success("Login Successful!");
-        navigate("/"); 
-      } else {
-        toast.error(response.data.message);
+      data.appCode = "TRUCK_USER";
+      try {
+        const response = await userApi.post(
+          `user/login`,
+          data,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response.data.responseBody.roles[0]);
+        if (response.status === 200) {
+          toast.success("Login Successful!");
+          navigate("/shift");
+          resetForm();
+          handleLogin();
+          sessionStorage.setItem("userId", response.data.responseBody.userId);
+          sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+          sessionStorage.setItem(
+            "username",
+            response.data.responseBody.username
+          );
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
       }
-    } catch (error) {
-      toast.error("Failed: " + error.message);
-    }
 
-    // Pass email and password to onLogin
-    navigate("/");
-    resetForm();
-  },
-});
+      // Pass email and password to onLogin
+    },
+  });
 
   return (
     <div className="container-fluid">

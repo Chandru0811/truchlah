@@ -8,10 +8,10 @@ import Mob from "../Components/home/mobile";
 import About from "../Components/home/about";
 import ShiftPack from "../Components/home/ShiftPack";
 
-function Home() {
+function Home({ isAdmin }) {
   return (
     <div>
-      <Hero />
+      <Hero isAdmin={isAdmin} />
       <ShiftPack />
       {/* <Vechicle /> */}
       <Lead />
@@ -19,7 +19,6 @@ function Home() {
       <About />
       <Accod />
       <ContactUs />
-      
     </div>
   );
 }
