@@ -2,10 +2,16 @@ import React, { useRef, useState } from "react";
 import Logins from "../../asset/Login.png";
 import { Button, Form } from "react-bootstrap";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 // import OTPIMG from '../asset/OTP.png';
 
 function OTP() {
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const location = useLocation();
+  const { mobileNo } = location.state || {};
+  const navigate = useNavigate();
+  const [otp, setOtp] = useState(Array(6).fill(""));
   const [showOtp, setShowOtp] = useState(false);
   const inputRefs = useRef([]);
 
@@ -35,12 +41,35 @@ function OTP() {
     setShowOtp(!showOtp);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const otpValue = otp.join("");
     // Perform validation or submit logic here
     console.log("Submitted OTP:", otp.join(""));
+    const formData = new FormData();
+    formData.append("phone", mobileNo);
+    formData.append("otp", otpValue);
+    try {
+      
+      const response = await axios.post(
+        `https://trucklah.com/user-service/api/user/verifyotp}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoibGVlbGFjbG91ZDAxQGdtYWlsLmNvbSIsImlhdCI6MTcxNjYzNDkxNywiZXhwIjoxNzE2NjM4NTE3fQ._BQFHMuyMVOQRUeMdqkhlXX5xRp7-oXwWj8YLapnGx7RlbYYJjklqxo0v1bRuQ8UJ5lfYxo4f9h9IaF1V_1kHA",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      }
+      navigate("/login");
+    } catch (error) {
+      toast.error(error);
+    }
   };
-
+  console.log("object", mobileNo);
   return (
     <div className="container-fluid">
       <div
@@ -71,11 +100,12 @@ function OTP() {
         >
           <div className="row">
             <div className="text-center">
-            {/* <img src={OTPIMG} alt="Trucklah" className="img-fluid" style={{width: '20%', height: '100'}}/> */}
+              {/* <img src={OTPIMG} alt="Trucklah" className="img-fluid" style={{width: '20%', height: '100'}}/> */}
             </div>
             <h5 className="LoginTitle pb-4">OTP Verification</h5>
             <h6 className="LoginSubHead">
-              Enter OTP Sent to +91 9941****31
+              Enter OTP Sent to{" "}
+              {`+${mobileNo.slice(0, 6)}****${mobileNo.slice(10, 12)}`}
             </h6>
 
             <hr></hr>
