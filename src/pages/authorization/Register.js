@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import Logins from "../../asset/Login.png";
 import { AiOutlineGoogle } from "react-icons/ai";
@@ -6,8 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
-import axios from "axios";
+import { userApi } from "../../config/URL";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("*First Name is required"),
@@ -23,20 +23,23 @@ const validationSchema = Yup.object().shape({
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "*Invalid Phone Number"
     )
-    .required("*mobileNo Number is required"),
+    .required("*Mobile Number is required"),
   password: Yup.string()
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
     )
     .required("Please Enter your password"),
 
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
-  countryCode: Yup.string().required("*countryCode is required"),
-  refCode: Yup.string().required("*Referal Code is required"),
-  termsCondition: Yup.string().notRequired(),
+  countryCode: Yup.string().required("*Country Code is required"),
+  refCode: Yup.string().required("*Referral Code is required"),
+  termsCondition: Yup.boolean().oneOf(
+    [true],
+    "Please accept the terms and conditions"
+  ),
 });
 
 function Register() {
@@ -121,8 +124,8 @@ function Register() {
       //         });
       // values.termsCondition=values.termsCondition?"y":"N";
       try {
-        const response = await axios.post(
-          `https://trucklah.com/user-service/api/user/signup`,
+        const response = await userApi.post(
+          `user/signup`,
           payload,
           {
             headers: {
@@ -134,14 +137,15 @@ function Register() {
           toast.success(response.data.message);
           const mobileNo = `${values.countryCode}${values.mobileNo}`;
           try {
-            const response = await axios.post(
-              `https://trucklah.com/user-service/api/user/sendOTP?phone=${mobileNo}`,
+            const response = await userApi.post(
+              `user/sendOTP?phone=${mobileNo}`,
               {
                 headers: {
                   "Content-Type": "application/json",
                 },
               }
             );
+            navigate("/otp", { state: { mobileNo } });
           } catch (error) {
             toast.error(error);
           }
@@ -153,6 +157,10 @@ function Register() {
       }
     },
   });
+
+  useEffect(() => {
+    formik.setFieldValue("countryCode", 65);
+  }, []);
   return (
     <div className="container-fluid">
       <div
@@ -284,6 +292,54 @@ function Register() {
                     </div>
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
+                        <label htmlFor="mobileNo">
+                          Mobile Number<span className="errmsg">*</span>
+                        </label>
+                        <div className="input-group">
+                          <div className="input-group-prepend">
+                            <select
+                              name="countryCode"
+                              id="countryCode"
+                              className={`form-control ${
+                                formik.touched.countryCode &&
+                                formik.errors.countryCode
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              {...formik.getFieldProps("countryCode")}
+                            >
+                              <option value="65">+65</option>
+                              <option value="91">+91</option>
+                            </select>
+                          </div>
+                          <input
+                            type="text"
+                            id="mobileNo"
+                            name="mobileNo"
+                            className={`form-control ${
+                              formik.touched.mobileNo && formik.errors.mobileNo
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            {...formik.getFieldProps("mobileNo")}
+                          />
+                        </div>
+                        {formik.touched.countryCode &&
+                          formik.errors.countryCode && (
+                            <div className="invalid-feedback d-block">
+                              {formik.errors.countryCode}
+                            </div>
+                          )}
+                        {formik.touched.mobileNo && formik.errors.mobileNo && (
+                          <div className="invalid-feedback d-block">
+                            {formik.errors.mobileNo}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* <div className="col-lg-6 col-12 pb-2">
+                      <div className="form-group">
                         <label>
                           MobilNo<span className="errmsg">*</span>
                         </label>
@@ -291,11 +347,16 @@ function Register() {
                           <div className="input-group-prepend">
                             <select
                               name="countryCode"
-                              className="form-control"
+                              className={`form-control ${
+                                formik.touched.countryCode &&
+                                formik.errors.countryCode
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               {...formik.getFieldProps("countryCode")}
                             >
-                              <option value="+65">+65</option>
-                              <option value="+91">+91</option>
+                              <option value="65">+65</option>
+                              <option value="91">+91</option>
                             </select>
                           </div>
                           <input
@@ -309,39 +370,47 @@ function Register() {
                             {...formik.getFieldProps("mobileNo")}
                           />
                         </div>
+                        {formik.touched.countryCode &&
+                          formik.errors.countryCode && (
+                            <div className="invalid-feedback d-block">
+                              {formik.errors.countryCode}
+                            </div>
+                          )}
                         {formik.touched.mobileNo && formik.errors.mobileNo && (
-                          <div className="invalid-feedback">
+                          <div className="invalid-feedback d-block">
                             {formik.errors.mobileNo}
                           </div>
                         )}
                       </div>
-                    </div>
+                    </div> */}
 
                     <div className="col-lg-6 col-12 pb-2">
-                      <div className="form-group">
-                        <label>
-                          Password<span className="errmsg">*</span>
-                        </label>
-                        <div className="password-wrapper">
-                          <input
-                            type={Password ? "text" : "password"}
-                            name="password"
-                            className={`form-control ${
-                              formik.touched.password && formik.errors.password
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            {...formik.getFieldProps("password")}
-                            style={{ backgroundImage: "none" }}
-                          />
-                          <span
-                            className="password-toggle-icon"
-                            onClick={showPassword}
-                            style={{ cursor: "pointer" }}
-                          >
-                            {Password ? <RiEyeOffLine /> : <RiEyeLine />}
-                          </span>
-                        </div>
+                      <label className="form-label">Password</label>
+                      <div className={`input-group mb-3`}>
+                        <input
+                          type={Password ? "text" : "password"}
+                          className={`form-control ${
+                            formik.touched.password && formik.errors.password
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          style={{
+                            borderRadius: "3px",
+                            borderRight: "none",
+                            borderTopRightRadius: "0px",
+                            borderBottomRightRadius: "0px",
+                          }}
+                          name="password"
+                          {...formik.getFieldProps("password")}
+                        />
+                        <span
+                          className={`input-group-text iconInputBackground bg-white`}
+                          id="basic-addon1"
+                          onClick={showPassword}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {Password ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                        </span>
                         {formik.touched.password && formik.errors.password && (
                           <div className="invalid-feedback">
                             {formik.errors.password}
@@ -349,34 +418,34 @@ function Register() {
                         )}
                       </div>
                     </div>
-
                     <div className="col-lg-6 col-12 pb-2">
-                      <div className="form-group">
-                        <label>
-                          Confirm Password<span className="errmsg">*</span>
-                        </label>
-                        <div className="password-wrapper">
-                          <input
-                            type={cPassword ? "text" : "password"}
-                            name="confirmPassword"
-                            className={`form-control ${
-                              formik.touched.confirmPassword &&
-                              formik.errors.confirmPassword
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            {...formik.getFieldProps("confirmPassword")}
-                          />
-                          <div className="input-group-append">
-                            <span
-                              className="password-toggle-icon"
-                              onClick={confirmShowPassword}
-                              style={{ cursor: "pointer" }}
-                            >
-                              {cPassword ? <RiEyeOffLine /> : <RiEyeLine />}
-                            </span>
-                          </div>
-                        </div>
+                      <label className="form-label">Conform Password</label>
+                      <div className={`input-group mb-3`}>
+                        <input
+                          type={cPassword ? "text" : "password"}
+                          className={`form-control ${
+                            formik.touched.confirmPassword &&
+                            formik.errors.confirmPassword
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          style={{
+                            borderRadius: "3px",
+                            borderRight: "none",
+                            borderTopRightRadius: "0px",
+                            borderBottomRightRadius: "0px",
+                          }}
+                          name="confirmPassword"
+                          {...formik.getFieldProps("confirmPassword")}
+                        />
+                        <span
+                          className={`input-group-text iconInputBackground bg-white `}
+                          id="basic-addon1"
+                          onClick={confirmShowPassword}
+                          style={{ cursor: "pointer", borderRadius: "3px" }}
+                        >
+                          {cPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                        </span>
                         {formik.touched.confirmPassword &&
                           formik.errors.confirmPassword && (
                             <div className="invalid-feedback">
@@ -386,28 +455,6 @@ function Register() {
                       </div>
                     </div>
 
-                    <div className="col-lg-6 col-12 pb-2">
-                      <div className="form-group">
-                        <label>
-                          Country<span className="errmsg">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="country"
-                          className={`form-control  ${
-                            formik.touched.country && formik.errors.country
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          {...formik.getFieldProps("country")}
-                        />
-                        {formik.touched.country && formik.errors.country && (
-                          <div className="invalid-feedback">
-                            {formik.errors.country}
-                          </div>
-                        )}
-                      </div>
-                    </div>
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label>
