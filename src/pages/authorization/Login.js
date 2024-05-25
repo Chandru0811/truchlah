@@ -43,16 +43,12 @@ function Login({ handleLogin }) {
       console.log("Form submission data:", data);
       data.appCode = "TRUCK_USER";
       try {
-        const response = await userApi.post(
-          `user/login`,
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log(response.data.responseBody.roles[0]);
+        const response = await userApi.post(`user/login`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(response.data.responseBody);
         if (response.status === 200) {
           toast.success("Login Successful!");
           navigate("/shift");
@@ -60,6 +56,7 @@ function Login({ handleLogin }) {
           handleLogin();
           sessionStorage.setItem("userId", response.data.responseBody.userId);
           sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+          sessionStorage.setItem("token", response.data.responseBody.token);
           sessionStorage.setItem(
             "username",
             response.data.responseBody.username

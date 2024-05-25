@@ -16,12 +16,11 @@ import profiles from "../../asset/user.png";
 import { TbLogout } from "react-icons/tb";
 
 function User({ handleLogout }) {
-  const [show, setShow] = useState(false);
+  const [, setShow] = useState(false);
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
 
   const handleCloseMain = () => setShow(false);
-  const handleShowMain = () => setShow(true);
 
   const handleCloseProfile = () => {
     setShowProfile(false);

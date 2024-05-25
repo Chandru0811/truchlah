@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation,
 } from "react-router-dom";
 import Head from "./Components/common/header";
 import Foot from "./Components/common/footer";
@@ -64,6 +63,8 @@ function UserRoute() {
     sessionStorage.removeItem("roles");
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("shiftType");
     setIsAdmin(false);
   };
 

@@ -1,26 +1,16 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Ace from "../../../asset/Rectangle 42.png";
 import "../../../styles/custom.css";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { bookingApi } from "../../../config/URL";
 
 function Summary({ handleNext }) {
   const [data, setData] = useState({});
-  const token =
-    "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoibGVlbGFjbG91ZDAxQGdtYWlsLmNvbSIsImlhdCI6MTcxNjQ1NDc5NywiZXhwIjoxNzE2NDU4Mzk3fQ.4vtqPSlMEhePlEk76AghcwA7NbCodHNnIchs7St1bpA3sD7kPwglDJv8MtrP3LhxBFYR8DxWBICLLvK0MWK5Rw";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://trucklah.com/booking-service/api/booking/getBookingById/340`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await bookingApi.get(`booking/getBookingById/340`);
         setData(response.data);
       } catch (error) {
         toast.error("Error Fetching Data: " + error.message);

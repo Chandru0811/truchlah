@@ -16,9 +16,9 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import HouseShiftModel from "../HouseShiftModel";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { bookingApi } from "../../config/URL";
 
 // const center = { lat: 13.05, lng: 80.2824 };
 
@@ -30,8 +30,6 @@ const validationSchema = Yup.object().shape({
 function HouseShift() {
   const shiftType = sessionStorage.getItem("shiftType");
   console.log("Type:", shiftType);
-
-  const token = 'eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoibGVlbGFjbG91ZDAxQGdtYWlsLmNvbSIsImlhdCI6MTcxNjYzNTgwMSwiZXhwIjoxNzE2NjM5NDAxfQ.2ZY2c9E8_XiWc58OuEYz4q6f1AVdhjbR9YAe5NK_sC_j3gjH_AQC1HdmnHkf68EJVSTC-mnBlS4QoGMiLiGOHA';
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -69,16 +67,7 @@ function HouseShift() {
       };
       console.log("Form values:", payload);
       try {
-        const response = await axios.post(
-          `http://13.213.208.92:9084/booking-service/api/booking/create`,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
           // toast.success("Successfully Booking Create")
           toast.success(response.data.message);

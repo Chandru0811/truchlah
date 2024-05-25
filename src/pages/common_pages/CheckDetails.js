@@ -7,16 +7,11 @@ import { bookingApi } from "../../config/URL";
 
 function Summary() {
   const [data, setData] = useState({});
-  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await bookingApi.get(`booking/getBookingById/340`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await bookingApi.get(`booking/getBookingById/340`);
         setData(response.data);
       } catch (error) {
         toast.error("Error Fetching Data: " + error.message);

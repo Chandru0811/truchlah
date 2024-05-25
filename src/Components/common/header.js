@@ -113,7 +113,7 @@ function OffcanvasExample({ isAdmin, handleLogout }) {
                                     <li className="nav-item">
                                       <button
                                         type="button"
-                                        className="btn btn-primary"
+                                        className="btn btn-primary py-2"
                                         id="NextMove"
                                       >
                                         Book Rides
@@ -125,7 +125,7 @@ function OffcanvasExample({ isAdmin, handleLogout }) {
                                     <li className="nav-item">
                                       <button
                                         type="button"
-                                        className="btn btn-primary"
+                                        className="btn btn-primary py-2"
                                         id="NextMove"
                                       >
                                         Book Rides
