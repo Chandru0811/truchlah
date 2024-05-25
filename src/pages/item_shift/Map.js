@@ -9,25 +9,30 @@ import { Link } from "react-router-dom";
 import {
   useJsApiLoader,
   GoogleMap,
+  PolylineF,
   Autocomplete,
-  DirectionsService,
-  DirectionsRenderer,
-  Marker,
+  MarkerF,
 } from "@react-google-maps/api";
+import ItemShiftModel from "../ItemShiftModal";
 
 const center = { lat: 13.05, lng: 80.2824 };
 const left = { lat: 13.0397, lng: 80.2792 };
 
 function Maps() {
+  const [origin, setOrigin] = useState(null);
+  const [destination, setDestination] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [locationDetail, setLocationDetail] = useState({
+    pickupLocation: "",
+    dropLocation: "",
+  });
+  const [stops, setStops] = useState([]);
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
   });
-
-  const [origin, setOrigin] = useState(null);
-  const [destination, setDestination] = useState(null);
-  const [directions, setDirections] = useState(null);
-  const [stops, setStops] = useState([]);
 
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
@@ -35,44 +40,6 @@ function Maps() {
 
   const onDestinationLoad = (autocomplete) => {
     setDestination(autocomplete);
-  };
-
-  const handlePlaceChanged = () => {
-    if (origin && destination) {
-      calculateRoute();
-    }
-  };
-
-  const calculateRoute = () => {
-    const originPlace = origin.getPlace();
-    const destinationPlace = destination.getPlace();
-
-    if (
-      originPlace &&
-      originPlace.geometry &&
-      destinationPlace &&
-      destinationPlace.geometry
-    ) {
-      const directionsService = new window.google.maps.DirectionsService();
-      directionsService.route(
-        {
-          origin: originPlace.geometry.location,
-          destination: destinationPlace.geometry.location,
-          travelMode: "DRIVING",
-        },
-        (result, status) => {
-          if (status === "OK") {
-            setDirections(result);
-          } else {
-            console.error("Directions request failed due to ", status);
-          }
-        }
-      );
-    } else {
-      console.error(
-        "Origin or destination place details are undefined or invalid."
-      );
-    }
   };
 
   const handleAddStop = () => {
@@ -91,9 +58,44 @@ function Maps() {
     setStops(updatedStops);
   };
 
+  const path = [
+    { lat: 13.05, lng: 80.2824 },
+    { lat: 13.0397, lng: 80.2792 },
+    { lat: 13.0615, lng: 80.2614 },
+    { lat: 13.0633, lng: 80.2812 },
+    { lat: 13.05, lng: 80.2824 },
+  ];
+
+  const onPlaceChanged = () => {
+    if (origin !== null) {
+      const place = origin.getPlace();
+      if (place && place.formatted_address) {
+        setLocationDetail((prev) => ({
+          ...prev,
+          pickupLocation: place.formatted_address,
+        }));
+        setModalTitle("Pickup Location Set");
+        setModalShow(true);
+      }
+    }
+    if (destination !== null) {
+      const place = destination.getPlace();
+      if (place && place.formatted_address) {
+        setLocationDetail((prev) => ({
+          ...prev,
+          dropLocation: place.formatted_address,
+        }));
+      }
+    }
+  };
+  
+
+  const handleCloseModal = () => setModalShow(false);
+
   if (!isLoaded) {
-    return null; // Return null while loading
+    return null; // Handle the loading state properly
   }
+
   return (
     <div className="container-fluid" style={{ backgroundColor: "#fcf3f6" }}>
       <div className="row">
@@ -110,26 +112,29 @@ function Maps() {
               fullscreenControl: false,
             }}
           >
-            {origin && origin.getPlace() && (
-              <Marker position={origin.getPlace().geometry.location} />
-            )}
-            {destination && destination.getPlace() && (
-              <Marker position={destination.getPlace().geometry.location} />
-            )}
-            {directions && <DirectionsRenderer directions={directions} />}
+            <MarkerF position={center} />
+            <MarkerF position={left} />
+            <PolylineF
+              path={path}
+              options={{
+                strokeColor: "#39FF14",
+                strokeOpacity: 1,
+                strokeWeight: 3,
+              }}
+            />
           </GoogleMap>
         </div>
+
         <div className="col-12 py-5">
           <div className="row">
             <div className="col-lg-3 col-md-3 col-12"></div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="row pb-5">
-                <div className=" col-12 lab " id="one">
+                <div className="col-12 lab" id="one">
                   <Autocomplete
                     onLoad={onOriginLoad}
-                    onPlaceChanged={handlePlaceChanged}
+                    onPlaceChanged={onPlaceChanged}
                     types={["(regions)"]}
-                    placeholder="Origin"
                   >
                     <FloatingLabel
                       controlId="floatingInput"
@@ -148,20 +153,20 @@ function Maps() {
                     >
                       <Form.Control
                         type="text"
-                        placeholder="Drop off Location"
+                        placeholder="Pick Up Location"
                         style={{ borderRadius: "30px" }}
                       />
                     </FloatingLabel>
                   </Autocomplete>
                 </div>
               </div>
-              <div className="row ">
-                <div className=" col-12 lab " id="one">
+
+              <div className="row">
+                <div className="col-12 lab" id="one">
                   <Autocomplete
                     onLoad={onDestinationLoad}
-                    onPlaceChanged={handlePlaceChanged}
+                    onPlaceChanged={onPlaceChanged}
                     types={["(regions)"]}
-                    placeholder="Destination"
                   >
                     <FloatingLabel
                       controlId="floatingInput"
@@ -180,16 +185,35 @@ function Maps() {
                     >
                       <Form.Control
                         type="text"
-                        placeholder="Drop up Location"
+                        placeholder="Drop Location"
                         style={{ borderRadius: "30px" }}
                       />
                     </FloatingLabel>
                   </Autocomplete>
                 </div>
               </div>
+
+              {stops.map((stop, index) => (
+                <div key={index} className="d-flex align-items-center mt-3">
+                  <Form.Control
+                    id="AddStop"
+                    type="text"
+                    placeholder="Add more stops"
+                    value={stop}
+                    onChange={(e) => handleStopChange(index, e.target.value)}
+                    className="me-2"
+                  />
+                  <FaMinus
+                    className="text-danger"
+                    onClick={() => handleDeleteStop(index)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+              ))}
+
               <div className="pt-4">
                 <button
-                  className="btn btn-primary "
+                  className="btn btn-primary"
                   style={{
                     backgroundColor: "transparent",
                     color: "red",
@@ -199,31 +223,23 @@ function Maps() {
                 >
                   Add Stop <FaPlus />
                 </button>
-                {stops.map((stop, index) => (
-                  <div key={index} className="d-flex align-items-center mt-3">
-                    <Form.Control
-                      id="AddStop"
-                      type="text"
-                      placeholder="Add more stops"
-                      value={stop}
-                      onChange={(e) => handleStopChange(index, e.target.value)}
-                      className="me-2"
-                    />
-                    <FaMinus
-                      className="text-danger"
-                      onClick={() => handleDeleteStop(index)}
-                      style={{ cursor: "pointer" }}
-                    />
-                  </div>
-                ))}
               </div>
-              <div className="text-center mt-4">
+              <div className="text-center">
                 <Link to="/confirmlocation">
                   <button className="btn btn-primary px-5 py-2" id="NextMove">
                     Next
                   </button>
                 </Link>
               </div>
+
+              {/* <ItemShiftModel
+                show={modalShow}
+                title={modalTitle}
+                onHide={handleCloseModal}
+                pickupLocation={locationDetail.pickupLocation}
+                dropLocation={locationDetail.dropLocation}
+                setLocationDetail={setLocationDetail}
+              /> */}
             </div>
             <div className="col-lg-3 col-md-3 col-12"></div>
           </div>
