@@ -5,11 +5,26 @@ import "../../styles/custom.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { FaWeightHanging, FaCheckCircle } from "react-icons/fa";
+import { Modal, Button } from 'react-bootstrap';
 
 function Service() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
+
+  const handleShowModal =(item, index) => {
+    setCurrentItem(item);
+    setSelectedItemId(index);
+    setModalShow(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalShow(false);
+    setCurrentItem();
+  };
   function handleCardClick(index) {
     setSelectedItemId(index);
   }
@@ -89,20 +104,20 @@ function Service() {
   const carouselItems = [
     {
       image: "asset/Vechicle1.png",
-      text1: "Base fare 1",
-      price: " 250",
-      text2: " Loading capacity ",
-      weight: "100kg",
+      text1: "Base fare $250",
+      price: "$250",
+      name: "3 Wheeler",
+      weight: "750kg",
       text3: "Load body size  ",
       size: " 50x50 ",
       description:
         "Base fare includes 1.0 km distance and 25 minutes of time. Pricing may vary based on your locality. Road tax, parking etc as applicable over and above ride fare.",
     },
     {
-      image: "asset/Vechicle2.png",
-      text1: "Base fare 2",
-      price: " 250",
-      text2: " Loading capacity ",
+      image: "asset/TataAce.png",
+      text1: "Base fare $250",
+      price: "$250",
+      name: "Tata Ace",
       weight: "100kg",
       text3: "Load body size  ",
       size: " 50x50 ",
@@ -111,10 +126,10 @@ function Service() {
     },
     {
       image: "asset/Vechicle3.png",
-      text1: "Base fare 3",
-      price: " 250",
-      text2: " Loading capacity ",
+      text1: "Base fare $250",
+      price: "$250",
       weight: "100kg",
+      name: "Bolero",
       text3: "Load body size  ",
       size: " 50x50 ",
       description:
@@ -122,9 +137,9 @@ function Service() {
     },
     {
       image: "asset/Vechicle4.png",
-      text1: "Base fare 4",
-      price: " 250",
-      text2: " Loading capacity ",
+      text1: "Base fare $250",
+      price: "$450",
+      name: "10 Footer",
       weight: "100kg",
       text3: "Load body size  ",
       size: " 50x50 ",
@@ -133,21 +148,21 @@ function Service() {
     },
     {
       image: "asset/Vechicle3.png",
-      text1: "Base fare 5",
-      price: " 250",
-      text2: " Loading capacity ",
+      text1: "Base fare $250",
+      price: "$550",
+      name: "Bolero",
       weight: "100kg",
-      text3: "Load body size  ",
+      text3: "Load body size ",
       size: " 50x50 ",
       description:
         "Base fare includes 1.0 km distance and 25 minutes of time. Pricing may vary based on your locality. Road tax, parking etc as applicable over and above ride fare.",
     },
     {
-      image: "asset/Vechicle3.png",
-      text1: "Base fare 5",
-      price: " 10000000",
-      text2: " Loading capacity ",
-      weight: "500000000kg",
+      image: "asset/Vechicle2.png",
+      text1: "Base fare $250",
+      price: "$1000",
+      name: "Tata Ace",
+      weight: "500kg",
       text3: "Load body size  ",
       size: " 500x500 ",
       description:
@@ -158,7 +173,7 @@ function Service() {
 
   return (
     <div
-      className="container-fluid"
+      className="container-fluid" 
       id="ServicePage"
       style={{ backgroundColor: "#faf5f6" }}
     >
@@ -229,49 +244,100 @@ function Service() {
           slidesToSlide={1}
           swipeable
         >
-          {carouselItems.map(function (item, index) {
-            return (
-              <label
-                className="container my-5"
-                key={index}
-                id={`Vehicle-${index}`}
-                onClick={handleCardClick.bind(null, index)} // handle card click
-                style={{ cursor: 'pointer', display: 'block' }} // change cursor to pointer to indicate clickability
-              >
-                <div className="card h-100 d-flex flex-column">
-                  <img src={item.image} className="card-img-top" alt="Card" />
-                  <div className="card-body">
-                    <div className="card-text">
-                      <div className="d-flex justify-content-between">
-                        <span>{item.text1}</span>
-                        <span>{item.price}</span>
-                      </div>
-                      <div className="d-flex justify-content-between">
-                        <span>{item.text2}</span>
-                        <span>{item.weight}</span>
-                      </div>
-                      <div className="d-flex justify-content-between">
-                        <span>{item.text3}</span>
-                        <span>{item.size}</span>
-                      </div>
-                      <center>
-                        <div className="form-check plan">
-                          <input
-                            className="form-check-input border-info "
-                            type="radio"
-                            name="selectedItem"
-                            id={`flexRadioDefault${index}`}
-                            checked={selectedItemId === index} // check if the item is selected
-                            readOnly // make it read-only because we are managing the state
-                          />
-                        </div>
-                      </center>
+          {carouselItems.map((item, index) => (
+            <label
+              className="container my-5"
+              key={index}
+              id={`Vehicle-${index}`}
+              onClick={() => handleCardClick(index)}
+              style={{
+                cursor: 'pointer',
+                display: 'block',
+                borderRadius: '8px'
+              }}
+            >
+              <div className="card d-flex flex-column" 
+              style={{ borderRadius: "6px", position: "relative", border: selectedItemId === index ? '2px solid #1C6DD0' : '1px solid #B2C8BA' }}>
+                {selectedItemId === index && (
+                  <FaCheckCircle
+                    style={{
+                      position: 'absolute',
+                      top: "-10px",
+                      right: "-8px",
+                      color: '#00A9FF',
+                      fontSize: '24px',
+                      zIndex: 5,
+                    }}
+                  />
+                )}
+                <img src={item.image} className="card-img-top" alt="Card" />
+                <div className="card-body h-100">
+                  <div className="card-text">
+                    <div className="d-flex justify-content-center">
+                      <span className="p-1" style={{ background: "#D2E0FB", borderRadius: "5px" }}>
+                        <FaWeightHanging />  {item.weight}
+                      </span>
                     </div>
+                    <div className="d-flex justify-content-center pt-3">
+                      <span style={{ fontSize: "20px" }}><b>{item.name}</b></span>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <span>Starting from <b style={{ fontSize: "18px" }}>{item.price}</b></span>
+                    </div>
+                    <div className="d-flex justify-content-center pt-2">
+                      <span>
+                        <a href="#knowmore" onClick={(e) => { e.preventDefault(); handleShowModal(item); }}
+                        class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Know More</a>
+                      </span>
+                    </div>
+
+                    <center>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input border-info"
+                          type="radio"
+                          name="selectedItem"
+                          id={`flexRadioDefault${index}`}
+                          checked={selectedItemId === index}
+                          readOnly
+                        />
+                      </div>
+                    </center>
                   </div>
                 </div>
-              </label>
-            );
-          })}
+              </div>
+            </label>
+          ))}
+          {currentItem && (
+            <Modal show={modalShow} onHide={handleCloseModal} backdropClassName="custom-backdrop">
+              <Modal.Header closeButton>
+                {/* <Modal.Title>{currentItem.name}</Modal.Title> */}
+              </Modal.Header>
+              <Modal.Body>
+                <img className="card-img-top mx-auto d-block" src={currentItem.image} alt={currentItem.name} style={{ width: '70%' }} />
+                <div className="d-flex justify-content-center pt-3">
+                  <span className="p-1" style={{ background: "#D2E0FB", borderRadius: "5px" }}>
+                    <FaWeightHanging />  {currentItem.weight}
+                  </span>
+                </div>
+                <div className="d-flex justify-content-center pt-2">
+                  <span style={{ fontSize: "20px" }}><b>{currentItem.name}</b></span>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <span>Starting from <b style={{ fontSize: "18px" }}>{currentItem.price}</b></span>
+                </div>
+                <hr/>
+                <p>Base fair price : <b>{currentItem.text1}</b></p>
+                <p>{currentItem.text3}: <b>{currentItem.size}</b></p>
+                <p><b>Description:</b> {currentItem.description}</p>
+              </Modal.Body>
+              {/* <Modal.Footer>
+                <Button className="btn btn-primary btn-sm" onClick={handleCloseModal}>
+                  Close
+                </Button>
+              </Modal.Footer> */}
+            </Modal>
+          )}
         </Carousel>
         <div className="row d-flex flex-column py-3">
           <div
