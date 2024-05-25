@@ -13,7 +13,7 @@ import {
   Autocomplete,
   MarkerF,
 } from "@react-google-maps/api";
-import ItemShiftModel from "../ItemShiftModal";
+// import ItemShiftModel from "../ItemShiftModal";
 
 const center = { lat: 13.05, lng: 80.2824 };
 const left = { lat: 13.0397, lng: 80.2792 };
@@ -88,7 +88,6 @@ function Maps() {
       }
     }
   };
-  
 
   const handleCloseModal = () => setModalShow(false);
 
