@@ -7,18 +7,23 @@ import { bookingApi } from "../../config/URL";
 
 function Summary() {
   const [data, setData] = useState({});
+  const shiftType = sessionStorage.getItem("shiftType");
+  console.log("Type:", shiftType);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await bookingApi.get(`booking/getBookingById/340`);
-        setData(response.data);
+        const response = await bookingApi.get(`booking/getBookingById/355`);
+        setData(response.data.responseBody);
       } catch (error) {
         toast.error("Error Fetching Data: " + error.message);
       }
     };
     fetchData();
   }, []);
+
+  const bookingTripLocations = data.bookingTripLocations || [];
+  const firstLocation = bookingTripLocations[0] || {};
 
   return (
     <section className="summary">
@@ -61,7 +66,8 @@ function Summary() {
                           <b>Name : </b>
                         </span>
                         <span style={{ color: "#494949" }}>
-                          {data.pickupContactName}
+                          {/* {data.pickupAddress} */}
+                          {firstLocation.pickupContactName || "-"}
                         </span>
                       </p>
                       <p>
@@ -69,7 +75,7 @@ function Summary() {
                           <b>Address : </b>
                         </span>
                         <span style={{ color: "#494949" }}>
-                          {data.pickupAddress}
+                          {firstLocation.pickupAddress || "N/A"}
                         </span>
                       </p>
                       <p>
@@ -77,7 +83,7 @@ function Summary() {
                           <b>Contact:</b>{" "}
                         </span>
                         <span style={{ color: "#494949" }}>
-                          {data.pickupMobile}
+                          {firstLocation.pickupMobile || "N/A"}
                         </span>
                       </p>
                     </div>
@@ -91,7 +97,7 @@ function Summary() {
                         <b>Name :</b>{" "}
                       </span>
                       <span style={{ color: "#494949" }}>
-                        {data.dropoffContactName}
+                        {firstLocation.dropoffContactName || "N/A"}
                       </span>
                     </p>
                     <p>
@@ -99,7 +105,7 @@ function Summary() {
                         <b>Address :</b>{" "}
                       </span>
                       <span style={{ color: "#494949" }}>
-                        {data.dropoffAddress}
+                        {firstLocation.dropoffAddress || "N/A"}
                       </span>
                     </p>
                     <p>
@@ -107,105 +113,108 @@ function Summary() {
                         <b>Contact: </b>
                       </span>
                       <span style={{ color: "#494949" }}>
-                        {data.dropoffMobile}
+                        {firstLocation.dropoffMobile || "N/A"}
                       </span>
                     </p>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6 col-12 ps-1">
-                    <div>
-                      <p className="line" style={{ color: "#00316B" }}>
-                        <b>1. Drop Address</b>
-                      </p>
+                {shiftType === "Item Shift" && (
+                  <>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <div>
+                          <p className="line" style={{ color: "#00316B" }}>
+                            <b>1. Drop Address</b>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        <p className="line">
+                          <span style={{ color: "#00316B" }}>
+                            <b>Name :</b>{" "}
+                          </span>
+                          <span style={{ color: "#494949" }}>S. Sathish</span>
+                        </p>
+                        <p>
+                          <span style={{ color: "#00316B" }}>
+                            <b>Address :</b>{" "}
+                          </span>
+                          <span style={{ color: "#494949" }}>
+                            7, Shenstone Park, # 13, 1, Harrington Rd, Chetpet,
+                            Chennai, Tamil Nadu 600031
+                          </span>
+                        </p>
+                        <p>
+                          <span style={{ color: "#00316B" }}>
+                            <b>Contact: </b>
+                          </span>
+                          <span style={{ color: "#494949" }}>9123678907</span>
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-6 col-12 ps-1" id="drop">
-                    <p className="line">
-                      <span style={{ color: "#00316B" }}>
-                        <b>Name :</b>{" "}
-                      </span>
-                      <span style={{ color: "#494949" }}>S. Sathish</span>
-                    </p>
-                    <p>
-                      <span style={{ color: "#00316B" }}>
-                        <b>Address :</b>{" "}
-                      </span>
-                      <span style={{ color: "#494949" }}>
-                        7, Shenstone Park, # 13, 1, Harrington Rd, Chetpet,
-                        Chennai, Tamil Nadu 600031
-                      </span>
-                    </p>
-                    <p>
-                      <span style={{ color: "#00316B" }}>
-                        <b>Contact: </b>
-                      </span>
-                      <span style={{ color: "#494949" }}>9123678907</span>
-                    </p>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-6 col-12 ps-1">
-                    <div>
-                      <p className="line" style={{ color: "#00316B" }}>
-                        <b>2. Drop Address</b>
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <div>
+                          <p className="line" style={{ color: "#00316B" }}>
+                            <b>2. Drop Address</b>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        <p className="line">
+                          <span style={{ color: "#00316B" }}>
+                            <b>Name :</b>{" "}
+                          </span>
+                          <span style={{ color: "#494949" }}>{firstLocation.dropName2 || "N/A"}</span>
+                        </p>
+                        <p>
+                          <span style={{ color: "#00316B" }}>
+                            <b>Address :</b>{" "}
+                          </span>
+                          <span style={{ color: "#494949" }}>
+                          {firstLocation.dropoffAddress2 || "N/A"}
+                          </span>
+                        </p>
+                        <p>
+                          <span style={{ color: "#00316B" }}>
+                            <b>Contact: </b>
+                          </span>
+                          <span style={{ color: "#494949" }}>{firstLocation.dropoffMobile || "N/A"}</span>
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-6 col-12 ps-1" id="drop">
-                    <p className="line">
-                      <span style={{ color: "#00316B" }}>
-                        <b>Name :</b>{" "}
-                      </span>
-                      <span style={{ color: "#494949" }}>M. Vishal</span>
-                    </p>
-                    <p>
-                      <span style={{ color: "#00316B" }}>
-                        <b>Address :</b>{" "}
-                      </span>
-                      <span style={{ color: "#494949" }}>
-                        Old No. 1/144 & New, 41, Poonamallee High Rd,
-                        Nerkundram, Chennai, Tamil Nadu 600107
-                      </span>
-                    </p>
-                    <p>
-                      <span style={{ color: "#00316B" }}>
-                        <b>Contact: </b>
-                      </span>
-                      <span style={{ color: "#494949" }}>9345623710</span>
-                    </p>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-6 col-12 ps-1">
-                    <div>
-                      <p className="line" style={{ color: "#00316B" }}>
-                        <b>Category</b>
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <div>
+                          <p className="line" style={{ color: "#00316B" }}>
+                            <b>Category</b>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          Item Shifting
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-6 col-12 ps-1" id="drop">
-                    {" "}
-                    <p className="line" style={{ color: "#494949" }}>
-                      House Shifting
-                    </p>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-6 col-12 ps-1">
-                    <div>
-                      <p className="line" style={{ color: "#00316B" }}>
-                        <b>Date & Time</b>
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <div>
+                          <p className="line" style={{ color: "#00316B" }}>
+                            <b>Date & Time</b>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                        {firstLocation.dateTime || "N/A"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-6 col-12 ps-1" id="drop">
-                    {" "}
-                    <p className="line" style={{ color: "#494949" }}>
-                      14-feb-2022 : 08:30 am
-                    </p>
-                  </div>
-                </div>
+                  </>
+                )}
                 <div className="row">
                   <div className="col-md-6 col-12 ps-1">
                     <p className="line" style={{ color: "#00316B" }}>
@@ -215,7 +224,7 @@ function Summary() {
                   <div className="col-md-6 col-12 ps-1" id="drop">
                     {" "}
                     <p className="line" style={{ color: "#494949" }}>
-                      2 persons
+                      {data.manPower ? "2 persons" : "N/A"}
                     </p>
                   </div>
                 </div>
@@ -228,7 +237,9 @@ function Summary() {
                   <div className="col-md-6 col-12 ps-1" id="drop">
                     {" "}
                     <p className="line" style={{ color: "#494949" }}>
-                      750.00 Rupees
+                      {data.transactionDetails
+                        ? `${data.transactionDetails.txnAmount} Rupees`
+                        : "N/A"}
                     </p>
                   </div>
                 </div>

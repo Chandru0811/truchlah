@@ -1,128 +1,161 @@
-function Maps() {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
-  });
+import React, { useEffect, useState } from "react";
+import Ace from "../../asset/Rectangle 42.png";
+import "../../styles/custom.css";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { bookingApi } from "../../config/URL";
 
-  const [origin, setOrigin] = useState(null);
-  const [destination, setDestination] = useState(null);
-  const [directions, setDirections] = useState(null);
-  const [stops, setStops] = useState([]);
+function Summary() {
+  const [data, setData] = useState({});
 
-  const onOriginLoad = (autocomplete) => {
-    setOrigin(autocomplete);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await bookingApi.get(`booking/getBookingById/340`);
+        setData(response.data.responseBody);
+      } catch (error) {
+        toast.error("Error Fetching Data: " + error.message);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const onDestinationLoad = (autocomplete) => {
-    setDestination(autocomplete);
-  };
-
-  const handlePlaceChanged = () => {
-    if (origin && destination) {
-      calculateRoute();
-    }
-  };
-
-  const calculateRoute = () => {
-    const originPlace = origin.getPlace();
-    const destinationPlace = destination.getPlace();
-  
-    if (originPlace && originPlace.geometry && destinationPlace && destinationPlace.geometry) {
-      const directionsService = new window.google.maps.DirectionsService();
-      directionsService.route(
-        {
-          origin: originPlace.geometry.location,
-          destination: destinationPlace.geometry.location,
-          travelMode: "DRIVING",
-        },
-        (result, status) => {
-          if (status === "OK") {
-            setDirections(result);
-          } else {
-            console.error("Directions request failed due to ", status);
-          }
-        }
-      );
-    } else {
-      console.error("Origin or destination place details are undefined or invalid.");
-    }
-  };
-
-  const handleAddStop = () => {
-    setStops([...stops, ""]);
-  };
-
-  const handleDeleteStop = (index) => {
-    const updatedStops = [...stops];
-    updatedStops.splice(index, 1);
-    setStops(updatedStops);
-  };
-
-  const handleStopChange = (index, value) => {
-    const updatedStops = [...stops];
-    updatedStops[index] = value;
-    setStops(updatedStops);
-  };
-
-  if (!isLoaded) {
-    return null; // Return null while loading
-  }
+  const bookingTripLocations = data.bookingTripLocations || [];
+  const firstLocation = bookingTripLocations[0] || {};
 
   return (
-    <div className="container-fluid" style={{ backgroundColor: "#fcf3f6" }}>
-      <div className="row">
-        <div className="col-12" id="MapContainer">
-          {/* Google Map Box */}
-          {/* Your GoogleMap component code */}
-        </div>
-
-        <div className="col-12 py-5">
-          <div className="row">
-            <div className="col-lg-3 col-md-3 col-12"></div>
-            <div className="col-lg-6 col-md-6 col-12">
-              {/* Your Autocomplete components code */}
-              {stops.map((stop, index) => (
-                <div key={index} className="d-flex align-items-center mt-3">
-                  <Form.Control
-                    id="AddStop"
-                    type="text"
-                    placeholder="Add more stops"
-                    value={stop}
-                    onChange={(e) => handleStopChange(index, e.target.value)}
-                    className="me-2"
-                  />
-                  <FaMinus
-                    className="text-danger"
-                    onClick={() => handleDeleteStop(index)}
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-              ))}
-              <div className="pt-4">
-                <button
-                  className="btn btn-primary "
-                  style={{
-                    backgroundColor: "transparent",
-                    color: "red",
-                    border: "none",
-                  }}
-                  onClick={handleAddStop}
-                >
-                  Add Stop <FaPlus />
-                </button>
-              </div>
-              <div className="text-center">
-                <Link to="/confirmlocation">
-                  <button className="btn btn-primary px-5 py-2" id="NextMove">
-                    Next
-                  </button>
-                </Link>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-3 col-12"></div>
+    <section className="summary">
+      <div className="container-fluid pt-5" id="Ace">
+        <center>
+          <h3 style={{ color: "#106EEA" }}>SUMMARY</h3>
+        </center>
+        <div className="row">
+          <div className="col-lg-3"></div>
+          <div className="col-lg-9">
+            <p className="mt-5 ps-2">
+              <b>Vehicle :</b>
+            </p>
           </div>
         </div>
+        <center>
+          <img src={Ace} alt="Ace" className="img-fluid mt-3" />
+          <p>Tata Ace</p>
+        </center>
+        <div className="row">
+          <div className="col-lg-3"></div>
+          <div className="col-lg-9">
+            <p className="mt-5 ps-2">
+              <b>Address :</b>
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="d-flex justify-content-center">
+            <div className="card w-50">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-md-6 col-12 ps-1">
+                    <div>
+                      <p style={{ color: "#00316B" }}>
+                        <b>Pickup Address :</b>
+                      </p>
+                      <p>
+                        <span style={{ color: "#00316B" }}>
+                          <b>Name : </b>
+                        </span>
+                        <span style={{ color: "#494949" }}>
+                          {firstLocation.pickupContactName || "N/A"}
+                        </span>
+                      </p>
+                      <p>
+                        <span style={{ color: "#00316B" }}>
+                          <b>Address : </b>
+                        </span>
+                        <span style={{ color: "#494949" }}>
+                          {firstLocation.pickupAddress || "N/A"}
+                        </span>
+                      </p>
+                      <p>
+                        <span style={{ color: "#00316B" }}>
+                          <b>Contact:</b>{" "}
+                        </span>
+                        <span style={{ color: "#494949" }}>
+                          {firstLocation.pickupMobile || "N/A"}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-md-6 col-12 ps-1" id="drop">
+                    <p style={{ color: "#00316B" }}>
+                      <b>Drop Address :</b>
+                    </p>
+                    <p>
+                      <span style={{ color: "#00316B" }}>
+                        <b>Name :</b>{" "}
+                      </span>
+                      <span style={{ color: "#494949" }}>
+                        {firstLocation.dropoffContactName || "N/A"}
+                      </span>
+                    </p>
+                    <p>
+                      <span style={{ color: "#00316B" }}>
+                        <b>Address :</b>{" "}
+                      </span>
+                      <span style={{ color: "#494949" }}>
+                        {firstLocation.dropoffAddress || "N/A"}
+                      </span>
+                    </p>
+                    <p>
+                      <span style={{ color: "#00316B" }}>
+                        <b>Contact: </b>
+                      </span>
+                      <span style={{ color: "#494949" }}>
+                        {firstLocation.dropoffMobile || "N/A"}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                {/* Additional sections omitted for brevity */}
+                <div className="row">
+                  <div className="col-md-6 col-12 ps-1">
+                    <p className="line" style={{ color: "#00316B" }}>
+                      <b>Manpower</b>
+                    </p>
+                  </div>
+                  <div className="col-md-6 col-12 ps-1" id="drop">
+                    {" "}
+                    <p className="line" style={{ color: "#494949" }}>
+                      {data.manPower ? "2 persons" : "N/A"}
+                    </p>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6 col-12 ps-1">
+                    <p className="line" style={{ color: "#00316B" }}>
+                      <b>Total amount</b>
+                    </p>
+                  </div>
+                  <div className="col-md-6 col-12 ps-1" id="drop">
+                    {" "}
+                    <p className="line" style={{ color: "#494949" }}>
+                      {data.transactionDetails ? `${data.transactionDetails.txnAmount} Rupees` : "N/A"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="text-center py-5">
+          <Link to="/payments">
+            <button className="btn btn-primary px-5 py-2" id="NextMove">
+              Next
+            </button>
+          </Link>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
+
+export default Summary;

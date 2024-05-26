@@ -5,27 +5,14 @@ import Form from "react-bootstrap/Form";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
-
-const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "*Enter a valid email address"
-    )
-    .required("*Email is required"),
-
-  password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters"),
-    confirmPassword: Yup.string()
-    .required("Confirm Password is required")
-    .oneOf([Yup.ref("password")], "Passwords must match"),
-});
+import { userApi } from "../../config/URL";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const PasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -33,22 +20,47 @@ function ForgotPassword() {
   const ConfirmPasswordVisibility = () => {
     setConfirmPassword(!confirmPassword);
   };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "*Enter a valid email address"
+      )
+      .required("*Email is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters"),
+    confirmPassword: Yup.string()
+      .required("Confirm Password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
+  });
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
-      confirmPassword:"",
-      },
+      confirmPassword: "",
+    },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
-
-
-    }
-  })
+      try {
+        const response = await userApi.post("user/forgotPassword", values);
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/shift");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Error Submitting Data, ", error);
+      }
+    },
+  });
 
   return (
-    <div className="container-fluid"> 
+    <div className="container-fluid">
       <div
         className="row align-items-center"
         style={{
@@ -85,35 +97,34 @@ function ForgotPassword() {
             <hr></hr>
             <div className="row">
               <div className="col-lg-3 col-md-2 col-12"></div>
-
               <div className="col-lg-6 col-md-8 col-12">
                 <div className="text-center">
                   <form onClick={formik.handleSubmit}>
                     <div className="form mb-3 ">
-                    <div className="form mb-3 d-flex justify-content-center">
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label="Email"
-                        style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
-                        className="mb-3"
-                      >
-                        <Form.Control
-                          type="email"
-                          className={`form-control  ${
-                            formik.touched.email && formik.errors.email
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          {...formik.getFieldProps("email")}
-                          placeholder="Enter your name"
-                        />
-                        {formik.touched.email && formik.errors.email && (
-                          <div className="invalid-feedback">
-                            {formik.errors.email}
-                          </div>
-                        )}
-                      </FloatingLabel>
-                    </div>
+                      <div className="form mb-3 d-flex justify-content-center">
+                        <FloatingLabel
+                          controlId="floatingInput"
+                          label="Email"
+                          style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
+                          className="mb-3"
+                        >
+                          <Form.Control
+                            type="email"
+                            className={`form-control  ${
+                              formik.touched.email && formik.errors.email
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            {...formik.getFieldProps("email")}
+                            placeholder="Enter your name"
+                          />
+                          {formik.touched.email && formik.errors.email && (
+                            <div className="invalid-feedback">
+                              {formik.errors.email}
+                            </div>
+                          )}
+                        </FloatingLabel>
+                      </div>
                       <div className="">
                         <FloatingLabel
                           controlId="floatingPassword"
@@ -152,11 +163,12 @@ function ForgotPassword() {
                               }}
                             />
                           )}
-                          {formik.touched.password && formik.errors.password && (
-                          <div className="invalid-feedback">
-                            {formik.errors.password}
-                          </div>
-                        )}
+                          {formik.touched.password &&
+                            formik.errors.password && (
+                              <div className="invalid-feedback">
+                                {formik.errors.password}
+                              </div>
+                            )}
                         </FloatingLabel>
                       </div>
                       <div className="">
@@ -198,12 +210,12 @@ function ForgotPassword() {
                               }}
                             />
                           )}
-                           {formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword && (
-                            <div className="invalid-feedback">
-                              {formik.errors.confirmPassword}
-                            </div>
-                          )}
+                          {formik.touched.confirmPassword &&
+                            formik.errors.confirmPassword && (
+                              <div className="invalid-feedback">
+                                {formik.errors.confirmPassword}
+                              </div>
+                            )}
                         </FloatingLabel>
                       </div>
                     </div>
@@ -219,7 +231,6 @@ function ForgotPassword() {
                   </form>
                 </div>
               </div>
-
               <div className="col-lg-3 col-md-2 col-12"></div>
             </div>
           </div>
