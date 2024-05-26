@@ -133,22 +133,21 @@ function Summary() {
                           <span style={{ color: "#00316B" }}>
                             <b>Name :</b>{" "}
                           </span>
-                          <span style={{ color: "#494949" }}>S. Sathish</span>
+                          <span style={{ color: "#494949" }}>{firstLocation.dropoffName1 || "N/A"}</span>
                         </p>
                         <p>
                           <span style={{ color: "#00316B" }}>
                             <b>Address :</b>{" "}
                           </span>
                           <span style={{ color: "#494949" }}>
-                            7, Shenstone Park, # 13, 1, Harrington Rd, Chetpet,
-                            Chennai, Tamil Nadu 600031
+                          {firstLocation.dropoffAddress1 || "N/A"}
                           </span>
                         </p>
                         <p>
                           <span style={{ color: "#00316B" }}>
                             <b>Contact: </b>
                           </span>
-                          <span style={{ color: "#494949" }}>9123678907</span>
+                          <span style={{ color: "#494949" }}>{firstLocation.dropoffMobile1 || "N/A"}</span>
                         </p>
                       </div>
                     </div>
@@ -179,7 +178,7 @@ function Summary() {
                           <span style={{ color: "#00316B" }}>
                             <b>Contact: </b>
                           </span>
-                          <span style={{ color: "#494949" }}>{firstLocation.dropoffMobile || "N/A"}</span>
+                          <span style={{ color: "#494949" }}>{firstLocation.dropoffMobile2 || "N/A"}</span>
                         </p>
                       </div>
                     </div>
