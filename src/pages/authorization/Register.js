@@ -36,10 +36,10 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Passwords must match"),
   countryCode: Yup.string().required("*Country Code is required"),
   refCode: Yup.string().required("*Referral Code is required"),
-  termsCondition: Yup.boolean().oneOf(
-    [true],
+  termsCondition: Yup.string().required(
     "Please accept the terms and conditions"
   ),
+  agree: Yup.string().required("Please accept the condition"),
 });
 
 function Register() {
@@ -96,6 +96,7 @@ function Register() {
       countryCode: "",
       refCode: "",
       termsCondition: "",
+      agree: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -124,36 +125,27 @@ function Register() {
       //         });
       // values.termsCondition=values.termsCondition?"y":"N";
       try {
-        const response = await userApi.post(
-          `user/signup`,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await userApi.post(`user/signup`, payload);
         if (response.status === 200) {
           toast.success(response.data.message);
           const mobileNo = `${values.countryCode}${values.mobileNo}`;
           try {
             const response = await userApi.post(
-              `user/sendOTP?phone=${mobileNo}`,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
+              `user/sendOTP?phone=${mobileNo}`
             );
             navigate("/otp", { state: { mobileNo } });
           } catch (error) {
             toast.error(error);
           }
-        } else {
-          toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if (error.response.status === 400) {
+          // toast.error("Email or Mobile is already in registered!");
+          toast.warning(error.response.data.errorList[0].errorMessage);
+          console.log("object", error.response.data.errorList[0].errorMessage);
+        } else {
+          toast.error(error);
+        }
       }
     },
   });
@@ -505,8 +497,13 @@ function Register() {
                   <div className="form-check mb-3 d-flex ">
                     <input
                       type="checkbox"
-                      className="form-check-input"
                       id="privacyCheckbox"
+                      className={`form-check-input  ${
+                        formik.touched.agree && formik.errors.agree
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("agree")}
                     />
                     &nbsp; &nbsp;
                     <label
@@ -516,6 +513,11 @@ function Register() {
                       I agree the use of my personal data for direct marketing
                       in accordance with the stated Privacy Policy.{" "}
                     </label>
+                    {formik.touched.agree && formik.errors.agree && (
+                      <div className="invalid-feedback">
+                        {formik.errors.agree}
+                      </div>
+                    )}
                   </div>
                   <button
                     type="submit"
