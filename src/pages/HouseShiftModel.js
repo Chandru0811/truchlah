@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, InputGroup, Form } from "react-bootstrap";
-import {
-  FaLocationDot,
-  FaRegAddressCard,
-  FaPhoneVolume,
-} from "react-icons/fa6";
-import { IoIosContact, IoMdContact } from "react-icons/io";
-import {
-  Field,
-  Formik,
-  Form as FormikForm,
-  ErrorMessage,
-  useFormik,
-} from "formik";
+import { Modal } from "react-bootstrap";
+import { FaLocationDot, FaRegAddressCard } from "react-icons/fa6";
+import { IoMdContact } from "react-icons/io";
+import { Form as FormikForm, useFormik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
