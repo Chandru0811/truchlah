@@ -11,8 +11,6 @@ function OTP() {
   const navigate = useNavigate();
   const { mobileNo } = location.state || {};
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const [showOtp, setShowOtp] = useState(false);
-  console.log(showOtp);
 
   const inputRefs = useRef([]);
 
@@ -67,9 +65,12 @@ function OTP() {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/login");
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.message || "An error occurred");
+      toast.error("Invalid OTP");
+      // console.log("object",error)
     }
   };
 
@@ -113,7 +114,7 @@ function OTP() {
                       {otp.map((value, index) => (
                         <Form.Control
                           key={index}
-                          type={showOtp ? "text" : "password"}
+                          type="text"
                           name={`otp-${index}`}
                           ref={(ref) => (inputRefs.current[index] = ref)}
                           value={value}
@@ -125,15 +126,7 @@ function OTP() {
                           className="text-center"
                         />
                       ))}
-                      <button
-                        type="button"
-                        className="btn btn-light"
-                        onClick={() =>
-                          setShowOtp((prevShowOtp) => !prevShowOtp)
-                        }
-                      >
-                        {showOtp ? <BsEyeSlash /> : <BsEye />}
-                      </button>
+                   
                     </div>
                   </Form.Group>
                   <div>

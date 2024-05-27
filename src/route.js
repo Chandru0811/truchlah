@@ -37,10 +37,11 @@ import Support from "./pages/profile/Support";
 import Refer from "./pages/profile/Refer&Earn";
 import Map from "./pages/item_shift/Map";
 import MapCopy from "./pages/item_shift/Map copy";
-// import Priceing from "./pages/Priceing";
+import Priceing from "./pages/Priceing";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { bookingApi, userApi } from "./config/URL";
+import Price from "./pages/Price";
 // import MapCopy from "./pages/item_shift/Map copy";
 
 function UserRoute() {
@@ -113,7 +114,7 @@ function UserRoute() {
           <Route path="/otp" element={<OTP />} />
           <Route path="/termsandcondition" element={<TermsCondition />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          {/* <Route path="/pricing" element={<Priceing />} /> */}
+          <Route path="/pricing" element={<Priceing />} />
           {isAdmin && (
             <>
               <Route path="/map" element={<Map />} />
@@ -128,13 +129,14 @@ function UserRoute() {
               <Route path="/confirmlocation" element={<ConfirmLocation />} />
               <Route path="/service" element={<Service />} />
               <Route path="/successful" element={<SuccessFul />} />
-              <Route path="/summary" element={<Summary />} />
+              <Route path="/summary/:bookingId" element={<Summary />} />
               <Route path="/payments" element={<Payment />} />
               <Route path="/invoice" element={<Invoices />} />
               <Route path="/cancelorder" element={<Cancel />} />
               <Route path="/user" element={<User />} />
               <Route path="/rides" element={<Order />} />
               <Route path="/coupons" element={<Coupons />} />
+              <Route path="/price" element={<Price />} />
             </>
           )}
           <Route path="*" element={<NotFound />} />
