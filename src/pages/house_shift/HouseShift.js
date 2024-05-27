@@ -17,8 +17,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import HouseShiftModel from "../HouseShiftModel";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
+import { type } from "@testing-library/user-event/dist/type";
 
 // const center = { lat: 13.05, lng: 80.2824 };
 
@@ -29,7 +30,7 @@ const validationSchema = Yup.object().shape({
 
 function HouseShift() {
   const shiftType = sessionStorage.getItem("shiftType");
-  console.log("Type:", shiftType);
+  // console.log("Type:", shiftType);
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -47,12 +48,19 @@ function HouseShift() {
     useState(null);
   const [directions, setDirections] = useState(null);
   const [locationDetail, setLocationDetail] = useState([]);
-  // console.log("Location Details is ", locationDetail);
+  console.log("Location Details is ", locationDetail);
   const userId = sessionStorage.getItem("userId");
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
 
   const navigate = useNavigate();
+//   const location = useLocation();
+// const params = new URLSearchParams(location.search);
+// const bookingId = params.get("bookingId");
+// const locationDetails = params.get("location");
+
+// Now you can use the bookingId and locationDetail variables as needed
+
 
   const formik = useFormik({
     initialValues: {
@@ -66,13 +74,15 @@ function HouseShift() {
         type: shiftType,
         locationDetail: locationDetail,
       };
-      console.log("Form values:", payload);
+      // console.log("Form values:", payload);
       try {
         const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
           // toast.success("Successfully Booking Create")
           toast.success(response.data.message);
-          navigate("/service");
+          const bookingId = response.data.responseBody.booking.bookingId;
+          const locations = encodeURIComponent(JSON.stringify(locationDetail));
+          navigate(`/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`);
         } else {
           toast.error(response.data.message);
         }
@@ -389,15 +399,15 @@ function HouseShift() {
                     <option selected disabled>
                       Category
                     </option>
-                    <option value="1">Easy Shift</option>
-                    <option value="2">Studio</option>
-                    <option value="3">Kitchen</option>
-                    <option value="3">Single room</option>
-                    <option value="3">Cabin</option>
-                    <option value="3">1 BHK</option>
-                    <option value="3">2 BHK</option>
-                    <option value="3">3 BHK</option>
-                    <option value="3">4 BHK</option>
+                    <option value="Easy Shift">Easy Shift</option>
+                    <option value="Studio">Studio</option>
+                    <option value="Kitchen">Kitchen</option>
+                    <option value="room">Single room</option>
+                    <option value="Cabin">Cabin</option>
+                    <option value="1 BHK">1 BHK</option>
+                    <option value="2 BHK">2 BHK</option>
+                    <option value="3 BHK">3 BHK</option>
+                    <option value="4 BHK">4 BHK</option>
                   </select>
                 </div>
                 <div className="text-center mt-2">

@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Ace from "../../asset/Rectangle 42.png";
 import "../../styles/custom.css";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bookingApi } from "../../config/URL";
 
 function Summary() {
   const [data, setData] = useState({});
+  const {bookingId} = useParams();
+  console.log("bookingId",bookingId);
   const shiftType = sessionStorage.getItem("shiftType");
-  console.log("Type:", shiftType);
+  // console.log("Type:", shiftType);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await bookingApi.get(`booking/getBookingById/355`);
+        const response = await bookingApi.get(`booking/getBookingById/${bookingId}`);
         setData(response.data.responseBody);
       } catch (error) {
         toast.error("Error Fetching Data: " + error.message);

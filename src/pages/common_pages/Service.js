@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "../../styles/custom.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { FaWeightHanging, FaCheckCircle } from "react-icons/fa";
-import { Modal } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { bookingApi, userApi } from "../../config/URL";
@@ -19,108 +18,141 @@ import Lorry24 from "../../asset/24FT_LORRY.png";
 const validationSchema = Yup.object().shape({
   date: Yup.string().required("Date is required"),
   time: Yup.string().required("Time is required"),
+  vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
 });
 
 function Service() {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
-  const [selectedItemId, setSelectedItemId] = useState(null);
-  const [modalShow, setModalShow] = useState(false);
-  const [currentItem, setCurrentItem] = useState(null);
-  const [vechicle, setVechicle] = useState([]);
+  // const {location , bookingId} = useParams();
 
-  // console.log("Vechicle List", vechicle);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const distanceValue = params.get("distance");
+  const locationValueString = params.get("location");
+  const bookingIdValue = params.get("bookingId");
+
+  let locationValue = [];
+  try {
+    locationValue = JSON.parse(decodeURIComponent(locationValueString));
+  } catch (error) {
+    console.error("Failed to parse location value:", error);
+  }
+
+  console.log("Location:", locationValue);
+  console.log("Booking ID:", bookingIdValue);
+  console.log("Distance:", distanceValue);
+
+  const [vechicle, setVechicle] = useState([]);
+  // console.log("Vechile :", vechicle );
+  const [showQuantity, setShowQuantity] = useState(false);
+  const navigate = useNavigate();
+  const userId = sessionStorage.getItem("userId");
+  const shiftType = sessionStorage.getItem("shiftType");
+  const [manpowerQuantity, setManpowerQuantity] = useState(0);
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    now.setHours(now.getHours());
+    return now.toTimeString().split(":").slice(0, 2).join(":");
+  };
+
+  const getEliglibleTime = () => {
+    const now = new Date();
+    now.setHours(now.getHours() + 3);
+    return now.toTimeString().split(":").slice(0, 2).join(":");
+  };
+
   const formik = useFormik({
     initialValues: {
-      date: "",
-      time: "",
+      date: getCurrentDate(),
+      time: getCurrentTime(),
       vechicleTypeId: "",
-      driverAsManpower: "N",
-      extraManpower: "N",
+      driverAsManpower: false,
+      extraManpower: false,
       quantity: 0,
-      trollyRequired: "N",
-      roundTripRequired: "N",
+      trollyRequired: false,
+      roundTripRequired: false,
       messageToDriver: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log("Form values:", payload);
-      try {
-        const response = await bookingApi.post(`booking/create`, values);
+      if (values.time >= getEliglibleTime()) {
+        const selectedValue = formik.values.vechicleTypeId; // Assuming formik is in scope
+        let selectedOptionName = "";
+
+        vechicle.forEach((vechicles) => {
+          if (parseInt(selectedValue) === vechicles.vehicletypeId) {
+            selectedOptionName = vechicles.type;
+          }
+        });
+
+        values.vechicleTypeId = selectedOptionName;
+
+        console.log("vechicleTypeId",values.vechicleTypeId);
+
+        const payload = {
+          userId: userId,
+          type: shiftType,
+          locationDetail: locationValue,
+          bookingId: bookingIdValue,
+          estKm: 23,
+          scheduledDate: `${values.date}T${values.time}`,
+          deliveryDate: "2024-05-29T07:22:10.400Z",
+          quantity: values.extraManpower ? values.quantity : 0,
+          msgToDriver: values.messageToDriver,
+          manpower: values.driverAsManpower ? "Y" : "N",
+          extraManpower: values.extraManpower ? "Y" : "N",
+          trollyRequired: values.trollyRequired ? "Y" : "N",
+          roundTrip: values.roundTripRequired ? "Y" : "N",
+          vehicleType: selectedOptionName,
+          promoCode: "",
+        };
+        try {
+        const response = await bookingApi.post(`booking/update`, payload);
+        console.log(response)
         if (response.status === 200) {
           // toast.success("Successfully Booking Create")
           toast.success(response.data.message);
-          navigate("/service");
+          navigate("/summary");
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
         toast.error(error);
       }
+      } else {
+        toast.warning("Not Eligble for booking");
+      }
+      
     },
   });
 
-  console.log("Formik Values", formik.values);
+  // console.log("Values is ", formik.values)
 
-  const handleShowModal = (item, index) => {
-    setCurrentItem(item);
-    setSelectedItemId(index);
-    setModalShow(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalShow(false);
-    setCurrentItem();
-  };
-  function handleCardClick(index) {
-    setSelectedItemId(index);
-  }
-  const [showQuantity, setShowQuantity] = useState(false);
-  const handleCheckboxClick = () => {
-    setShowQuantity(!showQuantity);
-  };
-  const navigate = useNavigate();
-  const [manpowerQuantity, setManpowerQuantity] = useState(0);
-
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
-
-  const handleTimeChange = (e) => {
-    setSelectedTime(e.target.value);
-  };
+  useEffect(() => {
+    formik.setFieldValue("quantity", manpowerQuantity);
+  }, [manpowerQuantity]);
 
   const increaseManpowerQuantity = () => {
-    setManpowerQuantity(manpowerQuantity + 1);
+    setManpowerQuantity((prevQuantity) =>
+      prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
+    );
   };
 
   const decreaseManpowerQuantity = () => {
-    if (manpowerQuantity > 0) {
-      setManpowerQuantity(manpowerQuantity - 1);
-    }
-  };
-
-  const handleNextClick = (e) => {
-    e.preventDefault();
-
-    const now = new Date();
-    const selectedDateTime = new Date(`${selectedDate}T${selectedTime}`);
-
-    const diffInMs = selectedDateTime - now;
-    const diffInHours = diffInMs / (1000 * 60 * 60);
-
-    if (diffInHours < 3) {
-      toast.warning("Please Select time at least 3 hours in advance.");
-    } else {
-      navigate("/summary");
-    }
+    setManpowerQuantity((prevQuantity) =>
+      prevQuantity > 1 ? prevQuantity - 1 : prevQuantity
+    );
   };
 
   useEffect(() => {
     const getVechicle = async () => {
       try {
         const response = await userApi.get("vehicle/vehicleType");
-        // console.log(response.data.responseBody);
         setVechicle(response.data.responseBody);
       } catch (e) {
         toast.error("Error Fetching Data : ", e);
@@ -237,7 +269,9 @@ function Service() {
                   className="container my-5"
                   key={index}
                   id={`Vehicle-${item.vechicleTypeId}`}
-                  onClick={() => handleCardClick(index)}
+                  onClick={() =>
+                    formik.setFieldValue("vechicleTypeId", item.vehicletypeId)
+                  }
                   style={{
                     cursor: "pointer",
                     display: "block",
@@ -250,12 +284,12 @@ function Service() {
                       borderRadius: "6px",
                       position: "relative",
                       border:
-                        selectedItemId === index
+                        formik.values.vechicleTypeId === item.vehicletypeId
                           ? "2px solid #1C6DD0"
                           : "1px solid #B2C8BA",
                     }}
                   >
-                    {selectedItemId === index && (
+                    {formik.values.vechicleTypeId === item.vehicletypeId && (
                       <FaCheckCircle
                         style={{
                           position: "absolute",
@@ -299,41 +333,20 @@ function Service() {
                             </b>
                           </span>
                         </div>
-                        {/* <div className="d-flex justify-content-center pt-2">
-                          <span>
-                            <a
-                              href="#knowmore"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleShowModal(item);
-                              }}
-                              class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                            >
-                              Know More
-                            </a>
-                          </span>
-                        </div> */}
-
                         <center>
                           <div className="form-check">
                             <input
                               className={`form-check-input border-info ${
-                                formik.touched.time && formik.errors.time
+                                formik.touched.vechicleTypeId &&
+                                formik.errors.vechicleTypeId
                                   ? "is-invalid"
                                   : ""
                               }`}
-                              {...formik.getFieldProps("time")}
                               type="radio"
                               name="vechicleTypeId"
                               value={item.vechicleTypeId}
                               id={`flexRadioDefault${index}`}
-                              readOnly
                             />
-                            {formik.touched.time && formik.errors.time && (
-                              <div className="invalid-feedback text-center">
-                                {formik.errors.time}
-                              </div>
-                            )}
                           </div>
                         </center>
                       </div>
@@ -341,60 +354,12 @@ function Service() {
                   </div>
                 </label>
               ))}
-            {currentItem && (
-              <Modal
-                show={modalShow}
-                onHide={handleCloseModal}
-                backdropClassName="custom-backdrop"
-              >
-                <Modal.Header closeButton>
-                  {/* <Modal.Title>{currentItem.name}</Modal.Title> */}
-                </Modal.Header>
-                <Modal.Body>
-                  <img
-                    className="card-img-top mx-auto d-block"
-                    src={currentItem.image}
-                    alt={currentItem.name}
-                    style={{ width: "70%" }}
-                  />
-                  <div className="d-flex justify-content-center pt-3">
-                    <span
-                      className="p-1"
-                      style={{ background: "#D2E0FB", borderRadius: "5px" }}
-                    >
-                      <FaWeightHanging /> {currentItem.weight}
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-center pt-2">
-                    <span style={{ fontSize: "20px" }}>
-                      <b>{currentItem.name}</b>
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-center">
-                    <span>
-                      Starting from{" "}
-                      <b style={{ fontSize: "18px" }}>{currentItem.price}</b>
-                    </span>
-                  </div>
-                  <hr />
-                  <p>
-                    Base fair price : <b>{currentItem.text1}</b>
-                  </p>
-                  <p>
-                    {currentItem.text3}: <b>{currentItem.size}</b>
-                  </p>
-                  <p>
-                    <b>Description:</b> {currentItem.description}
-                  </p>
-                </Modal.Body>
-                {/* <Modal.Footer>
-                <Button className="btn btn-primary btn-sm" onClick={handleCloseModal}>
-                  Close
-                </Button>
-              </Modal.Footer> */}
-              </Modal>
-            )}
           </Carousel>
+          {formik.touched.vechicleTypeId && formik.errors.vechicleTypeId && (
+            <div className="text-danger text-center mb-3">
+              {formik.errors.vechicleTypeId}
+            </div>
+          )}
           <div className="row py-3">
             <div className="col-md-6 col-12 mb-3">
               <div
@@ -412,27 +377,12 @@ function Service() {
                   <input
                     type="checkbox"
                     name="driverAsManpower"
-                    className={`form-check-input border-info ${
-                      formik.touched.driverAsManpower &&
-                      formik.errors.driverAsManpower
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    value="Y"
-                    checked={
-                      formik.values.driverAsManpower &&
-                      formik.values.driverAsManpower.includes("NIL")
-                    }
+                    className="form-check-input border-info"
+                    value={true}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     id="flexCheckChecked"
                   />
-                  {formik.touched.driverAsManpower &&
-                    formik.errors.driverAsManpower && (
-                      <div className="invalid-feedback text-center">
-                        {formik.errors.driverAsManpower}
-                      </div>
-                    )}
                 </div>
               </div>
             </div>
@@ -453,7 +403,14 @@ function Service() {
                     className="form-check-input border-info"
                     type="checkbox"
                     id="flexCheckChecked"
-                    onClick={handleCheckboxClick}
+                    value={true}
+                    onClick={() => {
+                      setShowQuantity(!showQuantity);
+                      setManpowerQuantity(1);
+                    }}
+                    name="extraManpower"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                 </div>
               </div>
@@ -474,12 +431,13 @@ function Service() {
                   {/* Quantity increment/decrement input field */}
                   <div className="quantity-input">
                     <button
-                      className="quantity-btn btn "
+                      className="quantity-btn btn border-white"
+                      type="button"
                       style={{
                         borderRadius: "50%",
                       }}
                       onClick={decreaseManpowerQuantity}
-                      // disabled={manpowerQuantity === 0}
+                      disabled={manpowerQuantity === 1}
                     >
                       <FaMinus style={{ fontSize: "8px" }} />
                     </button>
@@ -499,8 +457,9 @@ function Service() {
                       }}
                     />
                     <button
-                      className="quantity-btn btn "
+                      className="quantity-btn btn border-white"
                       onClick={increaseManpowerQuantity}
+                      type="button"
                       disabled={manpowerQuantity === 99}
                       style={{
                         borderRadius: "50%",
@@ -528,8 +487,11 @@ function Service() {
                   <input
                     class="form-check-input border-info"
                     type="checkbox"
-                    value=""
+                    value={true}
                     id="flexCheckChecked"
+                    name="trollyRequired"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                 </div>
               </div>
@@ -550,8 +512,11 @@ function Service() {
                   <input
                     class="form-check-input border-info"
                     type="checkbox"
-                    value=""
+                    value={true}
                     id="flexCheckChecked"
+                    name="roundTripRequired"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                 </div>
               </div>
@@ -564,10 +529,11 @@ function Service() {
                 <b>Message to Driver</b>
               </label>
               <textarea
-                className="form-control"
                 id="exampleTextarea"
                 rows="3"
                 placeholder="write your message here............"
+                className="form-control form-control-lg "
+                {...formik.getFieldProps("messageToDriver")}
               ></textarea>
             </div>
           </div>
@@ -575,7 +541,6 @@ function Service() {
             <button
               className="btn btn-primary px-5 py-2"
               type="submit"
-              // onClick={handleNextClick}
               id="NextMove"
             >
               Next
