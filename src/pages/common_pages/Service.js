@@ -93,13 +93,12 @@ function Service() {
         values.vechicleTypeId = selectedOptionName;
 
         console.log("vechicleTypeId",values.vechicleTypeId);
-
         const payload = {
           userId: userId,
           type: shiftType,
           locationDetail: locationValue,
           bookingId: bookingIdValue,
-          estKm: 23,
+          estKm: parseInt(distanceValue),
           scheduledDate: `${values.date}T${values.time}`,
           deliveryDate: "2024-05-29T07:22:10.400Z",
           quantity: values.extraManpower ? values.quantity : 0,
@@ -117,7 +116,7 @@ function Service() {
         if (response.status === 200) {
           // toast.success("Successfully Booking Create")
           toast.success(response.data.message);
-          navigate("/summary");
+          navigate(`/summary/${bookingIdValue}`);
         } else {
           toast.error(response.data.message);
         }
