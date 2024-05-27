@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Head from "./Components/common/header";
 import Foot from "./Components/common/footer";
 import Home from "./pages/Home";
@@ -41,9 +37,10 @@ import Support from "./pages/profile/Support";
 import Refer from "./pages/profile/Refer&Earn";
 import Map from "./pages/item_shift/Map";
 import MapCopy from "./pages/item_shift/Map copy";
-import Priceing from "./pages/Priceing";
+// import Priceing from "./pages/Priceing";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { bookingApi, userApi } from "./config/URL";
 // import MapCopy from "./pages/item_shift/Map copy";
 
 function UserRoute() {
@@ -75,24 +72,30 @@ function UserRoute() {
       setIsAdmin(isAdminBoolean);
     }
 
-    const interceptor = axios.interceptors.response.use(
-      (response) => response,
-
-      (error) => {
-        // console.log("Error is", error.response);
-        if (error.response?.status === 401) {
-          toast.warning("Session Expired!! Please Login");
-          handleLogout();
-        }
-        return Promise.reject(error);
+    const responseInterceptor = (error) => {
+      console.log("Error is", error);
+      if (error.response?.status === 401) {
+        toast.warning("Session Expired!! Please Login");
+        handleLogout();
       }
+      return Promise.reject(error);
+    };
+
+    // Add the interceptor to both APIs
+    const bookingInterceptor = bookingApi.interceptors.response.use(
+      (response) => response,
+      responseInterceptor
+    );
+    const userInterceptor = userApi.interceptors.response.use(
+      (response) => response,
+      responseInterceptor
     );
 
     return () => {
-      axios.interceptors.response.eject(interceptor);
+      bookingApi.interceptors.response.eject(bookingInterceptor);
+      userApi.interceptors.response.eject(userInterceptor);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAdmin]);
 
   return (
     <Router>
@@ -110,7 +113,7 @@ function UserRoute() {
           <Route path="/otp" element={<OTP />} />
           <Route path="/termsandcondition" element={<TermsCondition />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/pricing" element={<Priceing />} />
+          {/* <Route path="/pricing" element={<Priceing />} /> */}
           {isAdmin && (
             <>
               <Route path="/map" element={<Map />} />

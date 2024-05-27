@@ -117,6 +117,7 @@ function OTP() {
                           name={`otp-${index}`}
                           ref={(ref) => (inputRefs.current[index] = ref)}
                           value={value}
+                          placeholder="*"
                           onChange={(e) => handleOtpChange(e, index)}
                           onKeyDown={(e) => handleKeyPress(e, index)}
                           maxLength={1}
@@ -124,27 +125,38 @@ function OTP() {
                           className="text-center"
                         />
                       ))}
+                      <button
+                        type="button"
+                        className="btn btn-light"
+                        onClick={() =>
+                          setShowOtp((prevShowOtp) => !prevShowOtp)
+                        }
+                      >
+                        {showOtp ? <BsEyeSlash /> : <BsEye />}
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      className="btn btn-light"
-                      onClick={() => setShowOtp((prevShowOtp) => !prevShowOtp)}
-                    >
-                      {showOtp ? <BsEyeSlash /> : <BsEye />}
-                    </button>
                   </Form.Group>
                   <div>
                     {" "}
-                    <Button type="submit" variant="primary" className="my-4">
+                    <div className="d-flex align-items-center justify-content-center">
+                      <p style={{ marginBottom: "0px" }}>Don't Recive OTP?</p>
+                      <button
+                        className="btn text-primary"
+                        type="button"
+                        onClick={Resendotp}
+                        style={{ textDecoration: "underline" }}
+                      >
+                        Resend OTP
+                      </button>
+                    </div>
+                    <Button
+                      style={{ width: "100%" }}
+                      type="submit"
+                      variant="primary"
+                      className="my-4"
+                    >
                       Submit
                     </Button>
-                    <button
-                      className="btn my-4 text-primary"
-                      type="button"
-                      onClick={Resendotp}
-                    >
-                      Resend OTP
-                    </button>
                   </div>
                 </Form>
               </div>

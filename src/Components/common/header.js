@@ -77,11 +77,11 @@ function OffcanvasExample({ isAdmin, handleLogout }) {
                                   CONTACT US
                                 </Link>
                               </li>
-                              <li className="nav-item px-2">
+                              {/* <li className="nav-item px-2">
                                 <Link className="Links" to="/pricing">
                                   PRICING
                                 </Link>
-                              </li>
+                              </li> */}
                               {isAdmin ? (
                                 <></>
                               ) : (

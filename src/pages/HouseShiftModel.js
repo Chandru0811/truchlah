@@ -20,12 +20,6 @@ function HouseShiftModel({
   dropLocation,
   setLocationDetail,
 }) {
-  const [locationDetail, setLocationDetailState] = useState([]);
-
-  useEffect(() => {
-    setLocationDetail(locationDetail); // Update parent component state
-  }, [locationDetail]);
-
   const formik = useFormik({
     initialValues: {
       location: "",
@@ -37,7 +31,7 @@ function HouseShiftModel({
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Location Details:", values);
-      setLocationDetailState((prevDetails) => [...prevDetails, { ...values }]);
+      setLocationDetail((prevDetails) => [...prevDetails, { ...values }]);
       onHide();
       formik.resetForm();
     },
