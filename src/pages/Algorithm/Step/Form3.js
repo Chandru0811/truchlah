@@ -315,9 +315,9 @@ function Service({ handleNext }) {
         </div>
 
         {showQuantity && (
-          <div className="row d-flex flex-column py-3">
+          <div className="row d-flex flex-column py-3 px-3">
             <div
-              className="d-flex justify-content-between p-3"
+              className="d-flex justify-content-between p-2"
               style={{
                 backgroundColor: "#fff",
                 borderRadius: "5px",
