@@ -20,8 +20,11 @@ const validationSchema = Yup.object().shape({
     .required("*Email is required"),
 
   password: Yup.string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters"),
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
+    )
+    .required("Please Enter your password"),
 });
 
 function Login({ handleLogin }) {
@@ -61,11 +64,17 @@ function Login({ handleLogin }) {
             "username",
             response.data.responseBody.username
           );
+        } else if (response.status === 400) {
+          // console.log("object",response.status)
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed: " + error.message);
+        if (error.response.status === 400) {
+          toast.warning(error.response.data.errorList[0].errorMessage);
+        } else {
+          toast.error(error);
+        }
       }
 
       // Pass email and password to onLogin
