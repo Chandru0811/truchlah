@@ -11,8 +11,6 @@ function OTP() {
   const navigate = useNavigate();
   const { mobileNo } = location.state || {};
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const [showOtp, setShowOtp] = useState(false);
-  console.log(showOtp);
 
   const inputRefs = useRef([]);
 
@@ -67,9 +65,12 @@ function OTP() {
       if (response.status === 200) {
         toast.success(response.data.message);
         navigate("/login");
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.message || "An error occurred");
+      toast.error("Invalid OTP");
+      // console.log("object",error)
     }
   };
 
@@ -113,10 +114,11 @@ function OTP() {
                       {otp.map((value, index) => (
                         <Form.Control
                           key={index}
-                          type={showOtp ? "text" : "password"}
+                          type="text"
                           name={`otp-${index}`}
                           ref={(ref) => (inputRefs.current[index] = ref)}
                           value={value}
+                          placeholder="*"
                           onChange={(e) => handleOtpChange(e, index)}
                           onKeyDown={(e) => handleKeyPress(e, index)}
                           maxLength={1}
@@ -124,27 +126,30 @@ function OTP() {
                           className="text-center"
                         />
                       ))}
+                   
                     </div>
-                    <button
-                      type="button"
-                      className="btn btn-light"
-                      onClick={() => setShowOtp((prevShowOtp) => !prevShowOtp)}
-                    >
-                      {showOtp ? <BsEyeSlash /> : <BsEye />}
-                    </button>
                   </Form.Group>
                   <div>
                     {" "}
-                    <Button type="submit" variant="primary" className="my-4">
+                    <div className="d-flex align-items-center justify-content-center">
+                      <p style={{ marginBottom: "0px" }}>Don't Recive OTP?</p>
+                      <button
+                        className="btn text-primary"
+                        type="button"
+                        onClick={Resendotp}
+                        style={{ textDecoration: "underline" }}
+                      >
+                        Resend OTP
+                      </button>
+                    </div>
+                    <Button
+                      style={{ width: "100%" }}
+                      type="submit"
+                      variant="primary"
+                      className="my-4"
+                    >
                       Submit
                     </Button>
-                    <button
-                      className="btn my-4 text-primary"
-                      type="button"
-                      onClick={Resendotp}
-                    >
-                      Resend OTP
-                    </button>
                   </div>
                 </Form>
               </div>

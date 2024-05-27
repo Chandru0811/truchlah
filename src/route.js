@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Head from "./Components/common/header";
 import Foot from "./Components/common/footer";
 import Home from "./pages/Home";
@@ -44,6 +40,8 @@ import MapCopy from "./pages/item_shift/Map copy";
 import Priceing from "./pages/Priceing";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { bookingApi, userApi } from "./config/URL";
+import Price from "./pages/Price";
 // import MapCopy from "./pages/item_shift/Map copy";
 
 function UserRoute() {
@@ -75,24 +73,30 @@ function UserRoute() {
       setIsAdmin(isAdminBoolean);
     }
 
-    const interceptor = axios.interceptors.response.use(
-      (response) => response,
-
-      (error) => {
-        // console.log("Error is", error.response);
-        if (error.response?.status === 401) {
-          toast.warning("Session Expired!! Please Login");
-          handleLogout();
-        }
-        return Promise.reject(error);
+    const responseInterceptor = (error) => {
+      console.log("Error is", error);
+      if (error.response?.status === 401) {
+        toast.warning("Session Expired!! Please Login");
+        handleLogout();
       }
+      return Promise.reject(error);
+    };
+
+    // Add the interceptor to both APIs
+    const bookingInterceptor = bookingApi.interceptors.response.use(
+      (response) => response,
+      responseInterceptor
+    );
+    const userInterceptor = userApi.interceptors.response.use(
+      (response) => response,
+      responseInterceptor
     );
 
     return () => {
-      axios.interceptors.response.eject(interceptor);
+      bookingApi.interceptors.response.eject(bookingInterceptor);
+      userApi.interceptors.response.eject(userInterceptor);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAdmin]);
 
   return (
     <Router>
@@ -125,13 +129,14 @@ function UserRoute() {
               <Route path="/confirmlocation" element={<ConfirmLocation />} />
               <Route path="/service" element={<Service />} />
               <Route path="/successful" element={<SuccessFul />} />
-              <Route path="/summary" element={<Summary />} />
+              <Route path="/summary/:bookingId" element={<Summary />} />
               <Route path="/payments" element={<Payment />} />
               <Route path="/invoice" element={<Invoices />} />
               <Route path="/cancelorder" element={<Cancel />} />
               <Route path="/user" element={<User />} />
               <Route path="/rides" element={<Order />} />
               <Route path="/coupons" element={<Coupons />} />
+              <Route path="/price" element={<Price />} />
             </>
           )}
           <Route path="*" element={<NotFound />} />

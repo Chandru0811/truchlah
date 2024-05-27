@@ -680,6 +680,17 @@ body {
 #NextMove {
   background: linear-gradient(180deg, #6c54ff 0%, #ad00ff 100%);
   border-radius: 28px;
+  border: none;
+  color: white; /* Optional: to ensure text is readable */
+  cursor: pointer; /* Optional: to change the cursor to a pointer on hover */
+  transition: 0.5s ease; /* Optional: to animate the background change */
+}
+#NextMove:hover {
+  background: linear-gradient(180deg,#ad00ff 0%, #6c54ff 100% );
+  /* background: linear-gradient(180deg, #00c6ff 0%, #0072ff 100%); */
+  /* background: linear-gradient(180deg, #ff54c3 0%, #ff00a1 100%); */
+  /* border-radius: 28px; */
+  /* color: #000; */
 }
 
 /* Invoice  */
@@ -898,10 +909,7 @@ body {
   border-bottom: 2px solid #b9b9b9;
 }
 
-#NextMove {
-  background: linear-gradient(180deg, #6c54ff 0%, #ad00ff 100%);
-  border-radius: 28px;
-}
+
 
 /* Mobile  */
 
@@ -1589,3 +1597,7 @@ body {
   border-bottom: 1px solid #dee2e6;
   padding: 10px;
 }
+.addtionalservice{
+  margin: 5px 0;
+}
+
