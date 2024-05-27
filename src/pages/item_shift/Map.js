@@ -39,6 +39,7 @@ function Map() {
   const [center, setCenter] = useState("");
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [destination1, setDestination1] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -88,6 +89,10 @@ function Map() {
     setDestination(autocomplete);
   };
 
+  const onDestinationLoad1 = (autocomplete) => {
+    setDestination1(autocomplete);
+  };
+
   const onPlaceChanged = async (type) => {
     if (type === "origin") {
       if (origin) {
@@ -108,6 +113,16 @@ function Map() {
         }
         handleOpenModal("Drop Location");
         formik.setFieldValue("dropLocation", place.formatted_address);
+      }
+    } else if (type === "destination1") {
+      if (destination1) {
+        const place = destination1.getPlace();
+        if (place && place.formatted_address) {
+          setSelectedAddress(place.formatted_address);
+          console.log("Selected destination1:", place.formatted_address);
+        }
+        handleOpenModal("Drop Location1");
+        formik.setFieldValue("dropLocation1", place.formatted_address);
       }
     }
 
@@ -404,23 +419,31 @@ function Map() {
                 <div className="col-md-4 col-12"></div>
                 <div className="col-md-5 col-12">
                   {stops.map((stop, index) => (
-                    <div key={index} className="d-flex align-items-center mt-3">
-                      <Form.Control
-                        id="AddStop"
-                        type="text"
-                        placeholder="Add more stops"
-                        value={stop}
-                        onChange={(e) =>
-                          handleStopChange(index, e.target.value)
-                        }
-                        className="me-2"
-                      />
-                      <FaMinus
-                        className="text-danger"
-                        onClick={() => handleDeleteStop(index)}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
+                    <Autocomplete
+                      onLoad={onDestinationLoad1}
+                      onPlaceChanged={() => onPlaceChanged("destination1")}
+                      key={index}
+                    >
+                      <div className="d-flex align-items-center mt-3">
+                        <Form.Control
+                          id="AddStop"
+                          type="text"
+                          placeholder="Add more stops"
+                          value={stop}
+                          name="dropLocation1"
+                          {...formik.getFieldProps("dropLocation1")}
+                          onChange={(e) =>
+                            handleStopChange(index, e.target.value)
+                          }
+                          className="me-2"
+                        />
+                        <FaMinus
+                          className="text-danger"
+                          onClick={() => handleDeleteStop(index)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </div>
+                    </Autocomplete>
                   ))}
                   <div>
                     <button
@@ -459,6 +482,7 @@ function Map() {
         onHide={handleCloseModal}
         pickupLocation={formik.values.pickupLocation}
         dropLocation={formik.values.dropLocation}
+        dropLocation1={formik.values.dropLocation1}
         setLocationDetail={setLocationDetail}
       />
     </div>

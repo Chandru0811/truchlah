@@ -18,6 +18,7 @@ function HouseShiftModel({
   title,
   pickupLocation,
   dropLocation,
+  dropLocation1,
   setLocationDetail,
 }) {
   const [locationDetail, setLocationDetailState] = useState([]);
@@ -48,8 +49,10 @@ function HouseShiftModel({
       formik.setFieldValue("countryCode", 65);
       if (title === "Pick Up Location") {
         formik.setFieldValue("location", pickupLocation);
-      } else {
+      } else if (title === "Drop Location") {
         formik.setFieldValue("location", dropLocation);
+      } else {
+        formik.setFieldValue("location", dropLocation1);
       }
     }
   }, [show, title]);
