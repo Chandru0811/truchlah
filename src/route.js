@@ -131,7 +131,7 @@ function UserRoute() {
               <Route path="/successful" element={<SuccessFul />} />
               <Route path="/summary/:bookingId" element={<Summary />} />
               <Route path="/payments" element={<Payment />} />
-              <Route path="/invoice" element={<Invoices />} />
+              <Route path="/invoices" element={<Invoices />} />
               <Route path="/cancelorder" element={<Cancel />} />
               <Route path="/user" element={<User />} />
               <Route path="/rides" element={<Order />} />
