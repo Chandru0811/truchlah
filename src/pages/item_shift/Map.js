@@ -39,7 +39,7 @@ function Map() {
   const [center, setCenter] = useState("");
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
-  const [destination1, setDestination1] = useState(null);
+  const [addStop, setAddStop] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -57,6 +57,7 @@ function Map() {
     initialValues: {
       pickupLocation: "",
       dropLocation: "",
+      stops: [], // Initialize stops as an empty array
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -69,9 +70,8 @@ function Map() {
       try {
         const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
-          // toast.success("Successfully Booking Create")
           toast.success(response.data.message);
-          navigate("/service");
+          // navigate("/service");
         } else {
           toast.error(response.data.message);
         }
@@ -89,74 +89,47 @@ function Map() {
     setDestination(autocomplete);
   };
 
-  const onDestinationLoad1 = (autocomplete) => {
-    setDestination1(autocomplete);
+  const onStopLoad = (index) => (autocomplete) => {
+    setStops((prevStops) => {
+      const newStops = [...prevStops];
+      newStops[index] = autocomplete;
+      return newStops;
+    });
   };
 
-  const onPlaceChanged = async (type) => {
+  const onPlaceChanged = async (type, index = null) => {
+    let place = null;
     if (type === "origin") {
       if (origin) {
-        const place = origin.getPlace();
-        if (place && place.formatted_address) {
-          setSelectedAddress(place.formatted_address);
-          console.log("Selected origin:", place.formatted_address);
-        }
-        handleOpenModal("Pick Up Location");
+        place = origin.getPlace();
         formik.setFieldValue("pickupLocation", place.formatted_address);
+        handleOpenModal("Pick Up Location");
       }
     } else if (type === "destination") {
       if (destination) {
-        const place = destination.getPlace();
-        if (place && place.formatted_address) {
-          setSelectedAddress(place.formatted_address);
-          console.log("Selected destination:", place.formatted_address);
-        }
-        handleOpenModal("Drop Location");
+        place = destination.getPlace();
         formik.setFieldValue("dropLocation", place.formatted_address);
+        handleOpenModal("Drop Location");
       }
-    } else if (type === "destination1") {
-      if (destination1) {
-        const place = destination1.getPlace();
-        if (place && place.formatted_address) {
-          setSelectedAddress(place.formatted_address);
-          console.log("Selected destination1:", place.formatted_address);
-        }
-        handleOpenModal("Drop Location1");
-        formik.setFieldValue("dropLocation1", place.formatted_address);
+    } else if (type === "addStop" && index !== null) {
+      if (stops[index]) {
+        place = stops[index].getPlace();
+        formik.setFieldValue(`stops[${index}]`, place.formatted_address);
+        handleOpenModal(`Stop Location ${index + 1}`);
       }
     }
 
-    if (origin !== null) {
-      const originPlace = origin.getPlace();
-      console.log("Origin Place:", originPlace);
-      if (
-        originPlace &&
-        originPlace.geometry &&
-        originPlace.geometry.location
-      ) {
-        const location = {
-          lat: originPlace.geometry.location.lat(),
-          lng: originPlace.geometry.location.lng(),
-        };
+    if (place && place.geometry && place.geometry.location) {
+      const location = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      };
+      if (type === "origin") {
         setMarkerPosition(location);
         setCenter(location);
-      }
-    }
-
-    if (destination !== null) {
-      const destinationPlace = destination.getPlace();
-      console.log("Destination Place:", destinationPlace);
-      if (
-        destinationPlace &&
-        destinationPlace.geometry &&
-        destinationPlace.geometry.location
-      ) {
-        const dropLocation = {
-          lat: destinationPlace.geometry.location.lat(),
-          lng: destinationPlace.geometry.location.lng(),
-        };
-        setDestinationMarkerPosition(dropLocation);
-        setCenter(dropLocation);
+      } else {
+        setDestinationMarkerPosition(location);
+        setCenter(location);
       }
     }
 
@@ -192,7 +165,6 @@ function Map() {
             if (status === window.google.maps.DirectionsStatus.OK) {
               setDirections(result);
 
-              // Extract distance and duration
               const route = result.routes[0].legs[0];
               setDistance(route.distance.text);
               setDuration(route.duration.text);
@@ -239,18 +211,23 @@ function Map() {
 
   const handleAddStop = () => {
     setStops([...stops, ""]);
+    formik.setFieldValue("stops", [...formik.values.stops, ""]);
   };
 
   const handleDeleteStop = (index) => {
     const updatedStops = [...stops];
     updatedStops.splice(index, 1);
     setStops(updatedStops);
+    formik.setFieldValue(
+      "stops",
+      formik.values.stops.filter((_, i) => i !== index)
+    );
   };
 
   const handleStopChange = (index, value) => {
-    const updatedStops = [...stops];
+    const updatedStops = [...formik.values.stops];
     updatedStops[index] = value;
-    setStops(updatedStops);
+    formik.setFieldValue("stops", updatedStops);
   };
 
   if (!isLoaded) {
@@ -420,8 +397,8 @@ function Map() {
                 <div className="col-md-5 col-12">
                   {stops.map((stop, index) => (
                     <Autocomplete
-                      onLoad={onDestinationLoad1}
-                      onPlaceChanged={() => onPlaceChanged("destination1")}
+                      onLoad={onStopLoad(index)}
+                      onPlaceChanged={() => onPlaceChanged("addStop", index)}
                       key={index}
                     >
                       <div className="d-flex align-items-center mt-3">
@@ -429,9 +406,7 @@ function Map() {
                           id="AddStop"
                           type="text"
                           placeholder="Add more stops"
-                          value={stop}
-                          name="dropLocation1"
-                          {...formik.getFieldProps("dropLocation1")}
+                          value={formik.values.stops[index]}
                           onChange={(e) =>
                             handleStopChange(index, e.target.value)
                           }
@@ -447,6 +422,7 @@ function Map() {
                   ))}
                   <div>
                     <button
+                      type="button"
                       className="btn btn-primary"
                       style={{
                         backgroundColor: "transparent",
