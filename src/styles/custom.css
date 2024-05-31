@@ -686,7 +686,7 @@ body {
   transition: 0.5s ease; /* Optional: to animate the background change */
 }
 #NextMove:hover {
-  background: linear-gradient(180deg,#ad00ff 0%, #6c54ff 100% );
+  background: linear-gradient(180deg, #ad00ff 0%, #6c54ff 100%);
   /* background: linear-gradient(180deg, #00c6ff 0%, #0072ff 100%); */
   /* background: linear-gradient(180deg, #ff54c3 0%, #ff00a1 100%); */
   /* border-radius: 28px; */
@@ -908,8 +908,6 @@ body {
   border: none;
   border-bottom: 2px solid #b9b9b9;
 }
-
-
 
 /* Mobile  */
 
@@ -1597,7 +1595,71 @@ body {
   border-bottom: 1px solid #dee2e6;
   padding: 10px;
 }
-.addtionalservice{
+.addtionalservice {
   margin: 5px 0;
 }
 
+.darksoul-layout {
+  margin: auto;
+  display: flex;
+  width: 250px;
+
+  min-height: 80vh;
+}
+
+.darksoul-grid {
+  margin: auto;
+  margin-right: 1px;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  gap: 0px;
+  grid-template-columns: auto auto;
+  animation: rotate 2s linear 0s infinite;
+}
+.item1 {
+  margin: auto;
+  width: 15px;
+  height: 15px;
+  border-radius: 0%;
+  background: linear-gradient(180deg, #6c54ff 0%, #ad00ff 100%);
+}
+.item2 {
+  margin: auto;
+  width: 15px;
+  height: 15px;
+  border-radius: 0%;
+  background: linear-gradient(180deg, #ad00ff 0%, #6c54ff 100%);
+}
+.item3 {
+  margin: auto;
+  width: 15px;
+  height: 15px;
+  border-radius: 0%;
+  background: linear-gradient(180deg, #6c54ff 0%, #ad00ff 100%);
+}
+.item4 {
+  margin: auto;
+  width: 15px;
+  height: 15px;
+  border-radius: 0%;
+  background: linear-gradient(180deg, #ad00ff 0%, #6c54ff 100%);
+}
+@keyframes rotate {
+  0% {
+    rotate: 0deg;
+    transform: scale(0.6);
+  }
+  50% {
+    rotate: 100deg;
+    transform: scale(0.4);
+  }
+  100% {
+    rotate: 360deg;
+    transform: scale(0.6);
+  }
+}
+.darksoul-loader-h {
+  margin: auto;
+  margin-left: 5px;
+}
