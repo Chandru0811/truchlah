@@ -140,7 +140,7 @@ function UserRoute() {
               <Route path="/rides" element={<Order />} />
               <Route path="/coupons" element={<Coupons />} />
               <Route path="/price" element={<Price />} />
-              <Route path="/ridedetailsview" element={<RideDetailsView />} />
+              <Route path="/ridedetailsview/:id" element={<RideDetailsView />} />
               <Route path="/popup" element={<Popup />} />
               <Route path="/changepassword" element={<ChangePassword />} />
             </>

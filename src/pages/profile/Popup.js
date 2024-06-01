@@ -48,7 +48,7 @@ function Popup() {
                 console.log(response);
                 if (response.status === 200) {
                     toast.success(response.data.message);
-                    navigate(`/summary/${bookingIdValue}`);
+                    // navigate(`/summary/${bookingIdValue}`);
                 } else {
                     toast.error(response.data.message);
                 }
@@ -161,14 +161,16 @@ function Popup() {
                         )}
                     </Modal.Body>
                     <Modal.Footer>
-                        <button
-                            className="btn btn-secondary"
-                            type="button"
-                            onClick={handleClose}
-                        >
-                            Close
-                        </button>
-                        <button className="btn btn-primary" type="submit">
+                        <span>
+                            <button
+                                className="btn btn-danger px-5"
+                                onClick={handleClose}
+                                style={{ borderRadius: "20px" }}
+                            >
+                                Cancel
+                            </button>
+                        </span>
+                        <button className="btn btn-primary px-5 py-2" id="NextMove">
                             Submit
                         </button>
                     </Modal.Footer>
