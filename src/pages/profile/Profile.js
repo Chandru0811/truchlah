@@ -74,112 +74,125 @@ function User({ handleLogout }) {
             </Offcanvas.Title>
           </div>
         </Offcanvas.Header>
-        <Offcanvas.Body className="p-0">
-          <Table className="data data-hover">
-            <tbody>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/wallet"
-                    onClick={handleCloseProfile}
-                    className="data-link"
-                  >
-                    <img src={wallet} alt="wallet pic" className="got mx-3" />
-                    <span>WALLET</span>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/rides"
-                    onClick={handleCloseProfile}
-                    className="data-link"
-                  >
-                    <img src={rides} alt="rides pic" className="got mx-3" />
-                    <span>MY RIDES</span>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/referearn"
-                    onClick={handleCloseProfile}
-                    className="data-link"
-                  >
-                    <img src={refer} alt="refer pic" className="got mx-3" />
-                    <span>REFER AND EARN</span>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/coupons"
-                    onClick={handleCloseProfile}
-                    className="data-link"
-                  >
-                    <img src={rewards} alt="rewards pic" className="got mx-3" />
-                    <span>REWARDS</span>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/invoice"
-                    onClick={handleCloseProfile}
-                    style={{ textDecoration: "none" }}
-                    className="data-link"
-                  >
-                    <img src={invoice} alt="user pic" className="got mx-3" />
-                    <span>Invoice</span>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/notification"
-                    onClick={handleCloseProfile}
-                    className="data-link"
-                  >
-                    <img
-                      src={notification}
-                      alt="notification pic"
-                      className="got mx-3"
-                    />
-                    <span>NOTIFICATION</span>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/support"
-                    onClick={handleCloseProfile}
-                    className="data-link"
-                  >
-                    <img src={support} alt="support pic" className="got mx-3" />
-                    <span>SUPPORT</span>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-2">
-                  <Link
-                    to="/about"
-                    onClick={handleCloseProfile}
-                    className="data-link"
-                  >
-                    <img src={about} alt="about pic" className="got mx-3" />
-                    <span>ABOUT</span>
-                  </Link>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
+        <Offcanvas.Body className="p-0 d-flex flex-column justify-content-between">
+          <div>
+            <Table className="data data-hover">
+              <tbody>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/wallet"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img src={wallet} alt="wallet pic" className="got mx-3" />
+                      <span>WALLET</span>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/rides"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img src={rides} alt="rides pic" className="got mx-3" />
+                      <span>MY RIDES</span>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/referearn"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img src={refer} alt="refer pic" className="got mx-3" />
+                      <span>REFER AND EARN</span>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/coupons"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img src={rewards} alt="rewards pic" className="got mx-3" />
+                      <span>REWARDS</span>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/invoice"
+                      onClick={handleCloseProfile}
+                      style={{ textDecoration: "none" }}
+                      className="data-link"
+                    >
+                      <img src={invoice} alt="user pic" className="got mx-3" />
+                      <span>Invoice</span>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/notification"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img
+                        src={notification}
+                        alt="notification pic"
+                        className="got mx-3"
+                      />
+                      <span>NOTIFICATION</span>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/support"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img src={support} alt="support pic" className="got mx-3" />
+                      <span>SUPPORT</span>
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/about"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img src={about} alt="about pic" className="got mx-3" />
+                      <span>ABOUT</span>
+                    </Link>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+          </div>
+          <div className="p-3">
+            <Link
+              to="/changepassword"
+              onClick={handleCloseProfile}
+              className="data-link"
+            >
+              <button className="btn btn-danger w-100">
+                Change Password
+              </button>
+            </Link>
+          </div>
         </Offcanvas.Body>
       </Offcanvas>
     </>

@@ -9,16 +9,23 @@ import { userApi } from "../../config/URL";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-function ForgotPassword() {
+function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
+  const [oldPassword, setConfirmOldPassword] = useState(false);
   const navigate = useNavigate();
 
-  const PasswordVisibility = () => {
+  const PasswordVisibility = (e) => {
+    e.preventDefault();
     setShowPassword(!showPassword);
   };
-  const ConfirmPasswordVisibility = () => {
+  const ConfirmPasswordVisibility = (e) => {
+    e.preventDefault();
     setConfirmPassword(!confirmPassword);
+  };
+  const ConfirmOldPasswordVisibility = (e) => {
+    e.preventDefault();
+    setConfirmOldPassword(!oldPassword);
   };
 
   const validationSchema = Yup.object().shape({
@@ -34,6 +41,9 @@ function ForgotPassword() {
     confirmPassword: Yup.string()
       .required("Confirm Password is required")
       .oneOf([Yup.ref("password")], "Passwords must match"),
+    oldPassword: Yup.string()
+      .required("Old Password is required")
+      .oneOf([Yup.ref("password")], "Enter the Correct password"),
   });
 
   const formik = useFormik({
@@ -41,12 +51,13 @@ function ForgotPassword() {
       email: "",
       password: "",
       confirmPassword: "",
+      oldPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
       try {
-        const response = await userApi.post(`user/forgotPassword`, values);
+        const response = await userApi.post(`api/user/changePassword`, values);
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/shift");
@@ -89,7 +100,7 @@ function ForgotPassword() {
         >
           <div className="row">
             <div className="text-center"></div>
-            <h5 className="LoginTitle pb-4">Forget Password</h5>
+            <h5 className="LoginTitle pb-4">Change Password</h5>
             <h6 className="LoginSubHead">
               Your new password must be different from previously used Password
             </h6>
@@ -218,13 +229,60 @@ function ForgotPassword() {
                             )}
                         </FloatingLabel>
                       </div>
+                      <div className="">
+                        <FloatingLabel
+                          controlId="floatingOldPassword"
+                          label="Old Password"
+                          style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
+                          className="mb-3"
+                        >
+                          <Form.Control
+                            type={oldPassword ? "text" : "password"}
+                            placeholder="Enter the Correct password"
+                            className={`form-control ${
+                              formik.touched.oldPassword &&
+                              formik.errors.oldPassword
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            {...formik.getFieldProps("oldPassword")}
+                          />
+                          {oldPassword ? (
+                            <RiEyeOffLine
+                              onClick={ConfirmOldPasswordVisibility}
+                              style={{
+                                position: "absolute",
+                                right: "15px",
+                                top: "calc(50% - 8px)",
+                                cursor: "pointer",
+                              }}
+                            />
+                          ) : (
+                            <RiEyeLine
+                              onClick={ConfirmOldPasswordVisibility}
+                              style={{
+                                position: "absolute",
+                                right: "15px",
+                                top: "calc(50% - 8px)",
+                                cursor: "pointer",
+                              }}
+                            />
+                          )}
+                          {formik.touched.oldPassword &&
+                            formik.errors.oldPassword && (
+                              <div className="invalid-feedback">
+                                {formik.errors.oldPassword}
+                              </div>
+                            )}
+                        </FloatingLabel>
+                      </div>
                     </div>
                     <div className="text-center">
                       <button
-                        type="submit"
                         className="btn btn-primary py-2"
                         style={{ width: "100%" }}
                         id="registerButton"
+                        type="submit"
                       >
                         save
                       </button>
@@ -241,4 +299,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default ChangePassword;

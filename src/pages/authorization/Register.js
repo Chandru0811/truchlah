@@ -411,7 +411,7 @@ function Register() {
                       </div>
                     </div>
                     <div className="col-lg-6 col-12 pb-2">
-                      <label className="form-label">Conform Password</label>
+                      <label className="form-label">Confirm Password</label>
                       <div className={`input-group mb-3`}>
                         <input
                           type={cPassword ? "text" : "password"}
