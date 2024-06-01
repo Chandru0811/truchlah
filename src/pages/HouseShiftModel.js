@@ -47,7 +47,8 @@ function HouseShiftModel({
       } else if (title === "Drop Location") {
         formik.setFieldValue("location", dropLocation);
       } else {
-        formik.setFieldValue("location", stops);
+        const titleId = parseInt(title) - 1;
+        formik.setFieldValue("location", stops[titleId]);
       }
     }
   }, [show, title]);
@@ -55,7 +56,11 @@ function HouseShiftModel({
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title>
+          {title !== "Pick Up Location" && title !== "Drop Location"
+            ? `Stop ${title}`
+            : title}
+        </Modal.Title>
       </Modal.Header>
       <form onSubmit={formik.handleSubmit}>
         <Modal.Body>

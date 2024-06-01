@@ -19,10 +19,12 @@ function ChangePassword() {
     e.preventDefault();
     setShowPassword(!showPassword);
   };
+
   const ConfirmPasswordVisibility = (e) => {
     e.preventDefault();
     setConfirmPassword(!confirmPassword);
   };
+
   const ConfirmOldPasswordVisibility = (e) => {
     e.preventDefault();
     setConfirmOldPassword(!oldPassword);
@@ -36,14 +38,20 @@ function ChangePassword() {
       )
       .required("*Email is required"),
     password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
+      )
+      .required("Please Enter your new password"),
     confirmPassword: Yup.string()
       .required("Confirm Password is required")
       .oneOf([Yup.ref("password")], "Passwords must match"),
     oldPassword: Yup.string()
-      .required("Old Password is required")
-      .oneOf([Yup.ref("password")], "Enter the Correct password"),
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
+      )
+      .required("Please Enter your current password"),
   });
 
   const formik = useFormik({
@@ -57,15 +65,15 @@ function ChangePassword() {
     onSubmit: async (values) => {
       console.log("values", values);
       try {
-        const response = await userApi.post(`api/user/changePassword`, values);
-        if (response.status === 201) {
+        const response = await userApi.post(`user/changePassword`, values);
+        if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/shift");
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Error Submitting Data, ", error);
+        toast.warning("Password Mismatch, ", error);
       }
     },
   });
@@ -145,7 +153,7 @@ function ChangePassword() {
                         >
                           <Form.Control
                             type={showPassword ? "text" : "password"}
-                            placeholder="Enter your password"
+                            placeholder="Enter your new password"
                             className={`form-control ${
                               formik.touched.password && formik.errors.password
                                 ? "is-invalid"
@@ -238,7 +246,7 @@ function ChangePassword() {
                         >
                           <Form.Control
                             type={oldPassword ? "text" : "password"}
-                            placeholder="Enter the Correct password"
+                            placeholder="Enter your current password"
                             className={`form-control ${
                               formik.touched.oldPassword &&
                               formik.errors.oldPassword
@@ -284,7 +292,7 @@ function ChangePassword() {
                         id="registerButton"
                         type="submit"
                       >
-                        save
+                        Save
                       </button>
                     </div>
                   </form>
