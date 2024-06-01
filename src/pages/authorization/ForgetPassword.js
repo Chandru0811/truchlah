@@ -47,9 +47,9 @@ function ForgotPassword() {
       console.log("values", values);
       try {
         const response = await userApi.post(`user/forgotPassword`, values);
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/shift");
+          navigate("/login");
         } else {
           toast.error(response.data.message);
         }

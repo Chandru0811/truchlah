@@ -42,9 +42,11 @@ function Map() {
   const [modalShow, setModalShow] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [destinationMarkerPosition, setDestinationMarkerPosition] = useState(null);
+  const [destinationMarkerPosition, setDestinationMarkerPosition] =
+    useState(null);
   const [directions, setDirections] = useState(null);
   const [locationDetail, setLocationDetail] = useState([]);
+  console.log("Location Details", locationDetail);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [stops, setStops] = useState([]);
@@ -56,7 +58,7 @@ function Map() {
     initialValues: {
       pickupLocation: "",
       dropLocation: "",
-      stops: "", // Initialize stops as an empty array
+      stops: "",
     },
     validationSchema: validationSchema,
 
@@ -84,18 +86,12 @@ function Map() {
     //     toast.error(error);
     //   }
     // },
-    
+
     onSubmit: async (values) => {
       const payload = {
         userId: userId,
         type: shiftType,
-        locationDetail: locationDetail.map(({ location, address, countryCode, contactName, mobile }) => ({
-          location: Array.isArray(location) ? location.join(', ') : location,
-          address,
-          countryCode,
-          contactName,
-          mobile
-        }))
+        locationDetail: locationDetail,
       };
       console.log("Form values:", payload);
       try {
@@ -115,9 +111,10 @@ function Map() {
         toast.error(error);
       }
     },
-    
   });
-  
+
+  console.log("Stop is ", formik.values.stops);
+
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
   };
@@ -136,7 +133,7 @@ function Map() {
 
   const onPlaceChanged = async (type, index = null) => {
     let place = null;
-    console.log("Type is", type)
+    console.log("Type is", type);
     if (type === "origin") {
       if (origin) {
         place = origin.getPlace();
@@ -151,10 +148,10 @@ function Map() {
       }
     } else if (type === "stops" && index !== null) {
       if (stops[index]) {
-        console.log("Direction", stops[index])
+        console.log("Direction", stops[index]);
         place = stops[index].getPlace();
         formik.setFieldValue(`stops[${index}]`, place.formatted_address);
-        handleOpenModal(`Stop Location ${index + 1}`);
+        handleOpenModal(`${index + 1}`);
       }
     }
 
@@ -270,7 +267,17 @@ function Map() {
   };
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div class="darksoul-layout">
+        <div class="darksoul-grid">
+          <div class="item1"></div>
+          <div class="item2"></div>
+          <div class="item3"></div>
+          <div class="item4"></div>
+        </div>
+        <h3 class="darksoul-loader-h">Trucklah</h3>
+      </div>
+    );
   }
 
   return (
@@ -343,6 +350,10 @@ function Map() {
                 <Autocomplete
                   onLoad={onOriginLoad}
                   onPlaceChanged={() => onPlaceChanged("origin")}
+                  options={{
+                    types: ["(regions)"],
+                    componentRestrictions: { country: ["sg", "in"] },
+                  }}
                 >
                   <FloatingLabel
                     controlId="floatingInput"
@@ -384,6 +395,10 @@ function Map() {
                 <Autocomplete
                   onLoad={onDestinationLoad}
                   onPlaceChanged={() => onPlaceChanged("destination")}
+                  options={{
+                    types: ["(regions)"],
+                    componentRestrictions: { country: ["sg", "in"] },
+                  }}
                 >
                   <FloatingLabel
                     controlId="floatingInput"
@@ -439,6 +454,10 @@ function Map() {
                       onLoad={onStopLoad(index)}
                       onPlaceChanged={() => onPlaceChanged("stops", index)}
                       key={index}
+                      options={{
+                        types: ["(regions)"],
+                        componentRestrictions: { country: ["sg", "in"] },
+                      }}
                     >
                       <div className="d-flex align-items-center mt-3">
                         <Form.Control
@@ -499,7 +518,7 @@ function Map() {
         pickupLocation={formik.values.pickupLocation}
         dropLocation={formik.values.dropLocation}
         stops={formik.values.stops}
-        setStops = {setStops}
+        setStops={setStops}
         setLocationDetail={setLocationDetail}
       />
     </div>
