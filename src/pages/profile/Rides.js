@@ -1,21 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import { FaRupeeSign } from "react-icons/fa";
 import { SiPaytm } from "react-icons/si";
+import { toast } from "react-toastify";
+import { bookingApi } from "../../config/URL";
 
 function Order() {
-  const [showFirstSection, setShowFirstSection] = useState(true);
-  const [showSecondSection, setShowSecondSection] = useState(false);
+  const [showInprogressSection, setShowInprogressSection] = useState(true);
+  const [showCompletedSection, setShowCompletedSection] = useState(false);
+  const [showCanceledSection, setShowCanceledSection] = useState(false);
+  const [data, setData] = useState("");
+  const userId = sessionStorage.getItem("userId");
 
-  const hideFirstSection = () => {
-    setShowFirstSection(false);
-    setShowSecondSection(true);
+  const inprogressSection = () => {
+    setShowInprogressSection(true);
+    setShowCompletedSection(false);
+    setShowCanceledSection(false);
   };
 
-  const hideSecondSection = () => {
-    setShowFirstSection(true);
-    setShowSecondSection(false);
+  const completedSection = () => {
+    setShowInprogressSection(false);
+    setShowCanceledSection(false);
+    setShowCompletedSection(true);
   };
+
+  const cancelSection = () => {
+    setShowInprogressSection(false);
+    setShowCompletedSection(false);
+    setShowCanceledSection(true);
+  };
+  let status = "";
+  if (showInprogressSection) {
+    status = "INPROGRESS";
+  } else if (showCompletedSection) {
+    status = "COMPLETED";
+  } else if (showCanceledSection) {
+    status = "CANCELLED";
+  }
+
+  const fetch = async () => {
+    try {
+      const response = await bookingApi.get(
+        `booking/byUserId/${userId}/${status}`
+      );
+      if (response.status === 200) {
+        // toast.success("Successfully Booking Create")
+        // toast.success(response.data.message);
+        // console.log("1",response.data.responseBody)
+        setData(response.data.responseBody);
+        console.log("object",data)
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetch();
+  }, [status]);
 
   return (
     <section className="order">
@@ -28,233 +70,129 @@ function Order() {
         <div className="row mt-5">
           <div className="col-12 d-flex justify-content-center">
             <button
-              className={`mx-3 ${showFirstSection ? "underline" : ""}`}
+              className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
               id="shift-btn"
-              onClick={hideSecondSection}
+              onClick={inprogressSection}
             >
-              House Shifting
+              INPROGRESS
             </button>
             <button
-              className={`mx-3 ${showSecondSection ? "underline" : ""}`}
+              className={`mx-3 ${showCompletedSection ? "underline" : ""}`}
               id="shift-btn"
-              onClick={hideFirstSection}
+              onClick={completedSection}
             >
-              Item Shifting
+              COMPLETED
+            </button>
+            <button
+              className={`mx-3 ${showCanceledSection ? "underline" : ""}`}
+              id="shift-btn"
+              onClick={cancelSection}
+            >
+              CANCELLED
             </button>
           </div>
         </div>
       </div>
-      {showFirstSection && (
+      {showInprogressSection && (
         <div id="shift-bg" className="container-fuild">
-          <div className="container py-4">
-            <div className="row" id="on">
-              <div className="col-lg-10 col-md-6 col-12 p-3">
-                <p>Tata ace - today</p>
-                <p style={{ color: "#DFAE00" }}>On process</p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
-                  tower,anna salai,chennai-600008<br></br>
-                  <span className="line"></span>
-                </p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot2"></span>
-                  &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
-                </p>
+          {data &&
+            data.map((item, index) => (
+              <div className="container py-4" key={index}>
+                <div className="row" id="on">
+                  <div className="col-lg-10 col-md-6 col-12 p-3">
+                    <p>Tata ace - today</p>
+                    <p style={{ color: "#DFAE00" }}>On process</p>
+                    <p style={{ marginTop: "0", marginBottom: "0" }}>
+                      <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,
+                      Sakthi Tower, Anna Salai, Chennai-600008
+                      <br />
+                      <span className="line"></span>
+                    </p>
+                    <p style={{ marginTop: "0", marginBottom: "0" }}>
+                      <span className="dot2"></span>&nbsp;&nbsp;&nbsp;123, Rich
+                      Street, Mount Road, Chennai-600005
+                    </p>
+                  </div>
+                  <div className="col-lg-2 col-md-6 col-12 p-3">
+                    <p className="ps-5 pt-2">
+                      <FaRupeeSign /> {item.transactionDetails?.txnAmount}
+                      <br />
+                      <SiPaytm style={{ fontSize: "50px" }} />
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="col-lg-2 col-md-6 col-12 p-3">
-                <p className="ps-5 pt-2">
-                  <FaRupeeSign />
-                  750<br></br>
-                  <SiPaytm style={{ fontSize: "50px" }} />
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="container py-5">
-            <div className="row" id="on">
-              <div className="col-lg-10 col-md-6 col-12 p-3">
-                <p>Truck - 1 month ago</p>
-                <p style={{ color: "#DF0000" }}>Cancelled</p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
-                  tower,anna salai,chennai-600008<br></br>
-                  <span className="line"></span>
-                </p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot2"></span>
-                  &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
-                </p>
-              </div>
-              <div className="col-lg-2 col-md-6 col-12 p-3">
-                <p className="ps-5 pt-2">
-                  <FaRupeeSign />
-                  1500<br></br>
-                  <SiPaytm style={{ fontSize: "50px" }} />
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="container py-5">
-            <div className="row" id="on">
-              <div className="col-lg-10 col-md-6 col-12 p-3">
-                <p>Tata ace - today</p>
-                <p style={{ color: "#0D64CD" }}>Dropped</p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
-                  tower,anna salai,chennai-600008<br></br>
-                  <span className="line"></span>
-                </p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot2"></span>
-                  &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
-                </p>
-              </div>
-              <div className="col-lg-2 col-md-6 col-12 p-3">
-                <p className="ps-5 pt-2">
-                  <FaRupeeSign />
-                  750<br></br>
-                  <SiPaytm style={{ fontSize: "50px" }} />
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="container py-5">
-            <div className="row" id="on">
-              <div className="col-lg-10 col-md-6 col-12 p-3">
-                <p>Tata ace - today</p>
-                <p style={{ color: "#DFAE00" }}>On process</p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,sakthi
-                  tower,anna salai,chennai-600008<br></br>
-                  <span className="line"></span>
-                </p>
-                <p style={{ marginTop: "0", marginBottom: "0" }}>
-                  <span className="dot2"></span>
-                  &nbsp;&nbsp;&nbsp;123,rich street,mount road,chennai-600005
-                </p>
-              </div>
-              <div className="col-lg-2 col-md-6 col-12 p-3">
-                <p className="ps-5 pt-2">
-                  <FaRupeeSign />
-                  750<br></br>
-                  <SiPaytm style={{ fontSize: "50px" }} />
-                </p>
-              </div>
-            </div>
-          </div>
+            ))}
         </div>
       )}
       <div className="container-fluid ">
-        {showSecondSection && (
+        {showCompletedSection && (
           <div id="shift-bg" className="container-fuild">
-            <div className="container py-4">
-              <div className="row" id="on">
-                <div className="col-lg-10 col-md-6 col-12 p-3">
-                  <p>Tata ace - today</p>
-                  <p style={{ color: "#DFAE00" }}>On process</p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
-                    street,mount road,chennai-600005<br></br>
-                    <span className="line"></span>
-                  </p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot2"></span>
-                    &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
-                    salai,chennai-600008
-                  </p>
-                </div>
-                <div className="col-lg-2 col-md-6 col-12 p-3">
-                  <p className="ps-5 pt-2">
-                    <FaRupeeSign />
-                    750<br></br>
-                    <SiPaytm style={{ fontSize: "50px" }} />
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="container py-5">
-              <div className="row" id="on">
-                <div className="col-lg-10 col-md-6 col-12 p-3">
-                  <p>Tata ace - today</p>
-                  <p style={{ color: "#DF0000" }}>Cancelled</p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
-                    street,mount road,chennai-600005<br></br>
-                    <span className="line"></span>
-                  </p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot2"></span>
-                    &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
-                    salai,chennai-600008
-                  </p>
-                </div>
-                <div className="col-lg-2 col-md-6 col-12 p-3">
-                  <p className="ps-5 pt-2">
-                    <FaRupeeSign />
-                    1500<br></br>
-                    <SiPaytm style={{ fontSize: "50px" }} />
-                  </p>
+            {data &&
+            data.map((item, index) => (
+              <div className="container py-4" key={index}>
+                <div className="row" id="on">
+                  <div className="col-lg-10 col-md-6 col-12 p-3">
+                    <p>Tata ace - today</p>
+                    <p style={{ color: "#DFAE00" }}>COMPLETED</p>
+                    <p style={{ marginTop: "0", marginBottom: "0" }}>
+                      <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,
+                      Sakthi Tower, Anna Salai, Chennai-600008
+                      <br />
+                      <span className="line"></span>
+                    </p>
+                    <p style={{ marginTop: "0", marginBottom: "0" }}>
+                      <span className="dot2"></span>&nbsp;&nbsp;&nbsp;123, Rich
+                      Street, Mount Road, Chennai-600005
+                    </p>
+                  </div>
+                  <div className="col-lg-2 col-md-6 col-12 p-3">
+                    <p className="ps-5 pt-2">
+                      <FaRupeeSign /> {item.txtAmount}
+                      <br />
+                      <SiPaytm style={{ fontSize: "50px" }} />
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="container py-5">
-              <div className="row" id="on">
-                <div className="col-lg-10 col-md-6 col-12 p-3">
-                  <p>Tata ace - today</p>
-                  <p style={{ color: "#0D64CD" }}>Dropped</p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
-                    street,mount road,chennai-600005<br></br>
-                    <span className="line"></span>
-                  </p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot2"></span>
-                    &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
-                    salai,chennai-600008
-                  </p>
-                </div>
-                <div className="col-lg-2 col-md-6 col-12 p-3">
-                  <p className="ps-5 pt-2">
-                    <FaRupeeSign />
-                    750<br></br>
-                    <SiPaytm style={{ fontSize: "50px" }} />
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="container py-5">
-              <div className="row" id="on">
-                <div className="col-lg-10 col-md-6 col-12">
-                  <p>Tata ace - today</p>
-                  <p style={{ color: "#DFAE00" }}>On process</p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot1"></span>&nbsp;&nbsp;&nbsp; 123,rich
-                    street,mount road,chennai-600005<br></br>
-                    <span className="line"></span>
-                  </p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot2"></span>
-                    &nbsp;&nbsp;&nbsp;45/1,sakthi tower,anna
-                    salai,chennai-600008
-                  </p>
-                </div>
-                <div className="col-lg-2 col-md-6 col-12">
-                  <p className="ps-5 pt-2">
-                    <FaRupeeSign />
-                    750<br></br>
-                    <SiPaytm style={{ fontSize: "50px" }} />
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         )}
+        
+      </div>
+      <div className="container-fluid ">
+        {showCanceledSection && (
+          <div id="shift-bg" className="container-fuild">
+            {data &&
+            data.map((item, index) => (
+              <div className="container py-4" key={index}>
+                <div className="row" id="on">
+                  <div className="col-lg-10 col-md-6 col-12 p-3">
+                    <p>Tata ace - today</p>
+                    <p style={{ color: "#DFAE00" }}>CANCELLED</p>
+                    <p style={{ marginTop: "0", marginBottom: "0" }}>
+                      <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,
+                      Sakthi Tower, Anna Salai, Chennai-600008
+                      <br />
+                      <span className="line"></span>
+                    </p>
+                    <p style={{ marginTop: "0", marginBottom: "0" }}>
+                      <span className="dot2"></span>&nbsp;&nbsp;&nbsp;123, Rich
+                      Street, Mount Road, Chennai-600005
+                    </p>
+                  </div>
+                  <div className="col-lg-2 col-md-6 col-12 p-3">
+                    <p className="ps-5 pt-2">
+                      <FaRupeeSign /> 750
+                      <br />
+                      <SiPaytm style={{ fontSize: "50px" }} />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}    
       </div>
     </section>
   );
