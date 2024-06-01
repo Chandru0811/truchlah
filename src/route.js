@@ -42,7 +42,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { bookingApi, userApi } from "./config/URL";
 import Price from "./pages/Price";
+import RideDetailsView from "./pages/profile/RideDetailsView";
+import Popup from "./pages/profile/Popup";
 // import MapCopy from "./pages/item_shift/Map copy";
+import ChangePassword from "./pages/authorization/ChangePassword";
 
 function UserRoute() {
   AOS.init({
@@ -137,6 +140,9 @@ function UserRoute() {
               <Route path="/rides" element={<Order />} />
               <Route path="/coupons" element={<Coupons />} />
               <Route path="/price" element={<Price />} />
+              <Route path="/ridedetailsview" element={<RideDetailsView />} />
+              <Route path="/popup" element={<Popup />} />
+              <Route path="/changepassword" element={<ChangePassword />} />
             </>
           )}
           <Route path="*" element={<NotFound />} />

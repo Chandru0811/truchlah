@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Ace from "../../asset/Rectangle 42.png";
 import "../../styles/custom.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bookingApi, userApi } from "../../config/URL";
 import VAN1 from "../../asset/1.7M_VAN.png";
@@ -18,6 +18,7 @@ function Summary() {
   // console.log("Api Data", data.booking);
   const shiftType = sessionStorage.getItem("shiftType");
   // console.log("Type:", shiftType);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +26,10 @@ function Summary() {
         const response = await bookingApi.get(
           `booking/getBookingById/${bookingId}`
         );
-        setData(response.data.responseBody);
+        if (response.status === 200) {
+          setData(response.data.responseBody);
+          navigate('/successful');
+          }
       } catch (error) {
         toast.error("Error Fetching Data: " + error.message);
       }
