@@ -18,7 +18,7 @@ function HouseShiftModel({
   title,
   pickupLocation,
   dropLocation,
-  dropLocation1,
+  stops,
   setLocationDetail,
 }) {
   const formik = useFormik({
@@ -29,10 +29,11 @@ function HouseShiftModel({
       contactName: "",
       mobile: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Location Details:", values);
       setLocationDetail((prevDetails) => [...prevDetails, { ...values }]);
+      // setStops((prevDetails) => [...prevDetails, { ...values }]);
       onHide();
       formik.resetForm();
     },
@@ -46,7 +47,7 @@ function HouseShiftModel({
       } else if (title === "Drop Location") {
         formik.setFieldValue("location", dropLocation);
       } else {
-        formik.setFieldValue("location", dropLocation1);
+        formik.setFieldValue("location", stops);
       }
     }
   }, [show, title]);

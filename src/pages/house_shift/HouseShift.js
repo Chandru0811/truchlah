@@ -17,9 +17,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import HouseShiftModel from "../HouseShiftModel";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
-import { type } from "@testing-library/user-event/dist/type";
 
 // const center = { lat: 13.05, lng: 80.2824 };
 
@@ -54,13 +53,12 @@ function HouseShift() {
   const [duration, setDuration] = useState("");
 
   const navigate = useNavigate();
-//   const location = useLocation();
-// const params = new URLSearchParams(location.search);
-// const bookingId = params.get("bookingId");
-// const locationDetails = params.get("location");
+  //   const location = useLocation();
+  // const params = new URLSearchParams(location.search);
+  // const bookingId = params.get("bookingId");
+  // const locationDetails = params.get("location");
 
-// Now you can use the bookingId and locationDetail variables as needed
-
+  // Now you can use the bookingId and locationDetail variables as needed
 
   const formik = useFormik({
     initialValues: {
@@ -82,7 +80,9 @@ function HouseShift() {
           toast.success(response.data.message);
           const bookingId = response.data.responseBody.booking.bookingId;
           const locations = encodeURIComponent(JSON.stringify(locationDetail));
-          navigate(`/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`);
+          navigate(
+            `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+          );
         } else {
           toast.error(response.data.message);
         }
@@ -235,7 +235,17 @@ function HouseShift() {
   }, []);
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div class="darksoul-layout">
+        <div class="darksoul-grid">
+          <div class="item1"></div>
+          <div class="item2"></div>
+          <div class="item3"></div>
+          <div class="item4"></div>
+        </div>
+        <h3 class="darksoul-loader-h">Trucklah</h3>
+      </div>
+    );
   }
 
   return (
@@ -308,6 +318,10 @@ function HouseShift() {
                 <Autocomplete
                   onLoad={onOriginLoad}
                   onPlaceChanged={() => onPlaceChanged("origin")}
+                  options={{
+                    types: ["(regions)"],
+                    componentRestrictions: { country: ["sg", "in"] },
+                  }}
                 >
                   <FloatingLabel
                     controlId="floatingInput"
@@ -349,6 +363,10 @@ function HouseShift() {
                 <Autocomplete
                   onLoad={onDestinationLoad}
                   onPlaceChanged={() => onPlaceChanged("destination")}
+                  options={{
+                    types: ["(regions)"],
+                    componentRestrictions: { country: ["sg", "in"] },
+                  }}
                 >
                   <FloatingLabel
                     controlId="floatingInput"

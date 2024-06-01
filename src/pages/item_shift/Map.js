@@ -39,39 +39,75 @@ function Map() {
   const [center, setCenter] = useState("");
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
-  const [addStop, setAddStop] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
-  const [selectedAddress, setSelectedAddress] = useState("");
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [destinationMarkerPosition, setDestinationMarkerPosition] =
-    useState(null);
+  const [destinationMarkerPosition, setDestinationMarkerPosition] = useState(null);
   const [directions, setDirections] = useState(null);
   const [locationDetail, setLocationDetail] = useState([]);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [stops, setStops] = useState([]);
+  const userId = sessionStorage.getItem("userId");
+
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       pickupLocation: "",
       dropLocation: "",
-      stops: [], // Initialize stops as an empty array
+      stops: "", // Initialize stops as an empty array
     },
     validationSchema: validationSchema,
+
+    // onSubmit: async (values) => {
+    //   const payload = {
+    //     userId: userId,
+    //     type: shiftType,
+    //     locationDetail: locationDetail,
+    //   };
+    //   console.log("Form values:", payload);
+    //   try {
+    //     const response = await bookingApi.post(`booking/create`, payload);
+    //     if (response.status === 200) {
+    //       // toast.success("Successfully Booking Create")
+    //       toast.success(response.data.message);
+    //       const bookingId = response.data.responseBody.booking.bookingId;
+    //       const locations = encodeURIComponent(JSON.stringify(locationDetail));
+    //       navigate(
+    //         `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+    //       );
+    //     } else {
+    //       toast.error(response.data.message);
+    //     }
+    //   } catch (error) {
+    //     toast.error(error);
+    //   }
+    // },
+    
     onSubmit: async (values) => {
       const payload = {
-        userId: 1,
+        userId: userId,
         type: shiftType,
-        locationDetail: locationDetail,
+        locationDetail: locationDetail.map(({ location, address, countryCode, contactName, mobile }) => ({
+          location: Array.isArray(location) ? location.join(', ') : location,
+          address,
+          countryCode,
+          contactName,
+          mobile
+        }))
       };
       console.log("Form values:", payload);
       try {
         const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
+          // toast.success("Successfully Booking Create")
           toast.success(response.data.message);
-          // navigate("/service");
+          const bookingId = response.data.responseBody.booking.bookingId;
+          const locations = encodeURIComponent(JSON.stringify(locationDetail));
+          // navigate(
+          //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+          // );
         } else {
           toast.error(response.data.message);
         }
@@ -79,8 +115,9 @@ function Map() {
         toast.error(error);
       }
     },
+    
   });
-
+  
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
   };
@@ -99,6 +136,7 @@ function Map() {
 
   const onPlaceChanged = async (type, index = null) => {
     let place = null;
+    console.log("Type is", type)
     if (type === "origin") {
       if (origin) {
         place = origin.getPlace();
@@ -111,8 +149,9 @@ function Map() {
         formik.setFieldValue("dropLocation", place.formatted_address);
         handleOpenModal("Drop Location");
       }
-    } else if (type === "addStop" && index !== null) {
+    } else if (type === "stops" && index !== null) {
       if (stops[index]) {
+        console.log("Direction", stops[index])
         place = stops[index].getPlace();
         formik.setFieldValue(`stops[${index}]`, place.formatted_address);
         handleOpenModal(`Stop Location ${index + 1}`);
@@ -292,9 +331,9 @@ function Map() {
                     <p className="me-5">
                       Distance : <b>{distance}</b>
                     </p>
-                    <p>
+                    {/* <p>
                       Duration : <b>{duration}</b>
-                    </p>
+                    </p> */}
                   </div>
                 )}
               </div>
@@ -398,7 +437,7 @@ function Map() {
                   {stops.map((stop, index) => (
                     <Autocomplete
                       onLoad={onStopLoad(index)}
-                      onPlaceChanged={() => onPlaceChanged("addStop", index)}
+                      onPlaceChanged={() => onPlaceChanged("stops", index)}
                       key={index}
                     >
                       <div className="d-flex align-items-center mt-3">
@@ -406,6 +445,7 @@ function Map() {
                           id="AddStop"
                           type="text"
                           placeholder="Add more stops"
+                          name="stops"
                           value={formik.values.stops[index]}
                           onChange={(e) =>
                             handleStopChange(index, e.target.value)
@@ -458,7 +498,8 @@ function Map() {
         onHide={handleCloseModal}
         pickupLocation={formik.values.pickupLocation}
         dropLocation={formik.values.dropLocation}
-        dropLocation1={formik.values.dropLocation1}
+        stops={formik.values.stops}
+        setStops = {setStops}
         setLocationDetail={setLocationDetail}
       />
     </div>
