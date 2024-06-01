@@ -92,7 +92,11 @@ function Service() {
 
         values.vechicleTypeId = selectedOptionName;
 
-        console.log("vechicleTypeId",values.vechicleTypeId);
+        console.log("vechicleTypeId", values.vechicleTypeId);
+        
+        const deliveryDate = new Date(`${values.date}T${values.time}`);
+        deliveryDate.setDate(deliveryDate.getDate() + 2);
+        
         const payload = {
           userId: userId,
           type: shiftType,
@@ -100,7 +104,7 @@ function Service() {
           bookingId: bookingIdValue,
           estKm: parseInt(distanceValue),
           scheduledDate: `${values.date}T${values.time}`,
-          deliveryDate: "2024-05-29T07:22:10.400Z",
+          deliveryDate: deliveryDate,
           quantity: values.extraManpower ? values.quantity : 0,
           msgToDriver: values.messageToDriver,
           manpower: values.driverAsManpower ? "Y" : "N",
@@ -110,23 +114,23 @@ function Service() {
           vehicleType: selectedOptionName,
           promoCode: "",
         };
+
         try {
-        const response = await bookingApi.post(`booking/update`, payload);
-        console.log(response)
-        if (response.status === 200) {
-          // toast.success("Successfully Booking Create")
-          toast.success(response.data.message);
-          navigate(`/summary/${bookingIdValue}`);
-        } else {
-          toast.error(response.data.message);
+          const response = await bookingApi.post(`booking/update`, payload);
+          console.log(response);
+          if (response.status === 200) {
+            // toast.success("Successfully Booking Create")
+            toast.success(response.data.message);
+            navigate(`/summary/${bookingIdValue}`);
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error);
         }
-      } catch (error) {
-        toast.error(error);
-      }
       } else {
         toast.warning("Not Eligble for booking");
       }
-      
     },
   });
 
