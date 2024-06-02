@@ -49,7 +49,7 @@ function Order() {
         // toast.success(response.data.message);
         // console.log("1",response.data.responseBody)
         setData(response.data.responseBody);
-        console.log("object", data)
+        console.log("object", data);
       }
     } catch (error) {
       toast.error(error);
@@ -95,114 +95,125 @@ function Order() {
         </div>
       </div>
       {showInprogressSection && (
-
         <div id="shift-bg" className="container-fuild">
           {data &&
-  data.map((item, index) => {
-    // console.log("object", item.booking.bookingId);
-    return (
-      <Link
-        to={`/ridedetailsview/${item.booking.bookingId}`}
-        style={{ textDecoration: "none", color: "black" }}
-        key={index}
-      >
-        <div className="container py-4">
-          <div className="row" id="on">
-            <div className="col-lg-10 col-md-6 col-12 p-3">
-              <p>Tata ace - today</p>
-              <p style={{ color: "#DFAE00" }}>On process</p>
-              <p style={{ marginTop: "0", marginBottom: "0" }}>
-                <span className="dot1"></span>
-                &nbsp;&nbsp;&nbsp;45/1, Sakthi Tower, Anna Salai, Chennai-600008
-                <br />
-                <span className="line"></span>
-              </p>
-              <p style={{ marginTop: "0", marginBottom: "0" }}>
-                <span className="dot2"></span>
-                &nbsp;&nbsp;&nbsp;123, Rich Street, Mount Road, Chennai-600005
-              </p>
-            </div>
-            <div className="col-lg-2 col-md-6 col-12 p-3">
-              <p className="ps-5 pt-2">
-                <FaRupeeSign />{" "}
-                {item.transactionDetails?.txnAmount.toFixed(2)}
-                <br />
-                <SiPaytm style={{ fontSize: "50px" }} />
-              </p>
-            </div>
-          </div>
+            data.map((item, index) => {
+              // console.log("object", item.booking.bookingId);
+              return (
+                <Link
+                  to={`/ridedetailsview/${item.booking.bookingId}`}
+                  style={{ textDecoration: "none", color: "black" }}
+                  key={index}
+                >
+                  <div className="container py-4">
+                    <div className="row" id="on">
+                      <div className="col-lg-10 col-md-6 col-12 p-3">
+                        <p>Tata ace - today</p>
+                        <p style={{ color: "#DFAE00" }}>On process</p>
+                        <p style={{ marginTop: "0", marginBottom: "0" }}>
+                          <span className="dot1"></span>
+                          &nbsp;&nbsp;&nbsp;45/1, Sakthi Tower, Anna Salai,
+                          Chennai-600008
+                          <br />
+                          <span className="line"></span>
+                        </p>
+                        <p style={{ marginTop: "0", marginBottom: "0" }}>
+                          <span className="dot2"></span>
+                          &nbsp;&nbsp;&nbsp;123, Rich Street, Mount Road,
+                          Chennai-600005
+                        </p>
+                      </div>
+                      <div className="col-lg-2 col-md-6 col-12 p-3">
+                        <p className="ps-5 pt-2">
+                          <FaRupeeSign />{" "}
+                          {item.transactionDetails?.txnAmount.toFixed(2)}
+                          <br />
+                          <SiPaytm style={{ fontSize: "50px" }} />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
         </div>
-      </Link>
-    );
-  })}
-        </div>
-
       )}
       <div className="container-fluid ">
         {showCompletedSection && (
           <div id="shift-bg" className="container-fuild">
             {data &&
               data.map((item, index) => (
-                <div className="container py-4" key={index}>
-                  <div className="row" id="on">
-                    <div className="col-lg-10 col-md-6 col-12 p-3">
-                      <p>Tata ace - today</p>
-                      <p style={{ color: "#DFAE00" }}>COMPLETED</p>
-                      <p style={{ marginTop: "0", marginBottom: "0" }}>
-                        <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,
-                        Sakthi Tower, Anna Salai, Chennai-600008
-                        <br />
-                        <span className="line"></span>
-                      </p>
-                      <p style={{ marginTop: "0", marginBottom: "0" }}>
-                        <span className="dot2"></span>&nbsp;&nbsp;&nbsp;123, Rich
-                        Street, Mount Road, Chennai-600005
-                      </p>
-                    </div>
-                    <div className="col-lg-2 col-md-6 col-12 p-3">
-                      <p className="ps-5 pt-2">
-                        <FaRupeeSign /> {item.txtAmount}
-                        <br />
-                        <SiPaytm style={{ fontSize: "50px" }} />
-                      </p>
+                <Link
+                  to={`/ridedetailsview/${item.booking.bookingId}`}
+                  style={{ textDecoration: "none", color: "black" }}
+                  key={index}
+                >
+                  <div className="container py-4">
+                    <div className="row" id="on">
+                      <div className="col-lg-10 col-md-6 col-12 p-3">
+                        <p>Tata ace - today</p>
+                        <p style={{ color: "#DFAE00" }}>COMPLETED</p>
+                        <p style={{ marginTop: "0", marginBottom: "0" }}>
+                          <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,
+                          Sakthi Tower, Anna Salai, Chennai-600008
+                          <br />
+                          <span className="line"></span>
+                        </p>
+                        <p style={{ marginTop: "0", marginBottom: "0" }}>
+                          <span className="dot2"></span>&nbsp;&nbsp;&nbsp;123,
+                          Rich Street, Mount Road, Chennai-600005
+                        </p>
+                      </div>
+                      <div className="col-lg-2 col-md-6 col-12 p-3">
+                        <p className="ps-5 pt-2">
+                          <FaRupeeSign /> {item.txtAmount}
+                          <br />
+                          <SiPaytm style={{ fontSize: "50px" }} />
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
           </div>
         )}
-
       </div>
       <div className="container-fluid ">
         {showCanceledSection && (
           <div id="shift-bg" className="container-fuild">
             {data &&
               data.map((item, index) => (
-                <div className="container py-4" key={index}>
-                  <div className="row" id="on">
-                    <div className="col-lg-10 col-md-6 col-12 p-3">
-                      <p>Tata ace - today</p>
-                      <p style={{ color: "#DFAE00" }}>CANCELLED</p>
-                      <p style={{ marginTop: "0", marginBottom: "0" }}>
-                        <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,
-                        Sakthi Tower, Anna Salai, Chennai-600008
-                        <br />
-                        <span className="line"></span>
-                      </p>
-                      <p style={{ marginTop: "0", marginBottom: "0" }}>
-                        <span className="dot2"></span>&nbsp;&nbsp;&nbsp;123, Rich
-                        Street, Mount Road, Chennai-600005
-                      </p>
-                    </div>
-                    <div className="col-lg-2 col-md-6 col-12 p-3">
-                      <p className="ps-5 pt-2">
-                        <FaRupeeSign /> 750
-                        <br />
-                        <SiPaytm style={{ fontSize: "50px" }} />
-                      </p>
+                <Link
+                  to={`/ridedetailsview/${item.booking.bookingId}`}
+                  style={{ textDecoration: "none", color: "black" }}
+                  key={index}
+                >
+                  <div className="container py-4">
+                    <div className="row" id="on">
+                      <div className="col-lg-10 col-md-6 col-12 p-3">
+                        <p>Tata ace - today</p>
+                        <p style={{ color: "#DFAE00" }}>CANCELLED</p>
+                        <p style={{ marginTop: "0", marginBottom: "0" }}>
+                          <span className="dot1"></span>&nbsp;&nbsp;&nbsp;45/1,
+                          Sakthi Tower, Anna Salai, Chennai-600008
+                          <br />
+                          <span className="line"></span>
+                        </p>
+                        <p style={{ marginTop: "0", marginBottom: "0" }}>
+                          <span className="dot2"></span>&nbsp;&nbsp;&nbsp;123,
+                          Rich Street, Mount Road, Chennai-600005
+                        </p>
+                      </div>
+                      <div className="col-lg-2 col-md-6 col-12 p-3">
+                        <p className="ps-5 pt-2">
+                          <FaRupeeSign /> 750
+                          <br />
+                          <SiPaytm style={{ fontSize: "50px" }} />
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
           </div>
         )}

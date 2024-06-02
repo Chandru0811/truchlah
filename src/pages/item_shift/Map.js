@@ -99,12 +99,12 @@ function Map() {
         if (response.status === 200) {
           // toast.success("Successfully Booking Create")
           toast.success(response.data.message);
-          navigate("/rides");
-          // const bookingId = response.data.responseBody.booking.bookingId;
-          // const locations = encodeURIComponent(JSON.stringify(locationDetail));
-          // navigate(
-          //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-          // );
+          // navigate("/rides");
+          const bookingId = response.data.responseBody.booking.bookingId;
+          const locations = encodeURIComponent(JSON.stringify(locationDetail));
+          navigate(
+            `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+          );
         } else {
           toast.error(response.data.message);
         }

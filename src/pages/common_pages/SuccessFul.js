@@ -23,15 +23,15 @@ function Successfull() {
                 </h5>
                 <p className="mt-2">Thank you so much for your order</p>
                 <center>
-                  <Link to='/invoice'>
-                  <button
-                    id="button"
-                    type="button"
-                    className="btn btn-success my-3"
-                    style={{ width: "40%" }}
-                  >
-                    Check Status
-                  </button>
+                  <Link to="/rides">
+                    <button
+                      id="button"
+                      type="button"
+                      className="btn btn-success my-3"
+                      style={{ width: "40%" }}
+                    >
+                      Check Status
+                    </button>
                   </Link>
                 </center>
               </div>

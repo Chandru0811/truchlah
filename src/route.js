@@ -53,13 +53,26 @@ function UserRoute() {
     delay: 200,
   });
   const [isAdmin, setIsAdmin] = useState(false);
+  const token = sessionStorage.getItem("token");
 
   const handleLogin = () => {
     sessionStorage.setItem("isAdmin", true);
     setIsAdmin(true);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const payload = {
+      jwtToken: token,
+    };
+    try {
+      const response = await userApi.post(`user/logout`, payload);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      console.log("Error");
+    }
+
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("roles");
     sessionStorage.removeItem("username");
@@ -140,7 +153,10 @@ function UserRoute() {
               <Route path="/rides" element={<Order />} />
               <Route path="/coupons" element={<Coupons />} />
               <Route path="/price" element={<Price />} />
-              <Route path="/ridedetailsview/:id" element={<RideDetailsView />} />
+              <Route
+                path="/ridedetailsview/:id"
+                element={<RideDetailsView />}
+              />
               <Route path="/popup" element={<Popup />} />
               <Route path="/changepassword" element={<ChangePassword />} />
             </>

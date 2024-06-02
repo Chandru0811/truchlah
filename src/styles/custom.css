@@ -1126,11 +1126,11 @@ body {
 }
 
 .order #shift-btn:focus-within {
-  border-bottom: 4px solid rgba(49, 49, 49, 1);
+  /* border-bottom: 4px solid rgba(49, 49, 49, 1); */
 }
 
 .order #shift-btn:active {
-  border-bottom: 4px solid rgba(49, 49, 49, 1);
+  /* border-bottom: 4px solid rgba(49, 49, 49, 1); */
 }
 
 .order .dot1 {

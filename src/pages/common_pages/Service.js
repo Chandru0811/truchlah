@@ -37,9 +37,9 @@ function Service() {
     console.error("Failed to parse location value:", error);
   }
 
-  console.log("Location:", locationValue);
-  console.log("Booking ID:", bookingIdValue);
-  console.log("Distance:", distanceValue);
+  // console.log("Location:", locationValue);
+  // console.log("Booking ID:", bookingIdValue);
+  // console.log("Distance:", distanceValue);
 
   const [vechicle, setVechicle] = useState([]);
   // console.log("Vechile :", vechicle );
@@ -93,10 +93,10 @@ function Service() {
         values.vechicleTypeId = selectedOptionName;
 
         console.log("vechicleTypeId", values.vechicleTypeId);
-        
+
         const deliveryDate = new Date(`${values.date}T${values.time}`);
         deliveryDate.setDate(deliveryDate.getDate() + 2);
-        
+
         const payload = {
           userId: userId,
           type: shiftType,
@@ -129,7 +129,7 @@ function Service() {
           toast.error(error);
         }
       } else {
-        toast.warning("Not Eligble for booking");
+        toast.warning("You must select a time at least 3 hours from now");
       }
     },
   });

@@ -12,6 +12,7 @@ import Lorry24 from "../../asset/24FT_LORRY.png";
 
 function Summary() {
   const [data, setData] = useState({});
+  console.log("Summary Data is", data);
   const { bookingId } = useParams();
   // console.log("bookingId", bookingId);
   const [vechicle, setVechicle] = useState([]);
@@ -28,8 +29,7 @@ function Summary() {
         );
         if (response.status === 200) {
           setData(response.data.responseBody);
-          navigate('/successful');
-          }
+        }
       } catch (error) {
         toast.error("Error Fetching Data: " + error.message);
       }
@@ -46,6 +46,19 @@ function Summary() {
     3: <img src={Lorry10} alt="SomeOther" className="img-fluid mt-3" />,
     4: <img src={Lorry24} alt="Ace" className="img-fluid mt-3" />,
     5: <img src={Lorry14} alt="Ace" className="img-fluid mt-3" />,
+  };
+
+  const confirmCashPayment = async () => {
+    try {
+      const response = await bookingApi.post(
+        `booking/cashPayment/${bookingId}`
+      );
+      if (response.status === 200) {
+        navigate("/successful");
+      }
+    } catch (error) {
+      toast.error("Error Fetching Data: " + error.message);
+    }
   };
 
   useEffect(() => {
@@ -76,7 +89,7 @@ function Summary() {
         </div>
         <center>
           {vehicleImages[data.booking?.vehicletypeId] || null}
-          <p>Tata Ace</p>
+          {/* <p>Tata Ace</p> */}
           {vechicle &&
             vechicle.map((vechicles) =>
               parseInt(data.centerId) === vechicles.vehicletypeId
@@ -169,110 +182,92 @@ function Summary() {
                     </p>
                   </div>
                 </div>
-                {shiftType === "Item Shift" && (
-                  <>
-                    <div className="row">
-                      <div className="col-md-6 col-12 ps-1">
-                        <div>
-                          <p className="line" style={{ color: "#00316B" }}>
-                            <b>1. Drop Address</b>
-                          </p>
+
+                <>
+                  {data?.bookingTripLocations &&
+                    data?.bookingTripLocations.length > 1 &&
+                    data.bookingTripLocations
+                      .filter((_, index) => index !== 0) // Exclude the first index
+                      .map((stop, index) => (
+                        <div className="row" key={index}>
+                          <div className="col-md-6 col-12 ps-1">
+                            <div>
+                              <p className="line" style={{ color: "#00316B" }}>
+                                <b>Stop {index + 1}</b>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 ps-1" id="drop">
+                            <p className="line">
+                              <span style={{ color: "#00316B" }}>
+                                <b>Name :</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {stop.dropoffContactName || "N/A"}
+                              </span>
+                            </p>
+                            <p>
+                              <span style={{ color: "#00316B" }}>
+                                <b>Address :</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {stop.dropoffAddress || "N/A"}
+                              </span>
+                            </p>
+                            <p>
+                              <span style={{ color: "#00316B" }}>
+                                <b>Contact: </b>
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {stop.dropoffMobile || "N/A"}
+                              </span>
+                            </p>
+                            <p>
+                              <span style={{ color: "#00316B" }}>
+                                <b>Location: </b>
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {stop.dropoff || "N/A"}
+                              </span>
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-md-6 col-12 ps-1" id="drop">
-                        <p className="line">
-                          <span style={{ color: "#00316B" }}>
-                            <b>Name :</b>{" "}
-                          </span>
-                          <span style={{ color: "#494949" }}>
-                            {firstLocation.dropoffName1 || "N/A"}
-                          </span>
-                        </p>
-                        <p>
-                          <span style={{ color: "#00316B" }}>
-                            <b>Address :</b>{" "}
-                          </span>
-                          <span style={{ color: "#494949" }}>
-                            {firstLocation.dropoffAddress1 || "N/A"}
-                          </span>
-                        </p>
-                        <p>
-                          <span style={{ color: "#00316B" }}>
-                            <b>Contact: </b>
-                          </span>
-                          <span style={{ color: "#494949" }}>
-                            {firstLocation.dropoffMobile1 || "N/A"}
-                          </span>
+                      ))}
+
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <div>
+                        <p className="line" style={{ color: "#00316B" }}>
+                          <b>Category</b>
                         </p>
                       </div>
                     </div>
-                    <div className="row">
-                      <div className="col-md-6 col-12 ps-1">
-                        <div>
-                          <p className="line" style={{ color: "#00316B" }}>
-                            <b>2. Drop Address</b>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="col-md-6 col-12 ps-1" id="drop">
-                        <p className="line">
-                          <span style={{ color: "#00316B" }}>
-                            <b>Name :</b>{" "}
-                          </span>
-                          <span style={{ color: "#494949" }}>
-                            {firstLocation.dropName2 || "N/A"}
-                          </span>
-                        </p>
-                        <p>
-                          <span style={{ color: "#00316B" }}>
-                            <b>Address :</b>{" "}
-                          </span>
-                          <span style={{ color: "#494949" }}>
-                            {firstLocation.dropoffAddress2 || "N/A"}
-                          </span>
-                        </p>
-                        <p>
-                          <span style={{ color: "#00316B" }}>
-                            <b>Contact: </b>
-                          </span>
-                          <span style={{ color: "#494949" }}>
-                            {firstLocation.dropoffMobile2 || "N/A"}
-                          </span>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        {data?.booking?.bookingType || "--"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <div>
+                        <p className="line" style={{ color: "#00316B" }}>
+                          <b>Date & Time</b>
                         </p>
                       </div>
                     </div>
-                    <div className="row">
-                      <div className="col-md-6 col-12 ps-1">
-                        <div>
-                          <p className="line" style={{ color: "#00316B" }}>
-                            <b>Category</b>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="col-md-6 col-12 ps-1" id="drop">
-                        {" "}
-                        <p className="line" style={{ color: "#494949" }}>
-                          Item Shifting
-                        </p>
-                      </div>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        {data?.booking?.scheduledDate
+                          ? data.booking.scheduledDate.substring(0, 10)
+                          : "N/A"}
+                      </p>
                     </div>
-                    <div className="row">
-                      <div className="col-md-6 col-12 ps-1">
-                        <div>
-                          <p className="line" style={{ color: "#00316B" }}>
-                            <b>Date & Time</b>
-                          </p>
-                        </div>
-                      </div>
-                      <div className="col-md-6 col-12 ps-1" id="drop">
-                        {" "}
-                        <p className="line" style={{ color: "#494949" }}>
-                          {firstLocation.dateTime || "N/A"}
-                        </p>
-                      </div>
-                    </div>
-                  </>
-                )}
+                  </div>
+                </>
+
                 <div className="row">
                   <div className="col-md-6 col-12 ps-1">
                     <p className="line" style={{ color: "#00316B" }}>
@@ -358,11 +353,13 @@ function Summary() {
           </div>
         </div>
         <div className="text-center py-5">
-          <Link to="/successful">
-            <button className="btn btn-primary px-5 py-2" id="NextMove">
+          <button
+            onClick={confirmCashPayment}
+            className="btn btn-primary px-5 py-2"
+            id="NextMove"
+          >
             Confirm and proceed with cash payment
-            </button>
-          </Link>
+          </button>
         </div>
       </div>
     </section>
