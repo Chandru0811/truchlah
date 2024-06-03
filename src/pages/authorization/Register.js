@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import Logins from "../../asset/Login.png";
-import { AiOutlineGoogle } from "react-icons/ai";
+// import { AiOutlineGoogle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
@@ -18,12 +18,36 @@ const validationSchema = Yup.object().shape({
       "*Enter a valid email address"
     )
     .required("*Email is required"),
+  // mobileNo: Yup.string()
+  //   .matches(
+  //     /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+  //     "*Invalid Phone Number"
+  //   )
+  //   .required("*Mobile Number is required"),
+  countryCode: Yup.string().required("*Country Code is required"),
   mobileNo: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number"
-    )
-    .required("*Mobile Number is required"),
+    .required("Mobile number is required")
+    .test("phone-length", function (value) {
+      const { countryCode } = this.parent;
+      if (value && /\s/.test(value)) {
+        return this.createError({
+          message: "Phone number should not contain spaces",
+        });
+      }
+      if (countryCode === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
+      }
+      if (countryCode === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
+      }
+      return true; // Default validation for other country codes
+    }),
   password: Yup.string()
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
@@ -34,8 +58,8 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
-  countryCode: Yup.string().required("*Country Code is required"),
-  refCode: Yup.string().required("*Referral Code is required"),
+
+  // refCode: Yup.string().required("*Referral Code is required"),
   termsCondition: Yup.string().required(
     "Please accept the terms and conditions"
   ),
@@ -43,7 +67,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function Register() {
-  const [role, setRole] = useState(["User"]);
+  // const [role, setRole] = useState(["User"]);
   const navigate = useNavigate();
   const [Password, setShowPassword] = useState(false);
   const [cPassword, setCShowPassword] = useState(false);
@@ -110,37 +134,25 @@ function Register() {
         refCode: values.refCode,
         termsCondition: values.termsCondition ? "y" : "N",
       };
-      console.log("values", values);
-      // fetch("http://139.84.133.106:9095/trucklah/api/auth/signup", {
-      //         method: "POST",
-      //         headers: { "content-type": "application/json" },
-      //         body: JSON.stringify(values),
-      //       })
-      //         .then((res) => {
-      //           toast.success("Register Successfully.");
-      //           navigate("/otp");
-      //         })
-      //         .catch((err) => {
-      //           toast.error("Failed :" + err.message);
-      //         });
-      // values.termsCondition=values.termsCondition?"y":"N";
+      // console.log("values", values);
       try {
         const response = await userApi.post(`user/signup`, payload);
         if (response.status === 200) {
           toast.success(response.data.message);
           const mobileNo = `${values.countryCode}${values.mobileNo}`;
           try {
-            const response = await userApi.post(
+            const otpResponse = await userApi.post(
               `user/sendOTP?phone=${mobileNo}`
             );
-            navigate("/otp", { state: { mobileNo } });
+            if (otpResponse.status === 200) {
+              navigate("/otp", { state: { mobileNo } });
+            }
           } catch (error) {
             toast.error(error);
           }
         }
       } catch (error) {
         if (error.response.status === 400) {
-          // toast.error("Email or Mobile is already in registered!");
           toast.warning(error.response.data.errorList[0].errorMessage);
           console.log("object", error.response.data.errorList[0].errorMessage);
         } else {
@@ -152,7 +164,9 @@ function Register() {
 
   useEffect(() => {
     formik.setFieldValue("countryCode", 65);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div className="container-fluid">
       <div
@@ -195,20 +209,20 @@ function Register() {
 
               <div className="col-lg-6 col-md-8 col-12">
                 <div className="text-center">
-                  <p className="LoginContent">
+                  {/* <p className="LoginContent">
                     <b>Get started with your free account</b>
-                  </p>
-                  <button className="btn btn-danger" style={{ width: "100%" }}>
+                  </p> */}
+                  {/* <button className="btn btn-danger" style={{ width: "100%" }}>
                     <AiOutlineGoogle style={{ fontSize: "30px" }} /> Sign in
                     with Google
-                  </button>
-                  <div className="or-line-container py-3">
+                  </button> */}
+                  {/* <div className="or-line-container py-3">
                     <div className="or-line"></div>
                     <span className="or-line-text">
                       <b>OR</b>
                     </span>
                     <div className="or-line"></div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="col-lg-3 col-md-2 col-12"></div>
@@ -263,7 +277,7 @@ function Register() {
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label>
-                          Email<span className="errmsg">*</span>
+                          Email <span className="errmsg">*</span>
                         </label>
                         <input
                           type="text"
@@ -285,7 +299,7 @@ function Register() {
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
                         <label htmlFor="mobileNo">
-                          Mobile Number<span className="errmsg">*</span>
+                          Mobile Number <span className="errmsg">*</span>
                         </label>
                         <div className="input-group">
                           <div className="input-group-prepend">
@@ -377,7 +391,9 @@ function Register() {
                     </div> */}
 
                     <div className="col-lg-6 col-12 pb-2">
-                      <label className="form-label">Password</label>
+                      <label className="form-label">
+                        Password <span className="errmsg">*</span>
+                      </label>
                       <div className={`input-group mb-3`}>
                         <input
                           type={Password ? "text" : "password"}
@@ -411,7 +427,9 @@ function Register() {
                       </div>
                     </div>
                     <div className="col-lg-6 col-12 pb-2">
-                      <label className="form-label">Confirm Password</label>
+                      <label className="form-label">
+                        Confirm Password <span className="errmsg">*</span>
+                      </label>
                       <div className={`input-group mb-3`}>
                         <input
                           type={cPassword ? "text" : "password"}
@@ -449,9 +467,7 @@ function Register() {
 
                     <div className="col-lg-6 col-12 pb-2">
                       <div className="form-group">
-                        <label>
-                          Referal Code<span className="errmsg">*</span>
-                        </label>
+                        <label>Referal Code</label>
                         <input
                           type="text"
                           name="refCode"

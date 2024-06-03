@@ -1,4 +1,4 @@
-/* global google  New test-1*/
+
 
 import React, { useRef, useState, useEffect } from "react";
 import {
@@ -20,7 +20,7 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 import RedMarker from "../../asset/pinRed.png";
-import blueMarker from "../../asset/pinBlue.png";
+// import blueMarker from "../../asset/pinBlue.png";
 
 function MapCopy() {
   const { isLoaded } = useJsApiLoader({
@@ -95,6 +95,7 @@ function MapCopy() {
       return;
     }
 
+    console.log("Direction is ", destinationRefs);
     const directionsService = new window.google.maps.DirectionsService();
     const waypoints = destinationRefs.current.slice(0, -1).map((ref) => ({
       location: ref.value,

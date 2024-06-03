@@ -217,8 +217,6 @@ function HouseShift() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log("Latitude: ", latitude);
-          console.log("Longitude: ", longitude);
           setCenter({ lat: latitude, lng: longitude });
         },
         (error) => {

@@ -36,10 +36,10 @@ import Invoice from "./pages/profile/invoice";
 import Support from "./pages/profile/Support";
 import Refer from "./pages/profile/Refer&Earn";
 import Map from "./pages/item_shift/Map";
-import MapCopy from "./pages/item_shift/Map copy";
+// import MapCopy from "./pages/item_shift/Map copy";
 import Priceing from "./pages/Priceing";
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { bookingApi, userApi } from "./config/URL";
 import Price from "./pages/Price";
 import RideDetailsView from "./pages/profile/RideDetailsView";
@@ -112,6 +112,7 @@ function UserRoute() {
       bookingApi.interceptors.response.eject(bookingInterceptor);
       userApi.interceptors.response.eject(userInterceptor);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
   return (
@@ -134,7 +135,7 @@ function UserRoute() {
           {isAdmin && (
             <>
               <Route path="/map" element={<Map />} />
-              <Route path="/mapcopy" element={<MapCopy />} />
+              {/* <Route path="/mapcopy" element={<MapCopy />} /> */}
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/notification" element={<Notification />} />
               <Route path="/support" element={<Support />} />

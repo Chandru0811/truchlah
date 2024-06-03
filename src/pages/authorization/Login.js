@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/custom.css";
 import Logins from "../../asset/Login.png";
-import { AiOutlineGoogle } from "react-icons/ai";
+// import { AiOutlineGoogle } from "react-icons/ai";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
@@ -124,21 +124,21 @@ function Login({ handleLogin }) {
               <div className="col-lg-3 col-md-2 col-12"></div>
               <div className="col-lg-6 col-md-8 col-12">
                 <div className="text-center">
-                  <p className="LoginContent">
+                  {/* <p className="LoginContent">
                     <b>Get started with your free account</b>
-                  </p>
-                  <button className="btn btn-danger" style={{ width: "100%" }}>
+                  </p> */}
+                  {/* <button className="btn btn-danger" style={{ width: "100%" }}>
                     <AiOutlineGoogle style={{ fontSize: "30px" }} /> Sign in
                     with Google
-                  </button>
-                  <div className="or-line-container py-3">
+                  </button> */}
+                  {/* <div className="or-line-container py-3">
                     <div className="or-line"></div>
                     <span className="or-line-text">
                       <b>OR</b>
                     </span>
                     <div className="or-line"></div>
-                  </div>
-                  <form onSubmit={formik.handleSubmit}>
+                  </div> */}
+                  <form onSubmit={formik.handleSubmit} className="pt-2">
                     <div className="form mb-3 d-flex justify-content-center">
                       <FloatingLabel
                         controlId="floatingInput"

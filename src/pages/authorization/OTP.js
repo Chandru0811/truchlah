@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Logins from "../../asset/Login.png";
 import { Button, Form } from "react-bootstrap";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
+// import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { userApi } from "../../config/URL";
@@ -126,7 +126,6 @@ function OTP() {
                           className="text-center"
                         />
                       ))}
-                   
                     </div>
                   </Form.Group>
                   <div>

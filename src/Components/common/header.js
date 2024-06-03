@@ -111,9 +111,10 @@ function OffcanvasExample({ isAdmin, handleLogout }) {
                                 {isAdmin ? (
                                   <Link to="/shift">
                                     <li className="nav-item">
-                                      <button style={{minWidth:"max-content"}}
+                                      <button
+                                        style={{ minWidth: "max-content" }}
                                         type="button"
-                                        className="py-2"
+                                        className="py-2 px-3"
                                         id="NextMove"
                                       >
                                         Book Rides
@@ -123,9 +124,10 @@ function OffcanvasExample({ isAdmin, handleLogout }) {
                                 ) : (
                                   <Link to="/login">
                                     <li className="nav-item">
-                                      <button style={{minWidth:"max-content"}}
+                                      <button
+                                        style={{ minWidth: "max-content" }}
                                         type="button"
-                                        className="py-2"
+                                        className="py-2 px-3"
                                         id="NextMove"
                                       >
                                         Book Rides

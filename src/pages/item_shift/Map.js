@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
@@ -19,8 +19,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
 import { FaMinus, FaPlus } from "react-icons/fa";
-
-// const center = { lat: 13.05, lng: 80.2824 };
 
 const validationSchema = Yup.object().shape({
   pickupLocation: Yup.string().required("!Pickup Location is required"),
@@ -58,34 +56,9 @@ function Map() {
     initialValues: {
       pickupLocation: "",
       dropLocation: "",
-      stops: "",
+      stops: [""],
     },
     validationSchema: validationSchema,
-
-    // onSubmit: async (values) => {
-    //   const payload = {
-    //     userId: userId,
-    //     type: shiftType,
-    //     locationDetail: locationDetail,
-    //   };
-    //   console.log("Form values:", payload);
-    //   try {
-    //     const response = await bookingApi.post(`booking/create`, payload);
-    //     if (response.status === 200) {
-    //       // toast.success("Successfully Booking Create")
-    //       toast.success(response.data.message);
-    //       const bookingId = response.data.responseBody.booking.bookingId;
-    //       const locations = encodeURIComponent(JSON.stringify(locationDetail));
-    //       navigate(
-    //         `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-    //       );
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // },
 
     onSubmit: async (values) => {
       const payload = {
@@ -97,9 +70,7 @@ function Map() {
       try {
         const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
-          // toast.success("Successfully Booking Create")
           toast.success(response.data.message);
-          // navigate("/rides");
           const bookingId = response.data.responseBody.booking.bookingId;
           const locations = encodeURIComponent(JSON.stringify(locationDetail));
           navigate(
@@ -113,8 +84,6 @@ function Map() {
       }
     },
   });
-
-  console.log("Stop is ", formik.values.stops);
 
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
@@ -134,7 +103,6 @@ function Map() {
 
   const onPlaceChanged = async (type, index = null) => {
     let place = null;
-    console.log("Type is", type);
     if (type === "origin") {
       if (origin) {
         place = origin.getPlace();
@@ -149,10 +117,11 @@ function Map() {
       }
     } else if (type === "stops" && index !== null) {
       if (stops[index]) {
-        console.log("Direction", stops[index]);
         place = stops[index].getPlace();
-        formik.setFieldValue(`stops[${index}]`, place.formatted_address);
-        handleOpenModal(`${index + 1}`);
+        if (place && place.formatted_address) {
+          formik.setFieldValue(`stops[${index}]`, place.formatted_address);
+          handleOpenModal(`${index + 1}`);
+        }
       }
     }
 
@@ -164,52 +133,17 @@ function Map() {
       if (type === "origin") {
         setMarkerPosition(location);
         setCenter(location);
-      } else {
+      } else if (type === "destination") {
         setDestinationMarkerPosition(location);
         setCenter(location);
-      }
-    }
-
-    if (origin && destination) {
-      const originPlace = origin.getPlace();
-      const destinationPlace = destination.getPlace();
-
-      if (
-        originPlace &&
-        originPlace.geometry &&
-        originPlace.geometry.location &&
-        destinationPlace &&
-        destinationPlace.geometry &&
-        destinationPlace.geometry.location
-      ) {
-        const originLocation = {
-          lat: originPlace.geometry.location.lat(),
-          lng: originPlace.geometry.location.lng(),
-        };
-        const destinationLocation = {
-          lat: destinationPlace.geometry.location.lat(),
-          lng: destinationPlace.geometry.location.lng(),
-        };
-
-        const directionsService = new window.google.maps.DirectionsService();
-        directionsService.route(
-          {
-            origin: originLocation,
-            destination: destinationLocation,
-            travelMode: window.google.maps.TravelMode.DRIVING,
-          },
-          (result, status) => {
-            if (status === window.google.maps.DirectionsStatus.OK) {
-              setDirections(result);
-
-              const route = result.routes[0].legs[0];
-              setDistance(route.distance.text);
-              setDuration(route.duration.text);
-            } else {
-              console.error(`Error fetching directions ${result}`);
-            }
-          }
-        );
+      } else if (type === "stops" && index !== null) {
+        setStops((prevStops) => {
+          const newStops = [...prevStops];
+          newStops[index] = location;
+          return newStops;
+        });
+        // Call onPlaceChanged again to update directions
+        recalculateDirections();
       }
     }
   };
@@ -259,24 +193,90 @@ function Map() {
       "stops",
       formik.values.stops.filter((_, i) => i !== index)
     );
+    recalculateDirections();
   };
 
   const handleStopChange = (index, value) => {
     const updatedStops = [...formik.values.stops];
     updatedStops[index] = value;
     formik.setFieldValue("stops", updatedStops);
+    recalculateDirections();
   };
+
+  const recalculateDirections = useCallback(() => {
+    if (origin && destination) {
+      const originPlace = origin.getPlace();
+      const destinationPlace = destination.getPlace();
+      const stopLocations = stops
+        .map((stop) => {
+          if (stop && stop.lat && stop.lng) {
+            return {
+              location: { lat: stop.lat, lng: stop.lng },
+              stopover: true,
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      console.log("Stop Locations", stopLocations);
+
+      if (
+        originPlace &&
+        originPlace.geometry &&
+        originPlace.geometry.location &&
+        destinationPlace &&
+        destinationPlace.geometry &&
+        destinationPlace.geometry.location
+      ) {
+        const originLocation = {
+          lat: originPlace.geometry.location.lat(),
+          lng: originPlace.geometry.location.lng(),
+        };
+        const destinationLocation = {
+          lat: destinationPlace.geometry.location.lat(),
+          lng: destinationPlace.geometry.location.lng(),
+        };
+
+        const directionsService = new window.google.maps.DirectionsService();
+        directionsService.route(
+          {
+            origin: originLocation,
+            destination: destinationLocation,
+            waypoints: stopLocations,
+            travelMode: window.google.maps.TravelMode.DRIVING,
+          },
+          (result, status) => {
+            if (status === window.google.maps.DirectionsStatus.OK) {
+              setDirections(result);
+              const route = result.routes[0];
+              let totalDistance = 0;
+              let totalDuration = 0;
+              for (let i = 0; i < route.legs.length; i++) {
+                totalDistance += route.legs[i].distance.value;
+                totalDuration += route.legs[i].duration.value;
+              }
+              setDistance(`${(totalDistance / 1000).toFixed(2)} km`);
+              setDuration(`${Math.floor(totalDuration / 60)} mins`);
+            } else {
+              console.error(`error fetching directions ${result}`);
+            }
+          }
+        );
+      }
+    }
+  }, [origin, destination, stops]);
+
+  useEffect(() => {
+    recalculateDirections();
+  }, [recalculateDirections]);
 
   if (!isLoaded) {
     return (
-      <div class="darksoul-layout">
-        <div class="darksoul-grid">
-          <div class="item1"></div>
-          <div class="item2"></div>
-          <div class="item3"></div>
-          <div class="item4"></div>
+      <div className="darksoul-layout">
+        <div className="loader-container">
+          <div className="spinner"></div>
         </div>
-        <h3 class="darksoul-loader-h">Trucklah</h3>
       </div>
     );
   }
@@ -300,13 +300,7 @@ function Map() {
               // onLoad={map => mapRef.current = map}
             >
               {markerPosition ? (
-                <MarkerF
-                  position={markerPosition}
-                  icon={{
-                    url: RedMarker,
-                    scaledSize: new window.google.maps.Size(40, 40),
-                  }}
-                />
+                <></>
               ) : (
                 <MarkerF
                   position={center}
@@ -316,6 +310,7 @@ function Map() {
                   }}
                 />
               )}
+
               {directions && (
                 <DirectionsRenderer
                   directions={directions}

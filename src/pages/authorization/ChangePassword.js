@@ -120,7 +120,7 @@ function ChangePassword() {
                 <div className="text-center">
                   <form onSubmit={formik.handleSubmit}>
                     <div className="form mb-3 ">
-                      <div className="form mb-3 d-flex justify-content-center">
+                      <div className="form d-flex justify-content-center">
                         <FloatingLabel
                           controlId="floatingInput"
                           label="Email"
