@@ -16,9 +16,9 @@ import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
 
 const validationSchema = Yup.object().shape({
-  date: Yup.string().required("Date is required"),
-  time: Yup.string().required("Time is required"),
-  vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
+  // date: Yup.string().required("Date is required"),
+  // time: Yup.string().required("Time is required"),
+  // vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
 });
 
 function Service() {
@@ -60,11 +60,11 @@ function Service() {
     return now.toTimeString().split(":").slice(0, 2).join(":");
   };
 
-  const getEliglibleTime = () => {
-    const now = new Date();
-    now.setHours(now.getHours() + 3);
-    return now.toTimeString().split(":").slice(0, 2).join(":");
-  };
+  // const getEliglibleTime = () => {
+  //   const now = new Date();
+  //   now.setHours(now.getHours() + 3);
+  //   return now.toTimeString().split(":").slice(0, 2).join(":");
+  // };
 
   const formik = useFormik({
     initialValues: {
@@ -80,7 +80,14 @@ function Service() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      if (values.time >= getEliglibleTime()) {
+      const selectedDateTime = new Date(`${values.date}T${values.time}`);
+      console.log("Selected Date & Time:", selectedDateTime);
+
+      const eligibleTime = new Date();
+      eligibleTime.setHours(eligibleTime.getHours() + 3);
+      console.log("Current Date & Time plus 3 hours:", eligibleTime);
+
+      if (selectedDateTime >= eligibleTime) {
         const selectedValue = formik.values.vechicleTypeId; // Assuming formik is in scope
         let selectedOptionName = "";
 

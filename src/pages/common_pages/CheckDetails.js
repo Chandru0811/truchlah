@@ -44,8 +44,8 @@ function Summary() {
     1: <img src={VAN1} alt="Ace" className="img-fluid mt-3" />,
     2: <img src={VAN2} alt="Ace" className="img-fluid mt-3" />,
     3: <img src={Lorry10} alt="SomeOther" className="img-fluid mt-3" />,
-    4: <img src={Lorry24} alt="Ace" className="img-fluid mt-3" />,
-    5: <img src={Lorry14} alt="Ace" className="img-fluid mt-3" />,
+    4: <img src={Lorry14} alt="Ace" className="img-fluid mt-3" />,
+    5: <img src={Lorry24} alt="Ace" className="img-fluid mt-3" />,
   };
 
   const confirmCashPayment = async () => {
@@ -73,6 +73,15 @@ function Summary() {
     getVechicle();
   }, []);
 
+  const vehicleNameMap = {
+    1: "1.7M_VAN",
+    2: "2.4M_VAN",
+    3: "10FT_LORRY",
+    4: "14FT_LORRY",
+    5: "24FT_LORRY",
+    default: "Unknown Vehicle" 
+  };
+
   return (
     <section className="summary">
       <div className="container-fluid pt-5" id="Ace">
@@ -89,7 +98,7 @@ function Summary() {
         </div>
         <center>
           {vehicleImages[data.booking?.vehicletypeId] || null}
-          {/* <p>Tata Ace</p> */}
+          <p className="mt-3">{vehicleNameMap[data.booking?.vehicletypeId]}</p>
           {vechicle &&
             vechicle.map((vechicles) =>
               parseInt(data.centerId) === vechicles.vehicletypeId
@@ -343,7 +352,7 @@ function Summary() {
                     {" "}
                     <p className="line" style={{ color: "#494949" }}>
                       {data.transactionDetails
-                        ? `${data.transactionDetails.txnAmount} Rupees`
+                        ? `${data.transactionDetails.txnAmount} dollars`
                         : "N/A"}
                     </p>
                   </div>
