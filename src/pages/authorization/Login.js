@@ -12,18 +12,13 @@ import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string()
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "*Enter a valid email address"
-    )
-    .required("*Email is required"),
+  username: Yup.string().required("*Email is required"),
 
   password: Yup.string()
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
-    )
+    // .matches(
+    //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+    //   "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
+    // )
     .required("Please Enter your password"),
 });
 
@@ -124,30 +119,16 @@ function Login({ handleLogin }) {
               <div className="col-lg-3 col-md-2 col-12"></div>
               <div className="col-lg-6 col-md-8 col-12">
                 <div className="text-center">
-                  {/* <p className="LoginContent">
-                    <b>Get started with your free account</b>
-                  </p> */}
-                  {/* <button className="btn btn-danger" style={{ width: "100%" }}>
-                    <AiOutlineGoogle style={{ fontSize: "30px" }} /> Sign in
-                    with Google
-                  </button> */}
-                  {/* <div className="or-line-container py-3">
-                    <div className="or-line"></div>
-                    <span className="or-line-text">
-                      <b>OR</b>
-                    </span>
-                    <div className="or-line"></div>
-                  </div> */}
                   <form onSubmit={formik.handleSubmit} className="pt-2">
                     <div className="form mb-3 d-flex justify-content-center">
                       <FloatingLabel
                         controlId="floatingInput"
-                        label="Email"
+                        label="Email / Mobile No"
                         style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
                         className="mb-3"
                       >
                         <Form.Control
-                          type="email"
+                          type="text"
                           className={`form-control  ${
                             formik.touched.username && formik.errors.username
                               ? "is-invalid"

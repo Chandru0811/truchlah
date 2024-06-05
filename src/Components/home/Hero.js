@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function Section1({ isAdmin }) {
   const navigateToGooglePlayStore = () => {
     window.open(
-      "https://play.google.com/store/apps/details?id=com.ecscloudinfotech.trucklah",
+      "https://play.google.com/store/apps/details?id=com.trucklah.trucklah",
       "_blank"
     );
   };

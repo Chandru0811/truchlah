@@ -12,6 +12,8 @@ function Order() {
   const [showHouseShift, setShowHouseShift] = useState(true);
   const [showItemShift, setShowItemShift] = useState(false);
   const [data, setData] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(true);
+  console.log("Data is ", data);
   const userId = sessionStorage.getItem("userId");
 
   const houseSection = () => {
@@ -25,18 +27,21 @@ function Order() {
   };
 
   const inprogressSection = () => {
+    setIsLoaded(true); // Enable loader
     setShowInprogressSection(true);
     setShowCompletedSection(false);
     setShowCanceledSection(false);
   };
 
   const completedSection = () => {
+    setIsLoaded(true); // Enable loader
     setShowInprogressSection(false);
     setShowCanceledSection(false);
     setShowCompletedSection(true);
   };
 
   const cancelSection = () => {
+    setIsLoaded(true); // Enable loader
     setShowInprogressSection(false);
     setShowCompletedSection(false);
     setShowCanceledSection(true);
@@ -62,6 +67,8 @@ function Order() {
         }
       } catch (error) {
         toast.error(error.message);
+      } finally {
+        setIsLoaded(false); // Disable loader after data fetching
       }
     };
 
@@ -75,13 +82,14 @@ function Order() {
     userId,
   ]);
 
+  const colors = ["red", "orange", "blue", "purple", "grey"];
+
   const vehicleNameMap = {
     1: "1.7M_VAN",
     2: "2.4M_VAN",
     3: "10FT_LORRY",
     4: "14FT_LORRY",
     5: "24FT_LORRY",
-    default: "Unknown Vehicle",
   };
 
   return (
@@ -137,59 +145,107 @@ function Order() {
           </div>
         </div>
       </div>
-      <div id="shift-bg" className="container-fluid">
-        {data.map((item, index) => (
-          <Link
-            to={`/ridedetailsview/${item.booking.bookingId}`}
-            style={{ textDecoration: "none", color: "black" }}
-            key={index}
-          >
-            <div className="container py-4">
-              <div className="row" id="on">
-                <div className="col-lg-10 col-md-6 col-12 p-3">
-                  <p>{vehicleNameMap[item.booking.vehicletypeId]}</p>
-                  <p style={{ color: "#DFAE00" }}>
-                    {showInprogressSection
-                      ? "INPROGRESS"
-                      : showCompletedSection
-                      ? "COMPLETED"
-                      : "CANCELLED"}
-                  </p>
-                  <p style={{ marginTop: "0", marginBottom: "0" }}>
-                    <span className="dot1"></span>
-                    &nbsp;&nbsp;&nbsp;
-                    {item.bookingTripLocations?.[0]?.pickupAddress}
-                    <br />
-                    <span className="line"></span>
-                  </p>
-                  {item.bookingTripLocations?.map((location, index) => (
-                    <div key={index}>
-                      {index > 0 && (
-                        <div className="line-container">
+      <div id="shift-bg">
+        {isLoaded ? (
+          <div className="darksoul-layout">
+            <div className="darksoul-grid">
+              <div className="item1"></div>
+              <div className="item2"></div>
+              <div className="item3"></div>
+              <div className="item4"></div>
+            </div>
+            <h3 className="darksoul-loader-h">Trucklah</h3>
+          </div>
+        ) : (
+          <div className="container-fluid">
+            {data.length > 0 ? (
+              data.map((item, index) => (
+                <Link
+                  to={`/ridedetailsview/${item.booking.bookingId}`}
+                  style={{ textDecoration: "none", color: "black" }}
+                  key={index}
+                >
+                  <div className="container py-4">
+                    <div className="row" id="on">
+                      <div className="col-lg-10 col-md-6 col-12 p-3">
+                        <p>
+                          {vehicleNameMap[item.booking.vehicletypeId] ||
+                            "Unknown Vehicle"}
+                        </p>
+                        <p
+                          style={{
+                            color: showInprogressSection
+                              ? "orange" // Yellow color for INPROGRESS
+                              : showCompletedSection
+                              ? "green" // Green color for COMPLETED
+                              : "red", // Red color for CANCELLED
+                          }}
+                        >
+                          {showInprogressSection
+                            ? "IN PROGRESS"
+                            : showCompletedSection
+                            ? "COMPLETED"
+                            : "CANCELLED"}
+                        </p>
+
+                        <p style={{ marginTop: "0", marginBottom: "0" }}>
+                          <span className="dot1"></span>
+                          &nbsp;&nbsp;&nbsp;
+                          {item.bookingTripLocations?.[0]?.pickup}
+                          <br />
                           <span className="line"></span>
-                        </div>
-                      )}
-                      <p
-                        key={index}
-                        style={{ marginTop: "0", marginBottom: "0" }}
-                      >
-                        <span className="dot2"></span>
-                        &nbsp;&nbsp;&nbsp;{location.dropoffAddress}
-                      </p>
+                        </p>
+                        {item.bookingTripLocations?.map((location, index) => (
+                          <div key={index}>
+                            {index > 0 && (
+                              <div className="line-container">
+                                <span className="line"></span>
+                              </div>
+                            )}
+                            <p
+                              key={index}
+                              style={{ marginTop: "0", marginBottom: "0" }}
+                            >
+                              <span
+                                className="dot2"
+                                style={{
+                                  backgroundColor:
+                                    colors[index % colors.length],
+                                }}
+                              ></span>
+                              &nbsp;&nbsp;&nbsp;{location.dropoff}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="col-lg-2 col-md-6 col-12 p-3">
+                        <p className="ps-5 pt-2">
+                          <FaDollarSign />{" "}
+                          {item.transactionDetails?.txnAmount.toFixed(2) ||
+                            "0.00"}
+                          <br />
+                        </p>
+                      </div>
                     </div>
-                  ))}
-                </div>
-                <div className="col-lg-2 col-md-6 col-12 p-3">
-                  <p className="ps-5 pt-2">
-                    <FaDollarSign />{" "}
-                    {item.transactionDetails?.txnAmount.toFixed(2)}
-                    <br />
-                  </p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="container py-4">
+                <div className="row">
+                  <div className="col text-center">
+                    <div
+                      className="d-flex align-items-center justify-content-center"
+                      style={{ verticalAlign: "center", minHeight: "60vh" }}
+                    >
+                      <h6 className="text-secondary">No Data Found</h6>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

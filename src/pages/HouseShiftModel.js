@@ -1,15 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { FaLocationDot, FaRegAddressCard } from "react-icons/fa6";
 import { IoMdContact } from "react-icons/io";
-import { Form as FormikForm, useFormik } from "formik";
+import { Form as useFormik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  location: Yup.string().required("Location is required"),
-  address: Yup.string().required("Address is required"),
-  contactName: Yup.string().required("Contact Name is required"),
-  mobile: Yup.string().required("Mobile is required"),
+  location: Yup.string().required("*Location is required"),
+  address: Yup.string().required("*Address is required"),
+  contactName: Yup.string().required("*Contact Name is required"),
+  countryCode: Yup.string().required("*Country Code is required"),
+  mobile: Yup.string()
+    .required("Mobile number is required")
+    .test("phone-length", function (value) {
+      const { countryCode } = this.parent;
+      if (value && /\s/.test(value)) {
+        return this.createError({
+          message: "Phone number should not contain spaces",
+        });
+      }
+      if (countryCode === "65") {
+        return value && value.length === 8
+          ? true
+          : this.createError({ message: "Phone number must be 8 digits only" });
+      }
+      if (countryCode === "91") {
+        return value && value.length === 10
+          ? true
+          : this.createError({
+              message: "Phone number must be 10 digits only",
+            });
+      }
+      return true;
+    }),
 });
 
 function HouseShiftModel({
@@ -29,11 +52,10 @@ function HouseShiftModel({
       contactName: "",
       mobile: "",
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Location Details:", values);
       setLocationDetail((prevDetails) => [...prevDetails, { ...values }]);
-      // setStops((prevDetails) => [...prevDetails, { ...values }]);
       onHide();
       formik.resetForm();
     },
@@ -51,6 +73,7 @@ function HouseShiftModel({
         formik.setFieldValue("location", stops[titleId]);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, title]);
 
   return (
@@ -147,10 +170,10 @@ function HouseShiftModel({
                   Mobile<span className="text-danger">*</span>
                 </label>
                 <div className="input-group mb-3">
-                  <div className="input-group-prepend">
+                  <div className="input-group-prepend" id="basic-addon1">
                     <select
                       name="countryCode"
-                      className="form-control border-end-none"
+                      className="form-control border-end-none bg-light"
                       {...formik.getFieldProps("countryCode")}
                     >
                       <option value="65" selected>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/custom.css";
 import home from "../asset/Rectangle 19 (1).png";
 import item from "../asset/icons8-open-box-48 1.png";
@@ -9,7 +9,7 @@ function Shift() {
   // const [type , setType] = useState({});
 
   const logType = (selectedType) => {
-    console.log("Shift Type:", selectedType);
+    // console.log("Shift Type:", selectedType);
     sessionStorage.setItem("shiftType", selectedType);
   };
   return (
@@ -72,7 +72,7 @@ function Shift() {
                 // onClick={() => {
                 //   logType("Item Shift");
                 // }}
-                onClick={()=>{
+                onClick={() => {
                   logType("ITEM");
                 }}
               >

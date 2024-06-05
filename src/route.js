@@ -166,7 +166,7 @@ function UserRoute() {
         </Routes>
       </div>
       <BackToTopButton />
-      <Foot />
+      <Foot isAdmin={isAdmin} />
     </Router>
   );
 }

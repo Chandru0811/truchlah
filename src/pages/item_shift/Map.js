@@ -40,8 +40,8 @@ function Map() {
   const [modalShow, setModalShow] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [destinationMarkerPosition, setDestinationMarkerPosition] =
-    useState(null);
+  // const [destinationMarkerPosition, setDestinationMarkerPosition] =
+  //   useState(null);
   const [directions, setDirections] = useState(null);
   const [locationDetail, setLocationDetail] = useState([]);
   console.log("Location Details", locationDetail);
@@ -134,7 +134,7 @@ function Map() {
         setMarkerPosition(location);
         setCenter(location);
       } else if (type === "destination") {
-        setDestinationMarkerPosition(location);
+        // setDestinationMarkerPosition(location);
         setCenter(location);
       } else if (type === "stops" && index !== null) {
         setStops((prevStops) => {
@@ -475,20 +475,23 @@ function Map() {
                       </div>
                     </Autocomplete>
                   ))}
-                  <div>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      style={{
-                        backgroundColor: "transparent",
-                        color: "red",
-                        border: "none",
-                      }}
-                      onClick={handleAddStop}
-                    >
-                      Add Stop <FaPlus />
-                    </button>
-                  </div>
+                  {stops.length < 10 && (
+                    <div>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "red",
+                          border: "none",
+                        }}
+                        onClick={handleAddStop}
+                      >
+                        Add Stop <FaPlus />
+                      </button>
+                    </div>
+                  )}
+
                   <div className="text-center mt-4">
                     <button
                       type="submit"

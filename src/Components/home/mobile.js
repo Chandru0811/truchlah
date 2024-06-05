@@ -6,7 +6,7 @@ import app from "../../asset/app store.png";
 function mob() {
   const navigateToGooglePlayStore = () => {
     window.open(
-      "https://play.google.com/store/apps/details?id=com.ecscloudinfotech.trucklah",
+      "https://play.google.com/store/apps/details?id=com.trucklah.trucklah",
       "_blank"
     );
   };
@@ -32,23 +32,24 @@ function mob() {
             </p>
             <p id="three">Download the App and explore.</p>
             <div className="d-flex align-item-center">
-              <button onClick={navigateToGooglePlayStore}  style={{border: 'none', backgroundColor: 'transparent' } }>
+              <button
+                onClick={navigateToGooglePlayStore}
+                style={{ border: "none", backgroundColor: "transparent" }}
+              >
                 <img
                   src={google}
                   alt="Googleplay"
                   className="img-fluid"
-                  style={{ width: "200px", height: "73px",  }}
+                  style={{ width: "200px", height: "73px" }}
                 />
               </button>
               &nbsp;&nbsp;&nbsp;
-              <a href="/" className="justify-centent-center">
-                <img
-                  src={app}
-                  alt="AppStore"
-                  className="img-fluid"
-                  style={{ width: "200px", height: "63px" }}
-                />
-              </a>
+              <img
+                src={app}
+                alt="AppStore"
+                className="img-fluid"
+                style={{ width: "200px", height: "63px" }}
+              />
             </div>
           </div>
         </div>

@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "../../styles/custom.css";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { FaWeightHanging, FaCheckCircle } from "react-icons/fa";
@@ -16,9 +17,9 @@ import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
 
 const validationSchema = Yup.object().shape({
-  // date: Yup.string().required("Date is required"),
-  // time: Yup.string().required("Time is required"),
-  // vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
+  date: Yup.string().required("Date is required"),
+  time: Yup.string().required("Time is required"),
+  vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
 });
 
 function Service() {
@@ -37,12 +38,7 @@ function Service() {
     console.error("Failed to parse location value:", error);
   }
 
-  // console.log("Location:", locationValue);
-  // console.log("Booking ID:", bookingIdValue);
-  // console.log("Distance:", distanceValue);
-
   const [vechicle, setVechicle] = useState([]);
-  // console.log("Vechile :", vechicle );
   const [showQuantity, setShowQuantity] = useState(false);
   const navigate = useNavigate();
   const userId = sessionStorage.getItem("userId");
@@ -81,25 +77,31 @@ function Service() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const selectedDateTime = new Date(`${values.date}T${values.time}`);
-      console.log("Selected Date & Time:", selectedDateTime);
-
       const eligibleTime = new Date();
       eligibleTime.setHours(eligibleTime.getHours() + 3);
-      console.log("Current Date & Time plus 3 hours:", eligibleTime);
 
       if (selectedDateTime >= eligibleTime) {
-        const selectedValue = formik.values.vechicleTypeId; // Assuming formik is in scope
-        let selectedOptionName = "";
+        const selectedOption = vechicle.find(
+          (item) => item.vehicletypeId === values.vechicleTypeId
+        );
 
-        vechicle.forEach((vechicles) => {
-          if (parseInt(selectedValue) === vechicles.vehicletypeId) {
-            selectedOptionName = vechicles.type;
-          }
-        });
+        const totalKilometer = parseInt(distanceValue);
+        const km_charge = 0.75 * totalKilometer;
+        const total = selectedOption.baseFare + km_charge;
 
-        values.vechicleTypeId = selectedOptionName;
+        let driverAmount = 0;
+        let extraHelper = 0;
 
-        console.log("vechicleTypeId", values.vechicleTypeId);
+        if (values.driverAsManpower) {
+          driverAmount = selectedOption.driverHelper;
+        }
+
+        if (values.extraManpower) {
+          extraHelper = selectedOption.helper * values.quantity;
+        }
+
+        const totalCharges = total + driverAmount + extraHelper;
+        console.log(totalCharges);
 
         const deliveryDate = new Date(`${values.date}T${values.time}`);
         deliveryDate.setDate(deliveryDate.getDate() + 2);
@@ -118,7 +120,7 @@ function Service() {
           extraManpower: values.extraManpower ? "Y" : "N",
           trollyRequired: values.trollyRequired ? "Y" : "N",
           roundTrip: values.roundTripRequired ? "Y" : "N",
-          vehicleType: selectedOptionName,
+          vehicleType: selectedOption.type,
           promoCode: "",
         };
 
@@ -126,7 +128,6 @@ function Service() {
           const response = await bookingApi.post(`booking/update`, payload);
           console.log(response);
           if (response.status === 200) {
-            // toast.success("Successfully Booking Create")
             toast.success(response.data.message);
             navigate(`/summary/${bookingIdValue}`);
           } else {
@@ -163,7 +164,9 @@ function Service() {
     const getVechicle = async () => {
       try {
         const response = await userApi.get("vehicle/vehicleType");
-        setVechicle(response.data.responseBody);
+        if (response.status === 200) {
+          setVechicle(response.data.responseBody);
+        }
       } catch (e) {
         toast.error("Error Fetching Data : ", e);
       }

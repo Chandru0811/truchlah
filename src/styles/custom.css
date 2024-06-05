@@ -1125,14 +1125,6 @@ body {
   min-height: 80vh;
 }
 
-.order #shift-btn:focus-within {
-  /* border-bottom: 4px solid rgba(49, 49, 49, 1); */
-}
-
-.order #shift-btn:active {
-  /* border-bottom: 4px solid rgba(49, 49, 49, 1); */
-}
-
 .order .dot1 {
   height: 10px;
   width: 10px;
@@ -1144,7 +1136,7 @@ body {
 .order .dot2 {
   height: 10px;
   width: 10px;
-  background-color: #e33429;
+
   border-radius: 50%;
   display: inline-block;
 }
