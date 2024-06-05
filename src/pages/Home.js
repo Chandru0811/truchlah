@@ -1,5 +1,5 @@
 import React from "react";
-import Accod from "../Components/home/Accordian";
+// import Accod from "../Components/home/Accordian";
 // import Vechicle from "../Components/home/TrucklahVechicle";
 import ContactUs from "../Components/home/ContactUs";
 import Hero from "../Components/home/Hero";
@@ -17,7 +17,7 @@ function Home({ isAdmin }) {
       <Lead />
       <Mob />
       <About />
-      <Accod />
+      {/* <Accod /> */}
       <ContactUs />
     </div>
   );
