@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import Logins from "../../asset/Login.png";
-// import { AiOutlineGoogle } from "react-icons/ai";
+import { AiOutlineGoogle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { GoogleLogin } from "@react-oauth/google";
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("*First Name is required"),
@@ -66,7 +67,7 @@ const validationSchema = Yup.object().shape({
   agree: Yup.string().required("Please accept the condition"),
 });
 
-function Register() {
+function Register({ handleLogin }) {
   // const [role, setRole] = useState(["User"]);
   const navigate = useNavigate();
   const [Password, setShowPassword] = useState(false);
@@ -167,6 +168,38 @@ function Register() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleLoginSuccess = async (credentialResponse) => {
+    // console.log(credentialResponse);
+    try {
+      const data = {
+        token: credentialResponse.credential,
+      };
+      const response = await userApi.post("/user/signWithGoogle", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // console.log(response.data.responseBody);
+      if (response.status === 200) {
+        toast.success("Login Successful!");
+        handleLogin();
+        navigate("/shift");
+        sessionStorage.setItem("userId", response.data.responseBody.userId);
+        sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+        sessionStorage.setItem("token", response.data.responseBody.token);
+        sessionStorage.setItem("username", response.data.responseBody.username);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      if (error.response?.status === 400) {
+        toast.warning(error.response.data.errorList[0].errorMessage);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  };
+
   return (
     <div className="container-fluid">
       <div
@@ -204,6 +237,36 @@ function Register() {
               services. Fill out the form below to get started.
             </p>
             <hr></hr>
+            <div className="row">
+              <div className="offset-lg-3 offset-md-2 col-lg-6 col-md-8 col-12 d-flex flex-column align-items-center">
+                <p className="LoginContent">
+                  <b>Get started with your free account</b>
+                </p>
+
+                <GoogleLogin
+                  onSuccess={handleLoginSuccess}
+                  onError={() => {
+                    console.log("Login Failed");
+                  }}
+                >
+                  <button className="btn btn-danger" style={{ width: "100%" }}>
+                    <AiOutlineGoogle style={{ fontSize: "30px" }} /> Sign in
+                    with Google
+                  </button>
+                </GoogleLogin>
+              </div>
+            </div>
+            <div className="row">
+              <div className="offset-lg-3 offset-md-2 col-lg-6 col-md-8 col-12">
+                <div className="or-line-container py-3">
+                  <div className="or-line"></div>
+                  <span className="or-line-text">
+                    <b>OR</b>
+                  </span>
+                  <div className="or-line"></div>
+                </div>
+              </div>
+            </div>
             <div className="row">
               <div className="col-lg-3 col-md-2 col-12"></div>
 

@@ -1655,3 +1655,12 @@ body {
   margin: auto;
   margin-left: 5px;
 }
+
+.google-button {
+  width: 100%;
+  background-color: #db4437; /* Google button color */
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+}

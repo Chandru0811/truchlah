@@ -123,7 +123,10 @@ function UserRoute() {
         <Routes>
           <Route path="/" element={<Home isAdmin={isAdmin} />} />
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/register"
+            element={<Register handleLogin={handleLogin} />}
+          />
           <Route path="/about" element={<About />} />
           <Route path="/ShiftPack" element={<ShiftPack />} />
           <Route path="/contact" element={<ContactUs />} />

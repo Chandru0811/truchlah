@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/custom.css";
 import Logins from "../../asset/Login.png";
-// import { AiOutlineGoogle } from "react-icons/ai";
+import { AiOutlineGoogle } from "react-icons/ai";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
+import { GoogleLogin } from "@react-oauth/google";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required("*Email is required"),
@@ -46,7 +47,7 @@ function Login({ handleLogin }) {
             "Content-Type": "application/json",
           },
         });
-        console.log(response.data.responseBody);
+        // console.log(response.data.responseBody);
         if (response.status === 200) {
           toast.success("Login Successful!");
           navigate("/shift");
@@ -59,8 +60,6 @@ function Login({ handleLogin }) {
             "username",
             response.data.responseBody.username
           );
-        } else if (response.status === 400) {
-          // console.log("object",response.status)
         } else {
           toast.error(response.data.message);
         }
@@ -75,6 +74,38 @@ function Login({ handleLogin }) {
       // Pass email and password to onLogin
     },
   });
+
+  const handleLoginSuccess = async (credentialResponse) => {
+    // console.log(credentialResponse);
+    try {
+      const data = {
+        token: credentialResponse.credential,
+      };
+      const response = await userApi.post("/user/signWithGoogle", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data.responseBody);
+      if (response.status === 200) {
+        toast.success("Login Successful!");
+        navigate("/shift");
+        handleLogin();
+        sessionStorage.setItem("userId", response.data.responseBody.userId);
+        sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+        sessionStorage.setItem("token", response.data.responseBody.token);
+        sessionStorage.setItem("username", response.data.responseBody.username);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      if (error.response?.status === 400) {
+        toast.warning(error.response.data.errorList[0].errorMessage);
+      } else {
+        toast.error(error.message);
+      }
+    }
+  };
 
   return (
     <div className="container-fluid">
@@ -115,6 +146,37 @@ function Login({ handleLogin }) {
               services.
             </p>
             <hr></hr>
+
+            <div className="row">
+              <div className="offset-lg-3 offset-md-2 col-lg-6 col-md-8 col-12 d-flex flex-column align-items-center">
+                <p className="LoginContent">
+                  <b>Get started with your free account</b>
+                </p>
+
+                <GoogleLogin
+                  onSuccess={handleLoginSuccess}
+                  onError={() => {
+                    console.log("Login Failed");
+                  }}
+                >
+                  <button className="btn btn-danger" style={{ width: "100%" }}>
+                    <AiOutlineGoogle style={{ fontSize: "30px" }} /> Sign in
+                    with Google
+                  </button>
+                </GoogleLogin>
+              </div>
+            </div>
+            <div className="row">
+              <div className="offset-lg-3 offset-md-2 col-lg-6 col-md-8 col-12">
+                <div className="or-line-container py-3">
+                  <div className="or-line"></div>
+                  <span className="or-line-text">
+                    <b>OR</b>
+                  </span>
+                  <div className="or-line"></div>
+                </div>
+              </div>
+            </div>
             <div className="row">
               <div className="col-lg-3 col-md-2 col-12"></div>
               <div className="col-lg-6 col-md-8 col-12">
