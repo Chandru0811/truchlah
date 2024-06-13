@@ -9,7 +9,10 @@ import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { GoogleLogin } from "@react-oauth/google";
-
+import { jwtDecode } from "jwt-decode";
+import { LoginSocialFacebook } from "reactjs-social-login";
+// import { GoogleLoginButton } from "react-social-login-buttons";
+import { FaSquareFacebook } from "react-icons/fa6";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("*First Name is required"),
   lastName: Yup.string().required("*Last Name is required"),
@@ -80,36 +83,6 @@ function Register({ handleLogin }) {
     setCShowPassword(!cPassword);
   };
 
-  // const handelsubmit = (e) => {
-  //   e.preventDefault();
-  //   // if (isValidate())
-  //   {
-  //     let regsub = {
-  //       firstName,
-  //       lastName,
-  //       password,
-  //       email,
-  //       mobileNoNo,
-  //       countryCode,
-  //       refCode,
-  //       role,
-  //     };
-  //     console.log(regsub);
-  //     fetch("http://139.84.133.106:9095/trucklah/api/auth/signup", {
-  //       method: "POST",
-  //       headers: { "content-type": "application/json" },
-  //       body: JSON.stringify(regsub),
-  //     })
-  //       .then((res) => {
-  //         toast.success("Register Successfully.");
-  //         // navigate("/login");
-  //       })
-  //       .catch((err) => {
-  //         toast.error("Failed :" + err.message);
-  //       });
-  //   }
-  // };
-
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -167,23 +140,30 @@ function Register({ handleLogin }) {
     formik.setFieldValue("countryCode", 65);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
 
-  const handleLoginSuccess = async (credentialResponse) => {
-    // console.log(credentialResponse);
-    try {
-      const data = {
-        token: credentialResponse.credential,
+    const decodedToken = jwtDecode(credentialResponse.credential);
+      console.log("Credential Response:",decodedToken);
+
+      const payload = {
+        firstName: decodedToken.given_name,
+        lastName: decodedToken.family_name,
+        email: decodedToken.email,
+        profileImage: decodedToken.picture
       };
-      const response = await userApi.post("/user/signWithGoogle", data, {
+      console.log("Payload :",payload);
+
+    try {
+      const response = await userApi.post("/user/signWithGoogle", payload, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      // console.log(response.data.responseBody);
       if (response.status === 200) {
         toast.success("Login Successful!");
-        handleLogin();
         navigate("/shift");
+        handleLogin();
         sessionStorage.setItem("userId", response.data.responseBody.userId);
         sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
         sessionStorage.setItem("token", response.data.responseBody.token);
@@ -198,6 +178,41 @@ function Register({ handleLogin }) {
         toast.error(error.message);
       }
     }
+  };
+
+  const handleFaceBookLoginSuccess = async (response) => {
+    console.log("FaceBook Login Response:", response);
+    const payload = {
+      firstName: response.data.first_name,
+      lastName: response.data.last_name,
+      email: response.data.email,
+      profileImage: response.data.picture.data.url,
+    };
+    console.log("Payload :", payload);
+    // try {
+    //   const response = await userApi.post("/user/signWithGoogle", payload, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   if (response.status === 200) {
+    //     toast.success("Login Successful!");
+    //     navigate("/shift");
+    //     handleLogin();
+    //     sessionStorage.setItem("userId", response.data.responseBody.userId);
+    //     sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+    //     sessionStorage.setItem("token", response.data.responseBody.token);
+    //     sessionStorage.setItem("username", response.data.responseBody.username);
+    //   } else {
+    //     toast.error(response.data.message);
+    //   }
+    // } catch (error) {
+    //   if (error.response?.status === 400) {
+    //     toast.warning(error.response.data.errorList[0].errorMessage);
+    //   } else {
+    //     toast.error(error.message);
+    //   }
+    // }
   };
 
   return (
@@ -244,16 +259,29 @@ function Register({ handleLogin }) {
                 </p>
 
                 <GoogleLogin
-                  onSuccess={handleLoginSuccess}
+                  onSuccess={handleGoogleLoginSuccess}
                   onError={() => {
                     console.log("Login Failed");
                   }}
                 >
-                  <button className="btn btn-danger" style={{ width: "100%" }}>
-                    <AiOutlineGoogle style={{ fontSize: "30px" }} /> Sign in
-                    with Google
-                  </button>
                 </GoogleLogin>
+
+                <LoginSocialFacebook
+                  appId="386027390559424"
+                  onResolve = {handleFaceBookLoginSuccess}
+                  onReject={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  {/* <FacebookLoginButton /> */}
+                  <button
+                    className="btn text-white px-2 py-1 my-2"
+                    style={{ background: "#3b5998", width:"100%"}}
+                  >
+                    <FaSquareFacebook className="text-white me-2 fs-3" />
+                    Log in with Facebook
+                  </button>
+                </LoginSocialFacebook>
               </div>
             </div>
             <div className="row">

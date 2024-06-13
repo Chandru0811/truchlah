@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { FaLocationDot, FaRegAddressCard } from "react-icons/fa6";
 import { IoMdContact } from "react-icons/io";
-import { Form as useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({

@@ -1664,3 +1664,30 @@ body {
   padding: 10px;
   font-size: 16px;
 }
+
+/* .nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe {
+  -webkit-transition: background-color .218s;
+  transition: background-color .218s;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100% !important;
+  background: red !important;
+}
+
+.googleLogin{
+  background: red !important;
+  color: #ffffff !important;
+} */
+
+.googleLogin {
+  background-color: red !important; /* Replace with your custom background color */
+  border-radius: 5px !important; /* Example for rounded corners */
+  color: white !important; /* Text color */
+  padding: 10px 20px !important; /* Padding */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

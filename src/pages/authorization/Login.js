@@ -11,7 +11,11 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
 import { GoogleLogin } from "@react-oauth/google";
-
+import { jwtDecode } from "jwt-decode";
+import { LoginSocialFacebook } from "reactjs-social-login";
+// import { GoogleLoginButton } from "react-social-login-buttons";
+import { FaSquareFacebook } from "react-icons/fa6";
+// import { LoginSocialGoogle } from "reactjs-social-login";
 const validationSchema = Yup.object().shape({
   username: Yup.string().required("*Email is required"),
 
@@ -25,6 +29,7 @@ const validationSchema = Yup.object().shape({
 
 function Login({ handleLogin }) {
   const [showPassword, setShowPassword] = useState(false);
+  // const [profile, setProfile] = useState(null);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -75,18 +80,56 @@ function Login({ handleLogin }) {
     },
   });
 
-  const handleLoginSuccess = async (credentialResponse) => {
-    // console.log(credentialResponse);
+  // const handleLoginSuccess = async (credentialResponse) => {
+  //   // console.log(credentialResponse);
+  //   try {
+  //     const data = {
+  //       token: credentialResponse.credential,
+  //     };
+  //     const response = await userApi.post("/user/signWithGoogle", data, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     console.log(response.data.responseBody);
+  //     if (response.status === 200) {
+  //       toast.success("Login Successful!");
+  //       navigate("/shift");
+  //       handleLogin();
+  //       sessionStorage.setItem("userId", response.data.responseBody.userId);
+  //       sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+  //       sessionStorage.setItem("token", response.data.responseBody.token);
+  //       sessionStorage.setItem("username", response.data.responseBody.username);
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     if (error.response?.status === 400) {
+  //       toast.warning(error.response.data.errorList[0].errorMessage);
+  //     } else {
+  //       toast.error(error.message);
+  //     }
+  //   }
+  // };
+
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    const decodedToken = jwtDecode(credentialResponse.credential);
+    console.log("Google Login Response:", decodedToken);
+
+    const payload = {
+      firstName: decodedToken.given_name,
+      lastName: decodedToken.family_name,
+      email: decodedToken.email,
+      profileImage: decodedToken.picture,
+    };
+    console.log("Payload :", payload);
+
     try {
-      const data = {
-        token: credentialResponse.credential,
-      };
-      const response = await userApi.post("/user/signWithGoogle", data, {
+      const response = await userApi.post("/user/signWithGoogle", payload, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data.responseBody);
       if (response.status === 200) {
         toast.success("Login Successful!");
         navigate("/shift");
@@ -105,6 +148,41 @@ function Login({ handleLogin }) {
         toast.error(error.message);
       }
     }
+  };
+
+  const handleFaceBookLoginSuccess = async (response) => {
+    console.log("FaceBook Login Response:", response);
+    const payload = {
+      firstName: response.data.first_name,
+      lastName: response.data.last_name,
+      email: response.data.email,
+      profileImage: response.data.picture.data.url,
+    };
+    console.log("Payload :", payload);
+    // try {
+    //   const response = await userApi.post("/user/signWithGoogle", payload, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   if (response.status === 200) {
+    //     toast.success("Login Successful!");
+    //     navigate("/shift");
+    //     handleLogin();
+    //     sessionStorage.setItem("userId", response.data.responseBody.userId);
+    //     sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+    //     sessionStorage.setItem("token", response.data.responseBody.token);
+    //     sessionStorage.setItem("username", response.data.responseBody.username);
+    //   } else {
+    //     toast.error(response.data.message);
+    //   }
+    // } catch (error) {
+    //   if (error.response?.status === 400) {
+    //     toast.warning(error.response.data.errorList[0].errorMessage);
+    //   } else {
+    //     toast.error(error.message);
+    //   }
+    // }
   };
 
   return (
@@ -154,16 +232,30 @@ function Login({ handleLogin }) {
                 </p>
 
                 <GoogleLogin
-                  onSuccess={handleLoginSuccess}
+                  onSuccess={handleGoogleLoginSuccess}
                   onError={() => {
                     console.log("Login Failed");
                   }}
+                  className="googleLogin"
                 >
-                  <button className="btn btn-danger" style={{ width: "100%" }}>
-                    <AiOutlineGoogle style={{ fontSize: "30px" }} /> Sign in
-                    with Google
-                  </button>
                 </GoogleLogin>
+
+                <LoginSocialFacebook
+                  appId="386027390559424"
+                  onResolve = {handleFaceBookLoginSuccess}
+                  onReject={(error) => {
+                    console.log(error);
+                  }}
+                >
+                  {/* <FacebookLoginButton /> */}
+                  <button
+                    className="btn text-white px-2 py-1 my-2"
+                    style={{ background: "#3b5998", width:"100%"}}
+                  >
+                    <FaSquareFacebook className="text-white me-2 fs-3" />
+                    Log in with Facebook
+                  </button>
+                </LoginSocialFacebook>
               </div>
             </div>
             <div className="row">
@@ -261,7 +353,6 @@ function Login({ handleLogin }) {
                         type="submit"
                         className="btn btn-primary py-2"
                         style={{ width: "100%" }}
-                        id="VehicleButton"
                       >
                         Login{" "}
                       </button>
