@@ -44,6 +44,7 @@ function Service() {
   const userId = sessionStorage.getItem("userId");
   const shiftType = sessionStorage.getItem("shiftType");
   const [manpowerQuantity, setManpowerQuantity] = useState(0);
+  const [noOfPiecess, setNoOfPiecess] = useState(0);
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -70,6 +71,7 @@ function Service() {
       driverAsManpower: false,
       extraManpower: false,
       quantity: 0,
+      noOfPieces: 0,
       trollyRequired: false,
       roundTripRequired: false,
       messageToDriver: "",
@@ -112,16 +114,18 @@ function Service() {
           locationDetail: locationValue,
           bookingId: bookingIdValue,
           estKm: parseInt(distanceValue),
-          scheduledDate: `${values.date}T${values.time}`,
+          scheduledDate: `${values.date}T${values.time}:00.000Z`,
           deliveryDate: deliveryDate,
           quantity: values.extraManpower ? values.quantity : 0,
           msgToDriver: values.messageToDriver,
-          manpower: values.driverAsManpower ? "Y" : "N",
-          extraManpower: values.extraManpower ? "Y" : "N",
+          noOfPieces: values.noOfPieces,
+          helper: values.driverAsManpower ? "Y" : "N",
+          extraHelper: values.extraManpower ? "Y" : "N",
           trollyRequired: values.trollyRequired ? "Y" : "N",
           roundTrip: values.roundTripRequired ? "Y" : "N",
           vehicleType: selectedOption.type,
           promoCode: "",
+          actualKm: totalKilometer,
         };
 
         try {
@@ -146,10 +150,16 @@ function Service() {
 
   useEffect(() => {
     formik.setFieldValue("quantity", manpowerQuantity);
-  }, [manpowerQuantity]);
+    formik.setFieldValue("noOfPieces", noOfPiecess);
+  }, [manpowerQuantity, noOfPiecess]);
 
   const increaseManpowerQuantity = () => {
     setManpowerQuantity((prevQuantity) =>
+      prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
+    );
+  };
+  const increasePiecesQuantity = () => {
+    setNoOfPiecess((prevQuantity) =>
       prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
     );
   };
@@ -157,6 +167,11 @@ function Service() {
   const decreaseManpowerQuantity = () => {
     setManpowerQuantity((prevQuantity) =>
       prevQuantity > 1 ? prevQuantity - 1 : prevQuantity
+    );
+  };
+  const decreasePiecesQuantity = () => {
+    setNoOfPiecess((prevQuantity) =>
+      prevQuantity > 0 ? prevQuantity - 1 : prevQuantity
     );
   };
 
@@ -428,7 +443,61 @@ function Service() {
                 </div>
               </div>
             </div>
-            <div className="col-12 mb-3">
+            <div className="col-md-6 col-12 mb-3">
+              <div
+                className="d-flex justify-content-between p-3"
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                  alignItems: "center",
+                }}
+              >
+                <span>
+                  <b>No of pieces</b>
+                </span>
+
+                <div className="noOfPieces-input">
+                  <button
+                    className="quantity-btn btn border-white"
+                    type="button"
+                    style={{
+                      borderRadius: "50%",
+                    }}
+                    onClick={decreasePiecesQuantity}
+                    disabled={noOfPiecess === 0}
+                  >
+                    <FaMinus style={{ fontSize: "8px" }} />
+                  </button>
+                  <input
+                    type="number"
+                    className="quantity-value"
+                    value={noOfPiecess}
+                    min={1}
+                    max={99}
+                    readOnly
+                    style={{
+                      width: "50px",
+                      padding: "5px",
+                      textAlign: "center",
+                      border: "1px solid #ccc",
+                      borderRadius: "5px",
+                    }}
+                  />
+                  <button
+                    className="quantity-btn btn border-white"
+                    onClick={increasePiecesQuantity}
+                    type="button"
+                    disabled={noOfPiecess === 99}
+                    style={{
+                      borderRadius: "50%",
+                    }}
+                  >
+                    <FaPlus style={{ fontSize: "8px" }} />
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className=" col-md-6 col-12 mb-3">
               {showQuantity && (
                 <div
                   className="d-flex justify-content-between p-3"
@@ -484,6 +553,7 @@ function Service() {
                 </div>
               )}
             </div>
+
             <div className="col-md-6 col-12 mb-3">
               <div
                 className="d-flex justify-content-between p-3"

@@ -102,51 +102,60 @@ function Map() {
   };
 
   const onPlaceChanged = async (type, index = null) => {
-    let place = null;
-    if (type === "origin") {
-      if (origin) {
-        place = origin.getPlace();
-        formik.setFieldValue("pickupLocation", place.formatted_address);
-        handleOpenModal("Pick Up Location");
-      }
-    } else if (type === "destination") {
-      if (destination) {
-        place = destination.getPlace();
-        formik.setFieldValue("dropLocation", place.formatted_address);
-        handleOpenModal("Drop Location");
-      }
-    } else if (type === "stops" && index !== null) {
-      if (stops[index]) {
+  let place = null;
+
+  if (type === "origin") {
+    if (origin) {
+      place = origin.getPlace();
+      formik.setFieldValue("pickupLocation", place.formatted_address);
+      handleOpenModal("Pick Up Location");
+    }
+  } else if (type === "destination") {
+    if (destination) {
+      place = destination.getPlace();
+      formik.setFieldValue("dropLocation", place.formatted_address);
+      handleOpenModal("Drop Location");
+    }
+  } else if (type === "stops" && index !== null) {
+    console.log("stop", stops[index]);
+    if (stops[index]) {
+      // Check if getPlace method exists
+      if (typeof stops[index].getPlace === 'function') {
         place = stops[index].getPlace();
         if (place && place.formatted_address) {
           formik.setFieldValue(`stops[${index}]`, place.formatted_address);
           handleOpenModal(`${index + 1}`);
         }
+      } else {
+        console.error("getPlace is not a function on stops[index]");
       }
+    } else {
+      console.error("stops[index] is undefined");
     }
+  }
 
-    if (place && place.geometry && place.geometry.location) {
-      const location = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
-      };
-      if (type === "origin") {
-        setMarkerPosition(location);
-        setCenter(location);
-      } else if (type === "destination") {
-        // setDestinationMarkerPosition(location);
-        setCenter(location);
-      } else if (type === "stops" && index !== null) {
-        setStops((prevStops) => {
-          const newStops = [...prevStops];
-          newStops[index] = location;
-          return newStops;
-        });
-        // Call onPlaceChanged again to update directions
-        recalculateDirections();
-      }
+  if (place && place.geometry && place.geometry.location) {
+    const location = {
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng(),
+    };
+
+    if (type === "origin") {
+      setMarkerPosition(location);
+      setCenter(location);
+    } else if (type === "destination") {
+      setCenter(location);
+      recalculateDirections();
+    } else if (type === "stops" && index !== null) {
+      setStops((prevStops) => {
+        const newStops = [...prevStops];
+        newStops[index] = location;
+        return newStops;
+      });
+      recalculateDirections();
     }
-  };
+  }
+};
 
   const handleOpenModal = (title) => {
     setModalTitle(title);
@@ -187,11 +196,11 @@ function Map() {
 
   const handleDeleteStop = (index) => {
     const updatedStops = [...stops];
-    updatedStops.splice(index, 1);
+    updatedStops.pop();
     setStops(updatedStops);
     formik.setFieldValue(
       "stops",
-      formik.values.stops.filter((_, i) => i !== index)
+      formik.values.stops.pop()
     );
     recalculateDirections();
   };
