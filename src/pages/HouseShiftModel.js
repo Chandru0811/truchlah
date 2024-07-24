@@ -54,8 +54,20 @@ function HouseShiftModel({
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      let titles =
+        title === "Pick Up Location"
+          ? "pickUp"
+          : title === "Drop Location"
+          ? "drop"
+          : `stop${title}`;
+      values.state = titles;
       console.log("Location Details:", values);
-      setLocationDetail((prevDetails) => [...prevDetails, { ...values }]);
+      setLocationDetail((prevDetails) => {
+        const locationDetail = prevDetails.filter(
+          (item) => item.state !== titles
+        );
+        return [...locationDetail, values];
+      });
       onHide();
       formik.resetForm();
     },

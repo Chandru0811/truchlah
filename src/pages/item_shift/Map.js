@@ -118,19 +118,14 @@ function Map() {
     }
   } else if (type === "stops" && index !== null) {
     console.log("stop", stops[index]);
-    if (stops[index]) {
-      // Check if getPlace method exists
-      if (typeof stops[index].getPlace === 'function') {
-        place = stops[index].getPlace();
-        if (place && place.formatted_address) {
-          formik.setFieldValue(`stops[${index}]`, place.formatted_address);
-          handleOpenModal(`${index + 1}`);
-        }
-      } else {
-        console.error("getPlace is not a function on stops[index]");
+    if (stops[index] && typeof stops[index].getPlace === "function") {
+      place = stops[index].getPlace();
+      if (place && place.formatted_address) {
+        const updatedStops = [...formik.values.stops];
+        updatedStops[index] = place.formatted_address;
+        formik.setFieldValue("stops", updatedStops);
+        handleOpenModal(`${index + 1}`);
       }
-    } else {
-      console.error("stops[index] is undefined");
     }
   }
 
@@ -147,11 +142,6 @@ function Map() {
       setCenter(location);
       recalculateDirections();
     } else if (type === "stops" && index !== null) {
-      setStops((prevStops) => {
-        const newStops = [...prevStops];
-        newStops[index] = location;
-        return newStops;
-      });
       recalculateDirections();
     }
   }
@@ -196,12 +186,13 @@ function Map() {
 
   const handleDeleteStop = (index) => {
     const updatedStops = [...stops];
-    updatedStops.pop();
+    updatedStops.splice(index, 1); 
     setStops(updatedStops);
-    formik.setFieldValue(
-      "stops",
-      formik.values.stops.pop()
-    );
+
+    const updatedFormikStops = [...formik.values.stops];
+    updatedFormikStops.splice(index, 1); 
+    formik.setFieldValue("stops", updatedFormikStops);
+  
     recalculateDirections();
   };
 
@@ -218,9 +209,13 @@ function Map() {
       const destinationPlace = destination.getPlace();
       const stopLocations = stops
         .map((stop) => {
-          if (stop && stop.lat && stop.lng) {
+          if (stop) {
+            const stopPlace = stop.getPlace();
             return {
-              location: { lat: stop.lat, lng: stop.lng },
+              location: { 
+                lat: stopPlace?.geometry?.location.lat(),
+                lng: stopPlace?.geometry?.location.lng()
+              },
               stopover: true,
             };
           }
@@ -257,7 +252,7 @@ function Map() {
           },
           (result, status) => {
             if (status === window.google.maps.DirectionsStatus.OK) {
-              setDirections(result);
+              setDirections(null)
               const route = result.routes[0];
               let totalDistance = 0;
               let totalDuration = 0;
@@ -265,6 +260,7 @@ function Map() {
                 totalDistance += route.legs[i].distance.value;
                 totalDuration += route.legs[i].duration.value;
               }
+              setDirections(result);
               setDistance(`${(totalDistance / 1000).toFixed(2)} km`);
               setDuration(`${Math.floor(totalDuration / 60)} mins`);
             } else {
@@ -274,7 +270,7 @@ function Map() {
         );
       }
     }
-  }, [origin, destination, stops]);
+  }, [center, stops,formik.values.stops]);
 
   useEffect(() => {
     recalculateDirections();
@@ -320,18 +316,16 @@ function Map() {
                 />
               )}
 
-              {directions && (
-                <DirectionsRenderer
-                  directions={directions}
-                  options={{
-                    polylineOptions: {
-                      strokeColor: "blue",
-                      strokeOpacity: 1,
-                      strokeWeight: 3,
-                    },
-                  }}
-                />
-              )}
+              <DirectionsRenderer
+                directions={directions}
+                options={{
+                  polylineOptions: {
+                    strokeColor: "blue",
+                    strokeOpacity: 1,
+                    strokeWeight: 3,
+                  },
+                }}
+              />
             </GoogleMap>
           </div>
 
@@ -396,7 +390,57 @@ function Map() {
                       {formik.errors.pickupLocation}
                     </div>
                   )}
-
+                  {stops.map((stop, index) => (
+                    <Autocomplete
+                      onLoad={onStopLoad(index)}
+                      onPlaceChanged={() => onPlaceChanged("stops", index)}
+                      key={index}
+                      options={{
+                        types: ["(regions)"],
+                        componentRestrictions: { country: ["sg", "in"] },
+                      }}
+                    >
+                      <div className="d-flex align-items-center mt-3">
+                        <Form.Control
+                          id="AddStop"
+                          type="text"
+                          placeholder="Add more stops"
+                          name="stops"
+                          value={formik.values.stops[index]}
+                          onChange={(e) =>
+                            handleStopChange(index, e.target.value)
+                          }
+                          className="form-control rounded-5"
+                          style={{
+                            width: "500px",
+                            height: "50px",
+                            borderRadius: "8px",
+                          }}
+                        />
+                        <FaMinus
+                          className="text-danger"
+                          onClick={() => handleDeleteStop(index)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </div>
+                    </Autocomplete>
+                  ))}
+                  {stops.length < 10 && (
+                    <div className="d-flex justify-content-end">
+                      <button
+                        type="button"
+                        className="btn btn-primary mb-3 "
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "red",
+                          border: "none",
+                        }}
+                        onClick={handleAddStop}
+                      >
+                        Add Stop <FaPlus />
+                      </button>
+                    </div>
+                  )}
                 <Autocomplete
                   onLoad={onDestinationLoad}
                   onPlaceChanged={() => onPlaceChanged("destination")}
@@ -454,52 +498,7 @@ function Map() {
               <div className="row d-flex flex-column align-items-center justify-content-center">
                 <div className="col-md-4 col-12"></div>
                 <div className="col-md-5 col-12">
-                  {stops.map((stop, index) => (
-                    <Autocomplete
-                      onLoad={onStopLoad(index)}
-                      onPlaceChanged={() => onPlaceChanged("stops", index)}
-                      key={index}
-                      options={{
-                        types: ["(regions)"],
-                        componentRestrictions: { country: ["sg", "in"] },
-                      }}
-                    >
-                      <div className="d-flex align-items-center mt-3">
-                        <Form.Control
-                          id="AddStop"
-                          type="text"
-                          placeholder="Add more stops"
-                          name="stops"
-                          value={formik.values.stops[index]}
-                          onChange={(e) =>
-                            handleStopChange(index, e.target.value)
-                          }
-                          className="me-2"
-                        />
-                        <FaMinus
-                          className="text-danger"
-                          onClick={() => handleDeleteStop(index)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </div>
-                    </Autocomplete>
-                  ))}
-                  {stops.length < 10 && (
-                    <div>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "red",
-                          border: "none",
-                        }}
-                        onClick={handleAddStop}
-                      >
-                        Add Stop <FaPlus />
-                      </button>
-                    </div>
-                  )}
+                 
 
                   <div className="text-center mt-4">
                     <button
