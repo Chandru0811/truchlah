@@ -176,6 +176,7 @@ function RideDetailsView() {
                   ? vechicles.types || "--"
                   : ""
               )}
+              <p>{data.transactionDetails?.txnRef}</p>
           </center>
           <div className="row">
             <div className="col-lg-3"></div>
@@ -380,7 +381,7 @@ function RideDetailsView() {
                     <div className="col-md-6 col-12 ps-1" id="drop">
                       {" "}
                       <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.manPower === "Y" ? "Yes" : "No"}
+                        {data.booking?.helper === "Y" ? "Yes" : "No"}
                       </p>
                     </div>
                   </div>
@@ -393,7 +394,7 @@ function RideDetailsView() {
                     <div className="col-md-6 col-12 ps-1" id="drop">
                       {" "}
                       <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.extraManPower === "Y" ? "Yes" : "No"}
+                        {data.booking?.extraHelper === "Y" ? "Yes" : "No"}
                       </p>
                     </div>
                   </div>
@@ -433,6 +434,32 @@ function RideDetailsView() {
                       {" "}
                       <p className="line" style={{ color: "#494949" }}>
                         {data.booking?.quantity || 0}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <p className="line" style={{ color: "#00316B" }}>
+                        <b>No of Pieces</b>
+                      </p>
+                    </div>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        {data.booking?.noOfPieces || 0}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <p className="line" style={{ color: "#00316B" }}>
+                        <b>Estimate km</b>
+                      </p>
+                    </div>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        {data.booking?.estKm || 0}
                       </p>
                     </div>
                   </div>
