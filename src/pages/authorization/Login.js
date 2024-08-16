@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
     //   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
     //   "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
     // )
-    .required("Please Enter your password"),
+    .required("*Please Enter your password"),
 });
 
 function Login({ handleLogin }) {
@@ -114,7 +114,7 @@ function Login({ handleLogin }) {
 
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     const decodedToken = jwtDecode(credentialResponse.credential);
-    console.log("Google Login Response:", decodedToken);
+    // console.log("Google Login Response:", decodedToken);
 
     const payload = {
       firstName: decodedToken.given_name,
@@ -122,7 +122,7 @@ function Login({ handleLogin }) {
       email: decodedToken.email,
       profileImage: decodedToken.picture,
     };
-    console.log("Payload :", payload);
+    // console.log("Payload :", payload);
 
     try {
       const response = await userApi.post("/user/signWithGoogle", payload, {
@@ -157,6 +157,7 @@ function Login({ handleLogin }) {
       lastName: response.data.last_name,
       email: response.data.email,
       profileImage: response.data.picture.data.url,
+      loginType: "google",
     };
     console.log("Payload :", payload);
     // try {
@@ -240,14 +241,14 @@ function Login({ handleLogin }) {
                 >
                 </GoogleLogin>
 
-                <LoginSocialFacebook
+                {/* <LoginSocialFacebook
                   appId="386027390559424"
                   onResolve = {handleFaceBookLoginSuccess}
                   onReject={(error) => {
                     console.log(error);
                   }}
                 >
-                  {/* <FacebookLoginButton /> */}
+                
                   <button
                     className="btn text-white px-2 py-1 my-2"
                     style={{ background: "#3b5998", width:"100%"}}
@@ -255,7 +256,7 @@ function Login({ handleLogin }) {
                     <FaSquareFacebook className="text-white me-2 fs-3" />
                     Log in with Facebook
                   </button>
-                </LoginSocialFacebook>
+                </LoginSocialFacebook> */}
               </div>
             </div>
             <div className="row">
@@ -285,14 +286,14 @@ function Login({ handleLogin }) {
                           type="text"
                           className={`form-control  ${
                             formik.touched.username && formik.errors.username
-                              ? "is-invalid"
+                              ? ""
                               : ""
                           }`}
                           {...formik.getFieldProps("username")}
                           placeholder="Enter your email"
                         />
                         {formik.touched.username && formik.errors.username && (
-                          <div className="invalid-feedback">
+                          <div className="text-danger">
                             {formik.errors.username}
                           </div>
                         )}
@@ -309,7 +310,7 @@ function Login({ handleLogin }) {
                           type={showPassword ? "text" : "password"}
                           className={`form-control ${
                             formik.touched.password && formik.errors.password
-                              ? "is-invalid"
+                              ? ""
                               : ""
                           }`}
                           {...formik.getFieldProps("password")}
@@ -321,7 +322,7 @@ function Login({ handleLogin }) {
                             style={{
                               position: "absolute",
                               right: "15px",
-                              top: "calc(50% - 8px)",
+                              top: "calc(45% - 8px)",
                               cursor: "pointer",
                             }}
                           />
@@ -331,13 +332,13 @@ function Login({ handleLogin }) {
                             style={{
                               position: "absolute",
                               right: "15px",
-                              top: "calc(50% - 8px)",
+                              top: "calc(45% - 8px)",
                               cursor: "pointer",
                             }}
                           />
                         )}
                         {formik.touched.password && formik.errors.password && (
-                          <div className="invalid-feedback">
+                          <div className="text-danger">
                             {formik.errors.password}
                           </div>
                         )}

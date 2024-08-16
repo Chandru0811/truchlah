@@ -57,6 +57,9 @@ function User({ handleLogout }) {
               type="button"
               className="btn logoutButton"
               onClick={onLogout}
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Logout"
             >
               <TbLogout />
             </button>

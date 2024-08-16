@@ -30,7 +30,7 @@ function Cancel() {
                       className="btn btn-success my-3"
                       style={{ width: "40%" }}
                     >
-                      Resturn to home
+                      Return to home
                     </button>
                   </Link>
                 </center>
