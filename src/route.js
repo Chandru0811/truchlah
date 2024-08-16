@@ -46,6 +46,7 @@ import RideDetailsView from "./pages/profile/RideDetailsView";
 import Popup from "./pages/profile/Popup";
 // import MapCopy from "./pages/item_shift/Map copy";
 import ChangePassword from "./pages/authorization/ChangePassword";
+import ScrollToTop from "./pages/ScroolToTop";
 
 function UserRoute() {
   AOS.init({
@@ -119,6 +120,7 @@ function UserRoute() {
     <Router>
       <ToastContainer />
       <Head isAdmin={isAdmin} handleLogout={handleLogout} />
+      <ScrollToTop />
       <div style={{ marginTop: "88px" }}>
         <Routes>
           <Route path="/" element={<Home isAdmin={isAdmin} />} />
