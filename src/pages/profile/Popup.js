@@ -17,19 +17,18 @@ function Popup() {
     const [rating, setRating] = useState(null);
     const [hover, setHover] = useState();
     const id = 56;
-
     const [show, setShow] = useState(false);
     const [reviewType, setReviewType] = useState("General");
-
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
     const validationSchema = Yup.object({});
-
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const bookingIdValue = params.get("bookingId");
     const navigate = useNavigate();
+    const handleClose = () => {
+        setShow(false);
+        formik.resetForm();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -49,13 +48,13 @@ function Popup() {
                 if (response.status === 200) {
                     toast.success(response.data.message);
                     // navigate(`/summary/${bookingIdValue}`);
+                    handleClose();
                 } else {
                     toast.error(response.data.message);
                 }
             } catch (error) {
                 toast.error(error.message || 'An error occurred while submitting your review.');
             }
-            handleClose(); // Close modal after submission
         },
     });
 
@@ -166,11 +165,16 @@ function Popup() {
                                 className="btn btn-danger px-5"
                                 onClick={handleClose}
                                 style={{ borderRadius: "20px" }}
+                                type='button'
+
                             >
                                 Cancel
                             </button>
                         </span>
-                        <button className="btn btn-primary px-5 py-2" id="NextMove">
+                        <button
+                            type='submit'
+                            className="btn btn-primary px-5 py-2"
+                            id="NextMove">
                             Submit
                         </button>
                     </Modal.Footer>

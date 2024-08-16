@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "../../styles/custom.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { FaWeightHanging, FaCheckCircle } from "react-icons/fa";
@@ -15,6 +15,7 @@ import VAN2 from "../../asset/2.4M_VAN.png";
 import Lorry10 from "../../asset/10FT_LORRY.png";
 import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
   date: Yup.string().required("Date is required"),
@@ -28,6 +29,7 @@ function Service() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const distanceValue = params.get("distance");
+  console.log("est km", distanceValue)
   const locationValueString = params.get("location");
   const bookingIdValue = params.get("bookingId");
 
@@ -62,11 +64,17 @@ function Service() {
   //   now.setHours(now.getHours() + 3);
   //   return now.toTimeString().split(":").slice(0, 2).join(":");
   // };
+  const getEliglibleTime = () => {
+    const now = new Date();
+    now.setHours(now.getHours() + 3);
+    now.setMinutes(now.getMinutes() + 7);
+    return now.toTimeString().split(":").slice(0, 2).join(":");
+  };
 
   const formik = useFormik({
     initialValues: {
       date: getCurrentDate(),
-      time: getCurrentTime(),
+      time: getEliglibleTime(),
       vechicleTypeId: "",
       driverAsManpower: false,
       extraManpower: false,
@@ -113,7 +121,7 @@ function Service() {
           type: shiftType,
           locationDetail: locationValue,
           bookingId: bookingIdValue,
-          estKm: parseInt(distanceValue),
+          estKm: parseFloat(distanceValue),
           scheduledDate: `${values.date}T${values.time}:00.000Z`,
           deliveryDate: deliveryDate,
           quantity: values.extraManpower ? values.quantity : 0,
@@ -125,14 +133,14 @@ function Service() {
           roundTrip: values.roundTripRequired ? "Y" : "N",
           vehicleType: selectedOption.type,
           promoCode: "",
-          actualKm: totalKilometer,
+          actualKm: parseFloat(distanceValue),
         };
 
         try {
           const response = await bookingApi.post(`booking/update`, payload);
           console.log(response);
           if (response.status === 200) {
-            toast.success(response.data.message);
+            toast.success("Vehicle selected successfully!");
             navigate(`/summary/${bookingIdValue}`);
           } else {
             toast.error(response.data.message);
@@ -212,6 +220,12 @@ function Service() {
       style={{ backgroundColor: "#faf5f6" }}
     >
       <form onSubmit={formik.handleSubmit}>
+        <div className="containers pt-2">
+          <Link to="/map"
+            data-toggle="tooltip" data-placement="bottom" title="Back">
+            <IoArrowBackCircleOutline size={30} />
+          </Link>
+        </div>
         <div className="container">
           <h2 className="text-center my-5 mt-5 pt-5" id="AvaHeading">
             SERVICE
@@ -223,9 +237,8 @@ function Service() {
                 type="date"
                 id="date"
                 name="date"
-                className={`form-control form-control-lg ${
-                  formik.touched.date && formik.errors.date ? "is-invalid" : ""
-                }`}
+                className={`form-control form-control-lg ${formik.touched.date && formik.errors.date ? "is-invalid" : ""
+                  }`}
                 {...formik.getFieldProps("date")}
               />
               {formik.touched.date && formik.errors.date && (
@@ -239,9 +252,8 @@ function Service() {
                 type="time"
                 id="time"
                 name="time"
-                className={`form-control form-control-lg ${
-                  formik.touched.time && formik.errors.time ? "is-invalid" : ""
-                }`}
+                className={`form-control form-control-lg ${formik.touched.time && formik.errors.time ? "is-invalid" : ""
+                  }`}
                 {...formik.getFieldProps("time")}
               />
               {formik.touched.time && formik.errors.time && (
@@ -364,12 +376,11 @@ function Service() {
                         <center>
                           <div className="form-check">
                             <input
-                              className={`form-check-input border-info ${
-                                formik.touched.vechicleTypeId &&
+                              className={`form-check-input border-info ${formik.touched.vechicleTypeId &&
                                 formik.errors.vechicleTypeId
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                                ? "is-invalid"
+                                : ""
+                                }`}
                               type="radio"
                               name="vechicleTypeId"
                               value={item.vechicleTypeId}

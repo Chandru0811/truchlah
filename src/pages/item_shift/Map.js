@@ -49,6 +49,7 @@ function Map() {
   const [duration, setDuration] = useState("");
   const [stops, setStops] = useState([]);
   const userId = sessionStorage.getItem("userId");
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
 
   const navigate = useNavigate();
 
@@ -70,7 +71,7 @@ function Map() {
       try {
         const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
-          toast.success(response.data.message);
+          toast.success("Location has been successfully added!");
           const bookingId = response.data.responseBody.booking.bookingId;
           const locations = encodeURIComponent(JSON.stringify(locationDetail));
           navigate(
@@ -102,50 +103,50 @@ function Map() {
   };
 
   const onPlaceChanged = async (type, index = null) => {
-  let place = null;
-
-  if (type === "origin") {
-    if (origin) {
-      place = origin.getPlace();
-      formik.setFieldValue("pickupLocation", place.formatted_address);
-      handleOpenModal("Pick Up Location");
-    }
-  } else if (type === "destination") {
-    if (destination) {
-      place = destination.getPlace();
-      formik.setFieldValue("dropLocation", place.formatted_address);
-      handleOpenModal("Drop Location");
-    }
-  } else if (type === "stops" && index !== null) {
-    console.log("stop", stops[index]);
-    if (stops[index] && typeof stops[index].getPlace === "function") {
-      place = stops[index].getPlace();
-      if (place && place.formatted_address) {
-        const updatedStops = [...formik.values.stops];
-        updatedStops[index] = place.formatted_address;
-        formik.setFieldValue("stops", updatedStops);
-        handleOpenModal(`${index + 1}`);
-      }
-    }
-  }
-
-  if (place && place.geometry && place.geometry.location) {
-    const location = {
-      lat: place.geometry.location.lat(),
-      lng: place.geometry.location.lng(),
-    };
+    let place = null;
 
     if (type === "origin") {
-      setMarkerPosition(location);
-      setCenter(location);
+      if (origin) {
+        place = origin.getPlace();
+        formik.setFieldValue("pickupLocation", place.formatted_address);
+        handleOpenModal("Pick Up Location");
+      }
     } else if (type === "destination") {
-      setCenter(location);
-      recalculateDirections();
+      if (destination) {
+        place = destination.getPlace();
+        formik.setFieldValue("dropLocation", place.formatted_address);
+        handleOpenModal("Drop Location");
+      }
     } else if (type === "stops" && index !== null) {
-      recalculateDirections();
+      console.log("stop", stops[index]);
+      if (stops[index] && typeof stops[index].getPlace === "function") {
+        place = stops[index].getPlace();
+        if (place && place.formatted_address) {
+          const updatedStops = [...formik.values.stops];
+          updatedStops[index] = place.formatted_address;
+          formik.setFieldValue("stops", updatedStops);
+          handleOpenModal(`${index + 1}`);
+        }
+      }
     }
-  }
-};
+
+    if (place && place.geometry && place.geometry.location) {
+      const location = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      };
+
+      if (type === "origin") {
+        setMarkerPosition(location);
+        setCenter(location);
+      } else if (type === "destination") {
+        setCenter(location);
+        recalculateDirections();
+      } else if (type === "stops" && index !== null) {
+        recalculateDirections();
+      }
+    }
+  };
 
   const handleOpenModal = (title) => {
     setModalTitle(title);
@@ -186,13 +187,13 @@ function Map() {
 
   const handleDeleteStop = (index) => {
     const updatedStops = [...stops];
-    updatedStops.splice(index, 1); 
+    updatedStops.splice(index, 1);
     setStops(updatedStops);
 
     const updatedFormikStops = [...formik.values.stops];
-    updatedFormikStops.splice(index, 1); 
+    updatedFormikStops.splice(index, 1);
     formik.setFieldValue("stops", updatedFormikStops);
-  
+
     recalculateDirections();
   };
 
@@ -212,7 +213,7 @@ function Map() {
           if (stop) {
             const stopPlace = stop.getPlace();
             return {
-              location: { 
+              location: {
                 lat: stopPlace?.geometry?.location.lat(),
                 lng: stopPlace?.geometry?.location.lng()
               },
@@ -261,8 +262,14 @@ function Map() {
                 totalDuration += route.legs[i].duration.value;
               }
               setDirections(result);
-              setDistance(`${(totalDistance / 1000).toFixed(2)} km`);
+              const distanceInKm = (totalDistance / 1000).toFixed(2);
+              setDistance(`${distanceInKm} km`);
               setDuration(`${Math.floor(totalDuration / 60)} mins`);
+              if (distanceInKm === "0.00") {
+                setIsNextButtonDisabled(true);
+              } else {
+                setIsNextButtonDisabled(false);
+              }
             } else {
               console.error(`error fetching directions ${result}`);
             }
@@ -270,7 +277,7 @@ function Map() {
         );
       }
     }
-  }, [center, stops,formik.values.stops]);
+  }, [center, stops, formik.values.stops]);
 
   useEffect(() => {
     recalculateDirections();
@@ -302,7 +309,7 @@ function Map() {
                 mapTypeControl: true,
                 fullscreenControl: true,
               }}
-              // onLoad={map => mapRef.current = map}
+            // onLoad={map => mapRef.current = map}
             >
               {markerPosition ? (
                 <></>
@@ -390,57 +397,60 @@ function Map() {
                       {formik.errors.pickupLocation}
                     </div>
                   )}
-                  {stops.map((stop, index) => (
-                    <Autocomplete
-                      onLoad={onStopLoad(index)}
-                      onPlaceChanged={() => onPlaceChanged("stops", index)}
-                      key={index}
-                      options={{
-                        types: ["(regions)"],
-                        componentRestrictions: { country: ["sg", "in"] },
-                      }}
-                    >
-                      <div className="d-flex align-items-center mt-3">
-                        <Form.Control
-                          id="AddStop"
-                          type="text"
-                          placeholder="Add more stops"
-                          name="stops"
-                          value={formik.values.stops[index]}
-                          onChange={(e) =>
-                            handleStopChange(index, e.target.value)
-                          }
-                          className="form-control rounded-5"
-                          style={{
-                            width: "500px",
-                            height: "50px",
-                            borderRadius: "8px",
-                          }}
-                        />
-                        <FaMinus
-                          className="text-danger"
-                          onClick={() => handleDeleteStop(index)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </div>
-                    </Autocomplete>
-                  ))}
-                  {stops.length < 10 && (
-                    <div className="d-flex justify-content-end">
-                      <button
-                        type="button"
-                        className="btn btn-primary mb-3 "
+                {stops.map((stop, index) => (
+                  <Autocomplete
+                    onLoad={onStopLoad(index)}
+                    onPlaceChanged={() => onPlaceChanged("stops", index)}
+                    key={index}
+                    options={{
+                      types: ["(regions)"],
+                      componentRestrictions: { country: ["sg", "in"] },
+                    }}
+                  >
+                    <div className="d-flex align-items-center mt-3">
+                      <Form.Control
+                        id="AddStop"
+                        type="text"
+                        placeholder="Add more stops"
+                        name="stops"
+                        value={formik.values.stops[index]}
+                        onChange={(e) =>
+                          handleStopChange(index, e.target.value)
+                        }
+                        className="form-control rounded-5"
                         style={{
-                          backgroundColor: "transparent",
-                          color: "red",
-                          border: "none",
+                          width: "500px",
+                          height: "50px",
+                          borderRadius: "8px",
                         }}
-                        onClick={handleAddStop}
-                      >
-                        Add Stop <FaPlus />
-                      </button>
+                      />
+                      <FaMinus
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Remove Stop"
+                        className="text-danger"
+                        onClick={() => handleDeleteStop(index)}
+                        style={{ cursor: "pointer" }}
+                      />
                     </div>
-                  )}
+                  </Autocomplete>
+                ))}
+                {stops.length < 10 && (
+                  <div className="d-flex justify-content-end">
+                    <button
+                      type="button"
+                      className="btn btn-primary mb-3 "
+                      style={{
+                        backgroundColor: "transparent",
+                        color: "red",
+                        border: "none",
+                      }}
+                      onClick={handleAddStop}
+                    >
+                      Add Stop <FaPlus />
+                    </button>
+                  </div>
+                )}
                 <Autocomplete
                   onLoad={onDestinationLoad}
                   onPlaceChanged={() => onPlaceChanged("destination")}
@@ -498,13 +508,14 @@ function Map() {
               <div className="row d-flex flex-column align-items-center justify-content-center">
                 <div className="col-md-4 col-12"></div>
                 <div className="col-md-5 col-12">
-                 
+
 
                   <div className="text-center mt-4">
                     <button
                       type="submit"
                       className="btn btn-primary px-5 py-2 text-center"
                       id="NextMove"
+                      disabled={isNextButtonDisabled}
                     >
                       Next
                     </button>

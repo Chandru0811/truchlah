@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import Ace from "../../asset/Rectangle 42.png";
 import "../../styles/custom.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bookingApi, userApi } from "../../config/URL";
 import VAN1 from "../../asset/1.7M_VAN.png";
@@ -9,6 +9,7 @@ import VAN2 from "../../asset/2.4M_VAN.png";
 import Lorry10 from "../../asset/10FT_LORRY.png";
 import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 function Summary() {
   const [data, setData] = useState({});
@@ -88,6 +89,12 @@ function Summary() {
 
   return (
     <section className="summary">
+      {/* <div className="containers pt-2">
+            <Link to="/map"
+              data-toggle="tooltip" data-placement="bottom" title="Back">
+              <IoArrowBackCircleOutline size={24} />
+            </Link>
+          </div> */}
       {isLoading ? (
         <div className="darksoul-layout">
           <div className="darksoul-grid">
@@ -100,6 +107,10 @@ function Summary() {
         </div>
       ) : (
         <div className="container-fluid pt-5" id="Ace">
+          <Link to="/service"
+            data-toggle="tooltip" data-placement="bottom" title="Back">
+            <IoArrowBackCircleOutline size={30} />
+          </Link>
           <center>
             <h3 style={{ color: "#106EEA" }}>SUMMARY</h3>
           </center>
@@ -122,7 +133,7 @@ function Summary() {
                   ? vechicles.types || "--"
                   : ""
               )}
-              <p>{data?.transactionDetails?.txnRef}</p>
+            <p>{data?.transactionDetails?.txnRef}</p>
           </center>
           <div className="row">
             <div className="col-lg-3"></div>
@@ -177,7 +188,7 @@ function Summary() {
                     <div className="col-md-6 col-12 ps-1" id="drop">
                       <p style={{ color: "#00316B" }}>
                         <span className="col-6" style={{ color: "#00316B" }}>
-                          <b>Drop Address :</b>
+                          <b>Drop Address : </b>
                         </span>
                         <span className="col-6" style={{ color: "#494949" }}>
                           {firstLocation.dropoff || "-"}
@@ -337,7 +348,7 @@ function Summary() {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
@@ -386,11 +397,11 @@ function Summary() {
                     <div className="col-md-6 col-12 ps-1" id="drop">
                       {" "}
                       <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.estKm }
+                        {data.booking?.estKm}
                       </p>
                     </div>
                   </div>
-                 
+
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
