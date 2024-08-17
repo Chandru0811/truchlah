@@ -54,6 +54,7 @@ function UserRoute() {
     delay: 200,
   });
   const [isAdmin, setIsAdmin] = useState(false);
+  const [sessionExpired, setSessionExpired] = useState(false); // New flag
   const token = sessionStorage.getItem("token");
 
   const handleLogin = () => {
@@ -92,8 +93,9 @@ function UserRoute() {
 
     const responseInterceptor = (error) => {
       console.log("Error is", error);
-      if (error.response?.status === 401) {
+      if (error.response?.status === 401 && !sessionExpired) {  // Check the flag
         toast.warning("Session Expired!! Please Login");
+        setSessionExpired(true);  // Set the flag to true after showing the message
         handleLogout();
       }
       return Promise.reject(error);
@@ -114,7 +116,7 @@ function UserRoute() {
       userApi.interceptors.response.eject(userInterceptor);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin]);
+  }, [isAdmin, sessionExpired]);
 
   return (
     <Router>

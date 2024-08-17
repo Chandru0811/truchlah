@@ -15,6 +15,8 @@ function Order() {
   const [isLoaded, setIsLoaded] = useState(true);
   console.log("Data is ", data);
   const userId = sessionStorage.getItem("userId");
+  const shiftType = sessionStorage.getItem("shiftType");
+  console.log("Type:", shiftType);
 
   const houseSection = () => {
     setShowHouseShift(true);
@@ -51,8 +53,8 @@ function Order() {
     const status = showInprogressSection
       ? "INPROGRESS"
       : showCompletedSection
-      ? "COMPLETED"
-      : "CANCELLED";
+        ? "COMPLETED"
+        : "CANCELLED";
 
     const shiftType = showHouseShift ? "HOUSE" : "ITEM";
 
@@ -106,6 +108,7 @@ function Order() {
               className={`mx-3 ${showHouseShift ? "underline" : ""}`}
               id="shift-btn"
               onClick={houseSection}
+              type="button"
             >
               HOUSE SHIFT
             </button>
@@ -160,75 +163,82 @@ function Order() {
           <div className="container-fluid">
             {data.length > 0 ? (
               data.map((item, index) => (
-                <Link
-                  to={`/ridedetailsview/${item.booking.bookingId}`}
-                  style={{ textDecoration: "none", color: "black" }}
-                  key={index}
-                >
-                  <div className="container py-4">
-                    <div className="row" id="on">
-                      <div className="col-lg-10 col-md-6 col-12 p-3">
-                        <p>
-                          {vehicleNameMap[item.booking.vehicletypeId] ||
-                            "Unknown Vehicle"}
-                        </p>
-                        <p
-                          style={{
-                            color: showInprogressSection
-                              ? "orange" // Yellow color for INPROGRESS
+                <>
+                  <Link
+                    to={`/ridedetailsview/${item.booking.bookingId}`}
+                    style={{ textDecoration: "none", color: "black" }}
+                    key={index}
+                  >
+                    <div className="container py-4">
+                      <div className="row" id="on">
+                        <div className="col-lg-10 col-md-6 col-12 p-3">
+                          <p className=" fw-medium">
+                            Booking Id : {item.booking.bookingId ||
+                              "Unknown Booking Id"}
+                          </p>
+                          <p>
+                            {vehicleNameMap[item.booking.vehicletypeId] ||
+                              "Unknown Vehicle"}
+                          </p>
+                          <p
+                            style={{
+                              color: showInprogressSection
+                                ? "orange" // Yellow color for INPROGRESS
+                                : showCompletedSection
+                                  ? "green" // Green color for COMPLETED
+                                  : "red", // Red color for CANCELLED
+                            }}
+                          >
+                            {showInprogressSection
+                              ? "IN PROGRESS"
                               : showCompletedSection
-                              ? "green" // Green color for COMPLETED
-                              : "red", // Red color for CANCELLED
-                          }}
-                        >
-                          {showInprogressSection
-                            ? "IN PROGRESS"
-                            : showCompletedSection
-                            ? "COMPLETED"
-                            : "CANCELLED"}
-                        </p>
+                                ? "COMPLETED"
+                                : "CANCELLED"}
+                          </p>
 
-                        <p style={{ marginTop: "0", marginBottom: "0" }}>
-                          <span className="dot1"></span>
-                          &nbsp;&nbsp;&nbsp;
-                          {item.bookingTripLocations?.[0]?.pickup}
-                          <br />
-                          <span className="line"></span>
-                        </p>
-                        {item.bookingTripLocations?.map((location, index) => (
-                          <div key={index}>
-                            {index > 0 && (
-                              <div className="line-container">
-                                <span className="line"></span>
-                              </div>
-                            )}
-                            <p
-                              key={index}
-                              style={{ marginTop: "0", marginBottom: "0" }}
-                            >
-                              <span
-                                className="dot2"
-                                style={{
-                                  backgroundColor:
-                                    colors[index % colors.length],
-                                }}
-                              ></span>
-                              &nbsp;&nbsp;&nbsp;{location.dropoff}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="col-lg-2 col-md-6 col-12 p-3">
-                        <p className="ps-5 pt-2">
-                          <FaDollarSign />{" "}
-                          {item.transactionDetails?.txnAmount.toFixed(2) ||
-                            "0.00"}
-                          <br />
-                        </p>
+                          <p style={{ marginTop: "0", marginBottom: "0" }}>
+                            <span className="dot1"></span>
+                            &nbsp;&nbsp;&nbsp;
+                            {item.bookingTripLocations?.[0]?.pickup}
+                            <br />
+                            <span className="line"></span>
+                          </p>
+                          {item.bookingTripLocations?.map((location, index) => (
+                            <div key={index}>
+                              {index > 0 && (
+                                <div className="line-container">
+                                  <span className="line"></span>
+                                </div>
+                              )}
+                              <p
+                                key={index}
+                                style={{ marginTop: "0", marginBottom: "0" }}
+                              >
+                                <span
+                                  className="dot2"
+                                  style={{
+                                    backgroundColor:
+                                      colors[index % colors.length],
+                                  }}
+                                ></span>
+                                &nbsp;&nbsp;&nbsp;{location.dropoff}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="col-lg-2 col-md-6 col-12 p-3">
+                          <p className="ps-5 pt-2">
+                            <FaDollarSign />{" "}
+                            {item.transactionDetails?.txnAmount.toFixed(2) ||
+                              "0.00"}
+                            <br />
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
+
+                  </Link>
+                </>
               ))
             ) : (
               <div className="container py-4">

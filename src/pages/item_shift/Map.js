@@ -62,12 +62,25 @@ function Map() {
     validationSchema: validationSchema,
 
     onSubmit: async (values) => {
+      // Find the index of the drop location
+      const dropIndex = locationDetail.findIndex(location => location.state === "drop");
+
+      if (dropIndex !== -1) {
+        // Remove the drop location from its current position
+        const dropLocation = locationDetail.splice(dropIndex, 1)[0];
+
+        // Add the drop location to the end of the array
+        locationDetail.push(dropLocation);
+      }
+
       const payload = {
         userId: userId,
         type: shiftType,
         locationDetail: locationDetail,
       };
+
       console.log("Form values:", payload);
+
       try {
         const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
@@ -81,10 +94,43 @@ function Map() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "An error occurred while submitting the form.");
       }
     },
   });
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     pickupLocation: "",
+  //     dropLocation: "",
+  //     stops: [""],
+  //   },
+  //   validationSchema: validationSchema,
+
+  //   onSubmit: async (values) => {
+  //     const payload = {
+  //       userId: userId,
+  //       type: shiftType,
+  //       locationDetail: locationDetail,
+  //     };
+  //     console.log("Form values:", payload);
+  //     try {
+  //       const response = await bookingApi.post(`booking/create`, payload);
+  //       if (response.status === 200) {
+  //         toast.success("Location has been successfully added!");
+  //         const bookingId = response.data.responseBody.booking.bookingId;
+  //         const locations = encodeURIComponent(JSON.stringify(locationDetail));
+  //         navigate(
+  //           `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+  //         );
+  //       } else {
+  //         toast.error(response.data.message);
+  //       }
+  //     } catch (error) {
+  //       toast.error(error);
+  //     }
+  //   },
+  // });
 
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
@@ -414,15 +460,14 @@ function Map() {
                         placeholder="Add more stops"
                         name="stops"
                         value={formik.values.stops[index]}
-                        onChange={(e) =>
-                          handleStopChange(index, e.target.value)
-                        }
-                        className="form-control rounded-5"
+                        onChange={(e) => handleStopChange(index, e.target.value)}
+                        className="form-control rounded-5 mx-2"
                         style={{
                           width: "500px",
                           height: "50px",
                           borderRadius: "8px",
                         }}
+                        disabled={!formik.values.pickupLocation}
                       />
                       <FaMinus
                         data-toggle="tooltip"
@@ -435,17 +480,19 @@ function Map() {
                     </div>
                   </Autocomplete>
                 ))}
+
                 {stops.length < 10 && (
                   <div className="d-flex justify-content-end">
                     <button
                       type="button"
-                      className="btn btn-primary mb-3 "
+                      className="btn btn-primary mb-3"
                       style={{
                         backgroundColor: "transparent",
                         color: "red",
                         border: "none",
                       }}
                       onClick={handleAddStop}
+                      disabled={!formik.values.pickupLocation}
                     >
                       Add Stop <FaPlus />
                     </button>
