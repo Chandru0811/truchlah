@@ -43,6 +43,10 @@ function Summary() {
 
   const bookingTripLocations = data.bookingTripLocations || [];
   const firstLocation = bookingTripLocations[0] || {};
+  const lastLocation =
+    bookingTripLocations[bookingTripLocations.length - 1] || {};
+
+  console.log("First Location:", firstLocation);
 
   const vehicleImages = {
     1: <img src={VAN1} alt="Ace" className="img-fluid mt-3" />,
@@ -107,8 +111,12 @@ function Summary() {
         </div>
       ) : (
         <div className="container-fluid pt-5" id="Ace">
-          <Link to="/service"
-            data-toggle="tooltip" data-placement="bottom" title="Back">
+          <Link
+            to="/service"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Back"
+          >
             <IoArrowBackCircleOutline size={30} />
           </Link>
           <center>
@@ -139,7 +147,7 @@ function Summary() {
             <div className="col-lg-3"></div>
             <div className="col-lg-9">
               <p className="mt-5 ps-2">
-                <b>Address :</b>
+                <b>Shifting Informations :</b>
               </p>
             </div>
           </div>
@@ -191,7 +199,7 @@ function Summary() {
                           <b>Drop Address : </b>
                         </span>
                         <span className="col-6" style={{ color: "#494949" }}>
-                          {firstLocation.dropoff || "-"}
+                          {lastLocation.dropoff || "-"}
                         </span>
                       </p>
                       <p>
@@ -199,7 +207,7 @@ function Summary() {
                           <b>Name :</b>{" "}
                         </span>
                         <span style={{ color: "#494949" }}>
-                          {firstLocation.dropoffContactName || "--"}
+                          {lastLocation.dropoffContactName || "--"}
                         </span>
                       </p>
                       <p>
@@ -207,7 +215,7 @@ function Summary() {
                           <b>Address :</b>{" "}
                         </span>
                         <span style={{ color: "#494949" }}>
-                          {firstLocation.dropoffAddress || "--"}
+                          {lastLocation.dropoffAddress || "--"}
                         </span>
                       </p>
                       <p>
@@ -215,19 +223,72 @@ function Summary() {
                           <b>Contact: </b>
                         </span>
                         <span style={{ color: "#494949" }}>
-                          {firstLocation.dropoffMobile || "--"}
+                          {lastLocation.dropoffMobile || "--"}
                         </span>
                       </p>
                     </div>
                   </div>
 
                   <>
-                    {data?.bookingTripLocations &&
+                    {/* {data?.bookingTripLocations &&
                       data?.bookingTripLocations.length > 1 &&
                       data.bookingTripLocations
                         .filter((_, index) => index !== 0) // Exclude the first index
                         .map((stop, index) => (
                           <div className="row" key={index}>
+                            <div className="col-md-6 col-12 ps-1">
+                              <div>
+                                <p
+                                  className="line"
+                                  style={{ color: "#00316B" }}
+                                >
+                                  <b>Stop {index + 1}</b>
+                                </p>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12 ps-1" id="drop">
+                              <p className="line">
+                                <span style={{ color: "#00316B" }}>
+                                  <b>Name :</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {stop.dropoffContactName || "--"}
+                                </span>
+                              </p>
+                              <p>
+                                <span style={{ color: "#00316B" }}>
+                                  <b>Address :</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {stop.dropoffAddress || "N/A"}
+                                </span>
+                              </p>
+                              <p>
+                                <span style={{ color: "#00316B" }}>
+                                  <b>Contact: </b>
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {stop.dropoffMobile || "N/A"}
+                                </span>
+                              </p>
+                              <p>
+                                <span style={{ color: "#00316B" }}>
+                                  <b>Location: </b>
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {stop.dropoff || "N/A"}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        ))} */}
+
+                    {/* Other Stops */}
+                    {bookingTripLocations.length > 1 &&
+                      bookingTripLocations
+                        .slice(0, -1) // Exclude the first and last index
+                        .map((stop, index) => (
+                          <div className="row" key={stop.btLocId}>
                             <div className="col-md-6 col-12 ps-1">
                               <div>
                                 <p
@@ -299,10 +360,9 @@ function Summary() {
                         </div>
                       </div>
                       <div className="col-md-6 col-12 ps-1" id="drop">
-                        {" "}
-                        <p className="line" style={{ color: "#494949" }}>
+                      <p className="line" style={{ color: "#494949" }}>
                           {data?.booking?.scheduledDate
-                            ? data.booking.scheduledDate.substring(0, 10)
+                            ? `${data.booking.scheduledDate.substring(0, 10)} & ${data.booking.scheduledDate.substring(11, 16)}`
                             : "N/A"}
                         </p>
                       </div>

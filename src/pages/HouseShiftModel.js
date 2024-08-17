@@ -12,13 +12,9 @@ const validationSchema = Yup.object().shape({
   countryCode: Yup.string().required("*Country Code is required"),
   mobile: Yup.string()
     .required("Mobile number is required")
+    .matches(/^\d+$/, "Mobile number must contain only digits")
     .test("phone-length", function (value) {
       const { countryCode } = this.parent;
-      if (value && /\s/.test(value)) {
-        return this.createError({
-          message: "Phone number should not contain spaces",
-        });
-      }
       if (countryCode === "65") {
         return value && value.length === 8
           ? true
@@ -34,6 +30,7 @@ const validationSchema = Yup.object().shape({
       return true;
     }),
 });
+
 
 function HouseShiftModel({
   show,
