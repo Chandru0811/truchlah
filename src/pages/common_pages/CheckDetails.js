@@ -360,10 +360,22 @@ function Summary() {
                         </div>
                       </div>
                       <div className="col-md-6 col-12 ps-1" id="drop">
-                      <p className="line" style={{ color: "#494949" }}>
-                          {data?.booking?.scheduledDate
-                            ? `${data.booking.scheduledDate.substring(0, 10)} & ${data.booking.scheduledDate.substring(11, 16)}`
-                            : "N/A"}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data?.booking?.scheduledDate ? (
+                            <>
+                              {data.booking.scheduledDate.substring(0, 10)}{" "}
+                              <b>&</b>{" "}
+                              {new Date(
+                                data.booking.scheduledDate
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              })}
+                            </>
+                          ) : (
+                            " "
+                          )}
                         </p>
                       </div>
                     </div>
@@ -398,6 +410,19 @@ function Summary() {
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
+                        <b>Extra ManPower Quantity</b>
+                      </p>
+                    </div>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        {data.booking?.quantity || 0}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <p className="line" style={{ color: "#00316B" }}>
                         <b>Trolly Required</b>
                       </p>
                     </div>
@@ -422,20 +447,8 @@ function Summary() {
                       </p>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
-                        <b>Quantity</b>
-                      </p>
-                    </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.quantity || 0}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="row">
+
+                  {/* <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
                         <b>No Of Pieces</b>
@@ -447,7 +460,7 @@ function Summary() {
                         {data.booking?.noOfPieces || 0}
                       </p>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
@@ -475,6 +488,20 @@ function Summary() {
                         {data.transactionDetails
                           ? ` ${data.transactionDetails.txnAmount.toFixed(2)} `
                           : "0.00"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <p className="line" style={{ color: "#00316B" }}>
+                        <b>Message To Driver</b>
+                      </p>
+                    </div>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        <b>$</b>
+                        {data.booking ? ` ${data.booking.msgToDriver}` : " "}
                       </p>
                     </div>
                   </div>

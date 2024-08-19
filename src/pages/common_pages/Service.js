@@ -454,7 +454,7 @@ function Service() {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-12 mb-3">
+            {/* <div className="col-md-6 col-12 mb-3">
               <div
                 className="d-flex justify-content-between p-3"
                 style={{
@@ -505,6 +505,33 @@ function Service() {
                   >
                     <FaPlus style={{ fontSize: "8px" }} />
                   </button>
+                </div>
+              </div>
+            </div> */}
+           
+
+            <div className="col-md-6 col-12 mb-3">
+              <div
+                className="d-flex justify-content-between p-3"
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                  alignItems: "center",
+                }}
+              >
+                <span>
+                  <b>Trolly Required</b>
+                </span>
+                <div class="form-check">
+                  <input
+                    class="form-check-input border-info"
+                    type="checkbox"
+                    value={true}
+                    id="flexCheckChecked"
+                    name="trollyRequired"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
                 </div>
               </div>
             </div>
@@ -563,32 +590,6 @@ function Service() {
                   </div>
                 </div>
               )}
-            </div>
-
-            <div className="col-md-6 col-12 mb-3">
-              <div
-                className="d-flex justify-content-between p-3"
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                  alignItems: "center",
-                }}
-              >
-                <span>
-                  <b>Trolly Required</b>
-                </span>
-                <div class="form-check">
-                  <input
-                    class="form-check-input border-info"
-                    type="checkbox"
-                    value={true}
-                    id="flexCheckChecked"
-                    name="trollyRequired"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </div>
-              </div>
             </div>
             <div className="col-md-6 col-12 mb-3">
               <div

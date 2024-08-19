@@ -19,11 +19,13 @@ function Order() {
   console.log("Type:", shiftType);
 
   const houseSection = () => {
+    setIsLoaded(true); // Show loader when clicking on HOUSE SHIFT
     setShowHouseShift(true);
     setShowItemShift(false);
   };
 
   const itemSection = () => {
+    setIsLoaded(true); // Show loader when clicking on ITEM SHIFT
     setShowItemShift(true);
     setShowHouseShift(false);
   };

@@ -42,7 +42,7 @@ function RideDetailsView() {
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formik = useFormik({
@@ -159,11 +159,46 @@ function RideDetailsView() {
           </center>
           <div className="row">
             <div className="col-lg-3"></div>
-            <div className="col-lg-9">
+            <div className="col-lg-6">
               <p className="mt-5 ps-2">
-                <b>Vehicle :</b>
+                <div className="d-flex justify-content-between">
+                  <b>Vehicle :</b>
+                  {/* <span
+                    className={`text-white rounded-3 p-1 ${
+                      data.bookingStatus?.status === "CANCELLED"
+                        ? "bg-danger"
+                        : data.bookingStatus?.status === "BOOKED"
+                        ? "bg-warning"
+                        : data.bookingStatus?.status === "DRAFT_BOOKING"
+                        ? "bg-info"
+                        : data.bookingStatus?.status === "COMPLETED"
+                        ? "bg-primary"
+                        : ""
+                    }`}
+                  >
+                    {data.bookingStatus?.status}
+                  </span> */}
+                  <div
+                    className={`custom-price-tag ${
+                      data.bookingStatus?.status === "CANCELLED"
+                        ? "custom-bg-danger"
+                        : data.bookingStatus?.status === "BOOKED"
+                        ? "custom-bg-warning"
+                        : data.bookingStatus?.status === "DRAFT_BOOKING"
+                        ? "custom-bg-info"
+                        : data.bookingStatus?.status === "COMPLETED"
+                        ? "custom-bg-primary"
+                        : "custom-bg-secondary" /* Default color */
+                    }`}
+                  >
+                    <span className="custom-price-amount">
+                      {data.bookingStatus?.status || "--"}
+                    </span>
+                  </div>
+                </div>
               </p>
             </div>
+            <div className="col-lg-3"></div>
           </div>
           <center>
             {vehicleImages[data.booking?.vehicletypeId] || null}
@@ -176,13 +211,13 @@ function RideDetailsView() {
                   ? vechicles.types || "--"
                   : ""
               )}
-              <p>{data.transactionDetails?.txnRef}</p>
+            <p>{data.transactionDetails?.txnRef}</p>
           </center>
           <div className="row">
             <div className="col-lg-3"></div>
             <div className="col-lg-9">
               <p className="mt-5 ps-2">
-                <b>Address :</b>
+                <b>Shifting Informations :</b>
               </p>
             </div>
           </div>
@@ -340,11 +375,22 @@ function RideDetailsView() {
                         </div>
                       </div>
                       <div className="col-md-6 col-12 ps-1" id="drop">
-                        {" "}
-                        <p className="line" style={{ color: "#494949" }}>
-                          {data?.booking?.scheduledDate
-                            ? data.booking.scheduledDate.substring(0, 10)
-                            : "--"}
+                      <p className="line" style={{ color: "#494949" }}>
+                          {data?.booking?.scheduledDate ? (
+                            <>
+                              {data.booking.scheduledDate.substring(0, 10)}{" "}
+                              <b>&</b>{" "}
+                              {new Date(
+                                data.booking.scheduledDate
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              })}
+                            </>
+                          ) : (
+                            " "
+                          )}
                         </p>
                       </div>
                     </div>
@@ -401,6 +447,19 @@ function RideDetailsView() {
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
+                        <b>Extra ManPower Quantity</b>
+                      </p>
+                    </div>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        {data.booking?.quantity || 0}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <p className="line" style={{ color: "#00316B" }}>
                         <b>Trolly Required</b>
                       </p>
                     </div>
@@ -424,20 +483,8 @@ function RideDetailsView() {
                       </p>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
-                        <b>Quantity</b>
-                      </p>
-                    </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.quantity || 0}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="row">
+                  
+                  {/* <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
                         <b>No of Pieces</b>
@@ -449,7 +496,7 @@ function RideDetailsView() {
                         {data.booking?.noOfPieces || 0}
                       </p>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
@@ -479,9 +526,95 @@ function RideDetailsView() {
                       </p>
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="col-md-6 col-12 ps-1">
+                      <p className="line" style={{ color: "#00316B" }}>
+                        <b>Message To Driver</b>
+                      </p>
+                    </div>
+                    <div className="col-md-6 col-12 ps-1" id="drop">
+                      {" "}
+                      <p className="line" style={{ color: "#494949" }}>
+                        {data.booking ? ` ${data.booking.msgToDriver}` : " "}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {data.bookingStatus?.status === "CANCELLED" && (
+              <>
+                <div className="row">
+                  <div className="col-lg-3"></div>
+                  <div className="col-lg-9">
+                    <p className="mt-5 ps-2">
+                      <b>Cancelled Detail:</b>
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-center my-2 ">
+                  <div className="card w-50">
+                    <div className="card-body py-0">
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
+                              <b>Cancelled By</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 ps-1" id="drop">
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.bookingStatus?.cancelledBy || "--"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
+                              <b>Cancelled Date</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="col-md-6 col-12 ps-1 line"
+                          id="drop"
+                          style={{ borderBottom: "1px solid #e4e2e2" }}
+                        >
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.bookingStatus?.cancelledDate
+                              ? data.bookingStatus.cancelledDate.substring(
+                                  0,
+                                  10
+                                )
+                              : "--"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
+                              <b>Comments</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-12 col-12 ps-1">
+                          <p style={{ color: "#4949491" }}>
+                            {data?.bookingStatus?.comments
+                              ? data.bookingStatus.comments
+                              : " "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
             <div className="my-3 d-flex justify-content-center">
               {data.bookingStatus?.status === "COMPLETED" ||
                 (data.bookingStatus?.status === "CANCELLED" &&

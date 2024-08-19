@@ -50,6 +50,7 @@ function Map() {
   const [stops, setStops] = useState([]);
   const userId = sessionStorage.getItem("userId");
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const navigate = useNavigate();
 
@@ -63,74 +64,88 @@ function Map() {
 
     onSubmit: async (values) => {
       // Find the index of the drop location
-      const dropIndex = locationDetail.findIndex(location => location.state === "drop");
+      // const dropIndex = locationDetail.findIndex(location => location.state === "drop");
 
-      if (dropIndex !== -1) {
-        // Remove the drop location from its current position
-        const dropLocation = locationDetail.splice(dropIndex, 1)[0];
+      // if (dropIndex !== -1) {
+      //   // Remove the drop location from its current position
+      //   const dropLocation = locationDetail.splice(dropIndex, 1)[0];
 
-        // Add the drop location to the end of the array
-        locationDetail.push(dropLocation);
-      }
+      //   // Add the drop location to the end of the array
+      //   locationDetail.push(dropLocation);
+      // }
 
-      const payload = {
-        userId: userId,
-        type: shiftType,
-        locationDetail: locationDetail,
-      };
+      // const payload = {
+      //   userId: userId,
+      //   type: shiftType,
+      //   locationDetail: locationDetail,
+      // };
 
-      console.log("Form values:", payload);
+      // console.log("Form values:", payload);
 
-      try {
-        const response = await bookingApi.post(`booking/create`, payload);
-        if (response.status === 200) {
-          toast.success("Location has been successfully added!");
-          const bookingId = response.data.responseBody.booking.bookingId;
-          const locations = encodeURIComponent(JSON.stringify(locationDetail));
-          navigate(
-            `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-          );
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error(error.message || "An error occurred while submitting the form.");
-      }
+      // try {
+      //   const response = await bookingApi.post(`booking/create`, payload);
+      //   if (response.status === 200) {
+      //     toast.success("Location has been successfully added!");
+      //     const bookingId = response.data.responseBody.booking.bookingId;
+      //     const locations = encodeURIComponent(JSON.stringify(locationDetail));
+      //     navigate(
+      //       `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+      //     );
+      //   } else {
+      //     toast.error(response.data.message);
+      //   }
+      // } catch (error) {
+      //   toast.error(error.message || "An error occurred while submitting the form.");
+      // }
+      SubmitLocation();
     },
   });
 
-  // const formik = useFormik({
-  //   initialValues: {
-  //     pickupLocation: "",
-  //     dropLocation: "",
-  //     stops: [""],
-  //   },
-  //   validationSchema: validationSchema,
+  const SubmitLocation = async () => {
+    const dropIndex = locationDetail.findIndex(
+      (location) => location.state === "drop"
+    );
 
-  //   onSubmit: async (values) => {
-  //     const payload = {
-  //       userId: userId,
-  //       type: shiftType,
-  //       locationDetail: locationDetail,
-  //     };
-  //     console.log("Form values:", payload);
-  //     try {
-  //       const response = await bookingApi.post(`booking/create`, payload);
-  //       if (response.status === 200) {
-  //         toast.success("Location has been successfully added!");
-  //         const bookingId = response.data.responseBody.booking.bookingId;
-  //         const locations = encodeURIComponent(JSON.stringify(locationDetail));
-  //         navigate(
-  //           `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-  //         );
-  //       } else {
-  //         toast.error(response.data.message);
-  //       }
-  //     } catch (error) {
-  //       toast.error(error);
-  //     }
-  //   },
-  // });
+    if (dropIndex !== -1) {
+      // Remove the drop location from its current position
+      const dropLocation = locationDetail.splice(dropIndex, 1)[0];
+
+      // Add the drop location to the end of the array
+      locationDetail.push(dropLocation);
+    }
+
+    const payload = {
+      userId: userId,
+      type: shiftType,
+      locationDetail: locationDetail,
+    };
+
+    console.log("Form values:", payload);
+    setLoadIndicator(true);
+    setIsNextButtonDisabled(true);
+    try {
+      const response = await bookingApi.post(`booking/create`, payload);
+      if (response.status === 200) {
+        toast.success("Location has been successfully added!");
+        const bookingId = response.data.responseBody.booking.bookingId;
+        const locations = encodeURIComponent(JSON.stringify(locationDetail));
+        navigate(
+          `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+        );
+      } else {
+        toast.error(response.data.message);
+        // toast.warning("Pleas Enter the Locations");
+      }
+    } catch (error) {
+      // toast.error(
+      //   error.message || "An error occurred while submitting the form."
+      // );
+      toast.warning("Pleas Enter the Locations");
+    } finally {
+      setLoadIndicator(false);
+      setIsNextButtonDisabled(false);
+    }
+  };
 
   const onOriginLoad = (autocomplete) => {
     setOrigin(autocomplete);
@@ -154,17 +169,24 @@ function Map() {
     if (type === "origin") {
       if (origin) {
         place = origin.getPlace();
-        formik.setFieldValue("pickupLocation", place.formatted_address);
-        handleOpenModal("Pick Up Location");
+        if (place && place.formatted_address) {
+          formik.setFieldValue("pickupLocation", place.formatted_address);
+          handleOpenModal("Pick Up Location");
+        } else {
+          toast.warning("Please select a valid pickup location.");
+        }
       }
     } else if (type === "destination") {
       if (destination) {
         place = destination.getPlace();
-        formik.setFieldValue("dropLocation", place.formatted_address);
-        handleOpenModal("Drop Location");
+        if (place && place.formatted_address) {
+          formik.setFieldValue("dropLocation", place.formatted_address);
+          handleOpenModal("Drop Location");
+        } else {
+          toast.warning("Please select a valid drop location.");
+        }
       }
     } else if (type === "stops" && index !== null) {
-      console.log("stop", stops[index]);
       if (stops[index] && typeof stops[index].getPlace === "function") {
         place = stops[index].getPlace();
         if (place && place.formatted_address) {
@@ -172,6 +194,8 @@ function Map() {
           updatedStops[index] = place.formatted_address;
           formik.setFieldValue("stops", updatedStops);
           handleOpenModal(`${index + 1}`);
+        } else {
+          toast.warning("Please select a valid stop location.");
         }
       }
     }
@@ -261,7 +285,7 @@ function Map() {
             return {
               location: {
                 lat: stopPlace?.geometry?.location.lat(),
-                lng: stopPlace?.geometry?.location.lng()
+                lng: stopPlace?.geometry?.location.lng(),
               },
               stopover: true,
             };
@@ -299,7 +323,7 @@ function Map() {
           },
           (result, status) => {
             if (status === window.google.maps.DirectionsStatus.OK) {
-              setDirections(null)
+              setDirections(null);
               const route = result.routes[0];
               let totalDistance = 0;
               let totalDuration = 0;
@@ -355,7 +379,7 @@ function Map() {
                 mapTypeControl: true,
                 fullscreenControl: true,
               }}
-            // onLoad={map => mapRef.current = map}
+              // onLoad={map => mapRef.current = map}
             >
               {markerPosition ? (
                 <></>
@@ -460,7 +484,9 @@ function Map() {
                         placeholder="Add more stops"
                         name="stops"
                         value={formik.values.stops[index]}
-                        onChange={(e) => handleStopChange(index, e.target.value)}
+                        onChange={(e) =>
+                          handleStopChange(index, e.target.value)
+                        }
                         className="form-control rounded-5 mx-2"
                         style={{
                           width: "500px",
@@ -555,15 +581,20 @@ function Map() {
               <div className="row d-flex flex-column align-items-center justify-content-center">
                 <div className="col-md-4 col-12"></div>
                 <div className="col-md-5 col-12">
-
-
                   <div className="text-center mt-4">
                     <button
-                      type="submit"
+                      type="button"
+                      onClick={SubmitLocation}
                       className="btn btn-primary px-5 py-2 text-center"
                       id="NextMove"
-                      disabled={isNextButtonDisabled}
+                      disabled={ isNextButtonDisabled && loadIndicator }
                     >
+                      {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
                       Next
                     </button>
                   </div>

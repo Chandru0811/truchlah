@@ -180,7 +180,7 @@ function Service() {
       <form onSubmit={formik.handleSubmit}>
         <div className="container">
           <h2 className="text-center my-5 mt-5 pt-5" id="AvaHeading">
-            SERVICE
+            SERVICE fsdf
           </h2>
 
           <div className="form-group d-flex justify-content-center">

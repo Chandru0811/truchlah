@@ -40,3 +40,62 @@
 .content {
   margin-top: 78px;
 }
+
+/* Base styles for the custom price tag */
+.custom-price-tag {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 50px; /* Creates a pill shape */
+  color: white; /* Text color */
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Custom styles for the price amount */
+.custom-price-amount {
+  position: relative;
+  z-index: 1; /* Ensures text stays above the pseudo-element */
+}
+
+/* Adding a decorative ribbon effect */
+.custom-price-tag::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background-color: rgba(255, 255, 255, 0.1); /* Light overlay */
+  transform: translate(-50%, -50%) rotate(45deg);
+  z-index: 0;
+}
+
+/* Add shadow to give it a 3D effect */
+.custom-price-tag {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom background colors based on booking statuses */
+.custom-bg-danger {
+  background-color: #e63946 !important;
+}
+
+.custom-bg-warning {
+  background-color: #ffba08 !important;
+}
+
+.custom-bg-info {
+  background-color: #00afb9 !important;
+}
+
+.custom-bg-primary {
+  background-color: #0077b6 !important;
+}
+
+.custom-bg-secondary {
+  background-color: #adb5bd !important; /* Default color */
+}
+
