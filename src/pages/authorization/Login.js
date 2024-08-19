@@ -121,6 +121,7 @@ function Login({ handleLogin }) {
       lastName: decodedToken.family_name,
       email: decodedToken.email,
       profileImage: decodedToken.picture,
+      loginType: "google",
     };
     // console.log("Payload :", payload);
 
