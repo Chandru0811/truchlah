@@ -58,7 +58,7 @@ function Map() {
     initialValues: {
       pickupLocation: "",
       dropLocation: "",
-      stops: [""],
+      stops: [],
     },
     validationSchema: validationSchema,
 
@@ -250,7 +250,12 @@ function Map() {
     }
   }, []);
 
+  console.log("object",formik.values.stops)
   const handleAddStop = () => {
+    if (formik.values.stops.length > 0 && formik.values.stops[formik.values.stops.length - 1] === "") {
+      toast.warning("Please fill in the previous stop before adding a new one.");
+      return;
+    }
     setStops([...stops, ""]);
     formik.setFieldValue("stops", [...formik.values.stops, ""]);
   };
@@ -379,7 +384,7 @@ function Map() {
                 mapTypeControl: true,
                 fullscreenControl: true,
               }}
-              // onLoad={map => mapRef.current = map}
+            // onLoad={map => mapRef.current = map}
             >
               {markerPosition ? (
                 <></>
@@ -587,7 +592,7 @@ function Map() {
                       onClick={SubmitLocation}
                       className="btn btn-primary px-5 py-2 text-center"
                       id="NextMove"
-                      disabled={ isNextButtonDisabled && loadIndicator }
+                      disabled={isNextButtonDisabled || loadIndicator}
                     >
                       {loadIndicator && (
                         <span

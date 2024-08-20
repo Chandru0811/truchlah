@@ -38,7 +38,7 @@ import Refer from "./pages/profile/Refer&Earn";
 import Map from "./pages/item_shift/Map";
 // import MapCopy from "./pages/item_shift/Map copy";
 import Priceing from "./pages/Priceing";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // import axios from "axios";
 import { bookingApi, userApi } from "./config/URL";
 import Price from "./pages/Price";
@@ -53,8 +53,9 @@ function UserRoute() {
     duration: 800,
     delay: 200,
   });
+
   const [isAdmin, setIsAdmin] = useState(false);
-  const [sessionExpired, setSessionExpired] = useState(false); // New flag
+  const sessionExpired = useRef(false);  // Use useRef for persistent flag
   const token = sessionStorage.getItem("token");
 
   const handleLogin = () => {
@@ -67,12 +68,12 @@ function UserRoute() {
       jwtToken: token,
     };
     try {
-      const response = await userApi.post(`user/logout`, payload);
+      const response = await userApi.post('user/logout', payload);
       if (response.status === 200) {
         toast.success(response.data.message);
       }
     } catch (error) {
-      console.log("Error");
+      console.log("Error", error);
     }
 
     sessionStorage.removeItem("userId");
@@ -93,15 +94,14 @@ function UserRoute() {
 
     const responseInterceptor = (error) => {
       console.log("Error is", error);
-      if (error.response?.status === 401 && !sessionExpired) {  // Check the flag
+      if (error.response?.status === 401 && !sessionExpired.current) {
         toast.warning("Session Expired!! Please Login");
-        setSessionExpired(true);  // Set the flag to true after showing the message
+        sessionExpired.current = true;
         handleLogout();
       }
       return Promise.reject(error);
     };
 
-    // Add the interceptor to both APIs
     const bookingInterceptor = bookingApi.interceptors.response.use(
       (response) => response,
       responseInterceptor
@@ -116,11 +116,11 @@ function UserRoute() {
       userApi.interceptors.response.eject(userInterceptor);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin, sessionExpired]);
+  }, [isAdmin]);
 
   return (
     <Router>
-      <ToastContainer />
+      <ToastContainer position="top-center" />
       <Head isAdmin={isAdmin} handleLogout={handleLogout} />
       <ScrollToTop />
       <div style={{ marginTop: "88px" }}>

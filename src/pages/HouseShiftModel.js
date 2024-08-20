@@ -24,8 +24,8 @@ const validationSchema = Yup.object().shape({
         return value && value.length === 10
           ? true
           : this.createError({
-              message: "Phone number must be 10 digits only",
-            });
+            message: "Phone number must be 10 digits only",
+          });
       }
       return true;
     }),
@@ -55,8 +55,8 @@ function HouseShiftModel({
         title === "Pick Up Location"
           ? "pickUp"
           : title === "Drop Location"
-          ? "drop"
-          : `stop${title}`;
+            ? "drop"
+            : `stop${title}`;
       values.state = titles;
       console.log("Location Details:", values);
       setLocationDetail((prevDetails) => {
@@ -82,11 +82,19 @@ function HouseShiftModel({
         formik.setFieldValue("location", stops[titleId]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show, title]);
+  }, [show, title, pickupLocation, dropLocation, stops]);
+  
+  useEffect(() => {
+    if (!show) {
+      formik.resetForm();
+    }
+  }, [show]);
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal show={show} onHide={() => {
+      onHide();
+      formik.resetForm();
+    }}>
       <Modal.Header closeButton>
         <Modal.Title>
           {title !== "Pick Up Location" && title !== "Drop Location"
@@ -108,11 +116,10 @@ function HouseShiftModel({
                   </span>
                   <input
                     type="text"
-                    className={`form-control ${
-                      formik.touched.location && formik.errors.location
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.location && formik.errors.location
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     name="location"
                     readOnly
                     {...formik.getFieldProps("location")}
@@ -134,11 +141,10 @@ function HouseShiftModel({
                   </span>
                   <input
                     type="text"
-                    className={`form-control ${
-                      formik.touched.address && formik.errors.address
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.address && formik.errors.address
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     name="address"
                     {...formik.getFieldProps("address")}
                   />
@@ -159,11 +165,10 @@ function HouseShiftModel({
                   </span>
                   <input
                     type="text"
-                    className={`form-control ${
-                      formik.touched.contactName && formik.errors.contactName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.contactName && formik.errors.contactName
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     name="contactName"
                     {...formik.getFieldProps("contactName")}
                   />
@@ -194,11 +199,10 @@ function HouseShiftModel({
                   <input
                     type="text"
                     name="mobile"
-                    className={`form-control ${
-                      formik.touched.mobile && formik.errors.mobile
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.mobile && formik.errors.mobile
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("mobile")}
                   />
                   {formik.touched.mobile && formik.errors.mobile && (
