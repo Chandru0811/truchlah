@@ -37,7 +37,7 @@ function Shift() {
                 className="btn btn-outline-secondary btn-lg p-3 "
                 data-mdb-ripple-color="dark"
                 onClick={() => {
-                  logType("House Shift");
+                  logType("houseShift");
                 }}
                 // onClick={()=>{
                 //   logType("HOUSE");
