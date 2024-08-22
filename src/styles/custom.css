@@ -1717,7 +1717,6 @@ body {
 
 .badge {
   background-color: rgb(226, 57, 57);
-  /* Customize as needed */
   color: white;
   border-radius: 50%;
   padding: 0.3em 0.6em;
@@ -1728,11 +1727,33 @@ body {
 
 .rag {
   background-color: rgb(226, 57, 57);
-  /* Customize as needed */
   color: white;
   border-radius: 50%;
   padding: 0.3em 0.6em;
   font-size: 0.75em;
   vertical-align: super;
   margin-left: 1em;
+}
+
+.btn-custom {
+  width: 9vw;
+  background-color: #1bc24a;
+  font-size: 13px;
+  border-radius: 15px;
+  color: white;
+  border: none;
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.card-hover2 {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
