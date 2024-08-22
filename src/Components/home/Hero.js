@@ -4,7 +4,7 @@ import HeroImg from "../../asset/TrucklahHeroImage.png";
 // import HeroVideoImg from "../../asset/HeroVideoImage-removebg-preview.png";
 import { Link } from "react-router-dom";
 
-function Section1({ isAdmin }) {
+function Section1({ isAuthenticate }) {
   const navigateToGooglePlayStore = () => {
     window.open(
       "https://play.google.com/store/apps/details?id=com.trucklah.trucklah",
@@ -37,7 +37,7 @@ function Section1({ isAdmin }) {
                   </button>
                 </div>
                 <div className="col-lg-4 col-6 py-2 text-center">
-                  {isAdmin ? (
+                  {isAuthenticate ? (
                     <Link to="/shift">
                       <button className="btn btn-primary" id="HeroBtn">
                         Get Started!

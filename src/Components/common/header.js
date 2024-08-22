@@ -8,7 +8,7 @@ import "../../styles/custom.css";
 import React, { useState } from "react";
 import User from "../../pages/profile/Profile";
 
-function OffcanvasExample({ isAdmin, handleLogout }) {
+function OffcanvasExample({ isAuthenticate, handleLogout }) {
   const [showMain, setShowMain] = useState(false);
 
   const handleCloseMain = () => setShowMain(false);
@@ -82,7 +82,7 @@ function OffcanvasExample({ isAdmin, handleLogout }) {
                                   PRICING
                                 </Link>
                               </li> */}
-                              {isAdmin ? (
+                              {isAuthenticate ? (
                                 <></>
                               ) : (
                                 <>
@@ -103,12 +103,12 @@ function OffcanvasExample({ isAdmin, handleLogout }) {
                           <div className="col-3">
                             <div className="d-lg-flex justify-content-end">
                               <div className="me-2">
-                                {isAdmin && (
+                                {isAuthenticate && (
                                   <User handleLogout={handleLogout} />
                                 )}
                               </div>
                               <div className="ride ">
-                                {isAdmin ? (
+                                {isAuthenticate ? (
                                   <Link to="/shift">
                                     <li className="nav-item">
                                       <button
