@@ -7,7 +7,7 @@ import { RiInstagramFill } from "react-icons/ri";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { Link } from "react-router-dom";
 
-function foot({ isAdmin }) {
+function foot({ isAuthenticate }) {
   return (
     <footer className="bg-light text-center text-lg-start">
       <div className="container p-4">
@@ -30,7 +30,7 @@ function foot({ isAdmin }) {
           <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
             <h5 className="text-uppercase mb-0 help">Help</h5>
             <ul className="list-unstyled mb-0 py-3">
-              {isAdmin ? (
+              {isAuthenticate ? (
                 <></>
               ) : (
                 <>
@@ -83,7 +83,7 @@ function foot({ isAdmin }) {
           <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
             <h5 className="text-uppercase">OUR&nbsp;SERVICES</h5>
             <ul className="list-unstyled mb-0 py-2">
-              {isAdmin ? (
+              {isAuthenticate ? (
                 <>
                   <li>
                     <Link

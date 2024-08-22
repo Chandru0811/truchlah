@@ -62,7 +62,7 @@ function Summary() {
         `booking/cashPayment/${bookingId}`
       );
       if (response.status === 200) {
-        navigate("/successful");
+        navigate(`/successful?type=${data?.booking?.bookingType}`);
         sessionStorage.removeItem("shiftType");
       }
     } catch (error) {
