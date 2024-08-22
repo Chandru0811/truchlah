@@ -17,19 +17,13 @@ import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-const validationSchema = Yup.object().shape({
-  date: Yup.string().required("Date is required"),
-  time: Yup.string().required("Time is required"),
-  vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
-});
-
 function Service() {
   // const {location , bookingId} = useParams();
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const distanceValue = params.get("distance");
-  console.log("est km", distanceValue)
+  console.log("est km", distanceValue);
   const locationValueString = params.get("location");
   const bookingIdValue = params.get("bookingId");
 
@@ -47,34 +41,39 @@ function Service() {
   const shiftType = sessionStorage.getItem("shiftType");
   const [manpowerQuantity, setManpowerQuantity] = useState(0);
   const [noOfPiecess, setNoOfPiecess] = useState(0);
+ 
+  // eligible date based on time
 
-  const getCurrentDate = () => {
-    const today = new Date();
-    return today.toISOString().split("T")[0];
-  };
-
-  const getCurrentTime = () => {
-    const now = new Date();
-    now.setHours(now.getHours());
-    return now.toTimeString().split(":").slice(0, 2).join(":");
-  };
-
-  // const getEliglibleTime = () => {
+  // const getEligibleDateBasedOnTime = () => {
   //   const now = new Date();
   //   now.setHours(now.getHours() + 3);
+  //   now.setMinutes(now.getMinutes() + 7);
+
+  //   if (now.getHours() < 3 || (now.getHours() === 3 && now.getMinutes() < 7)) {
+  //     now.setDate(now.getDate() + 1);
+  //   }
+  //   return now.toISOString().split("T")[0];
+  // };
+
+  // const getEligibleTime = () => {
+  //   const now = new Date();
+  //   now.setHours(now.getHours() + 3);
+  //   now.setMinutes(now.getMinutes() + 7);
   //   return now.toTimeString().split(":").slice(0, 2).join(":");
   // };
-  const getEliglibleTime = () => {
-    const now = new Date();
-    now.setHours(now.getHours() + 3);
-    now.setMinutes(now.getMinutes() + 7);
-    return now.toTimeString().split(":").slice(0, 2).join(":");
-  };
 
+  const currentData = new Date().toISOString().split("T")[0];
+  const currentTime = new Date().toISOString().split("T")[1].slice(0, 5);
+
+  const validationSchema = Yup.object().shape({
+    date: Yup.date().required("Date is required"),
+ time: Yup.string().required("Time is required"),
+    vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
+  });
   const formik = useFormik({
     initialValues: {
-      date: getCurrentDate(),
-      time: getEliglibleTime(),
+      date: currentData,
+      time: currentTime,
       vechicleTypeId: "",
       driverAsManpower: false,
       extraManpower: false,
@@ -154,8 +153,6 @@ function Service() {
     },
   });
 
-  // console.log("Values is ", formik.values)
-
   useEffect(() => {
     formik.setFieldValue("quantity", manpowerQuantity);
     formik.setFieldValue("noOfPieces", noOfPiecess);
@@ -220,14 +217,20 @@ function Service() {
       style={{ backgroundColor: "#faf5f6" }}
     >
       <form onSubmit={formik.handleSubmit}>
-        <div className="containers pt-2">
-          <Link to="/map"
-            data-toggle="tooltip" data-placement="bottom" title="Back">
+        <div className="container-fluid pt-3 ">
+          <div
+            onClick={() => navigate(-1)}
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Back"
+            className="me-3"
+            style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
+          >
             <IoArrowBackCircleOutline size={30} />
-          </Link>
+          </div>
         </div>
         <div className="container">
-          <h2 className="text-center my-5 mt-5 pt-5" id="AvaHeading">
+          <h2 className="text-center my-3" id="AvaHeading">
             SERVICE
           </h2>
 
@@ -237,8 +240,10 @@ function Service() {
                 type="date"
                 id="date"
                 name="date"
-                className={`form-control form-control-lg ${formik.touched.date && formik.errors.date ? "is-invalid" : ""
-                  }`}
+                min={currentData}
+                className={`form-control form-control-lg ${
+                  formik.touched.date && formik.errors.date ? "is-invalid" : ""
+                }`}
                 {...formik.getFieldProps("date")}
               />
               {formik.touched.date && formik.errors.date && (
@@ -252,8 +257,10 @@ function Service() {
                 type="time"
                 id="time"
                 name="time"
-                className={`form-control form-control-lg ${formik.touched.time && formik.errors.time ? "is-invalid" : ""
-                  }`}
+                min={currentTime}
+                className={`form-control form-control-lg ${
+                  formik.touched.time && formik.errors.time ? "is-invalid" : ""
+                }`}
                 {...formik.getFieldProps("time")}
               />
               {formik.touched.time && formik.errors.time && (
@@ -376,11 +383,12 @@ function Service() {
                         <center>
                           <div className="form-check">
                             <input
-                              className={`form-check-input border-info ${formik.touched.vechicleTypeId &&
+                              className={`form-check-input border-info ${
+                                formik.touched.vechicleTypeId &&
                                 formik.errors.vechicleTypeId
-                                ? "is-invalid"
-                                : ""
-                                }`}
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               type="radio"
                               name="vechicleTypeId"
                               value={item.vechicleTypeId}
@@ -508,7 +516,6 @@ function Service() {
                 </div>
               </div>
             </div> */}
-           
 
             <div className="col-md-6 col-12 mb-3">
               <div

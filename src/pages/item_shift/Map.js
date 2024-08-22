@@ -4,7 +4,7 @@ import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
 import RedMarker from "../../asset/pinRed.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Form } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import {
   useJsApiLoader,
   GoogleMap,
@@ -16,7 +16,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import HouseShiftModel from "../HouseShiftModel";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
 import { FaEdit, FaMinus, FaPlus } from "react-icons/fa";
 
@@ -56,7 +56,15 @@ function Map() {
     dropLocation: false,
     stops: [],
   });
+  const [userLocation, setUserLocation] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [show, setShow] = useState(false);
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => {setShow(false)};
+  const currentPath = location.pathname;
+  console.log("Current path:", currentPath);
 
   const formik = useFormik({
     initialValues: {
@@ -268,8 +276,6 @@ function Map() {
     }
   }, []);
 
-  console.log("object", formik.values.stops);
-
   const handleAddStop = () => {
     if (
       formik.values.stops.length > 0 &&
@@ -391,6 +397,43 @@ function Map() {
     recalculateDirections();
   }, [recalculateDirections]);
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position?.coords?.latitude;
+          const lng = position?.coords?.longitude;
+          setUserLocation({ lat, lng });
+          console.log("lat",lat)
+          console.log("lng",lng)
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+          // Optional: You can also set a default location or handle errors appropriately
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (location.pathname === '/map') {
+        event.preventDefault(); 
+        handleShow(); 
+        window.history.pushState(null, '');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.history.pushState(null, '');
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [location, navigate]);
+
   if (!isLoaded) {
     return (
       <div className="darksoul-layout">
@@ -400,9 +443,18 @@ function Map() {
       </div>
     );
   }
-
   return (
     <div className="container-fluid" style={{ backgroundColor: "#fcf3f6" }}>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Cancel Order</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to cancel the order?</Modal.Body>
+        <Modal.Footer className="p-1">
+          <button className="btn btn-danger btn-sm px-3" onClick={handleClose}>No</button>
+          <button className="btn btn-info btn-sm px-3" onClick={()=>{handleClose(); navigate("/shift")}}>Yes</button>
+        </Modal.Footer>
+      </Modal>
       <form onSubmit={formik.handleSubmit}>
         <div className="row">
           <div className="col-12" id="MapContainer">
@@ -465,10 +517,13 @@ function Map() {
                   onLoad={onOriginLoad}
                   onPlaceChanged={() => onPlaceChanged("origin")}
                   options={{
-                    // types: ["(regions)"],
-                    types: ["geocode"],
-                    componentRestrictions: { country: ["sg", "in"] },
-                  }}
+                    bounds: new window.google.maps.LatLngBounds(
+                      new window.google.maps.LatLng(userLocation?.lat - 0.1, userLocation?.lng - 0.1),
+                      new window.google.maps.LatLng(userLocation?.lat + 0.1, userLocation?.lng + 0.1)
+                    ),
+                    types: ["geocode"], // Use geocode for all locations
+                    componentRestrictions: { country: ["sg", "in"] }, // Restrict to Singapore and India
+                  }}      
                 >
                   <FloatingLabel
                     controlId="floatingInput"
@@ -523,6 +578,10 @@ function Map() {
                     key={index}
                     options={{
                       // types: ["(regions)"],
+                      bounds: new window.google.maps.LatLngBounds(
+                        new window.google.maps.LatLng(userLocation?.lat - 0.1, userLocation?.lng - 0.1),
+                        new window.google.maps.LatLng(userLocation?.lat + 0.1, userLocation?.lng + 0.1)
+                      ),
                       types: ["geocode"],
                       componentRestrictions: { country: ["sg", "in"] },
                     }}
@@ -585,6 +644,10 @@ function Map() {
                   onPlaceChanged={() => onPlaceChanged("destination")}
                   options={{
                     // types: ["(regions)"],
+                    bounds: new window.google.maps.LatLngBounds(
+                      new window.google.maps.LatLng(userLocation?.lat - 0.1, userLocation?.lng - 0.1),
+                      new window.google.maps.LatLng(userLocation?.lat + 0.1, userLocation?.lng + 0.1)
+                    ),
                     types: ["geocode"],
                     componentRestrictions: { country: ["sg", "in"] },
                   }}
