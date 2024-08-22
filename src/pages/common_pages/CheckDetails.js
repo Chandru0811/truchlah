@@ -62,7 +62,8 @@ function Summary() {
         `booking/cashPayment/${bookingId}`
       );
       if (response.status === 200) {
-        navigate(`/successful?type=${data?.booking?.bookingType}`);
+        // navigate(`/successful?type=${data?.booking?.bookingType}`);
+        navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
         sessionStorage.removeItem("shiftType");
       }
     } catch (error) {
@@ -111,14 +112,16 @@ function Summary() {
         </div>
       ) : (
         <div className="container-fluid pt-5" id="Ace">
-          <Link
-            to="/service"
+          <div
+            onClick={() => navigate(-1)}
             data-toggle="tooltip"
             data-placement="bottom"
             title="Back"
+            className="me-3"
+            style={{ cursor: 'pointer', color: "rgb(16, 110, 234)" }}
           >
             <IoArrowBackCircleOutline size={30} />
-          </Link>
+          </div>
           <center>
             <h3 style={{ color: "#106EEA" }}>SUMMARY</h3>
           </center>

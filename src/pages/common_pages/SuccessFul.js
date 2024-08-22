@@ -5,6 +5,8 @@ import { Link, useSearchParams } from "react-router-dom";
 function Successfull() {
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type");
+  const bookingId = searchParams.get("bookingId");
+
   return (
     <section className="Success">
       <center>
@@ -20,7 +22,8 @@ function Successfull() {
                     </p>
                   </div>
                 </center>
-                <h5 className="mt-5" style={{ color: "#4D96ED" }}>
+                <span className="mt-3 fw-bolder">Booking Id: {bookingId}</span>
+                <h5 className="mt-4" style={{ color: "#4D96ED" }}>
                   Order Successful
                 </h5>
                 <p className="mt-2">Thank you so much for your order</p>

@@ -13,7 +13,10 @@ import Popup from "./Popup";
 // import { MdCancel } from "react-icons/md";
 import { useFormik } from "formik";
 import { Modal } from "react-bootstrap";
+import { Badge, Card, Space } from "antd";
 
+import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { GoStarFill } from "react-icons/go";
 function RideDetailsView() {
   const [show, setShow] = useState(false);
   const [data, setData] = useState({});
@@ -28,42 +31,49 @@ function RideDetailsView() {
   const [customReason, setCustomReason] = useState("");
   const navigate = useNavigate();
   console.log("object", data);
+
+  const fetchData = async () => {
+    try {
+      const response = await bookingApi.get(
+        `booking/getBookingById/${bookingId.id}`
+      );
+      setData(response.data.responseBody);
+    } catch (error) {
+      toast.error("Error Fetching Data: " + error.message);
+    } finally {
+      setIsLoading(false); // Set loading to false once data is fetched
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await bookingApi.get(
-          `booking/getBookingById/${bookingId.id}`
-        );
-        setData(response.data.responseBody);
-      } catch (error) {
-        toast.error("Error Fetching Data: " + error.message);
-      } finally {
-        setIsLoading(false); // Set loading to false once data is fetched
-      }
-    };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formik = useFormik({
     initialValues: {
+      cancelReason: "", // Adding the cancelReason field to Formik
       bookingId: "",
       cancelledBy: "",
       comments: "",
     },
     onSubmit: async (values) => {
-      let commentsArray = checkedValues.filter((value) => value !== "Others");
-      if (checkedValues.includes("Others") && customReason.trim() !== "") {
-        commentsArray.push(`Others: ${customReason}`);
+      let selectedReason = "";
+
+      if (values.cancelReason === "Others" && customReason.trim() !== "") {
+        selectedReason = customReason;
+      } else {
+        selectedReason = values.cancelReason;
       }
-      values.comments = commentsArray.join(", ");
+
+      values.comments = selectedReason;
 
       const payload = {
         bookingId: bookingId.id,
         cancelledBy: "User",
         comments: values.comments,
       };
-
+      console.log("Payload Cancel:", payload);
       try {
         const response = await bookingApi.post(
           `booking/cancelByUser/${bookingId.id}`,
@@ -106,13 +116,12 @@ function RideDetailsView() {
     getVechicle();
   }, []);
 
-  const handleCheckboxChange = (event) => {
-    const value = event.target.value;
-    setCheckedValues((prevValues) =>
-      prevValues.includes(value)
-        ? prevValues.filter((v) => v !== value)
-        : [...prevValues, value]
-    );
+  const handleRadioChange = (e) => {
+    const value = e.target.value;
+    formik.setFieldValue("cancelReason", value);
+    if (value !== "Others") {
+      setCustomReason(""); // Clear custom reason if "Others" is not selected
+    }
   };
 
   const togglePopup = () => {
@@ -127,10 +136,6 @@ function RideDetailsView() {
     setShow(false);
   };
 
-  const handleCustomReasonChange = (event) => {
-    setCustomReason(event.target.value);
-  };
-
   const vehicleNameMap = {
     1: "1.7M_VAN",
     2: "2.4M_VAN",
@@ -139,6 +144,23 @@ function RideDetailsView() {
     5: "24FT_LORRY",
     default: "Unknown Vehicle",
   };
+  const bookingStatus = data?.bookingStatus?.status || "Unknown";
+
+  const getBadgeStyle = (status) => {
+    switch (status) {
+      case "CANCELLED":
+        return { backgroundColor: "#f5222d", color: "#fff" }; // Danger color
+      case "BOOKED":
+        return { backgroundColor: "#faad14", color: "#fff" }; // Warning color
+      case "DRAFT_BOOKING":
+        return { backgroundColor: "#1890ff", color: "#fff" }; // Info color
+      case "COMPLETED":
+        return { backgroundColor: "#52c41a", color: "#fff" }; // Primary color
+      default:
+        return { backgroundColor: "#d9d9d9", color: "#000" }; // Default color
+    }
+  };
+  const badgeStyle = getBadgeStyle(bookingStatus);
 
   return (
     <section className="summary">
@@ -154,47 +176,43 @@ function RideDetailsView() {
         </div>
       ) : (
         <div className="container-fluid pt-5" id="Ace">
+          <div
+            onClick={() => navigate(-1)}
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Back"
+            className="me-3"
+            style={{ cursor: 'pointer', color: "rgb(16, 110, 234)" }}
+          >
+            <IoArrowBackCircleOutline size={30} />
+          </div>
           <center>
             <h3 style={{ color: "#106EEA" }}>SUMMARY</h3>
+
+            {/* <Space
+            direction="vertical"
+            size="middle"
+            style={{
+              width: "50%",
+            }}
+          >
+            <Badge.Ribbon text={bookingStatus}></Badge.Ribbon>
+          </Space> */}
           </center>
+
           <div className="row">
             <div className="col-lg-3"></div>
             <div className="col-lg-6">
               <p className="mt-5 ps-2">
                 <div className="d-flex justify-content-between">
                   <b>Vehicle :</b>
-                  {/* <span
-                    className={`text-white rounded-3 p-1 ${
-                      data.bookingStatus?.status === "CANCELLED"
-                        ? "bg-danger"
-                        : data.bookingStatus?.status === "BOOKED"
-                        ? "bg-warning"
-                        : data.bookingStatus?.status === "DRAFT_BOOKING"
-                        ? "bg-info"
-                        : data.bookingStatus?.status === "COMPLETED"
-                        ? "bg-primary"
-                        : ""
-                    }`}
-                  >
-                    {data.bookingStatus?.status}
-                  </span> */}
-                  <div
-                    className={`custom-price-tag ${
-                      data.bookingStatus?.status === "CANCELLED"
-                        ? "custom-bg-danger"
-                        : data.bookingStatus?.status === "BOOKED"
-                        ? "custom-bg-warning"
-                        : data.bookingStatus?.status === "DRAFT_BOOKING"
-                        ? "custom-bg-info"
-                        : data.bookingStatus?.status === "COMPLETED"
-                        ? "custom-bg-primary"
-                        : "custom-bg-secondary" /* Default color */
-                    }`}
-                  >
-                    <span className="custom-price-amount">
-                      {data.bookingStatus?.status || "--"}
-                    </span>
-                  </div>
+                  <Badge.Ribbon
+                    text={bookingStatus}
+                    style={{
+                      backgroundColor: badgeStyle.backgroundColor,
+                      color: badgeStyle.color,
+                    }}
+                  />
                 </div>
               </p>
             </div>
@@ -375,7 +393,7 @@ function RideDetailsView() {
                         </div>
                       </div>
                       <div className="col-md-6 col-12 ps-1" id="drop">
-                      <p className="line" style={{ color: "#494949" }}>
+                        <p className="line" style={{ color: "#494949" }}>
                           {data?.booking?.scheduledDate ? (
                             <>
                               {data.booking.scheduledDate.substring(0, 10)}{" "}
@@ -483,7 +501,6 @@ function RideDetailsView() {
                       </p>
                     </div>
                   </div>
-                  
                   {/* <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
@@ -535,7 +552,9 @@ function RideDetailsView() {
                     <div className="col-md-6 col-12 ps-1" id="drop">
                       {" "}
                       <p className="line" style={{ color: "#494949" }}>
-                        {data.booking ? ` ${data.booking.msgToDriver || " "}` : " "}
+                        {data.booking
+                          ? ` ${data.booking.msgToDriver || " "}`
+                          : " "}
                       </p>
                     </div>
                   </div>
@@ -584,15 +603,18 @@ function RideDetailsView() {
                           style={{ borderBottom: "1px solid #e4e2e2" }}
                         >
                           <p className="line" style={{ color: "#494949" }}>
-                            {data?.bookingStatus?.cancelledDate.substring(0, 10)}{" "}
-                              <b>&</b>{" "}
-                              {new Date(
-                                data.bookingStatus?.cancelledDate
-                              ).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                              })}
+                            {data?.bookingStatus?.cancelledDate.substring(
+                              0,
+                              10
+                            )}{" "}
+                            <b>&</b>{" "}
+                            {new Date(
+                              data.bookingStatus?.cancelledDate
+                            ).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            })}
                           </p>
                         </div>
                       </div>
@@ -618,10 +640,81 @@ function RideDetailsView() {
               </>
             )}
 
+            {data.bookingStatus?.reviewByUser ===
+              data.bookingStatus?.reviewByUser && (
+              <>
+                <div className="row">
+                  <div className="col-lg-3"></div>
+                  <div className="col-lg-9">
+                    <p className="mt-5 ps-2">
+                      <b>Review By User:</b>
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-center my-2 ">
+                  <div className="card w-50">
+                    <div className="card-body py-0">
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="mt-2" style={{ color: "#00316B" }}>
+                              <b>Rating By User</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="col-md-6 col-12 ps-1"
+                          id="drop"
+                          style={{ borderBottom: "1px solid #e4e2e2" }}
+                        >
+                          <p className="mt-2" style={{ color: "#494949" }}>
+                            {data?.bookingStatus?.ratingByUser
+                              ? Array.from({
+                                  length: data.bookingStatus.ratingByUser,
+                                }).map((_, index) => (
+                                  // <FaRegStar
+                                  //   key={index}
+                                  //   className="text-warning"
+                                  // />
+                                  <GoStarFill  key={index}
+                                  className="text-warning"/>
+                                ))
+                              : "--"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                            <p className="mt-2" style={{ color: "#00316B" }}>
+                              <b>Comments</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-12 col-12 ps-1">
+                          <p style={{ color: "#4949491" }}>
+                            {data?.bookingStatus?.reviewByUser
+                              ? data.bookingStatus.reviewByUser
+                              : " "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
             <div className="my-3 d-flex justify-content-center">
               {data.bookingStatus?.status === "COMPLETED" ||
                 (data.bookingStatus?.status === "CANCELLED" &&
-                  isPopupVisible && <Popup togglePopup={togglePopup} />)}
+                  isPopupVisible && (
+                    <Popup
+                      togglePopup={togglePopup}
+                      onSuccess={fetchData}
+                      bookingId={data?.booking?.bookingId}
+                    />
+                  ))}
             </div>
           </div>
 
@@ -671,110 +764,121 @@ function RideDetailsView() {
                         Before canceling, let us know why you’re leaving. Your
                         response may be shared with the subscription provider.
                       </p>
+
                       <div className="form-check">
                         <input
-                          type="checkbox"
+                          type="radio"
                           className="form-check-input"
                           id="reason1"
+                          name="cancelReason"
                           value="Driver is not allocated"
-                          onChange={handleCheckboxChange}
+                          onChange={handleRadioChange}
+                          checked={
+                            formik.values.cancelReason ===
+                            "Driver is not allocated"
+                          }
                         />
-                        <label
-                          className="form-check-label"
-                          id="closeBefore"
-                          htmlFor="reason1"
-                        >
+                        <label className="form-check-label" htmlFor="reason1">
                           Driver is not allocated
                         </label>
                       </div>
                       <div className="form-check">
                         <input
-                          type="checkbox"
+                          type="radio"
                           className="form-check-input"
                           id="reason2"
+                          name="cancelReason"
                           value="Driver says he will be late"
-                          onChange={handleCheckboxChange}
+                          onChange={handleRadioChange}
+                          checked={
+                            formik.values.cancelReason ===
+                            "Driver says he will be late"
+                          }
                         />
-                        <label
-                          className="form-check-label"
-                          id="closeBefore"
-                          htmlFor="reason2"
-                        >
+                        <label className="form-check-label" htmlFor="reason2">
                           Driver says he will be late
                         </label>
                       </div>
                       <div className="form-check">
                         <input
-                          type="checkbox"
+                          type="radio"
                           className="form-check-input"
                           id="reason3"
+                          name="cancelReason"
                           value="Vehicle cannot meet my requirement"
-                          onChange={handleCheckboxChange}
+                          onChange={handleRadioChange}
+                          checked={
+                            formik.values.cancelReason ===
+                            "Vehicle cannot meet my requirement"
+                          }
                         />
-                        <label
-                          className="form-check-label"
-                          id="closeBefore"
-                          htmlFor="reason3"
-                        >
+                        <label className="form-check-label" htmlFor="reason3">
                           Vehicle cannot meet my requirement
                         </label>
                       </div>
                       <div className="form-check">
                         <input
-                          type="checkbox"
+                          type="radio"
                           className="form-check-input"
                           id="reason4"
+                          name="cancelReason"
                           value="I need to change my address & location"
-                          onChange={handleCheckboxChange}
+                          onChange={handleRadioChange}
+                          checked={
+                            formik.values.cancelReason ===
+                            "I need to change my address & location"
+                          }
                         />
-                        <label
-                          className="form-check-label"
-                          id="closeBefore"
-                          htmlFor="reason4"
-                        >
+                        <label className="form-check-label" htmlFor="reason4">
                           I need to change my address & location
                         </label>
                       </div>
                       <div className="form-check">
                         <input
-                          type="checkbox"
+                          type="radio"
                           className="form-check-input"
                           id="reason5"
+                          name="cancelReason"
                           value="Driver is too far away and I need a shorter arrival time"
-                          onChange={handleCheckboxChange}
+                          onChange={handleRadioChange}
+                          checked={
+                            formik.values.cancelReason ===
+                            "Driver is too far away and I need a shorter arrival time"
+                          }
                         />
-                        <label
-                          className="form-check-label"
-                          id="closeBefore"
-                          htmlFor="reason5"
-                        >
+                        <label className="form-check-label" htmlFor="reason5">
                           Driver is too far away and I need a shorter arrival
                           time
                         </label>
                       </div>
                       <div className="form-check">
                         <input
-                          type="checkbox"
+                          type="radio"
                           className="form-check-input"
                           id="reason6"
+                          name="cancelReason"
                           value="Others"
-                          onChange={handleCheckboxChange}
+                          onChange={handleRadioChange}
+                          checked={formik.values.cancelReason === "Others"}
                         />
-                        <label
-                          className="form-check-label"
-                          id="closeBefore"
-                          htmlFor="reason6"
-                        >
+                        <label className="form-check-label" htmlFor="reason6">
                           Others
                         </label>
                       </div>
-                      <textarea
-                        className="form-control"
-                        placeholder="write your reason here..."
-                        id="floatingTextarea"
-                        value={formik.values.reviewComments}
-                        onChange={handleCustomReasonChange}
-                      ></textarea>
+
+                      {/* Conditionally render the textarea */}
+                      {formik.values.cancelReason === "Others" && (
+                        <textarea
+                          className="form-control mt-3"
+                          placeholder="Write your reason here..."
+                          {...formik.getFieldProps("comments")}
+                          value={formik.values.comments} // Bind value to Formik's comments state
+                          onChange={(e) => {
+                            formik.handleChange(e); // Let Formik handle the change
+                            setCustomReason(e.target.value); // Update customReason state if needed elsewhere
+                          }}
+                        ></textarea>
+                      )}
                     </div>
                   </div>
                 </div>
