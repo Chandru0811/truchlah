@@ -18,7 +18,7 @@ import HouseShiftModel from "../HouseShiftModel";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaEdit, FaMinus, FaPlus } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
   pickupLocation: Yup.string().required("!Pickup Location is required"),
@@ -51,7 +51,11 @@ function Map() {
   const userId = sessionStorage.getItem("userId");
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-
+  const [showEditIcon, setShowEditIcon] = useState({
+    pickupLocation: false,
+    dropLocation: false,
+    stops: [],
+  });
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -171,6 +175,10 @@ function Map() {
         place = origin.getPlace();
         if (place && place.formatted_address) {
           formik.setFieldValue("pickupLocation", place.formatted_address);
+          setShowEditIcon((prevState) => ({
+            ...prevState,
+            pickupLocation: true,
+          }));
           handleOpenModal("Pick Up Location");
         } else {
           toast.warning("Please select a valid pickup location.");
@@ -181,6 +189,10 @@ function Map() {
         place = destination.getPlace();
         if (place && place.formatted_address) {
           formik.setFieldValue("dropLocation", place.formatted_address);
+          setShowEditIcon((prevState) => ({
+            ...prevState,
+            dropLocation: true,
+          }));
           handleOpenModal("Drop Location");
         } else {
           toast.warning("Please select a valid drop location.");
@@ -193,6 +205,12 @@ function Map() {
           const updatedStops = [...formik.values.stops];
           updatedStops[index] = place.formatted_address;
           formik.setFieldValue("stops", updatedStops);
+          const updatedEditIconStops = [...showEditIcon.stops];
+          updatedEditIconStops[index] = true;
+          setShowEditIcon((prevState) => ({
+            ...prevState,
+            stops: updatedEditIconStops,
+          }));
           handleOpenModal(`${index + 1}`);
         } else {
           toast.warning("Please select a valid stop location.");
@@ -250,14 +268,24 @@ function Map() {
     }
   }, []);
 
-  console.log("object",formik.values.stops)
+  console.log("object", formik.values.stops);
+
   const handleAddStop = () => {
-    if (formik.values.stops.length > 0 && formik.values.stops[formik.values.stops.length - 1] === "") {
-      toast.warning("Please fill in the previous stop before adding a new one.");
+    if (
+      formik.values.stops.length > 0 &&
+      formik.values.stops[formik.values.stops.length - 1] === ""
+    ) {
+      toast.warning(
+        "Please fill in the previous stop before adding a new one."
+      );
       return;
     }
     setStops([...stops, ""]);
     formik.setFieldValue("stops", [...formik.values.stops, ""]);
+    setShowEditIcon((prevState) => ({
+      ...prevState,
+      stops: [...prevState.stops, false],
+    }));
   };
 
   const handleDeleteStop = (index) => {
@@ -268,7 +296,12 @@ function Map() {
     const updatedFormikStops = [...formik.values.stops];
     updatedFormikStops.splice(index, 1);
     formik.setFieldValue("stops", updatedFormikStops);
-
+    const updatedEditIconStops = [...showEditIcon.stops];
+    updatedEditIconStops.splice(index, 1);
+    setShowEditIcon((prevState) => ({
+      ...prevState,
+      stops: updatedEditIconStops,
+    }));
     recalculateDirections();
   };
 
@@ -384,7 +417,7 @@ function Map() {
                 mapTypeControl: true,
                 fullscreenControl: true,
               }}
-            // onLoad={map => mapRef.current = map}
+              // onLoad={map => mapRef.current = map}
             >
               {markerPosition ? (
                 <></>
@@ -432,7 +465,8 @@ function Map() {
                   onLoad={onOriginLoad}
                   onPlaceChanged={() => onPlaceChanged("origin")}
                   options={{
-                    types: ["(regions)"],
+                    // types: ["(regions)"],
+                    types: ["geocode"],
                     componentRestrictions: { country: ["sg", "in"] },
                   }}
                 >
@@ -452,6 +486,7 @@ function Map() {
                     style={{ color: "rgb(0, 0, 0, 0.9)" }}
                     className="mb-3"
                   >
+                    
                     <Form.Control
                       type="text"
                       placeholder="Pick Up Location"
@@ -464,7 +499,15 @@ function Map() {
                         borderRadius: "8px",
                       }}
                     />
+                    {/* {showEditIcon.pickupLocation && (
+                      <FaEdit
+                        className="edit-icon ms-2"
+                        onClick={() => handleOpenModal("Pick Up Location")}
+                        style={{ cursor: "pointer" }} // Add a pointer cursor to indicate it's clickable
+                      />
+                    )} */}
                   </FloatingLabel>
+
                 </Autocomplete>
                 {formik.touched.pickupLocation &&
                   formik.errors.pickupLocation && (
@@ -472,17 +515,25 @@ function Map() {
                       {formik.errors.pickupLocation}
                     </div>
                   )}
+
                 {stops.map((stop, index) => (
                   <Autocomplete
                     onLoad={onStopLoad(index)}
                     onPlaceChanged={() => onPlaceChanged("stops", index)}
                     key={index}
                     options={{
-                      types: ["(regions)"],
+                      // types: ["(regions)"],
+                      types: ["geocode"],
                       componentRestrictions: { country: ["sg", "in"] },
                     }}
                   >
                     <div className="d-flex align-items-center mt-3">
+                    {/* {showEditIcon.stops[index] && (
+                        <FaEdit
+                          className="edit-icon"
+                          onClick={() => handleOpenModal(`Stops ${index + 1}`)}
+                        />
+                      )} */}
                       <Form.Control
                         id="AddStop"
                         type="text"
@@ -533,7 +584,8 @@ function Map() {
                   onLoad={onDestinationLoad}
                   onPlaceChanged={() => onPlaceChanged("destination")}
                   options={{
-                    types: ["(regions)"],
+                    // types: ["(regions)"],
+                    types: ["geocode"],
                     componentRestrictions: { country: ["sg", "in"] },
                   }}
                 >
@@ -548,6 +600,7 @@ function Map() {
                           className="icon-img me-4"
                         />
                         <span>Drop Location</span>
+                        
                       </div>
                     }
                     style={{ color: "rgb(0, 0, 0, 0.9)" }}
@@ -565,7 +618,14 @@ function Map() {
                         borderRadius: "8px",
                       }}
                     />
+                    {/* {showEditIcon.dropLocation && (
+                          <FaEdit
+                            className="edit-icon"
+                            onClick={() => handleOpenModal("Drop Location")}
+                          />
+                        )} */}
                   </FloatingLabel>
+
                 </Autocomplete>
                 {formik.touched.dropLocation && formik.errors.dropLocation && (
                   <div className="mb-2 text-danger">

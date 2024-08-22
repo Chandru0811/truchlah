@@ -1,8 +1,10 @@
 import React from "react";
 import "../../styles/custom.css";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 function Successfull() {
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get("type");
   return (
     <section className="Success">
       <center>
@@ -23,7 +25,7 @@ function Successfull() {
                 </h5>
                 <p className="mt-2">Thank you so much for your order</p>
                 <center>
-                  <Link to="/rides">
+                  <Link to={`/rides?type=${type}`}>
                     <button
                       id="button"
                       type="button"
