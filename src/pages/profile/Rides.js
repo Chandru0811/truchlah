@@ -3,12 +3,17 @@ import "../../styles/custom.css";
 import { FaDollarSign } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { bookingApi } from "../../config/URL";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 function Order() {
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get("type");
   const [showInprogressSection, setShowInprogressSection] = useState(true);
   const [showCompletedSection, setShowCompletedSection] = useState(false);
   const [showCanceledSection, setShowCanceledSection] = useState(false);
+  const [inprogressCount, setInprogressCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [canceledCount, setCanceledCount] = useState(0);
   const [showHouseShift, setShowHouseShift] = useState(true);
   const [showItemShift, setShowItemShift] = useState(false);
   const [data, setData] = useState([]);
@@ -60,14 +65,34 @@ function Order() {
 
     const shiftType = showHouseShift ? "HOUSE" : "ITEM";
 
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await bookingApi.get(
+    //       `fetchBookingDetailsByUser/${userId}?bookingType=${shiftType}`
+    //     );
+    //     if (response.status === 200) {
+    //       const responseData = response.data.responseBody[status];
+    //       setData(responseData);
+    //     }
+    //   } catch (error) {
+    //     toast.error(error.message);
+    //   } finally {
+    //     setIsLoaded(false); // Disable loader after data fetching
+    //   }
+    // };
+
     const fetchData = async () => {
       try {
         const response = await bookingApi.get(
           `fetchBookingDetailsByUser/${userId}?bookingType=${shiftType}`
         );
         if (response.status === 200) {
-          const responseData = response.data.responseBody[status];
-          setData(responseData);
+          const responseData = response.data.responseBody;
+          setData(responseData[status]);
+          // Update badge counts
+          setInprogressCount(responseData["INPROGRESS"]?.length || 0);
+          setCompletedCount(responseData["COMPLETED"]?.length || 0);
+          setCanceledCount(responseData["CANCELLED"]?.length || 0);
         }
       } catch (error) {
         toast.error(error.message);
@@ -95,6 +120,15 @@ function Order() {
     4: "14FT_LORRY",
     5: "24FT_LORRY",
   };
+  useEffect(() => {
+    if (type === "ITEM") {
+      setShowItemShift(true);
+      setShowHouseShift(false);
+    } else {
+      setShowItemShift(false);
+      setShowHouseShift(true);
+    }
+  }, [type]);
 
   return (
     <section className="order">
@@ -122,7 +156,7 @@ function Order() {
               ITEM SHIFT
             </button>
           </div>
-          <div
+          {/* <div
             className="col-12 d-flex justify-content-center mt-5 py-3"
             style={{ backgroundColor: "rgba(246, 222, 222, 0.58)" }}
           >
@@ -146,6 +180,68 @@ function Order() {
               onClick={cancelSection}
             >
               CANCELLED
+            </button>
+          </div> */}
+
+          <div
+            className="col-12 d-flex justify-content-center mt-5 py-3"
+            style={{ backgroundColor: "rgba(246, 222, 222, 0.58)" }}
+          >
+            <button
+              className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
+              id="shift-btn"
+              onClick={inprogressSection}
+              style={{ position: 'relative' }}
+            >
+              INPROGRESS
+              <span
+                className="position-absolute start-100 translate-middle badge rag rounded-pill"
+                style={{
+                  transform: 'translate(-50%, -50%)',
+                  fontSize: '0.75em',
+                  padding: '0.3em 0.6em'
+                }}
+              >
+                {inprogressCount === 0 ? '0' : inprogressCount > 99 ? '99+' : inprogressCount}
+              </span>
+            </button>
+
+            <button
+              className={`mx-3 ${showCompletedSection ? "underline" : ""}`}
+              id="shift-btn"
+              onClick={completedSection}
+              style={{ position: 'relative' }}
+            >
+              COMPLETED
+              <span
+                className="position-absolute start-100 translate-middle badge rounded-pill"
+                style={{
+                  transform: 'translate(-50%, -50%)',
+                  fontSize: '0.75em',
+                  padding: '0.3em 0.6em'
+                }}
+              >
+                {completedCount === 0 ? '0' : completedCount > 99 ? '99+' : completedCount}
+              </span>
+            </button>
+
+            <button
+              className={`mx-3 ${showCanceledSection ? "underline" : ""}`}
+              id="shift-btn"
+              onClick={cancelSection}
+              style={{ position: 'relative' }}
+            >
+              CANCELLED
+              <span
+                className="position-absolute start-100 translate-middle badge rounded-pill"
+                style={{
+                  transform: 'translate(-50%, -50%)',
+                  fontSize: '0.75em',
+                  padding: '0.3em 0.6em'
+                }}
+              >
+                {canceledCount === 0 ? '0' : canceledCount > 99 ? '99+' : canceledCount}
+              </span>
             </button>
           </div>
         </div>
@@ -176,8 +272,13 @@ function Order() {
                         <div className="col-lg-10 col-md-6 col-12 p-3">
                           <p className=" fw-medium">
                             Booking Id : {item.booking.bookingId ||
-                              "Unknown Booking Id"}
+                              ""}
                           </p>
+                          {/* {!showCanceledSection && (
+                            <p className="fw-normal">
+                              Delivery Date : {item?.booking?.deliveryDate?.substring(0, 10) || ""}
+                            </p>
+                          )} */}
                           <p>
                             {vehicleNameMap[item.booking.vehicletypeId] ||
                               "Unknown Vehicle"}

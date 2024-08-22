@@ -574,7 +574,7 @@ function RideDetailsView() {
                         <div className="col-md-6 col-12 ps-1">
                           <div>
                             <p className="line" style={{ color: "#00316B" }}>
-                              <b>Cancelled Date</b>
+                              <b>Cancelled Date & Time</b>
                             </p>
                           </div>
                         </div>
@@ -584,12 +584,15 @@ function RideDetailsView() {
                           style={{ borderBottom: "1px solid #e4e2e2" }}
                         >
                           <p className="line" style={{ color: "#494949" }}>
-                            {data?.bookingStatus?.cancelledDate
-                              ? data.bookingStatus.cancelledDate.substring(
-                                  0,
-                                  10
-                                )
-                              : "--"}
+                            {data?.bookingStatus?.cancelledDate.substring(0, 10)}{" "}
+                              <b>&</b>{" "}
+                              {new Date(
+                                data.bookingStatus?.cancelledDate
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              })}
                           </p>
                         </div>
                       </div>

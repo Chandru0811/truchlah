@@ -93,6 +93,7 @@
   line-height: 47px;
   color: #106eea;
 }
+
 #accordion {
   background-color: #f9f9f9;
 }
@@ -230,7 +231,7 @@
   border-top: 1px solid #e4e2e2;
 }
 
-.summary .row > * {
+.summary .row>* {
   padding-left: 0;
   padding-right: 0;
 }
@@ -335,12 +336,10 @@
 }
 
 .rewards .coupon {
-  background: linear-gradient(
-    180deg,
-    #9189c0 0%,
-    rgba(156, 84, 170, 0.447917) 99.99%,
-    rgba(165, 41, 152, 0) 100%
-  );
+  background: linear-gradient(180deg,
+      #9189c0 0%,
+      rgba(156, 84, 170, 0.447917) 99.99%,
+      rgba(165, 41, 152, 0) 100%);
   border: 0.1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
@@ -400,12 +399,10 @@
 /* Footer  */
 
 footer {
-  background: linear-gradient(
-    89.87deg,
-    rgba(116, 0, 255, 0.211156) 0.11%,
-    rgba(97, 0, 255, 0.211156) 49.6%,
-    rgba(0, 41, 255, 0.211156) 99.89%
-  );
+  background: linear-gradient(89.87deg,
+      rgba(116, 0, 255, 0.211156) 0.11%,
+      rgba(97, 0, 255, 0.211156) 49.6%,
+      rgba(0, 41, 255, 0.211156) 99.89%);
 }
 
 footer p {
@@ -681,10 +678,14 @@ body {
   background: linear-gradient(180deg, #6c54ff 0%, #ad00ff 100%);
   border-radius: 28px;
   border: none;
-  color: white; /* Optional: to ensure text is readable */
-  cursor: pointer; /* Optional: to change the cursor to a pointer on hover */
-  transition: 0.5s ease; /* Optional: to animate the background change */
+  color: white;
+  /* Optional: to ensure text is readable */
+  cursor: pointer;
+  /* Optional: to change the cursor to a pointer on hover */
+  transition: 0.5s ease;
+  /* Optional: to animate the background change */
 }
+
 #NextMove:hover {
   background: linear-gradient(180deg, #ad00ff 0%, #6c54ff 100%);
   /* background: linear-gradient(180deg, #00c6ff 0%, #0072ff 100%); */
@@ -914,6 +915,7 @@ body {
 .me {
   background-color: rgba(194, 194, 194, 0.07);
 }
+
 .me #one {
   align-items: center;
   width: 475.99px;
@@ -943,6 +945,7 @@ body {
 
   color: #282d6c;
 }
+
 .me #three {
   font-family: "Montserrat";
   font-style: normal;
@@ -985,7 +988,7 @@ body {
   border: none;
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
   padding: 0;
 }
 
@@ -1000,6 +1003,7 @@ body {
 #pic {
   background-color: rgba(154, 184, 221, 1);
 }
+
 #pic p {
   font-family: "Nunito";
   font-style: normal;
@@ -1009,9 +1013,11 @@ body {
 
   color: #ffffff;
 }
+
 #menu tr {
   background-color: #f1f8ff;
 }
+
 .table span {
   font-family: "Nunito";
   font-style: normal;
@@ -1021,10 +1027,12 @@ body {
 
   color: #000000;
 }
+
 .table img {
   height: 38px;
   width: 38px;
 }
+
 .container-fluid #menu {
   margin: 0;
   padding: 0;
@@ -1424,13 +1432,11 @@ body {
 #vehicleForm {
   padding-left: 5%;
   padding-right: 5%;
-  background: linear-gradient(
-    180deg,
-    #8f6cf9 0%,
-    rgba(194, 49, 240, 0.211156) 99.42%,
-    rgba(200, 33, 234, 0.0414754) 99.74%,
-    rgba(179, 62, 198, 0) 100%
-  );
+  background: linear-gradient(180deg,
+      #8f6cf9 0%,
+      rgba(194, 49, 240, 0.211156) 99.42%,
+      rgba(200, 33, 234, 0.0414754) 99.74%,
+      rgba(179, 62, 198, 0) 100%);
 }
 
 #vehicleForm form {
@@ -1455,6 +1461,7 @@ body {
     background-color: rgba(0, 0, 0, 0);
     bottom: auto;
   }
+
   .popup-menu {
     max-width: 90%;
   }
@@ -1498,7 +1505,8 @@ body {
 }
 
 #shift-btn.active {
-  background-color: #007bff; /* Change this to your desired active color */
+  background-color: #007bff;
+  /* Change this to your desired active color */
   color: white;
 }
 
@@ -1527,6 +1535,7 @@ body {
 #shift-btn.underline {
   border-bottom: 2px solid #000000;
 }
+
 #coupenBtn {
   border: none;
   background: none;
@@ -1587,6 +1596,7 @@ body {
   border-bottom: 1px solid #dee2e6;
   padding: 10px;
 }
+
 .addtionalservice {
   margin: 5px 0;
 }
@@ -1609,6 +1619,7 @@ body {
   grid-template-columns: auto auto;
   animation: rotate 2s linear 0s infinite;
 }
+
 .item1 {
   margin: auto;
   width: 15px;
@@ -1616,6 +1627,7 @@ body {
   border-radius: 0%;
   background: linear-gradient(180deg, #6c54ff 0%, #ad00ff 100%);
 }
+
 .item2 {
   margin: auto;
   width: 15px;
@@ -1623,6 +1635,7 @@ body {
   border-radius: 0%;
   background: linear-gradient(180deg, #ad00ff 0%, #6c54ff 100%);
 }
+
 .item3 {
   margin: auto;
   width: 15px;
@@ -1630,6 +1643,7 @@ body {
   border-radius: 0%;
   background: linear-gradient(180deg, #6c54ff 0%, #ad00ff 100%);
 }
+
 .item4 {
   margin: auto;
   width: 15px;
@@ -1637,20 +1651,24 @@ body {
   border-radius: 0%;
   background: linear-gradient(180deg, #ad00ff 0%, #6c54ff 100%);
 }
+
 @keyframes rotate {
   0% {
     rotate: 0deg;
     transform: scale(0.6);
   }
+
   50% {
     rotate: 100deg;
     transform: scale(0.4);
   }
+
   100% {
     rotate: 360deg;
     transform: scale(0.6);
   }
 }
+
 .darksoul-loader-h {
   margin: auto;
   margin-left: 5px;
@@ -1658,7 +1676,8 @@ body {
 
 .google-button {
   width: 100%;
-  background-color: #db4437; /* Google button color */
+  background-color: #db4437;
+  /* Google button color */
   color: white;
   border: none;
   padding: 10px;
@@ -1683,11 +1702,37 @@ body {
 } */
 
 .googleLogin {
-  background-color: red !important; /* Replace with your custom background color */
-  border-radius: 5px !important; /* Example for rounded corners */
-  color: white !important; /* Text color */
-  padding: 10px 20px !important; /* Padding */
+  background-color: red !important;
+  /* Replace with your custom background color */
+  border-radius: 5px !important;
+  /* Example for rounded corners */
+  color: white !important;
+  /* Text color */
+  padding: 10px 20px !important;
+  /* Padding */
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+.badge {
+  background-color: rgb(226, 57, 57);
+  /* Customize as needed */
+  color: white;
+  border-radius: 50%;
+  padding: 0.3em 0.6em;
+  font-size: 0.75em;
+  vertical-align: super;
+  margin-left: 0.5em;
+}
+
+.rag {
+  background-color: rgb(226, 57, 57);
+  /* Customize as needed */
+  color: white;
+  border-radius: 50%;
+  padding: 0.3em 0.6em;
+  font-size: 0.75em;
+  vertical-align: super;
+  margin-left: 1em;
 }

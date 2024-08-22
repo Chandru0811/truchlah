@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/custom.css";
-import { Table } from "react-bootstrap";
+import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 // import wallet from "../../asset/wallet.png";
 import rides from "../../asset/my rides.png";
 // import refer from "../../asset/refer and earn.png";
@@ -46,6 +46,7 @@ function User({ handleLogout }) {
         </button>
       </div>
 
+
       <Offcanvas show={showProfile} onHide={handleCloseProfile} placement="end">
         <Offcanvas.Header
           style={{ alignItems: "start" }}
@@ -53,16 +54,18 @@ function User({ handleLogout }) {
           closeButton
         >
           <div>
-            <button
-              type="button"
-              className="btn logoutButton"
-              onClick={onLogout}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Logout"
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="tooltip-logout">Logout</Tooltip>}
             >
-              <TbLogout />
-            </button>
+              <button
+                type="button"
+                className="btn logoutButton"
+                onClick={onLogout}
+              >
+                <TbLogout />
+              </button>
+            </OverlayTrigger>
           </div>
           <div className="w-100 centered">
             <Offcanvas.Title className="w-100">
@@ -102,7 +105,7 @@ function User({ handleLogout }) {
                       className="data-link"
                     >
                       <img src={rides} alt="rides pic" className="got mx-3" />
-                      <span>MY RIDES</span>
+                      <span>MY ORDERS</span>
                     </Link>
                   </td>
                 </tr>

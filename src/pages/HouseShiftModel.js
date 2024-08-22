@@ -86,14 +86,13 @@ function HouseShiftModel({
   
   useEffect(() => {
     if (!show) {
-      formik.resetForm();
+      // formik.resetForm();
     }
   }, [show]);
 
   return (
     <Modal show={show} onHide={() => {
       onHide();
-      formik.resetForm();
     }}>
       <Modal.Header closeButton>
         <Modal.Title>
