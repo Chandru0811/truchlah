@@ -17,6 +17,7 @@ import { Badge, Card, Space } from "antd";
 
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { GoStarFill } from "react-icons/go";
+import { FaRegStar } from "react-icons/fa6";
 function RideDetailsView() {
   const [show, setShow] = useState(false);
   const [data, setData] = useState({});
@@ -182,7 +183,7 @@ function RideDetailsView() {
             data-placement="bottom"
             title="Back"
             className="me-3"
-            style={{ cursor: 'pointer', color: "rgb(16, 110, 234)" }}
+            style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
           >
             <IoArrowBackCircleOutline size={30} />
           </div>
@@ -593,6 +594,20 @@ function RideDetailsView() {
                         <div className="col-md-6 col-12 ps-1">
                           <div>
                             <p className="line" style={{ color: "#00316B" }}>
+                              <b>User Name</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 ps-1" id="drop">
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.user?.firstName || "--"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
                               <b>Cancelled Date & Time</b>
                             </p>
                           </div>
@@ -640,70 +655,141 @@ function RideDetailsView() {
               </>
             )}
 
-            {data.bookingStatus?.reviewByUser ===
-              data.bookingStatus?.reviewByUser && (
-              <>
-                <div className="row">
-                  <div className="col-lg-3"></div>
-                  <div className="col-lg-9">
-                    <p className="mt-5 ps-2">
-                      <b>Review By User:</b>
-                    </p>
+            {data?.bookingStatus?.reviewByUser &&
+              data?.bookingStatus?.ratingByUser && (
+                <>
+                  <div className="row">
+                    <div className="col-lg-3"></div>
+                    <div className="col-lg-9">
+                      <p className="mt-5 ps-2">
+                        <b>Review By User:</b>
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="d-flex justify-content-center my-2 ">
-                  <div className="card w-50">
-                    <div className="card-body py-0">
-                      <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div>
-                            <p className="mt-2" style={{ color: "#00316B" }}>
-                              <b>Rating By User</b>
+                  <div className="d-flex justify-content-center my-2 ">
+                    <div className="card w-50">
+                      <div className="card-body py-0">
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div>
+                              <p className="mt-2" style={{ color: "#00316B" }}>
+                                <b>Rating By User</b>
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            className="col-md-6 col-12 ps-1"
+                            id="drop"
+                            style={{ borderBottom: "1px solid #e4e2e2" }}
+                          >
+                            <p className="mt-2" style={{ color: "#494949" }}>
+                              {data?.bookingStatus?.ratingByUser !== undefined
+                                ? Array.from({ length: 5 }).map((_, index) =>
+                                    index < data.bookingStatus.ratingByUser ? (
+                                      <GoStarFill
+                                        key={index}
+                                        className="text-warning"
+                                      />
+                                    ) : (
+                                      <FaRegStar
+                                        key={index}
+                                        className="text-warning"
+                                      />
+                                    )
+                                  )
+                                : "--"}
                             </p>
                           </div>
                         </div>
-                        <div
-                          className="col-md-6 col-12 ps-1"
-                          id="drop"
-                          style={{ borderBottom: "1px solid #e4e2e2" }}
-                        >
-                          <p className="mt-2" style={{ color: "#494949" }}>
-                            {data?.bookingStatus?.ratingByUser
-                              ? Array.from({
-                                  length: data.bookingStatus.ratingByUser,
-                                }).map((_, index) => (
-                                  // <FaRegStar
-                                  //   key={index}
-                                  //   className="text-warning"
-                                  // />
-                                  <GoStarFill  key={index}
-                                  className="text-warning"/>
-                                ))
-                              : "--"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div style={{ borderTop: "1px solid #e4e2e2" }}>
-                            <p className="mt-2" style={{ color: "#00316B" }}>
-                              <b>Comments</b>
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                              <p className="mt-2" style={{ color: "#00316B" }}>
+                                <b>Comments</b>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-12 col-12 ps-1">
+                            <p style={{ color: "#4949491" }}>
+                              {data?.bookingStatus?.reviewByUser
+                                ? data.bookingStatus.reviewByUser
+                                : " "}
                             </p>
                           </div>
-                        </div>
-                        <div className="col-md-12 col-12 ps-1">
-                          <p style={{ color: "#4949491" }}>
-                            {data?.bookingStatus?.reviewByUser
-                              ? data.bookingStatus.reviewByUser
-                              : " "}
-                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+
+            {data.bookingStatus?.reviewByDriver &&
+              data.bookingStatus?.ratingByDriver && (
+                <>
+                  <div className="row">
+                    <div className="col-lg-3"></div>
+                    <div className="col-lg-9">
+                      <p className="mt-5 ps-2">
+                        <b>Review By Driver:</b>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content-center my-2 ">
+                    <div className="card w-50">
+                      <div className="card-body py-0">
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div>
+                              <p className="mt-2" style={{ color: "#00316B" }}>
+                                <b>Rating By Driver</b>
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            className="col-md-6 col-12 ps-1"
+                            id="drop"
+                            style={{ borderBottom: "1px solid #e4e2e2" }}
+                          >
+                            <p className="mt-2" style={{ color: "#494949" }}>
+                              {data?.bookingStatus?.ratingByUser !== undefined
+                                ? Array.from({ length: 5 }).map((_, index) =>
+                                    index < data.bookingStatus.ratingByUser ? (
+                                      <GoStarFill
+                                        key={index}
+                                        className="text-warning"
+                                      />
+                                    ) : (
+                                      <FaRegStar
+                                        key={index}
+                                        className="text-warning"
+                                      />
+                                    )
+                                  )
+                                : "--"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                              <p className="mt-2" style={{ color: "#00316B" }}>
+                                <b>Comments</b>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-12 col-12 ps-1">
+                            <p style={{ color: "#4949491" }}>
+                              {data?.bookingStatus?.reviewByUser
+                                ? data.bookingStatus.reviewByUser
+                                : " "}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
 
             <div className="my-3 d-flex justify-content-center">
               {data.bookingStatus?.status === "COMPLETED" ||
