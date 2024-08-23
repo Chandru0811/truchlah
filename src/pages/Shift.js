@@ -31,15 +31,13 @@ function Shift() {
               >
                 <div className="row">
                   <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
-                    <span className="fw-medium text-muted"
-                      style={{ color: "#939393" }}>
+                    <span className="fw-medium text-muted">
                       PACKERS & MOVERS
                     </span>
                     <h3 style={{ color: "#525252" }}>
                       ITEM SHIFTING
                     </h3>
-                    <span className="fw-medium text-muted"
-                      style={{ color: "#939393" }}>
+                    <span className="fw-medium text-muted">
                       Secure Item Shifting
                     </span>
                   </div>
@@ -54,8 +52,9 @@ function Shift() {
               </Link>
             </div>
 
-            <div className="col-6 card shadow-sm card-hover2"
-              style={{ width: '70%' }}>
+            <div className="col-6 justify-content-center card shadow-sm card-hover2"
+              style={{ width: '70%' }}
+            >
               <div className="row">
                 <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
                   <span className="fw-medium text-muted">
@@ -64,14 +63,16 @@ function Shift() {
                   <h3 style={{ color: "#525252" }}>
                     HOUSE SHIFTING
                   </h3>
-                  <button type="button" class="btn-custom">
-                    Coming Soon
-                  </button>
+                  <div>
+                    <button type="button" class="px-2 btn-custom">
+                      Coming Soon
+                    </button>
+                  </div>
                   <span className="fw-medium text-muted">
                     House Move Made Easy
                   </span>
                 </div>
-                <div className="col-6 pe-0">
+                <div className="col-md-6 col-12 pe-0">
                   <img
                     src={house}
                     alt="truck"

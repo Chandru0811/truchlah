@@ -1736,7 +1736,7 @@ body {
 }
 
 .btn-custom {
-  width: 9vw;
+  /* min-width: 9vw; */
   background-color: #1bc24a;
   font-size: 13px;
   border-radius: 15px;
