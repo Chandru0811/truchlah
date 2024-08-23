@@ -41,7 +41,11 @@ function Service() {
   const shiftType = sessionStorage.getItem("shiftType");
   const [manpowerQuantity, setManpowerQuantity] = useState(0);
   const [noOfPiecess, setNoOfPiecess] = useState(0);
- 
+  const currentDate = new Date();
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+
+
   // eligible date based on time
 
   // const getEligibleDateBasedOnTime = () => {
@@ -62,18 +66,21 @@ function Service() {
   //   return now.toTimeString().split(":").slice(0, 2).join(":");
   // };
 
-  const currentData = new Date().toISOString().split("T")[0];
-  const currentTime = new Date().toISOString().split("T")[1].slice(0, 5);
+  // const currentData = new Date().toISOString().split("T")[0];
+  const formattedDate = currentDate.toISOString().slice(0, 10);
+  // const currentTime = new Date().toISOString().split("T")[1].slice(0, 5);
+  const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
   const validationSchema = Yup.object().shape({
     date: Yup.date().required("Date is required"),
- time: Yup.string().required("Time is required"),
+    time: Yup.string().required("Time is required"),
     vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
   });
+
   const formik = useFormik({
     initialValues: {
-      date: currentData,
-      time: currentTime,
+      date: formattedDate,
+      time: formattedTime,
       vechicleTypeId: "",
       driverAsManpower: false,
       extraManpower: false,
@@ -163,22 +170,24 @@ function Service() {
       prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
     );
   };
-  const increasePiecesQuantity = () => {
-    setNoOfPiecess((prevQuantity) =>
-      prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
-    );
-  };
+
+  // const increasePiecesQuantity = () => {
+  //   setNoOfPiecess((prevQuantity) =>
+  //     prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
+  //   );
+  // };
 
   const decreaseManpowerQuantity = () => {
     setManpowerQuantity((prevQuantity) =>
       prevQuantity > 1 ? prevQuantity - 1 : prevQuantity
     );
   };
-  const decreasePiecesQuantity = () => {
-    setNoOfPiecess((prevQuantity) =>
-      prevQuantity > 0 ? prevQuantity - 1 : prevQuantity
-    );
-  };
+
+  // const decreasePiecesQuantity = () => {
+  //   setNoOfPiecess((prevQuantity) =>
+  //     prevQuantity > 0 ? prevQuantity - 1 : prevQuantity
+  //   );
+  // };
 
   useEffect(() => {
     const getVechicle = async () => {
@@ -192,6 +201,23 @@ function Service() {
       }
     };
     getVechicle();
+  }, []);
+
+  useEffect(() => {
+    const currentDate = new Date();
+
+    // Add 3 hours and 5 minutes to the current time
+    currentDate.setHours(currentDate.getHours() + 3);
+    currentDate.setMinutes(currentDate.getMinutes() + 5);
+
+    const formattedDate = currentDate.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
+    const formattedTime = currentDate.toTimeString().slice(0, 5); // Format time as HH:MM
+
+    setDate(formattedDate);
+    setTime(formattedTime);
+
+    formik.setFieldValue('date',formattedDate);
+    formik.setFieldValue('time',formattedTime);
   }, []);
 
   const imageMapping = {
@@ -240,11 +266,12 @@ function Service() {
                 type="date"
                 id="date"
                 name="date"
-                min={currentData}
+                // min={currentData}
                 className={`form-control form-control-lg ${
                   formik.touched.date && formik.errors.date ? "is-invalid" : ""
                 }`}
                 {...formik.getFieldProps("date")}
+                onChange={(e) => setDate(e.target.value)}
               />
               {formik.touched.date && formik.errors.date && (
                 <div className="invalid-feedback text-center">
@@ -257,11 +284,12 @@ function Service() {
                 type="time"
                 id="time"
                 name="time"
-                min={currentTime}
+                // min={currentTime}
                 className={`form-control form-control-lg ${
                   formik.touched.time && formik.errors.time ? "is-invalid" : ""
                 }`}
                 {...formik.getFieldProps("time")}
+                onChange={(e) => setTime(e.target.value)}
               />
               {formik.touched.time && formik.errors.time && (
                 <div className="invalid-feedback text-center">
