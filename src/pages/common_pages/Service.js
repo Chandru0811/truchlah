@@ -26,6 +26,7 @@ function Service() {
   console.log("est km", distanceValue);
   const locationValueString = params.get("location");
   const bookingIdValue = params.get("bookingId");
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   let locationValue = [];
   try {
@@ -42,9 +43,8 @@ function Service() {
   const [manpowerQuantity, setManpowerQuantity] = useState(0);
   const [noOfPiecess, setNoOfPiecess] = useState(0);
   const currentDate = new Date();
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   // eligible date based on time
 
@@ -69,11 +69,35 @@ function Service() {
   // const currentData = new Date().toISOString().split("T")[0];
   const formattedDate = currentDate.toISOString().slice(0, 10);
   // const currentTime = new Date().toISOString().split("T")[1].slice(0, 5);
-  const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+  const formattedTime = currentDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const startOfToday = () => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  };
+
+  const now = () => new Date();
+  const isPastDateTime = (date, time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+    return selectedDateTime < now();
+  };
 
   const validationSchema = Yup.object().shape({
-    date: Yup.date().required("Date is required"),
-    time: Yup.string().required("Time is required"),
+    date: Yup.date()
+      .min(startOfToday(), "Date cannot be in the past")
+      .required("Date is required"),
+    time: Yup.string()
+      .required("Time is required")
+      .test("not-in-past", "Time cannot be in the past", function (value) {
+        const { date } = this.parent; // Access other field values
+        return date && value ? !isPastDateTime(date, value) : true;
+      }),
     vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
   });
 
@@ -94,7 +118,7 @@ function Service() {
     onSubmit: async (values) => {
       const selectedDateTime = new Date(`${values.date}T${values.time}`);
       const eligibleTime = new Date();
-      eligibleTime.setHours(eligibleTime.getHours() + 3);
+      eligibleTime.setHours(eligibleTime.getHours());
 
       if (selectedDateTime >= eligibleTime) {
         const selectedOption = vechicle.find(
@@ -141,7 +165,7 @@ function Service() {
           promoCode: "",
           actualKm: parseFloat(distanceValue),
         };
-
+        setLoadIndicator(true);
         try {
           const response = await bookingApi.post(`booking/update`, payload);
           console.log(response);
@@ -153,6 +177,8 @@ function Service() {
           }
         } catch (error) {
           toast.error(error);
+        } finally {
+          setLoadIndicator(false);
         }
       } else {
         toast.warning("You must select a time at least 3 hours from now");
@@ -203,21 +229,20 @@ function Service() {
     getVechicle();
   }, []);
 
+  // Update the date and time
   useEffect(() => {
-    const currentDate = new Date();
+    const currentDateTime = new Date();
+    // currentDateTime.setHours(currentDateTime.getHours() + 3);
+    // currentDateTime.setMinutes(currentDateTime.getMinutes() + 5);
 
-    // Add 3 hours and 5 minutes to the current time
-    currentDate.setHours(currentDate.getHours() + 3);
-    currentDate.setMinutes(currentDate.getMinutes() + 5);
-
-    const formattedDate = currentDate.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
-    const formattedTime = currentDate.toTimeString().slice(0, 5); // Format time as HH:MM
+    const formattedDate = currentDateTime.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
+    const formattedTime = currentDateTime.toTimeString().slice(0, 5); // Format time as HH:MM
 
     setDate(formattedDate);
     setTime(formattedTime);
 
-    formik.setFieldValue('date',formattedDate);
-    formik.setFieldValue('time',formattedTime);
+    formik.setFieldValue("date", formattedDate);
+    formik.setFieldValue("time", formattedTime);
   }, []);
 
   const imageMapping = {
@@ -271,7 +296,7 @@ function Service() {
                   formik.touched.date && formik.errors.date ? "is-invalid" : ""
                 }`}
                 {...formik.getFieldProps("date")}
-                onChange={(e) => setDate(e.target.value)}
+                onChange={(e) => formik.setFieldValue("date", e.target.value)}
               />
               {formik.touched.date && formik.errors.date && (
                 <div className="invalid-feedback text-center">
@@ -289,7 +314,7 @@ function Service() {
                   formik.touched.time && formik.errors.time ? "is-invalid" : ""
                 }`}
                 {...formik.getFieldProps("time")}
-                onChange={(e) => setTime(e.target.value)}
+                onChange={(e) => formik.setFieldValue("time", e.target.value)}
               />
               {formik.touched.time && formik.errors.time && (
                 <div className="invalid-feedback text-center">
@@ -545,32 +570,8 @@ function Service() {
               </div>
             </div> */}
 
-            <div className="col-md-6 col-12 mb-3">
-              <div
-                className="d-flex justify-content-between p-3"
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                  alignItems: "center",
-                }}
-              >
-                <span>
-                  <b>Trolly Required</b>
-                </span>
-                <div class="form-check">
-                  <input
-                    class="form-check-input border-info"
-                    type="checkbox"
-                    value={true}
-                    id="flexCheckChecked"
-                    name="trollyRequired"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className=" col-md-6 col-12 mb-3">
+           
+            <div className=" col-md-12 col-12 mb-3">
               {showQuantity && (
                 <div
                   className="d-flex justify-content-between p-3"
@@ -636,6 +637,31 @@ function Service() {
                 }}
               >
                 <span>
+                  <b>Trolly Required</b>
+                </span>
+                <div class="form-check">
+                  <input
+                    class="form-check-input border-info"
+                    type="checkbox"
+                    value={true}
+                    id="flexCheckChecked"
+                    name="trollyRequired"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-3">
+              <div
+                className="d-flex justify-content-between p-3"
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                  alignItems: "center",
+                }}
+              >
+                <span>
                   <b>Round Trip Required</b>
                 </span>
                 <div class="form-check">
@@ -672,7 +698,14 @@ function Service() {
               className="btn btn-primary px-5 py-2"
               type="submit"
               id="NextMove"
+              
             >
+               {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
               Next
             </button>
           </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import "../../styles/custom.css";
 import { Link, useSearchParams } from "react-router-dom";
+import success from "../../asset/tick.gif";
 
 function Successfull() {
   const [searchParams] = useSearchParams();
@@ -16,14 +17,12 @@ function Successfull() {
             <div className="col-lg-6 col-md-6 col-12">
               <div className="card">
                 <center>
-                  <div className="circle d-flex justify-content-centre align-item-center mt-3">
-                    <p className="text">
-                      <i className="checkmark">✓</i>
-                    </p>
+                  <div className="d-flex justify-content-center align-item-center mt-2">
+                    <img src={success} style={{border:"none" ,width:"200px"}}/>
                   </div>
                 </center>
-                <span className="mt-3 fw-bolder">Booking Id: {bookingId}</span>
-                <h5 className="mt-4" style={{ color: "#4D96ED" }}>
+                <span className="fw-bolder">Booking Id: {bookingId}</span>
+                <h5 className="mt-4" style={{ color: "#1bc24a" }}>
                   Order Successful
                 </h5>
                 <p className="mt-2">Thank you so much for your order</p>

@@ -9,6 +9,7 @@ import VAN2 from "../../asset/2.4M_VAN.png";
 import Lorry10 from "../../asset/10FT_LORRY.png";
 import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
+import UnknownVehicle from "../../asset/Unknown Vehicle.png";
 import Popup from "./Popup";
 // import { MdCancel } from "react-icons/md";
 import { useFormik } from "formik";
@@ -101,6 +102,7 @@ function RideDetailsView() {
     3: <img src={Lorry10} alt="SomeOther" className="img-fluid mt-3" />,
     4: <img src={Lorry14} alt="Ace" className="img-fluid mt-3" />,
     5: <img src={Lorry24} alt="Ace" className="img-fluid mt-3" />,
+    default: <img src={UnknownVehicle} alt="Ace" className="img-fluid mt-3" />,
   };
 
   useEffect(() => {
@@ -145,7 +147,42 @@ function RideDetailsView() {
     5: "24FT_LORRY",
     default: "Unknown Vehicle",
   };
-  const bookingStatus = data?.bookingStatus?.status || "Unknown";
+
+  // Function to format the booking status text and return related background color
+  const formatBookingStatus = (status) => {
+    switch (status) {
+      case "DRAFT_BOOKING":
+        return {
+          text: "Draft Booking",
+          backgroundColor: "#fcd162", // Warning color (example)
+        };
+      case "CANCELLED":
+        return {
+          text: "Cancelled",
+          backgroundColor: "#f04545", // Danger color (example)
+        };
+      case "BOOKED":
+        return {
+          text: "Booked",
+          backgroundColor: "#2593fb", // Info color (example)
+        };
+      case "COMPLETED":
+        return {
+          text: "Completed",
+          backgroundColor: "#17e540", // Success color (example)
+        };
+      default:
+        return {
+          text: "Unknown",
+          backgroundColor: "#6d736e", // Default color (example)
+        };
+    }
+  };
+
+  // Get the formatted status and background color
+  const { text: bookingStatus, backgroundColor } = formatBookingStatus(
+    data?.bookingStatus?.status || "Unknown"
+  );
 
   const getBadgeStyle = (status) => {
     switch (status) {
@@ -189,16 +226,6 @@ function RideDetailsView() {
           </div>
           <center>
             <h3 style={{ color: "#106EEA" }}>SUMMARY</h3>
-
-            {/* <Space
-            direction="vertical"
-            size="middle"
-            style={{
-              width: "50%",
-            }}
-          >
-            <Badge.Ribbon text={bookingStatus}></Badge.Ribbon>
-          </Space> */}
           </center>
 
           <div className="row">
@@ -207,20 +234,24 @@ function RideDetailsView() {
               <p className="mt-5 ps-2">
                 <div className="d-flex justify-content-between">
                   <b>Vehicle :</b>
-                  <Badge.Ribbon
-                    text={bookingStatus}
-                    style={{
-                      backgroundColor: badgeStyle.backgroundColor,
-                      color: badgeStyle.color,
-                    }}
-                  />
                 </div>
               </p>
             </div>
             <div className="col-lg-3"></div>
           </div>
           <center>
-            {vehicleImages[data.booking?.vehicletypeId] || null}
+            <div className="w-25">
+              <Badge.Ribbon
+                text={bookingStatus}
+                style={{
+                  backgroundColor: backgroundColor,
+                  color: "#fff", // Text color for better contrast
+                }}
+              />
+              {vehicleImages[data.booking?.vehicletypeId] ||
+                vehicleImages.default}
+            </div>
+
             <p className="mt-3">
               {vehicleNameMap[data.booking?.vehicletypeId]}
             </p>
