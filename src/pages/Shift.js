@@ -25,7 +25,7 @@ function Shift() {
               <Link
                 to={{
                   pathname: "/map",
-                  state: { logType: logType("itemShift") },
+                  state: { logType: logType("ITEM") },
                 }}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
@@ -55,6 +55,13 @@ function Shift() {
             <div className="col-6 justify-content-center card shadow-sm card-hover2"
               style={{ width: '70%' }}
             >
+              {/* <Link
+                to={{
+                  pathname: "/houseshift",
+                  state: { logType: logType("HOUSE") },
+                }}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              > */}
               <div className="row">
                 <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
                   <span className="fw-medium text-muted">
@@ -80,6 +87,7 @@ function Shift() {
                   />
                 </div>
               </div>
+              {/* </Link> */}
             </div>
           </div>
         </div>
@@ -88,10 +96,10 @@ function Shift() {
           <img
             src={truck}
             alt="truck"
-            className="img-fluid w-100"
-            style={{ height: "85vh" }}
+            className="img-fluid responsive-image"
           />
         </div>
+
       </div>
 
       {/* <div className="col container-fluid container py-5 ">
@@ -156,7 +164,7 @@ function Shift() {
           <div className="col-lg-3 col-md-3 col-12"></div>
         </div>
       </div> */}
-    </div>
+    </div >
   );
 }
 export default Shift;
