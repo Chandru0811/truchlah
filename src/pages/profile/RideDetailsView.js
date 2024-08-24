@@ -184,22 +184,6 @@ function RideDetailsView() {
     data?.bookingStatus?.status || "Unknown"
   );
 
-  const getBadgeStyle = (status) => {
-    switch (status) {
-      case "CANCELLED":
-        return { backgroundColor: "#f5222d", color: "#fff" }; // Danger color
-      case "BOOKED":
-        return { backgroundColor: "#faad14", color: "#fff" }; // Warning color
-      case "DRAFT_BOOKING":
-        return { backgroundColor: "#1890ff", color: "#fff" }; // Info color
-      case "COMPLETED":
-        return { backgroundColor: "#52c41a", color: "#fff" }; // Primary color
-      default:
-        return { backgroundColor: "#d9d9d9", color: "#000" }; // Default color
-    }
-  };
-  const badgeStyle = getBadgeStyle(bookingStatus);
-
   return (
     <section className="summary">
       {isLoading ? (
@@ -782,9 +766,9 @@ function RideDetailsView() {
                             style={{ borderBottom: "1px solid #e4e2e2" }}
                           >
                             <p className="mt-2" style={{ color: "#494949" }}>
-                              {data?.bookingStatus?.ratingByUser !== undefined
+                              {data?.bookingStatus?.ratingByDriver !== undefined
                                 ? Array.from({ length: 5 }).map((_, index) =>
-                                    index < data.bookingStatus.ratingByUser ? (
+                                    index < data.bookingStatus.ratingByDriver ? (
                                       <GoStarFill
                                         key={index}
                                         className="text-warning"
@@ -810,8 +794,8 @@ function RideDetailsView() {
                           </div>
                           <div className="col-md-12 col-12 ps-1">
                             <p style={{ color: "#4949491" }}>
-                              {data?.bookingStatus?.reviewByUser
-                                ? data.bookingStatus.reviewByUser
+                              {data?.bookingStatus?.reviewByDriver
+                                ? data.bookingStatus.reviewByDriver
                                 : " "}
                             </p>
                           </div>
