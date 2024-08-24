@@ -16,7 +16,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import HouseShiftModel from "../HouseShiftModel";
 import { toast } from "react-toastify";
-import {  useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
 import { FaEdit, FaMinus, FaPlus } from "react-icons/fa";
 
@@ -62,7 +62,7 @@ function Map() {
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
-  const handleClose = () => {setShow(false)};
+  const handleClose = () => { setShow(false) };
   const currentPath = location.pathname;
   console.log("Current path:", currentPath);
 
@@ -276,7 +276,8 @@ function Map() {
     }
   }, []);
 
-  const handleAddStop = () => {
+  const handleAddStop = (title) => {
+     setModalTitle(title);
     if (
       formik.values.stops.length > 0 &&
       formik.values.stops[formik.values.stops.length - 1] === ""
@@ -292,8 +293,8 @@ function Map() {
       ...prevState,
       stops: [...prevState.stops, false],
     }));
+    // setModalShow(true);
   };
-
   const handleDeleteStop = (index) => {
     const updatedStops = [...stops];
     updatedStops.splice(index, 1);
@@ -309,6 +310,7 @@ function Map() {
       stops: updatedEditIconStops,
     }));
     recalculateDirections();
+    setModalShow(false);
   };
 
   const handleStopChange = (index, value) => {
@@ -404,8 +406,8 @@ function Map() {
           const lat = position?.coords?.latitude;
           const lng = position?.coords?.longitude;
           setUserLocation({ lat, lng });
-          console.log("lat",lat)
-          console.log("lng",lng)
+          console.log("lat", lat)
+          console.log("lng", lng)
         },
         (error) => {
           console.error("Error getting user location:", error);
@@ -420,8 +422,8 @@ function Map() {
   useEffect(() => {
     const handlePopState = (event) => {
       if (location.pathname === '/map') {
-        event.preventDefault(); 
-        handleShow(); 
+        event.preventDefault();
+        handleShow();
         window.history.pushState(null, '');
       }
     };
@@ -452,7 +454,7 @@ function Map() {
         <Modal.Body>Are you sure you want to cancel the order?</Modal.Body>
         <Modal.Footer className="p-1">
           <button className="btn btn-danger btn-sm px-3" onClick={handleClose}>No</button>
-          <button className="btn btn-info btn-sm px-3" onClick={()=>{handleClose(); navigate("/shift")}}>Yes</button>
+          <button className="btn btn-info btn-sm px-3" onClick={() => { handleClose(); navigate("/shift") }}>Yes</button>
         </Modal.Footer>
       </Modal>
       <form onSubmit={formik.handleSubmit}>
@@ -469,7 +471,7 @@ function Map() {
                 mapTypeControl: true,
                 fullscreenControl: true,
               }}
-              // onLoad={map => mapRef.current = map}
+            // onLoad={map => mapRef.current = map}
             >
               {markerPosition ? (
                 <></>
@@ -523,7 +525,7 @@ function Map() {
                     ),
                     types: ["geocode"], // Use geocode for all locations
                     componentRestrictions: { country: ["sg", "in"] }, // Restrict to Singapore and India
-                  }}      
+                  }}
                 >
                   <FloatingLabel
                     controlId="floatingInput"
@@ -541,7 +543,7 @@ function Map() {
                     style={{ color: "rgb(0, 0, 0, 0.9)" }}
                     className="mb-3"
                   >
-                    
+
                     <Form.Control
                       type="text"
                       placeholder="Pick Up Location"
@@ -587,7 +589,7 @@ function Map() {
                     }}
                   >
                     <div className="d-flex align-items-center mt-3">
-                    {/* {showEditIcon.stops[index] && (
+                      {/* {showEditIcon.stops[index] && (
                         <FaEdit
                           className="edit-icon"
                           onClick={() => handleOpenModal(`Stops ${index + 1}`)}
@@ -663,7 +665,7 @@ function Map() {
                           className="icon-img me-4"
                         />
                         <span>Drop Location</span>
-                        
+
                       </div>
                     }
                     style={{ color: "rgb(0, 0, 0, 0.9)" }}

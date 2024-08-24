@@ -42,16 +42,16 @@ function ChangePassword() {
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
       )
-      .required("Please Enter your new password"),
+      .required("*Please Enter your new password"),
     confirmPassword: Yup.string()
-      .required("Confirm Password is required")
+      .required("*Confirm Password is required")
       .oneOf([Yup.ref("password")], "Passwords must match"),
     oldPassword: Yup.string()
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
       )
-      .required("Please Enter your current password"),
+      .required("*Please Enter your current password"),
   });
 
   const formik = useFormik({
@@ -129,16 +129,15 @@ function ChangePassword() {
                         >
                           <Form.Control
                             type="email"
-                            className={`form-control  ${
-                              formik.touched.email && formik.errors.email
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                            className={`form-control  ${formik.touched.email && formik.errors.email
+                              ? ""
+                              : ""
+                              }`}
                             {...formik.getFieldProps("email")}
                             placeholder="Enter your name"
                           />
                           {formik.touched.email && formik.errors.email && (
-                            <div className="invalid-feedback">
+                            <div className="text-danger">
                               {formik.errors.email}
                             </div>
                           )}
@@ -154,11 +153,10 @@ function ChangePassword() {
                           <Form.Control
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter your new password"
-                            className={`form-control ${
-                              formik.touched.password && formik.errors.password
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                            className={`form-control ${formik.touched.password && formik.errors.password
+                              ? ""
+                              : ""
+                              }`}
                             {...formik.getFieldProps("password")}
                           />
                           {showPassword ? (
@@ -167,7 +165,7 @@ function ChangePassword() {
                               style={{
                                 position: "absolute",
                                 right: "15px",
-                                top: "calc(50% - 8px)",
+                                top: "calc(35% - 8px)",
                                 cursor: "pointer",
                               }}
                             />
@@ -177,14 +175,14 @@ function ChangePassword() {
                               style={{
                                 position: "absolute",
                                 right: "15px",
-                                top: "calc(50% - 8px)",
+                                top: "calc(35% - 8px)",
                                 cursor: "pointer",
                               }}
                             />
                           )}
                           {formik.touched.password &&
                             formik.errors.password && (
-                              <div className="invalid-feedback">
+                              <div className="text-danger">
                                 {formik.errors.password}
                               </div>
                             )}
@@ -200,12 +198,11 @@ function ChangePassword() {
                           <Form.Control
                             type={confirmPassword ? "text" : "password"}
                             placeholder="Confirm your password"
-                            className={`form-control ${
-                              formik.touched.confirmPassword &&
+                            className={`form-control ${formik.touched.confirmPassword &&
                               formik.errors.confirmPassword
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                              ? ""
+                              : ""
+                              }`}
                             {...formik.getFieldProps("confirmPassword")}
                           />
                           {confirmPassword ? (
@@ -214,7 +211,7 @@ function ChangePassword() {
                               style={{
                                 position: "absolute",
                                 right: "15px",
-                                top: "calc(50% - 8px)",
+                                top: "calc(35% - 8px)",
                                 cursor: "pointer",
                               }}
                             />
@@ -224,14 +221,14 @@ function ChangePassword() {
                               style={{
                                 position: "absolute",
                                 right: "15px",
-                                top: "calc(50% - 8px)",
+                                top: "calc(35% - 8px)",
                                 cursor: "pointer",
                               }}
                             />
                           )}
                           {formik.touched.confirmPassword &&
                             formik.errors.confirmPassword && (
-                              <div className="invalid-feedback">
+                              <div className="text-danger">
                                 {formik.errors.confirmPassword}
                               </div>
                             )}
@@ -247,12 +244,11 @@ function ChangePassword() {
                           <Form.Control
                             type={oldPassword ? "text" : "password"}
                             placeholder="Enter your current password"
-                            className={`form-control ${
-                              formik.touched.oldPassword &&
+                            className={`form-control ${formik.touched.oldPassword &&
                               formik.errors.oldPassword
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                              ? ""
+                              : ""
+                              }`}
                             {...formik.getFieldProps("oldPassword")}
                           />
                           {oldPassword ? (
@@ -261,7 +257,7 @@ function ChangePassword() {
                               style={{
                                 position: "absolute",
                                 right: "15px",
-                                top: "calc(50% - 8px)",
+                                top: "calc(35% - 8px)",
                                 cursor: "pointer",
                               }}
                             />
@@ -271,14 +267,14 @@ function ChangePassword() {
                               style={{
                                 position: "absolute",
                                 right: "15px",
-                                top: "calc(50% - 8px)",
+                                top: "calc(35% - 8px)",
                                 cursor: "pointer",
                               }}
                             />
                           )}
                           {formik.touched.oldPassword &&
                             formik.errors.oldPassword && (
-                              <div className="invalid-feedback">
+                              <div className="text-danger">
                                 {formik.errors.oldPassword}
                               </div>
                             )}
