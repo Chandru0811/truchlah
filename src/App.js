@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
+import 'antd/dist/reset.css';
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import AdminLayout from "./layouts/AdminLayout";
@@ -25,6 +25,10 @@ function UserRoute() {
     // Your logout logic
     sessionStorage.removeItem("isAdmin");
     sessionStorage.removeItem("isAuthenticate");
+    sessionStorage.removeItem("roles");
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("token");
     setIsAuthenticate(false);
     setIsAdmin(false);
   };

@@ -20,7 +20,12 @@ function User({ handleLogout }) {
   const userName = sessionStorage.getItem("username");
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
-
+  
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Profile
+    </Tooltip>
+  );
   const handleCloseMain = () => setShow(false);
 
   const handleCloseProfile = () => {
@@ -40,12 +45,13 @@ function User({ handleLogout }) {
 
   return (
     <>
-      <div id="pro-btn">
-        <button className="btn" onClick={handleShowProfile}>
-          <CgProfile style={{ color: "#3E4D6A", fontSize: "24px" }} />
-        </button>
-      </div>
-
+      <OverlayTrigger placement="bottom" overlay={renderTooltip}>
+        <div id="pro-btn">
+          <button className="btn" onClick={handleShowProfile}>
+            <CgProfile style={{ color: "#3E4D6A", fontSize: "24px" }} />
+          </button>
+        </div>
+      </OverlayTrigger>
 
       <Offcanvas show={showProfile} onHide={handleCloseProfile} placement="end">
         <Offcanvas.Header

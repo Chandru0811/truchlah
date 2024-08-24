@@ -1,8 +1,8 @@
 import React from "react";
 import "../styles/custom.css";
-import home from "../asset/Rectangle 19 (1).png";
-import item from "../asset/icons8-open-box-48 1.png";
-import truck from "../asset/delivery-service.png";
+import house from "../asset/house.png";
+import item from "../asset/item.png";
+import truck from "../asset/Trucklah.png";
 import { Link } from "react-router-dom";
 
 function Shift() {
@@ -15,15 +15,94 @@ function Shift() {
   return (
     <div className="container-fluid" id="heros">
       <div className="row">
-        <img
-          src={truck}
-          alt="truck"
-          className="img-fluid"
-          style={{ height: "80vh" }}
-        />
+        <div className="col-md-6 col-12">
+
+          <div className="row justify-content-center mb-3">
+            <div
+              className="col-6 justify-content-center card shadow-sm mb-5 mt-5 card-hover"
+              style={{ width: '70%' }}
+            >
+              <Link
+                to={{
+                  pathname: "/map",
+                  state: { logType: logType("ITEM") },
+                }}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <div className="row">
+                  <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
+                    <span className="fw-medium text-muted">
+                      PACKERS & MOVERS
+                    </span>
+                    <h3 style={{ color: "#525252" }}>
+                      ITEM SHIFTING
+                    </h3>
+                    <span className="fw-medium text-muted">
+                      Secure Item Shifting
+                    </span>
+                  </div>
+                  <div className="col-md-6 col-12 pe-0">
+                    <img
+                      src={item}
+                      alt="truck"
+                      className="img-fluid"
+                    />
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            <div className="col-6 justify-content-center card shadow-sm card-hover2"
+              style={{ width: '70%' }}
+            >
+              {/* <Link
+                to={{
+                  pathname: "/houseshift",
+                  state: { logType: logType("HOUSE") },
+                }}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              > */}
+              <div className="row">
+                <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
+                  <span className="fw-medium text-muted">
+                    PACKERS & MOVERS
+                  </span>
+                  <h3 style={{ color: "#525252" }}>
+                    HOUSE SHIFTING
+                  </h3>
+                  <div>
+                    <button type="button" class="px-2 btn-custom">
+                      Coming Soon
+                    </button>
+                  </div>
+                  <span className="fw-medium text-muted">
+                    House Move Made Easy
+                  </span>
+                </div>
+                <div className="col-md-6 col-12 pe-0">
+                  <img
+                    src={house}
+                    alt="truck"
+                    className="img-fluid"
+                  />
+                </div>
+              </div>
+              {/* </Link> */}
+            </div>
+          </div>
+        </div>
+
+        <div className="col-md-6 col-12">
+          <img
+            src={truck}
+            alt="truck"
+            className="img-fluid responsive-image"
+          />
+        </div>
+
       </div>
 
-      <div className="col container-fluid container py-5 ">
+      {/* <div className="col container-fluid container py-5 ">
         <div className=" text-center row ">
           <div className="col-lg-3 col-md-3 col-12"></div>
           <div className="col-lg-6 col-md-6 col-12">
@@ -51,9 +130,9 @@ function Shift() {
           </div>
           <div className="col-lg-3 col-md-3 col-12"></div>
         </div>
-      </div>
+      </div> */}
 
-      <div className=" container-fluid container py-2">
+      {/* <div className=" container-fluid container py-2">
         <div className="text-center row pb-5">
           <div className="col-lg-3 col-md-3 col-12"></div>
           <div className="col-lg-6 col-md-6 col-12">
@@ -84,8 +163,8 @@ function Shift() {
           </div>
           <div className="col-lg-3 col-md-3 col-12"></div>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </div >
   );
 }
 export default Shift;

@@ -17,21 +17,16 @@ import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-const validationSchema = Yup.object().shape({
-  date: Yup.string().required("Date is required"),
-  time: Yup.string().required("Time is required"),
-  vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
-});
-
 function Service() {
   // const {location , bookingId} = useParams();
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const distanceValue = params.get("distance");
-  console.log("est km", distanceValue)
+  console.log("est km", distanceValue);
   const locationValueString = params.get("location");
   const bookingIdValue = params.get("bookingId");
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   let locationValue = [];
   try {
@@ -47,34 +42,69 @@ function Service() {
   const shiftType = sessionStorage.getItem("shiftType");
   const [manpowerQuantity, setManpowerQuantity] = useState(0);
   const [noOfPiecess, setNoOfPiecess] = useState(0);
+  const currentDate = new Date();
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
-  const getCurrentDate = () => {
-    const today = new Date();
-    return today.toISOString().split("T")[0];
-  };
+  // eligible date based on time
 
-  const getCurrentTime = () => {
-    const now = new Date();
-    now.setHours(now.getHours());
-    return now.toTimeString().split(":").slice(0, 2).join(":");
-  };
-
-  // const getEliglibleTime = () => {
+  // const getEligibleDateBasedOnTime = () => {
   //   const now = new Date();
   //   now.setHours(now.getHours() + 3);
+  //   now.setMinutes(now.getMinutes() + 7);
+
+  //   if (now.getHours() < 3 || (now.getHours() === 3 && now.getMinutes() < 7)) {
+  //     now.setDate(now.getDate() + 1);
+  //   }
+  //   return now.toISOString().split("T")[0];
+  // };
+
+  // const getEligibleTime = () => {
+  //   const now = new Date();
+  //   now.setHours(now.getHours() + 3);
+  //   now.setMinutes(now.getMinutes() + 7);
   //   return now.toTimeString().split(":").slice(0, 2).join(":");
   // };
-  const getEliglibleTime = () => {
-    const now = new Date();
-    now.setHours(now.getHours() + 3);
-    now.setMinutes(now.getMinutes() + 7);
-    return now.toTimeString().split(":").slice(0, 2).join(":");
+
+  // const currentData = new Date().toISOString().split("T")[0];
+  const formattedDate = currentDate.toISOString().slice(0, 10);
+  // const currentTime = new Date().toISOString().split("T")[1].slice(0, 5);
+  const formattedTime = currentDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const startOfToday = () => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate());
   };
+
+  const now = () => new Date();
+  const isPastDateTime = (date, time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+    return selectedDateTime < now();
+  };
+
+  const validationSchema = Yup.object().shape({
+    date: Yup.date()
+      .min(startOfToday(), "Date cannot be in the past")
+      .required("Date is required"),
+    time: Yup.string()
+      .required("Time is required")
+      .test("not-in-past", "Time cannot be in the past", function (value) {
+        const { date } = this.parent; // Access other field values
+        return date && value ? !isPastDateTime(date, value) : true;
+      }),
+    vechicleTypeId: Yup.string().required("*Vechicle Type is required"),
+  });
 
   const formik = useFormik({
     initialValues: {
-      date: getCurrentDate(),
-      time: getEliglibleTime(),
+      date: formattedDate,
+      time: formattedTime,
       vechicleTypeId: "",
       driverAsManpower: false,
       extraManpower: false,
@@ -88,7 +118,7 @@ function Service() {
     onSubmit: async (values) => {
       const selectedDateTime = new Date(`${values.date}T${values.time}`);
       const eligibleTime = new Date();
-      eligibleTime.setHours(eligibleTime.getHours() + 3);
+      eligibleTime.setHours(eligibleTime.getHours());
 
       if (selectedDateTime >= eligibleTime) {
         const selectedOption = vechicle.find(
@@ -135,7 +165,7 @@ function Service() {
           promoCode: "",
           actualKm: parseFloat(distanceValue),
         };
-
+        setLoadIndicator(true);
         try {
           const response = await bookingApi.post(`booking/update`, payload);
           console.log(response);
@@ -147,14 +177,14 @@ function Service() {
           }
         } catch (error) {
           toast.error(error);
+        } finally {
+          setLoadIndicator(false);
         }
       } else {
         toast.warning("You must select a time at least 3 hours from now");
       }
     },
   });
-
-  // console.log("Values is ", formik.values)
 
   useEffect(() => {
     formik.setFieldValue("quantity", manpowerQuantity);
@@ -166,22 +196,24 @@ function Service() {
       prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
     );
   };
-  const increasePiecesQuantity = () => {
-    setNoOfPiecess((prevQuantity) =>
-      prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
-    );
-  };
+
+  // const increasePiecesQuantity = () => {
+  //   setNoOfPiecess((prevQuantity) =>
+  //     prevQuantity < 99 ? prevQuantity + 1 : prevQuantity
+  //   );
+  // };
 
   const decreaseManpowerQuantity = () => {
     setManpowerQuantity((prevQuantity) =>
       prevQuantity > 1 ? prevQuantity - 1 : prevQuantity
     );
   };
-  const decreasePiecesQuantity = () => {
-    setNoOfPiecess((prevQuantity) =>
-      prevQuantity > 0 ? prevQuantity - 1 : prevQuantity
-    );
-  };
+
+  // const decreasePiecesQuantity = () => {
+  //   setNoOfPiecess((prevQuantity) =>
+  //     prevQuantity > 0 ? prevQuantity - 1 : prevQuantity
+  //   );
+  // };
 
   useEffect(() => {
     const getVechicle = async () => {
@@ -195,6 +227,22 @@ function Service() {
       }
     };
     getVechicle();
+  }, []);
+
+  // Update the date and time
+  useEffect(() => {
+    const currentDateTime = new Date();
+    // currentDateTime.setHours(currentDateTime.getHours() + 3);
+    // currentDateTime.setMinutes(currentDateTime.getMinutes() + 5);
+
+    const formattedDate = currentDateTime.toISOString().slice(0, 10); // Format date as YYYY-MM-DD
+    const formattedTime = currentDateTime.toTimeString().slice(0, 5); // Format time as HH:MM
+
+    setDate(formattedDate);
+    setTime(formattedTime);
+
+    formik.setFieldValue("date", formattedDate);
+    formik.setFieldValue("time", formattedTime);
   }, []);
 
   const imageMapping = {
@@ -220,14 +268,20 @@ function Service() {
       style={{ backgroundColor: "#faf5f6" }}
     >
       <form onSubmit={formik.handleSubmit}>
-        <div className="containers pt-2">
-          <Link to="/map"
-            data-toggle="tooltip" data-placement="bottom" title="Back">
+        <div className="container-fluid pt-3 ">
+          <div
+            onClick={() => navigate(-1)}
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title="Back"
+            className="me-3"
+            style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
+          >
             <IoArrowBackCircleOutline size={30} />
-          </Link>
+          </div>
         </div>
         <div className="container">
-          <h2 className="text-center my-5 mt-5 pt-5" id="AvaHeading">
+          <h2 className="text-center my-3" id="AvaHeading">
             SERVICE
           </h2>
 
@@ -237,9 +291,12 @@ function Service() {
                 type="date"
                 id="date"
                 name="date"
-                className={`form-control form-control-lg ${formik.touched.date && formik.errors.date ? "is-invalid" : ""
-                  }`}
+                // min={currentData}
+                className={`form-control form-control-lg ${
+                  formik.touched.date && formik.errors.date ? "is-invalid" : ""
+                }`}
                 {...formik.getFieldProps("date")}
+                onChange={(e) => formik.setFieldValue("date", e.target.value)}
               />
               {formik.touched.date && formik.errors.date && (
                 <div className="invalid-feedback text-center">
@@ -252,9 +309,12 @@ function Service() {
                 type="time"
                 id="time"
                 name="time"
-                className={`form-control form-control-lg ${formik.touched.time && formik.errors.time ? "is-invalid" : ""
-                  }`}
+                // min={currentTime}
+                className={`form-control form-control-lg ${
+                  formik.touched.time && formik.errors.time ? "is-invalid" : ""
+                }`}
                 {...formik.getFieldProps("time")}
+                onChange={(e) => formik.setFieldValue("time", e.target.value)}
               />
               {formik.touched.time && formik.errors.time && (
                 <div className="invalid-feedback text-center">
@@ -376,11 +436,12 @@ function Service() {
                         <center>
                           <div className="form-check">
                             <input
-                              className={`form-check-input border-info ${formik.touched.vechicleTypeId &&
+                              className={`form-check-input border-info ${
+                                formik.touched.vechicleTypeId &&
                                 formik.errors.vechicleTypeId
-                                ? "is-invalid"
-                                : ""
-                                }`}
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               type="radio"
                               name="vechicleTypeId"
                               value={item.vechicleTypeId}
@@ -508,34 +569,9 @@ function Service() {
                 </div>
               </div>
             </div> */}
-           
 
-            <div className="col-md-6 col-12 mb-3">
-              <div
-                className="d-flex justify-content-between p-3"
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                  alignItems: "center",
-                }}
-              >
-                <span>
-                  <b>Trolly Required</b>
-                </span>
-                <div class="form-check">
-                  <input
-                    class="form-check-input border-info"
-                    type="checkbox"
-                    value={true}
-                    id="flexCheckChecked"
-                    name="trollyRequired"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className=" col-md-6 col-12 mb-3">
+           
+            <div className=" col-md-12 col-12 mb-3">
               {showQuantity && (
                 <div
                   className="d-flex justify-content-between p-3"
@@ -601,6 +637,31 @@ function Service() {
                 }}
               >
                 <span>
+                  <b>Trolly Required</b>
+                </span>
+                <div class="form-check">
+                  <input
+                    class="form-check-input border-info"
+                    type="checkbox"
+                    value={true}
+                    id="flexCheckChecked"
+                    name="trollyRequired"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-3">
+              <div
+                className="d-flex justify-content-between p-3"
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                  alignItems: "center",
+                }}
+              >
+                <span>
                   <b>Round Trip Required</b>
                 </span>
                 <div class="form-check">
@@ -637,7 +698,14 @@ function Service() {
               className="btn btn-primary px-5 py-2"
               type="submit"
               id="NextMove"
+              
             >
+               {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
               Next
             </button>
           </div>

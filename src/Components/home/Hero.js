@@ -33,7 +33,7 @@ function Section1({ isAuthenticate }) {
                     id="HeroBtn"
                     onClick={navigateToGooglePlayStore}
                   >
-                    Dowload App
+                    Download App
                   </button>
                 </div>
                 <div className="col-lg-4 col-6 py-2 text-center">

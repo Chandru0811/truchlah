@@ -3,10 +3,12 @@ import "../../styles/custom.css";
 import { FaDollarSign } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { bookingApi } from "../../config/URL";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 function Order() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const type = searchParams.get("type");
   const [showInprogressSection, setShowInprogressSection] = useState(true);
   const [showCompletedSection, setShowCompletedSection] = useState(false);
@@ -133,9 +135,19 @@ function Order() {
   return (
     <section className="order">
       <div className="container-fluid mt-3">
-        <div className="row">
-          <div className="col ms-5 mt-5">
-            <h2 style={{ color: "#106EEA" }}>ORDERS</h2>
+        <div className="row align-items-center">
+          <div className="col d-flex align-items-center ms-3 mt-5">
+            <div
+              onClick={() => navigate(-1)}
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Back"
+              className="me-3"
+              style={{ cursor: 'pointer', color: "rgb(16, 110, 234)" }}
+            >
+              <IoArrowBackCircleOutline size={30} />
+            </div>
+            <h2 style={{ color: "#106EEA", marginBottom: "0" }}>ORDERS</h2>
           </div>
         </div>
         <div className="row mt-3">
@@ -156,96 +168,10 @@ function Order() {
               ITEM SHIFT
             </button>
           </div>
-          {/* <div
-            className="col-12 d-flex justify-content-center mt-5 py-3"
-            style={{ backgroundColor: "rgba(246, 222, 222, 0.58)" }}
-          >
-            <button
-              className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={inprogressSection}
-            >
-              INPROGRESS
-            </button>
-            <button
-              className={`mx-3 ${showCompletedSection ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={completedSection}
-            >
-              COMPLETED
-            </button>
-            <button
-              className={`mx-3 ${showCanceledSection ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={cancelSection}
-            >
-              CANCELLED
-            </button>
-          </div> */}
 
-          <div
-            className="col-12 d-flex justify-content-center mt-5 py-3"
-            style={{ backgroundColor: "rgba(246, 222, 222, 0.58)" }}
-          >
-            <button
-              className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={inprogressSection}
-              style={{ position: 'relative' }}
-            >
-              INPROGRESS
-              <span
-                className="position-absolute start-100 translate-middle badge rag rounded-pill"
-                style={{
-                  transform: 'translate(-50%, -50%)',
-                  fontSize: '0.75em',
-                  padding: '0.3em 0.6em'
-                }}
-              >
-                {inprogressCount === 0 ? '0' : inprogressCount > 99 ? '99+' : inprogressCount}
-              </span>
-            </button>
-
-            <button
-              className={`mx-3 ${showCompletedSection ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={completedSection}
-              style={{ position: 'relative' }}
-            >
-              COMPLETED
-              <span
-                className="position-absolute start-100 translate-middle badge rounded-pill"
-                style={{
-                  transform: 'translate(-50%, -50%)',
-                  fontSize: '0.75em',
-                  padding: '0.3em 0.6em'
-                }}
-              >
-                {completedCount === 0 ? '0' : completedCount > 99 ? '99+' : completedCount}
-              </span>
-            </button>
-
-            <button
-              className={`mx-3 ${showCanceledSection ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={cancelSection}
-              style={{ position: 'relative' }}
-            >
-              CANCELLED
-              <span
-                className="position-absolute start-100 translate-middle badge rounded-pill"
-                style={{
-                  transform: 'translate(-50%, -50%)',
-                  fontSize: '0.75em',
-                  padding: '0.3em 0.6em'
-                }}
-              >
-                {canceledCount === 0 ? '0' : canceledCount > 99 ? '99+' : canceledCount}
-              </span>
-            </button>
-          </div>
         </div>
       </div>
+
       <div id="shift-bg">
         {isLoaded ? (
           <div className="darksoul-layout">
@@ -258,106 +184,171 @@ function Order() {
             <h3 className="darksoul-loader-h">Trucklah</h3>
           </div>
         ) : (
-          <div className="container-fluid">
-            {data.length > 0 ? (
-              data.map((item, index) => (
-                <>
-                  <Link
-                    to={`/ridedetailsview/${item.booking.bookingId}`}
-                    style={{ textDecoration: "none", color: "black" }}
-                    key={index}
-                  >
-                    <div className="container py-4">
-                      <div className="row" id="on">
-                        <div className="col-lg-10 col-md-6 col-12 p-3">
-                          <p className=" fw-medium">
-                            Booking Id : {item.booking.bookingId ||
-                              ""}
-                          </p>
-                          {/* {!showCanceledSection && (
+          <>
+            <div
+              className="col-12 d-flex justify-content-center mt-5 py-3"
+              // style={{ backgroundColor: "rgba(246, 222, 222, 0.58)" }}
+            >
+              <button
+                className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={inprogressSection}
+                style={{ position: 'relative' }}
+              >
+                INPROGRESS
+                <span
+                  className="position-absolute start-100 translate-middle badge rag rounded-pill"
+                  style={{
+                    transform: 'translate(-50%, -50%)',
+                    fontSize: '0.75em',
+                    padding: '0.3em 0.6em'
+                  }}
+                >
+                  {inprogressCount}
+                </span>
+              </button>
+
+              <button
+                className={`mx-3 ${showCompletedSection ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={completedSection}
+                style={{ position: 'relative' }}
+              >
+                COMPLETED
+                <span
+                  className="position-absolute start-100 translate-middle badge rounded-pill"
+                  style={{
+                    transform: 'translate(-50%, -50%)',
+                    fontSize: '0.75em',
+                    padding: '0.3em 0.6em'
+                  }}
+                >
+                  {completedCount}
+                </span>
+              </button>
+
+              <button
+                className={`mx-3 ${showCanceledSection ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={cancelSection}
+                style={{ position: 'relative' }}
+              >
+                CANCELLED
+                <span
+                  className="position-absolute start-100 translate-middle badge rounded-pill"
+                  style={{
+                    transform: 'translate(-50%, -50%)',
+                    fontSize: '0.75em',
+                    padding: '0.3em 0.6em'
+                  }}
+                >
+                  {canceledCount}
+                </span>
+              </button>
+            </div>
+
+
+            <div className="container-fluid">
+              {data.length > 0 ? (
+                data.map((item, index) => (
+                  <>
+                    <Link
+                      to={`/ridedetailsview/${item.booking.bookingId}`}
+                      style={{ textDecoration: "none", color: "black" }}
+                      key={index}
+                    >
+                      <div className="container py-4">
+                        <div className="row" id="on">
+                          <div className="col-lg-10 col-md-6 col-12 p-3">
+                            <p className=" fw-medium">
+                              Booking Id : {item.booking.bookingId ||
+                                ""}
+                            </p>
+                            {/* {!showCanceledSection && (
                             <p className="fw-normal">
                               Delivery Date : {item?.booking?.deliveryDate?.substring(0, 10) || ""}
                             </p>
                           )} */}
-                          <p>
-                            {vehicleNameMap[item.booking.vehicletypeId] ||
-                              "Unknown Vehicle"}
-                          </p>
-                          <p
-                            style={{
-                              color: showInprogressSection
-                                ? "orange" // Yellow color for INPROGRESS
+                            <p>
+                              {vehicleNameMap[item.booking.vehicletypeId] ||
+                                "Unknown Vehicle"}
+                            </p>
+                            <p
+                              style={{
+                                color: showInprogressSection
+                                  ? "orange" // Yellow color for INPROGRESS
+                                  : showCompletedSection
+                                    ? "green" // Green color for COMPLETED
+                                    : "red", // Red color for CANCELLED
+                              }}
+                            >
+                              {showInprogressSection
+                                ? "IN PROGRESS"
                                 : showCompletedSection
-                                  ? "green" // Green color for COMPLETED
-                                  : "red", // Red color for CANCELLED
-                            }}
-                          >
-                            {showInprogressSection
-                              ? "IN PROGRESS"
-                              : showCompletedSection
-                                ? "COMPLETED"
-                                : "CANCELLED"}
-                          </p>
+                                  ? "COMPLETED"
+                                  : "CANCELLED"}
+                            </p>
 
-                          <p style={{ marginTop: "0", marginBottom: "0" }}>
-                            <span className="dot1"></span>
-                            &nbsp;&nbsp;&nbsp;
-                            {item.bookingTripLocations?.[0]?.pickup}
-                            <br />
-                            <span className="line"></span>
-                          </p>
-                          {item.bookingTripLocations?.map((location, index) => (
-                            <div key={index}>
-                              {index > 0 && (
-                                <div className="line-container">
-                                  <span className="line"></span>
-                                </div>
-                              )}
-                              <p
-                                key={index}
-                                style={{ marginTop: "0", marginBottom: "0" }}
-                              >
-                                <span
-                                  className="dot2"
-                                  style={{
-                                    backgroundColor:
-                                      colors[index % colors.length],
-                                  }}
-                                ></span>
-                                &nbsp;&nbsp;&nbsp;{location.dropoff}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="col-lg-2 col-md-6 col-12 p-3">
-                          <p className="ps-5 pt-2">
-                            <FaDollarSign />{" "}
-                            {item.transactionDetails?.txnAmount.toFixed(2) ||
-                              "0.00"}
-                            <br />
-                          </p>
+                            <p style={{ marginTop: "0", marginBottom: "0" }}>
+                              <span className="dot1"></span>
+                              &nbsp;&nbsp;&nbsp;
+                              {item.bookingTripLocations?.[0]?.pickup}
+                              <br />
+                              <span className="line"></span>
+                            </p>
+                            {item.bookingTripLocations?.map((location, index) => (
+                              <div key={index}>
+                                {index > 0 && (
+                                  <div className="line-container">
+                                    <span className="line"></span>
+                                  </div>
+                                )}
+                                <p
+                                  key={index}
+                                  style={{ marginTop: "0", marginBottom: "0" }}
+                                >
+                                  <span
+                                    className="dot2"
+                                    style={{
+                                      backgroundColor:
+                                        colors[index % colors.length],
+                                    }}
+                                  ></span>
+                                  &nbsp;&nbsp;&nbsp;{location.dropoff}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="col-lg-2 col-md-6 col-12 p-3">
+                            <p className="ps-5 pt-2">
+                              <FaDollarSign />{" "}
+                              {item.transactionDetails?.txnAmount.toFixed(2) ||
+                                "0.00"}
+                              <br />
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                  </Link>
-                </>
-              ))
-            ) : (
-              <div className="container py-4">
-                <div className="row">
-                  <div className="col text-center">
-                    <div
-                      className="d-flex align-items-center justify-content-center"
-                      style={{ verticalAlign: "center", minHeight: "60vh" }}
-                    >
-                      <h6 className="text-secondary">No Data Found</h6>
+                    </Link>
+                  </>
+                ))
+              ) : (
+                <div className="container py-4">
+                  <div className="row">
+                    <div className="col text-center">
+                      <div
+                        className="d-flex align-items-center justify-content-center"
+                        style={{ verticalAlign: "center", minHeight: "60vh" }}
+                      >
+                        <h6 className="text-secondary">No Data Found</h6>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          </>
         )}
       </div>
     </section>

@@ -1,21 +1,44 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import Offcanvas from "react-bootstrap/Offcanvas";
+import {
+  Navbar,
+  Container,
+  Nav,
+  Offcanvas,
+  Modal,
+  Button,
+} from "react-bootstrap";
 import logo from "../../asset/logo.png";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import "../../styles/custom.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import User from "../../pages/profile/Profile";
 
 function OffcanvasExample({ isAuthenticate, handleLogout }) {
   const [showMain, setShowMain] = useState(false);
+  const [show, setShow] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  const currentPath = location.pathname;
+  console.log("Current path:", currentPath);
+
+  // Handle for the first modal
   const handleCloseMain = () => setShowMain(false);
   const handleShowMain = () => setShowMain(true);
+  const handleShow = () => setShow(true);
+  const handleClose = () => {setShow(false)};
 
   return (
     <section className="header">
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Cancel Order</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to cancel the order?</Modal.Body>
+        <Modal.Footer className="p-1">
+          <button className="btn btn-danger btn-sm px-3" onClick={handleClose}>No</button>
+          <button className="btn btn-info btn-sm px-3" onClick={()=>{handleClose(); navigate("/shift")}}>Yes</button>
+        </Modal.Footer>
+      </Modal>
       <>
         {["lg"].map((expand) => (
           <>
@@ -109,9 +132,11 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                               </div>
                               <div className="ride ">
                                 {isAuthenticate ? (
-                                  <Link to="/shift">
+                                  currentPath === "/map" ||
+                                  currentPath === "/service" ? (
                                     <li className="nav-item">
                                       <button
+                                        onClick={handleShow}
                                         style={{ minWidth: "max-content" }}
                                         type="button"
                                         className="py-2 px-3"
@@ -120,7 +145,20 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                         Book Rides
                                       </button>
                                     </li>
-                                  </Link>
+                                  ) : (
+                                    <Link to="/shift">
+                                      <li className="nav-item">
+                                        <button
+                                          style={{ minWidth: "max-content" }}
+                                          type="button"
+                                          className="py-2 px-3"
+                                          id="NextMove"
+                                        >
+                                          Book Rides
+                                        </button>
+                                      </li>
+                                    </Link>
+                                  )
                                 ) : (
                                   <Link to="/login">
                                     <li className="nav-item">
@@ -148,6 +186,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
           </>
         ))}
       </>
+      
     </section>
   );
 }
