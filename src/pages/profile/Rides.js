@@ -264,11 +264,11 @@ function Order() {
                               Booking Id : {item.booking.bookingId ||
                                 ""}
                             </p>
-                            {/* {!showCanceledSection && (
+                            {!showCanceledSection && (
                             <p className="fw-normal">
                               Delivery Date : {item?.booking?.deliveryDate?.substring(0, 10) || ""}
                             </p>
-                          )} */}
+                          )}
                             <p>
                               {vehicleNameMap[item.booking.vehicletypeId] ||
                                 "Unknown Vehicle"}

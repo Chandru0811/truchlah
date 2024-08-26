@@ -266,14 +266,13 @@ function Register({ handleLogin }) {
                 >
                 </GoogleLogin>
 
-                <LoginSocialFacebook
+                {/* <LoginSocialFacebook
                   appId="386027390559424"
                   onResolve = {handleFaceBookLoginSuccess}
                   onReject={(error) => {
                     console.log(error);
                   }}
                 >
-                  {/* <FacebookLoginButton /> */}
                   <button
                     className="btn text-white px-2 py-1 my-2"
                     style={{ background: "#3b5998", width:"100%"}}
@@ -281,7 +280,7 @@ function Register({ handleLogin }) {
                     <FaSquareFacebook className="text-white me-2 fs-3" />
                     Log in with Facebook
                   </button>
-                </LoginSocialFacebook>
+                </LoginSocialFacebook> */}
               </div>
             </div>
             <div className="row">
