@@ -1772,3 +1772,29 @@ body {
     object-fit: cover; /* Cover the container while preserving aspect ratio */
   }
 }
+.btn-button {
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  font-weight: 600;
+  background-color: #4066D5;
+  border-color: #4066D5;
+}
+
+ 
+
+.badge.active {
+  color: #fff;
+  background-color: #5cb85c; /* Green color */
+  display: inline-block;
+  padding: 0.2em 0.4em; /* Smaller padding */
+  font-size: 1em; /* Smaller font size */
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  align-items: center;
+  vertical-align: baseline;
+  border-radius: 0.2rem; /* Slightly smaller border radius */
+}
+
+

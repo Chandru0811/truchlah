@@ -48,37 +48,37 @@ function Dashboard({ onLogout }) {
           </NavLink>
           <ul className="navbar-nav flex-column">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/dashboard">
+              <NavLink className="nav-link" to="/">
                 <i className="bx bx-bar-chart pe-3"></i> Dashboard
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/vehicle-management">
+              <NavLink className="nav-link" to="/vehiclemanagement">
                 <i className="bx bx-car pe-3"></i> Vehicle Management
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/house-category-management">
+              <NavLink className="nav-link" to="/housecategorymanagement">
                 <i className="bx bx-home pe-3"></i> House Category
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/support-team-management">
+              <NavLink className="nav-link" to="/supportteammanagement">
                 <i className="bx bx-support pe-3"></i> Support Team
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/user-management">
+              <NavLink className="nav-link" to="/usermanagement">
                 <i className="bx bx-user pe-3"></i> User Management
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/driver-management">
+              <NavLink className="nav-link" to="/drivermanagement">
                 <i className="bx bx-id-card pe-3"></i> Driver Management
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/banners-and-offers">
+              <NavLink className="nav-link" to="/bannerandoffer">
                 <i className="bx bx-gift pe-3"></i> Banners and Offers
               </NavLink>
             </li>
@@ -88,13 +88,13 @@ function Dashboard({ onLogout }) {
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/reviews-feedback">
+              <NavLink className="nav-link" to="/reviewandfeedback">
                 <i className="bx bx-message-square-dots pe-3"></i> Reviews and
                 Feedback
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/contact-form">
+              <NavLink className="nav-link" to="/contactform">
                 <i className="bx bx-envelope pe-3"></i> Contact Form
               </NavLink>
             </li>

@@ -41,6 +41,7 @@ import Popup from "../pages/profile/Popup";
 import ChangePassword from "../pages/authorization/ChangePassword";
 import ScrollToTop from "../pages/ScroolToTop";
 
+
 function UserLayout({
   handleAdminLogin,
   isAuthenticate,
@@ -108,6 +109,9 @@ function UserLayout({
               <Route path="/rides" element={<Order />} />
               <Route path="/coupons" element={<Coupons />} />
               <Route path="/price" element={<Price />} />
+              
+              
+
               <Route
                 path="/ridedetailsview/:id"
                 element={<RideDetailsView />}
