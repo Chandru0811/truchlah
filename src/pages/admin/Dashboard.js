@@ -99,12 +99,12 @@ function Dashboard({ onLogout }) {
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/dashboard">
+              <NavLink className="nav-link" to="/usermanagementteam">
                 <i className="bx bx-bar-chart pe-3"></i> User Management
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/dashboard">
+              <NavLink className="nav-link" to="/drivermanagementteam">
                 <i className="bx bx-bar-chart pe-3"></i> Driver Management
               </NavLink>
             </li>
@@ -114,12 +114,12 @@ function Dashboard({ onLogout }) {
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/dashboard">
+              <NavLink className="nav-link" to="/reviewandfeedbackteam">
                 <i className="bx bx-bar-chart pe-3"></i> Reviews and Feedback
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/dashboard">
+              <NavLink className="nav-link" to="/contactformteam">
                 <i className="bx bx-bar-chart pe-3"></i> Contact Form
               </NavLink>
             </li>

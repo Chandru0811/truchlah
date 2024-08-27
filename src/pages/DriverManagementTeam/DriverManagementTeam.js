@@ -9,7 +9,7 @@ import DeleteModel from "../../Components/DeleteModel";
 // import toast from "react-hot-toast";
 // import api from "../../config/URL";
 
-const SupportTeamManagement = () => {
+const DriverManagementTeam = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,12 +85,12 @@ const SupportTeamManagement = () => {
           <div className="row align-items-center justify-content-between ">
             <div className="col">
               <div className="d-flex align-items-center gap-4">
-                <h1 className="h4 ls-tight headingColor ">Support Team Management</h1>
+                <h1 className="h4 ls-tight headingColor ">Driver Management</h1>
               </div>
             </div>
             <div className="col-auto">
               <div className="hstack gap-2 justify-content-end">
-                <Link to="/supportteammanagement/add">
+                <Link to="/drivermanagementteam/add">
                   <button type="submit" className="btn btn-sm btn-button">
                     <span>Add +</span>
                   </button>
@@ -135,12 +135,12 @@ const SupportTeamManagement = () => {
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/supportteammanagement/view/`}>
+                      <Link to={`/drivermanagementteam/view/`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
                       </Link>
-                      <Link to={`/supportteammanagement/edit/`} className="px-2">
+                      <Link to={`/drivermanagementteam/edit/`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
@@ -166,4 +166,4 @@ const SupportTeamManagement = () => {
   );
 };
 
-export default SupportTeamManagement;
+export default DriverManagementTeam;

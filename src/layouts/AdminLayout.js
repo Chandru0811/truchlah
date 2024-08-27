@@ -32,6 +32,18 @@ import ReviewAndFeedback from "../pages/ReviewAndFeedback";
 import ContactForm from "../pages/ContactForm/ContactForm";
 import ContactFormEdit from "../pages/ContactForm/ContactFormEdit";
 import ContactFormView from "../pages/ContactForm/ContactFormView";
+import UserManagementTeam from "../pages/UserManagementTeam/UserManagementTeam";
+import UserManagementTeamAdd from "../pages/UserManagementTeam/UserManagementTeamAdd";
+import UserManagementTeamEdit from "../pages/UserManagementTeam/UserManagementTeamEdit";
+import UserManagementTeamView from "../pages/UserManagementTeam/UserManagementTeamView";
+import DriverManagementTeam from "../pages/DriverManagementTeam/DriverManagementTeam";
+import DriverManagementTeamAdd from "../pages/DriverManagementTeam/DriverManagementTeamAdd";
+import DriverManagementTeamEdit from "../pages/DriverManagementTeam/DriverManagementTeamEdit";
+import DriverManagementTeamView from "../pages/DriverManagementTeam/DriverManagementTeamView";
+import ReviewAndFeedbackTeam from "../pages/ReviewAndFeedbackTeam";
+import ContactFormTeam from "../pages/ContactFormTeam/ContactFormTeam";
+import ContactFormTeamEdit from "../pages/ContactFormTeam/ContactFormTeamEdit";
+import ContactFormTeamView from "../pages/ContactFormTeam/ContactFormTeamView";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -40,7 +52,7 @@ function AdminLayout({ handleLogout }) {
         <div className="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
           <Dashboard onLogout={handleLogout} />
           <div className="h-screen flex-grow-1 overflow-y-lg-auto">
-            <main className="py-1 bg-surface-secondary"style={{marginLeft:"15rem"}}>
+            <main className="py-1 bg-surface-secondary" style={{ marginLeft: "15rem" }}>
               <Routes>
                 <Route path="/" element={<DashboardAdmin />} />
                 <Route path="/vehiclemanagement" element={<VehicleManagement />} />
@@ -48,38 +60,57 @@ function AdminLayout({ handleLogout }) {
                 <Route path="/vehiclemanagement/edit" element={<VehicleManagementEdit />} />
                 <Route path="/vehiclemanagement/view" element={<VehicleManagementView />} />
 
-                <Route path="/housecategorymanagement" element={< HouseCategoryManagement/>} />
-                <Route path="/housecategorymanagement/add" element={< HouseCategoryManagementAdd/>} />
-                <Route path="/housecategorymanagement/edit" element={< HouseCategoryManagementEdit/>} />
-                <Route path="/housecategorymanagement/view" element={< HouseCategoryManagementView/>} />
+                <Route path="/housecategorymanagement" element={< HouseCategoryManagement />} />
+                <Route path="/housecategorymanagement/add" element={< HouseCategoryManagementAdd />} />
+                <Route path="/housecategorymanagement/edit" element={< HouseCategoryManagementEdit />} />
+                <Route path="/housecategorymanagement/view" element={< HouseCategoryManagementView />} />
 
-                <Route path="/supportteammanagement" element={< SupportTeamManagement/>} />
-                <Route path="/supportteammanagement/add" element={< SupportTeamManagementAdd/>} />
-                <Route path="/supportteammanagement/edit" element={< SupportTeamManagementEdit/>} />
-                <Route path="/supportteammanagement/view" element={< SupportTeamManagementView/>} />
+                <Route path="/supportteammanagement" element={< SupportTeamManagement />} />
+                <Route path="/supportteammanagement/add" element={< SupportTeamManagementAdd />} />
+                <Route path="/supportteammanagement/edit" element={< SupportTeamManagementEdit />} />
+                <Route path="/supportteammanagement/view" element={< SupportTeamManagementView />} />
 
-                <Route path="/usermanagement" element={< UserManagement/>} />
-                <Route path="/usermanagement/add" element={< UserManagementAdd/>} />
-                <Route path="/usermanagement/edit" element={< UserManagementEdit/>} />
-                <Route path="/usermanagement/view" element={< UserManagementView/>} />
+                <Route path="/usermanagement" element={< UserManagement />} />
+                <Route path="/usermanagement/add" element={< UserManagementAdd />} />
+                <Route path="/usermanagement/edit" element={< UserManagementEdit />} />
+                <Route path="/usermanagement/view" element={< UserManagementView />} />
 
-                <Route path="/drivermanagement" element={< DriverManagement/>} />
-                <Route path="/drivermanagement/add" element={< DriverManagementAdd/>} />
-                <Route path="/drivermanagement/edit" element={< DriverManagementEdit/>} />
-                <Route path="/drivermanagement/view" element={< DriverManagementView/>} />
+                <Route path="/drivermanagement" element={< DriverManagement />} />
+                <Route path="/drivermanagement/add" element={< DriverManagementAdd />} />
+                <Route path="/drivermanagement/edit" element={< DriverManagementEdit />} />
+                <Route path="/drivermanagement/view" element={< DriverManagementView />} />
 
-                <Route path="/bannerandoffer" element={< BannerAndOffer/>} />
-                <Route path="/bannerandoffer/add" element={< BannerAndOfferAdd/>} />
-                <Route path="/bannerandoffer/edit" element={< BannerAndOfferEdit/>} />
-                <Route path="/bannerandoffer/view" element={< BannerAndOfferView/>} />
+                <Route path="/bannerandoffer" element={< BannerAndOffer />} />
+                <Route path="/bannerandoffer/add" element={< BannerAndOfferAdd />} />
+                <Route path="/bannerandoffer/edit" element={< BannerAndOfferEdit />} />
+                <Route path="/bannerandoffer/view" element={< BannerAndOfferView />} />
 
-                <Route path="/reviewandfeedback" element={< ReviewAndFeedback/>} />
-                
-                <Route path="/contactform" element={< ContactForm/>} />
-                <Route path="/contactform/edit" element={< ContactFormEdit/>} />
-                <Route path="/contactform/view" element={< ContactFormView/>} />
+                <Route path="/reviewandfeedback" element={< ReviewAndFeedback />} />
 
-                
+                <Route path="/contactform" element={< ContactForm />} />
+                <Route path="/contactform/edit" element={< ContactFormEdit />} />
+                <Route path="/contactform/view" element={< ContactFormView />} />
+
+                {/* Support Team */}
+                <Route path="/usermanagementteam" element={< UserManagementTeam />} />
+                <Route path="/usermanagementteam/add" element={< UserManagementTeamAdd />} />
+                <Route path="/usermanagementteam/edit" element={< UserManagementTeamEdit />} />
+                <Route path="/usermanagementteam/view" element={< UserManagementTeamView />} />
+
+                <Route path="/drivermanagementteam" element={< DriverManagementTeam />} />
+                <Route path="/drivermanagementteam/add" element={< DriverManagementTeamAdd />} />
+                <Route path="/drivermanagementteam/edit" element={< DriverManagementTeamEdit />} />
+                <Route path="/drivermanagementteam/view" element={< DriverManagementTeamView />} />
+
+
+                <Route path="/reviewandfeedbackteam" element={< ReviewAndFeedbackTeam />} />
+
+                <Route path="/contactformteam" element={< ContactFormTeam />} />
+                <Route path="/contactformteam/edit" element={< ContactFormTeamEdit />} />
+                <Route path="/contactformteam/view" element={< ContactFormTeamView />} />
+
+
+
               </Routes>
             </main>
           </div>

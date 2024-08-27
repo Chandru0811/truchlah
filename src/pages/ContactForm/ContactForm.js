@@ -3,6 +3,8 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
+import DeleteModel from "../../Components/DeleteModel";
+
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
 // import api from "../../config/URL";
@@ -36,19 +38,19 @@ const ContactForm = () => {
     }
   };
 
-//   const refreshData = async () => {
-//     destroyDataTable();
-//     setLoading(true);
-//     try {
-//       const response = await api.get("getAllMstrItems");
-//       setDatas(response.data);
-//       initializeDataTable(); 
-//     } catch (error) {
-//       toast.error("Error refreshing data:", error?.response?.data?.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  const refreshData = async () => {
+    destroyDataTable();
+    // setLoading(true);
+    // try {
+    //   const response = await api.get("getAllMstrItems");
+    //   setDatas(response.data);
+    //   initializeDataTable(); 
+    // } catch (error) {
+    //   toast.error("Error refreshing data:", error?.response?.data?.message);
+    // } finally {
+    //   setLoading(false);
+    // }
+  };
 
 //   useEffect(() => {
 //     const getItemData = async () => {
@@ -147,11 +149,11 @@ const ContactForm = () => {
                           Edit
                         </button>
                       </Link>
-                      {/* <DeleteModel
-                        // onSuccess={refreshData}
-                        path={`deleteMstrItem/${data.id}`}
+                      <DeleteModel
+                        onSuccess={refreshData}
+                        // path={`deleteMstrItem/${data.id}`}
                         style={{ display: "inline-block" }}
-                      /> */}
+                      />
                     </div>
                   </td>
                 </tr>

@@ -3,6 +3,8 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
+import DeleteModel from "../../Components/DeleteModel";
+
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
 // import api from "../../config/URL";
@@ -143,11 +145,11 @@ const HouseCategoryManagement = () => {
                           Edit
                         </button>
                       </Link>
-                      {/* <DeleteModel
+                      <DeleteModel
                         // onSuccess={refreshData}
-                        path={`deleteMstrItem/${data.id}`}
+                        // path={`deleteMstrItem/${data.id}`}
                         style={{ display: "inline-block" }}
-                      /> */}
+                      />
                     </div>
                   </td>
                 </tr>

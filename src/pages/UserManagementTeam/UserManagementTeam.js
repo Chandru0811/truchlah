@@ -3,13 +3,14 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
+import "../../styles/custom.css";
 import DeleteModel from "../../Components/DeleteModel";
 
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
 // import api from "../../config/URL";
 
-const SupportTeamManagement = () => {
+const UserManagementTeam = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,13 +86,13 @@ const SupportTeamManagement = () => {
           <div className="row align-items-center justify-content-between ">
             <div className="col">
               <div className="d-flex align-items-center gap-4">
-                <h1 className="h4 ls-tight headingColor ">Support Team Management</h1>
+                <h1 className="h4 ls-tight headingColor ">User Management</h1>
               </div>
             </div>
             <div className="col-auto">
               <div className="hstack gap-2 justify-content-end">
-                <Link to="/supportteammanagement/add">
-                  <button type="submit" className="btn btn-sm btn-button">
+                <Link to="/usermanagementteam/add">
+                  <button type="button" className="btn btn-sm btn-button">
                     <span>Add +</span>
                   </button>
                 </Link>
@@ -135,12 +136,12 @@ const SupportTeamManagement = () => {
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/supportteammanagement/view/`}>
+                      <Link to={`/usermanagementteam/view/`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
                       </Link>
-                      <Link to={`/supportteammanagement/edit/`} className="px-2">
+                      <Link to={`/usermanagementteam/edit/`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
@@ -166,4 +167,4 @@ const SupportTeamManagement = () => {
   );
 };
 
-export default SupportTeamManagement;
+export default UserManagementTeam;

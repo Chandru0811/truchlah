@@ -66,6 +66,18 @@ function DriverManagementView() {
       <div className="card shadow border-0 mb-2 minHeight">
         <div className="container">
           <div className="row mt-2 p-3">
+          <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex justify-content-start align-items-center">
+                  <p className="text-sm">
+                    <b>Name</b>
+                  </p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.itemCode || ""}</p>
+                </div>
+              </div>
+            </div>
             <div className="col-md-6 col-12">
               <div className="row mb-3">
                 <div className="col-6 d-flex justify-content-start align-items-center">

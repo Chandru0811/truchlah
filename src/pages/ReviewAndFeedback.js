@@ -3,6 +3,8 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
+import DeleteModel from "../Components/DeleteModel";
+
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
 // import api from "../../config/URL";
@@ -137,21 +139,21 @@ const ReviewAndFeedback = () => {
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/vehiclemanagement/view/`}>
+                      {/* <Link to={`/vehiclemanagement/view/`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
-                      </Link>
+                      </Link> */}
                       {/* <Link to={`/vehiclemanagement/edit/`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
                       </Link> */}
-                      {/* <DeleteModel
+                      <DeleteModel
                         // onSuccess={refreshData}
-                        path={`deleteMstrItem/${data.id}`}
+                        // path={`deleteMstrItem/${data.id}`}
                         style={{ display: "inline-block" }}
-                      /> */}
+                      />
                     </div>
                   </td>
                 </tr>

@@ -51,7 +51,7 @@ function ContactFormView() {
               </div>
               <div className="col-auto">
                 <div className="hstack gap-2 justify-content-start">
-                  <Link to="/vehiclemanagement">
+                  <Link to="/contactform">
                     <button type="submit" className="btn btn-sm btn-light">
                       <span>Back</span>
                     </button>

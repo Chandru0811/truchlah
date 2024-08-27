@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 // import api from "../../config/URL";
 // import toast from "react-hot-toast";
 
-function SupportTeamManagementView() {
+function DriverManagementTeamView() {
   // const { id } = useParams();
   const { id } = useParams();
   const [data, setData] = useState([]);
@@ -46,12 +46,12 @@ function SupportTeamManagementView() {
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
-                  <h1 className="h4 ls-tight headingColor">View Support Team Management</h1>
+                  <h1 className="h4 ls-tight headingColor">View Driver Management</h1>
                 </div>
               </div>
               <div className="col-auto">
                 <div className="hstack gap-2 justify-content-start">
-                  <Link to="/supportteammanagement">
+                  <Link to="/drivermanagementteam">
                     <button type="submit" className="btn btn-sm btn-light">
                       <span>Back</span>
                     </button>
@@ -148,4 +148,4 @@ function SupportTeamManagementView() {
   );
 }
 
-export default SupportTeamManagementView;
+export default DriverManagementTeamView;
