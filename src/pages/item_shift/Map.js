@@ -419,22 +419,22 @@ function Map() {
     }
   }, []);
 
-  useEffect(() => {
-    const handlePopState = (event) => {
-      if (location.pathname === '/map') {
-        event.preventDefault();
-        handleShow();
-        window.history.pushState(null, '');
-      }
-    };
+  // useEffect(() => {
+  //   const handlePopState = (event) => {
+  //     if (location.pathname === '/map') {
+  //       event.preventDefault();
+  //       handleShow();
+  //       window.history.pushState(null, '');
+  //     }
+  //   };
 
-    window.addEventListener('popstate', handlePopState);
-    window.history.pushState(null, '');
+  //   window.addEventListener('popstate', handlePopState);
+  //   window.history.pushState(null, '');
 
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [location, navigate]);
+  //   return () => {
+  //     window.removeEventListener('popstate', handlePopState);
+  //   };
+  // }, [location, navigate]);
 
   if (!isLoaded) {
     return (
