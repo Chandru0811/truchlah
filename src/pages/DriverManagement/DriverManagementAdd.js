@@ -248,30 +248,6 @@ function DriverManagementAdd() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Password <span className="text-danger">*</span>
-                </label>
-                <div className="input-group mb-3">
-                  <input
-                    type={passwordVisible ? "text" : "password"}
-                    name="password"
-                    className={`form-control ${formik.touched.password && formik.errors.password
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    {...formik.getFieldProps("password")}
-                  />
-                  <span className="input-group-text" onClick={togglePasswordVisibility}>
-                    {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                  </span>
-                  {formik.touched.password && formik.errors.password && (
-                    <div className="invalid-feedback">
-                      {formik.errors.password}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
                   Reference Code <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
@@ -479,6 +455,60 @@ function DriverManagementAdd() {
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-2">
+              <label className="form-label">
+                Terms Condition
+              </label>
+              <div className="form-check mb-3 d-flex ">
+                <input
+                  type="checkbox"
+                  id="termsCheckbox"
+                  name="termsCondition"
+                  className={`form-check-input ${formik.touched.termsCondition &&
+                    formik.errors.termsCondition
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("termsCondition")}
+                />
+                &nbsp; &nbsp;{" "}
+                <label className="form-check-label" htmlFor="termsCheckbox">
+                  I agree all statements in Terms and Conditions.
+                </label>
+                {formik.touched.termsCondition &&
+                  formik.errors.termsCondition && (
+                    <div className="invalid-feedback">
+                      {formik.errors.termsCondition}
+                    </div>
+                  )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-2">
+              <div className="form-check mb-3 d-flex ">
+                <input
+                  type="checkbox"
+                  id="privacyCheckbox"
+                  className={`form-check-input  ${formik.touched.agree && formik.errors.agree
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("agree")}
+                />
+                &nbsp; &nbsp;
+                <label
+                  className="form-check-label "
+                  htmlFor="privacyCheckbox"
+                >
+                  I agree the use of my personal data for direct marketing
+                  in accordance with the stated Privacy Policy.{" "}
+                </label>
+                {formik.touched.agree && formik.errors.agree && (
+                  <div className="invalid-feedback">
+                    {formik.errors.agree}
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -136,9 +136,9 @@ const UserManagement = () => {
               {/* {datas.map((data, index) => ( */}
                 <tr>
                   <td className="text-center">1</td>
-                  <td className="text-center">itemCode</td>
-                  <td className="text-center">itemName</td>
-                  <td className="text-center">costPrice</td>
+                  <td className="text-center">Rajangam</td>
+                  <td className="text-center">raj@gmail.com</td>
+                  <td className="text-center">+91 6385988984</td>
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">

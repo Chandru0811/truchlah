@@ -113,7 +113,7 @@ function DriverManagementEdit() {
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
                   <h1 className="h4 ls-tight headingColor">
-                    Add Driver Management
+                    Edit Driver Management
                   </h1>
                 </div>
               </div>
@@ -293,27 +293,6 @@ function DriverManagementEdit() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Terms Condition <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="termsCondition"
-                    className={`form-control ${formik.touched.termsCondition && formik.errors.termsCondition
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    {...formik.getFieldProps("termsCondition")}
-                  />
-                  {formik.touched.termsCondition && formik.errors.termsCondition && (
-                    <div className="invalid-feedback">
-                      {formik.errors.termsCondition}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
                   Driver Id <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
@@ -479,6 +458,62 @@ function DriverManagementEdit() {
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-2">
+              <label className="form-label">
+                Terms Condition
+              </label>
+              <div className="form-check mb-3 d-flex ">
+                <input
+                  type="checkbox"
+                  id="termsCheckbox"
+                  name="termsCondition"
+                  className={`form-check-input ${formik.touched.termsCondition &&
+                    formik.errors.termsCondition
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("termsCondition")}
+                  checked
+                />
+                &nbsp; &nbsp;{" "}
+                <label className="form-check-label" htmlFor="termsCheckbox">
+                  I agree all statements in Terms and Conditions.
+                </label>
+                {formik.touched.termsCondition &&
+                  formik.errors.termsCondition && (
+                    <div className="invalid-feedback">
+                      {formik.errors.termsCondition}
+                    </div>
+                  )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-2">
+              <div className="form-check mb-3 d-flex ">
+                <input
+                  type="checkbox"
+                  id="privacyCheckbox"
+                  className={`form-check-input  ${formik.touched.agree && formik.errors.agree
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("agree")}
+                  checked
+                />
+                &nbsp; &nbsp;
+                <label
+                  className="form-check-label "
+                  htmlFor="privacyCheckbox"
+                >
+                  I agree the use of my personal data for direct marketing
+                  in accordance with the stated Privacy Policy.{" "}
+                </label>
+                {formik.touched.agree && formik.errors.agree && (
+                  <div className="invalid-feedback">
+                    {formik.errors.agree}
+                  </div>
+                )}
               </div>
             </div>
           </div>

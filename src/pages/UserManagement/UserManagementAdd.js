@@ -37,15 +37,15 @@ function UserManagementAdd() {
           return value && value.length === 8
             ? true
             : this.createError({
-                message: "Phone number must be 8 digits only",
-              });
+              message: "Phone number must be 8 digits only",
+            });
         }
         if (countryCode === "91") {
           return value && value.length === 10
             ? true
             : this.createError({
-                message: "Phone number must be 10 digits only",
-              });
+              message: "Phone number must be 10 digits only",
+            });
         }
         return false;
       }),
@@ -59,29 +59,29 @@ function UserManagementAdd() {
       password: "",
       cPassword: "",
       email: "",
-      mobileNo: "",
       countryCode: "",
+      mobileNo: "",
       refCode: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // console.log("additems:", values);
       setLoading(true);
-    //   try {
-    //     const response = await api.post(`createMstrItems`, values);
-    //     console.log(response);
-    //     if (response.status === 201) {
-    //       toast.success(response.data.message);
-    //       console.log("Toast : ", response.data.message);
-    //       navigate("/items");
-    //     } else {
-    //       toast.error(response?.data?.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error("Error fetching data: ", error?.response?.data?.message);
-    //   } finally {
-    //     setLoading(false);
-    //   }
+      //   try {
+      //     const response = await api.post(`createMstrItems`, values);
+      //     console.log(response);
+      //     if (response.status === 201) {
+      //       toast.success(response.data.message);
+      //       console.log("Toast : ", response.data.message);
+      //       navigate("/items");
+      //     } else {
+      //       toast.error(response?.data?.message);
+      //     }
+      //   } catch (error) {
+      //     toast.error("Error fetching data: ", error?.response?.data?.message);
+      //   } finally {
+      //     setLoading(false);
+      //   }
     },
   });
 
@@ -106,7 +106,7 @@ function UserManagementAdd() {
               </div>
               <div className="col-auto">
                 <div className="hstack gap-2 justify-content-end">
-                  <Link to="/supportteammanagement">
+                  <Link to="/usermanagement">
                     <button type="button" className="btn btn-sm btn-light">
                       <span>Back</span>
                     </button>
@@ -141,11 +141,10 @@ function UserManagementAdd() {
                   <input
                     type="text"
                     name="firstName"
-                    className={`form-control ${
-                      formik.touched.firstName && formik.errors.firstName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.firstName && formik.errors.firstName
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("firstName")}
                   />
                   {formik.touched.firstName && formik.errors.firstName && (
@@ -163,11 +162,10 @@ function UserManagementAdd() {
                   <input
                     type="text"
                     name="lastName"
-                    className={`form-control ${
-                      formik.touched.lastName && formik.errors.lastName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.lastName && formik.errors.lastName
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("lastName")}
                   />
                   {formik.touched.lastName && formik.errors.lastName && (
@@ -185,11 +183,10 @@ function UserManagementAdd() {
                   <input
                     type="email"
                     name="email"
-                    className={`form-control ${
-                      formik.touched.email && formik.errors.email
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("email")}
                   />
                   {formik.touched.email && formik.errors.email && (
@@ -207,11 +204,10 @@ function UserManagementAdd() {
                   <div className="input-group">
                     <select
                       name="countryCode"
-                      className={`form-select form-select-sm ${
-                        formik.touched.countryCode && formik.errors.countryCode
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-select form-select-sm ${formik.touched.countryCode && formik.errors.countryCode
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       style={{ maxWidth: "80px" }} // Adjust width as needed
                       {...formik.getFieldProps("countryCode")}
                     >
@@ -223,11 +219,10 @@ function UserManagementAdd() {
                       type="text"
                       name="mobileNo"
                       placeholder="Mobile Number"
-                      className={`form-control ${
-                        formik.touched.mobileNo && formik.errors.mobileNo
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-control ${formik.touched.mobileNo && formik.errors.mobileNo
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       {...formik.getFieldProps("mobileNo")}
                     />
                     {formik.touched.mobileNo && formik.errors.mobileNo && (
@@ -243,25 +238,24 @@ function UserManagementAdd() {
                   Password <span className="text-danger">*</span>
                 </label>
                 <div className="input-group mb-3">
-                    <input
-                      type={passwordVisible ? "text" : "password"}
-                      name="password"
-                      className={`form-control ${
-                        formik.touched.password && formik.errors.password
-                          ? "is-invalid"
-                          : ""
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    className={`form-control ${formik.touched.password && formik.errors.password
+                      ? "is-invalid"
+                      : ""
                       }`}
-                      {...formik.getFieldProps("password")}
-                    />
-                    <span className="input-group-text" onClick={togglePasswordVisibility}>
-                      {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                    </span>
+                    {...formik.getFieldProps("password")}
+                  />
+                  <span className="input-group-text" onClick={togglePasswordVisibility}>
+                    {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                  </span>
                   {formik.touched.password && formik.errors.password && (
                     <div className="invalid-feedback">
                       {formik.errors.password}
                     </div>
                   )}
-                  </div>
+                </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
@@ -271,16 +265,15 @@ function UserManagementAdd() {
                   <input
                     type={cPasswordVisible ? "text" : "password"}
                     name="cPassword"
-                    className={`form-control ${
-                      formik.touched.cPassword && formik.errors.cPassword
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.cPassword && formik.errors.cPassword
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("cPassword")}
                   />
                   <span className="input-group-text" onClick={toggleCPasswordVisibility}>
-                      {cPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                    </span>
+                    {cPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+                  </span>
                   {formik.touched.cPassword && formik.errors.cPassword && (
                     <div className="invalid-feedback">
                       {formik.errors.cPassword}
@@ -296,11 +289,10 @@ function UserManagementAdd() {
                   <input
                     type="text"
                     name="refCode"
-                    className={`form-control ${
-                      formik.touched.refCode && formik.errors.refCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.refCode && formik.errors.refCode
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("refCode")}
                   />
                   {formik.touched.refCode && formik.errors.refCode && (
@@ -309,6 +301,60 @@ function UserManagementAdd() {
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-2">
+              <label className="form-label">
+                Terms Condition
+              </label>
+              <div className="form-check mb-3 d-flex ">
+                <input
+                  type="checkbox"
+                  id="termsCheckbox"
+                  name="termsCondition"
+                  className={`form-check-input ${formik.touched.termsCondition &&
+                    formik.errors.termsCondition
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("termsCondition")}
+                />
+                &nbsp; &nbsp;{" "}
+                <label className="form-check-label" htmlFor="termsCheckbox">
+                  I agree all statements in Terms and Conditions.
+                </label>
+                {formik.touched.termsCondition &&
+                  formik.errors.termsCondition && (
+                    <div className="invalid-feedback">
+                      {formik.errors.termsCondition}
+                    </div>
+                  )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-2">
+              <div className="form-check mb-3 d-flex ">
+                <input
+                  type="checkbox"
+                  id="privacyCheckbox"
+                  className={`form-check-input  ${formik.touched.agree && formik.errors.agree
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("agree")}
+                />
+                &nbsp; &nbsp;
+                <label
+                  className="form-check-label "
+                  htmlFor="privacyCheckbox"
+                >
+                  I agree the use of my personal data for direct marketing
+                  in accordance with the stated Privacy Policy.{" "}
+                </label>
+                {formik.touched.agree && formik.errors.agree && (
+                  <div className="invalid-feedback">
+                    {formik.errors.agree}
+                  </div>
+                )}
               </div>
             </div>
           </div>
