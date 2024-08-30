@@ -70,17 +70,17 @@ mobile:"0909090909"
                   S.NO
                 </th>
                 <th scope="col" className="text-center">
-                  Name
+                  Vehicle Type Id
                 </th>
                 <th scope="col" className="text-center">
-                  Email
+                Vehicle Type
                 </th>
                 <th scope="col" className="text-center">
-                  Mobile Number
+                Helper
                 </th>
-                {/* <th scope="col" className="text-center">
-                  Unit
-                </th> */}
+                <th scope="col" className="text-center">
+                ExtraHelper
+                </th>
                 <th scope="col" className="text-center">
                   ACTION
                 </th>
@@ -93,7 +93,7 @@ mobile:"0909090909"
                   <td className="text-center">{data.name}</td>
                   <td className="text-center">{data.email}</td>
                   <td className="text-center">{data.mobile}</td>
-                  {/* <td className="text-center">unit</td> */}
+                  <td className="text-center">unit</td>
                   <td className="text-center">
                     <div className="gap-2">
                       <Link to={`/vehiclemanagement/view/`}>

@@ -137,9 +137,9 @@ const DriverManagement = () => {
               {/* {datas.map((data, index) => ( */}
                 <tr>
                   <td className="text-center">1</td>
-                  <td className="text-center">itemCode</td>
-                  <td className="text-center">itemName</td>
-                  <td className="text-center">costPrice</td>
+                  <td className="text-center">Harish</td>
+                  <td className="text-center">harish@gmail.com</td>
+                  <td className="text-center">+91 6385921329</td>
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">

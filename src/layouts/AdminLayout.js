@@ -50,7 +50,7 @@ import BookingManagmentView from "../pages/BookingManagment/BookingManagmentView
 function AdminLayout({ handleLogout }) {
   return (
       <BrowserRouter>
-        <div className="d-flex flex-column flex-lg-row" style={{background:"#ECECEC"}}>
+        <div className="d-flex flex-column flex-lg-row  " style={{background:"#ECECEC"}}>
           <SideBar onLogout={handleLogout} />
           <div className="flex-grow-1 " style={{minHeight:"100vh"}}>
             <main className="py-1 " style={{background:"#ECECEC"}}>
