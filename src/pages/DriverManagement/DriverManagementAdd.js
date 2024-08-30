@@ -13,17 +13,9 @@ function DriverManagementAdd() {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
-    firstName: Yup.string().required("*First Name is required"),
-    lastName: Yup.string().required("*Last Name is required"),
-    password: Yup.string().required("*Password is required"),
-    cPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "*Passwords must match")
-      .required("*Confirm Password is required"),
-    email: Yup.string()
-      .email("*Invalid email address")
-      .required("*Email is required"),
-
-    countryCode: Yup.string().required("Country code is required"),
+    firstName: Yup.string().required("*First name is required"),
+    lastName: Yup.string().required("*Last name is required"),
+    countryCode: Yup.string().required("*Country code is required"),
     mobileNo: Yup.string()
       .required("Phone number is required")
       .test("mobileNo-length", function (value) {
@@ -37,51 +29,72 @@ function DriverManagementAdd() {
           return value && value.length === 8
             ? true
             : this.createError({
-                message: "Phone number must be 8 digits only",
-              });
+              message: "Phone number must be 8 digits only",
+            });
         }
         if (countryCode === "91") {
           return value && value.length === 10
             ? true
             : this.createError({
-                message: "Phone number must be 10 digits only",
-              });
+              message: "Phone number must be 10 digits only",
+            });
         }
         return false;
       }),
-    refCode: Yup.string().required("*Reference Code is required"),
+    email: Yup.string().email("*Invalid email format").required("*Email is required"),
+    password: Yup.string().required("*Password is required"),
+    refCode: Yup.string().required("*Referral code is required"),
+    termsCondition: Yup.string().required("*Terms and conditions must be accepted"),
+    driverId: Yup.number().required("*Driver ID is required")
+      .typeError("*Driver ID must be a number"),
+    driverPhoto: Yup.string().required("*Driver photo is required"),
+    idFront: Yup.string().required("*ID front image is required"),
+    idBack: Yup.string().required("*ID back image is required"),
+    licenseFront: Yup.string().required("*License front image is required"),
+    licenseBack: Yup.string().required("*License back image is required"),
+    demeritPoint: Yup.number().required("*Demerit point is required")
+      .typeError("*Demerit point must be a number"),
+    loginType: Yup.string().required("*Login type is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
-      password: "",
-      cPassword: "",
-      email: "",
-      mobileNo: "",
       countryCode: "",
+      mobileNo: "",
+      email: "",
+      password: "",
       refCode: "",
+      termsCondition: "",
+      driverId: "",
+      driverPhoto: "",
+      idFront: "",
+      idBack: "",
+      licenseFront: "",
+      licenseBack: "",
+      demeritPoint: "",
+      loginType: ""
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log("additems:", values);
-      setLoading(true);
-    //   try {
-    //     const response = await api.post(`createMstrItems`, values);
-    //     console.log(response);
-    //     if (response.status === 201) {
-    //       toast.success(response.data.message);
-    //       console.log("Toast : ", response.data.message);
-    //       navigate("/items");
-    //     } else {
-    //       toast.error(response?.data?.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error("Error fetching data: ", error?.response?.data?.message);
-    //   } finally {
-    //     setLoading(false);
-    //   }
+      console.log("drivermanagement:", values);
+      // setLoading(true);
+      //   try {
+      //     const response = await api.post(`createMstrItems`, values);
+      //     console.log(response);
+      //     if (response.status === 201) {
+      //       toast.success(response.data.message);
+      //       console.log("Toast : ", response.data.message);
+      //       navigate("/items");
+      //     } else {
+      //       toast.error(response?.data?.message);
+      //     }
+      //   } catch (error) {
+      //     toast.error("Error fetching data: ", error?.response?.data?.message);
+      //   } finally {
+      //     setLoading(false);
+      //   }
     },
   });
 
@@ -106,7 +119,7 @@ function DriverManagementAdd() {
               </div>
               <div className="col-auto">
                 <div className="hstack gap-2 justify-content-end">
-                  <Link to="/supportteammanagement">
+                  <Link to="/drivermanagement">
                     <button type="button" className="btn btn-sm btn-light">
                       <span>Back</span>
                     </button>
@@ -141,11 +154,10 @@ function DriverManagementAdd() {
                   <input
                     type="text"
                     name="firstName"
-                    className={`form-control ${
-                      formik.touched.firstName && formik.errors.firstName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.firstName && formik.errors.firstName
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("firstName")}
                   />
                   {formik.touched.firstName && formik.errors.firstName && (
@@ -163,38 +175,15 @@ function DriverManagementAdd() {
                   <input
                     type="text"
                     name="lastName"
-                    className={`form-control ${
-                      formik.touched.lastName && formik.errors.lastName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.lastName && formik.errors.lastName
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("lastName")}
                   />
                   {formik.touched.lastName && formik.errors.lastName && (
                     <div className="invalid-feedback">
                       {formik.errors.lastName}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                  Email <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="email"
-                    name="email"
-                    className={`form-control ${
-                      formik.touched.email && formik.errors.email
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("email")}
-                  />
-                  {formik.touched.email && formik.errors.email && (
-                    <div className="invalid-feedback">
-                      {formik.errors.email}
                     </div>
                   )}
                 </div>
@@ -207,11 +196,10 @@ function DriverManagementAdd() {
                   <div className="input-group">
                     <select
                       name="countryCode"
-                      className={`form-select form-select-sm ${
-                        formik.touched.countryCode && formik.errors.countryCode
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-select form-select-sm ${formik.touched.countryCode && formik.errors.countryCode
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       style={{ maxWidth: "80px" }} // Adjust width as needed
                       {...formik.getFieldProps("countryCode")}
                     >
@@ -223,11 +211,10 @@ function DriverManagementAdd() {
                       type="text"
                       name="mobileNo"
                       placeholder="Mobile Number"
-                      className={`form-control ${
-                        formik.touched.mobileNo && formik.errors.mobileNo
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-control ${formik.touched.mobileNo && formik.errors.mobileNo
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       {...formik.getFieldProps("mobileNo")}
                     />
                     {formik.touched.mobileNo && formik.errors.mobileNo && (
@@ -240,50 +227,45 @@ function DriverManagementAdd() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Password <span className="text-danger">*</span>
+                  Email <span className="text-danger">*</span>
                 </label>
-                <div className="input-group mb-3">
-                    <input
-                      type={passwordVisible ? "text" : "password"}
-                      name="password"
-                      className={`form-control ${
-                        formik.touched.password && formik.errors.password
-                          ? "is-invalid"
-                          : ""
+                <div className="mb-3">
+                  <input
+                    type="email"
+                    name="email"
+                    className={`form-control ${formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
                       }`}
-                      {...formik.getFieldProps("password")}
-                    />
-                    <span className="input-group-text" onClick={togglePasswordVisibility}>
-                      {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                    </span>
-                  {formik.touched.password && formik.errors.password && (
+                    {...formik.getFieldProps("email")}
+                  />
+                  {formik.touched.email && formik.errors.email && (
                     <div className="invalid-feedback">
-                      {formik.errors.password}
+                      {formik.errors.email}
                     </div>
                   )}
-                  </div>
+                </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Confirm Password <span className="text-danger">*</span>
+                  Password <span className="text-danger">*</span>
                 </label>
                 <div className="input-group mb-3">
                   <input
-                    type={cPasswordVisible ? "text" : "password"}
-                    name="cPassword"
-                    className={`form-control ${
-                      formik.touched.cPassword && formik.errors.cPassword
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("cPassword")}
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    className={`form-control ${formik.touched.password && formik.errors.password
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("password")}
                   />
-                  <span className="input-group-text" onClick={toggleCPasswordVisibility}>
-                      {cPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                    </span>
-                  {formik.touched.cPassword && formik.errors.cPassword && (
+                  <span className="input-group-text" onClick={togglePasswordVisibility}>
+                    {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                  {formik.touched.password && formik.errors.password && (
                     <div className="invalid-feedback">
-                      {formik.errors.cPassword}
+                      {formik.errors.password}
                     </div>
                   )}
                 </div>
@@ -296,16 +278,204 @@ function DriverManagementAdd() {
                   <input
                     type="text"
                     name="refCode"
-                    className={`form-control ${
-                      formik.touched.refCode && formik.errors.refCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.refCode && formik.errors.refCode
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("refCode")}
                   />
                   {formik.touched.refCode && formik.errors.refCode && (
                     <div className="invalid-feedback">
                       {formik.errors.refCode}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Terms Condition <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    name="termsCondition"
+                    className={`form-control ${formik.touched.termsCondition && formik.errors.termsCondition
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("termsCondition")}
+                  />
+                  {formik.touched.termsCondition && formik.errors.termsCondition && (
+                    <div className="invalid-feedback">
+                      {formik.errors.termsCondition}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Driver Id <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    name="driverId"
+                    className={`form-control ${formik.touched.driverId && formik.errors.driverId
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("driverId")}
+                  />
+                  {formik.touched.driverId && formik.errors.driverId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.driverId}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Driver Photo <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="driverPhoto"
+                    className={`form-control ${formik.touched.driverPhoto && formik.errors.driverPhoto
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("driverPhoto")}
+                  />
+                  {formik.touched.driverPhoto && formik.errors.driverPhoto && (
+                    <div className="invalid-feedback">
+                      {formik.errors.driverPhoto}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Id Front <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="idFront"
+                    className={`form-control ${formik.touched.idFront && formik.errors.idFront
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("idFront")}
+                  />
+                  {formik.touched.idFront && formik.errors.idFront && (
+                    <div className="invalid-feedback">
+                      {formik.errors.idFront}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Id Back <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="idBack"
+                    className={`form-control ${formik.touched.idBack && formik.errors.idBack
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("idBack")}
+                  />
+                  {formik.touched.idBack && formik.errors.idBack && (
+                    <div className="invalid-feedback">
+                      {formik.errors.idBack}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  License Front <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="licenseFront"
+                    className={`form-control ${formik.touched.licenseFront && formik.errors.licenseFront
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("licenseFront")}
+                  />
+                  {formik.touched.licenseFront && formik.errors.licenseFront && (
+                    <div className="invalid-feedback">
+                      {formik.errors.licenseFront}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  License Back <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="licenseBack"
+                    className={`form-control ${formik.touched.licenseBack && formik.errors.licenseBack
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("licenseBack")}
+                  />
+                  {formik.touched.licenseBack && formik.errors.licenseBack && (
+                    <div className="invalid-feedback">
+                      {formik.errors.licenseBack}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  DemeritPoint <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    name="demeritPoint"
+                    className={`form-control ${formik.touched.demeritPoint && formik.errors.demeritPoint
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("demeritPoint")}
+                  />
+                  {formik.touched.demeritPoint && formik.errors.demeritPoint && (
+                    <div className="invalid-feedback">
+                      {formik.errors.demeritPoint}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Login Type <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    name="loginType"
+                    className={`form-control ${formik.touched.loginType && formik.errors.loginType
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("loginType")}
+                  />
+                  {formik.touched.loginType && formik.errors.loginType && (
+                    <div className="invalid-feedback">
+                      {formik.errors.loginType}
                     </div>
                   )}
                 </div>

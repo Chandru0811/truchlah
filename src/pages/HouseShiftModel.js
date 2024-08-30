@@ -8,7 +8,9 @@ import * as Yup from "yup";
 const validationSchema = Yup.object().shape({
   location: Yup.string().required("*Location is required"),
   address: Yup.string().required("*Address is required"),
-  contactName: Yup.string().required("*Contact Name is required"),
+  contactName: Yup.string()
+    .required("*Contact Name is required")
+    .max(40, "*Maximum 40 characters"),
   countryCode: Yup.string().required("*Country Code is required"),
   mobile: Yup.string()
     .required("Mobile number is required")
@@ -83,7 +85,7 @@ function HouseShiftModel({
       }
     }
   }, [show, title, pickupLocation, dropLocation, stops]);
-  
+
   useEffect(() => {
     if (!show) {
       // formik.resetForm();
