@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Dashboard from "../pages/admin/Dashboard";
+import SideBar from "../pages/admin/SideBar";
 import DashboardAdmin from "../pages/DashboardAdmin";
 import VehicleManagement from "../pages/VehicleManagement/VehicleManagement";
 import VehicleManagementAdd from "../pages/VehicleManagement/VehicleManagementAdd";
@@ -48,9 +48,9 @@ import ContactFormTeamView from "../pages/ContactFormTeam/ContactFormTeamView";
 function AdminLayout({ handleLogout }) {
   return (
     <div>
-      <BrowserRouter>HouseCategoryManagement
+      <BrowserRouter>
         <div className="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
-          <Dashboard onLogout={handleLogout} />
+          <SideBar onLogout={handleLogout} />
           <div className="h-screen flex-grow-1 overflow-y-lg-auto">
             <main className="py-1 bg-surface-secondary" style={{ marginLeft: "15rem" }}>
               <Routes>

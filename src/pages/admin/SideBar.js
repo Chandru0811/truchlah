@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../asset/logo.png";
 import "../../styles/bootstrapCdn.css";
-function Dashboard({ onLogout }) {
+function SideBar({ onLogout }) {
   const handleLogOutClick = () => {
     onLogout();
   };
@@ -98,33 +98,8 @@ function Dashboard({ onLogout }) {
                 <i className="bx bx-envelope pe-3"></i> Contact Form
               </NavLink>
             </li>
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/usermanagementteam">
-                <i className="bx bx-bar-chart pe-3"></i> User Management
-              </NavLink>
-            </li>
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/drivermanagementteam">
-                <i className="bx bx-bar-chart pe-3"></i> Driver Management
-              </NavLink>
-            </li>
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/dashboard">
-                <i className="bx bx-bar-chart pe-3"></i> Booking Management
-              </NavLink>
-            </li>
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/reviewandfeedbackteam">
-                <i className="bx bx-bar-chart pe-3"></i> Reviews and Feedback
-              </NavLink>
-            </li>
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/contactformteam">
-                <i className="bx bx-bar-chart pe-3"></i> Contact Form
-              </NavLink>
-            </li>
           </ul>
-          <div className="ps-4 mt-4 w-100">
+          <div className="ps-4 mt-auto w-100">
             <button
               id="logoutbtn"
               className="text-start btn"
@@ -139,4 +114,4 @@ function Dashboard({ onLogout }) {
   );
 }
 
-export default Dashboard;
+export default SideBar;

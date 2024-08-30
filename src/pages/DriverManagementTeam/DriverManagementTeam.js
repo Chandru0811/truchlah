@@ -13,6 +13,14 @@ const DriverManagementTeam = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const table = $(tableRef.current).DataTable();
+  
+    return () => {
+      table.destroy();
+    };
+  }, []);
 
 //   useEffect(() => {
 //     if (!loading) {
@@ -23,20 +31,20 @@ const DriverManagementTeam = () => {
 //     };
 //   }, [loading]);
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable();
-  };
+  // const initializeDataTable = () => {
+  //   if ($.fn.DataTable.isDataTable(tableRef.current)) {
+  //     // DataTable already initialized, no need to initialize again
+  //     return;
+  //   }
+  //   $(tableRef.current).DataTable();
+  // };
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
+  // const destroyDataTable = () => {
+  //   const table = $(tableRef.current).DataTable();
+  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+  //     table.destroy();
+  //   }
+  // };
 
 //   const refreshData = async () => {
 //     destroyDataTable();
@@ -81,7 +89,7 @@ const DriverManagementTeam = () => {
     {/* ) : ( */}
     <div className="container-fluid px-2 minHeight">
       <div className="card shadow border-0 my-2">
-        <div className="container-fluid py-4">
+        <div className="container-fluid pt-4 pb-3">
           <div className="row align-items-center justify-content-between ">
             <div className="col">
               <div className="d-flex align-items-center gap-4">
@@ -99,10 +107,10 @@ const DriverManagementTeam = () => {
             </div>
           </div>
         </div>
-        <hr className="removeHrMargin"></hr>
+        <hr className="removeHrMargin mt-0"></hr>
        
         <div className="table-responsive p-2 minHeight">
-          <table ref={tableRef} className="display table">
+          <table ref={tableRef} className="display">
             <thead className="thead-light">
               <tr>
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
