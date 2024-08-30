@@ -48,9 +48,9 @@ import ContactFormTeamView from "../pages/ContactFormTeam/ContactFormTeamView";
 function AdminLayout({ handleLogout }) {
   return (
       <BrowserRouter>
-        <div className="d-flex flex-column flex-lg-row h-100 " style={{background:"#ECECEC"}}>
+        <div className="d-flex flex-column flex-lg-row  " style={{background:"#ECECEC"}}>
           <SideBar onLogout={handleLogout} />
-          <div className="flex-grow-1 " style={{height:"100vh"}}>
+          <div className="flex-grow-1 " style={{minHeight:"100vh"}}>
             <main className="py-1 " style={{background:"#ECECEC"}}>
               <Routes>
                 <Route path="/" element={<DashboardAdmin />} />
