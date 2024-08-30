@@ -104,7 +104,7 @@ function Service() {
   const formik = useFormik({
     initialValues: {
       date: formattedDate,
-      time: formattedTime,
+      time: "",
       vechicleTypeId: "",
       driverAsManpower: false,
       extraManpower: false,
@@ -242,7 +242,7 @@ function Service() {
     setTime(formattedTime);
 
     formik.setFieldValue("date", formattedDate);
-    formik.setFieldValue("time", formattedTime);
+    // formik.setFieldValue("time", formattedTime);
   }, []);
 
   const imageMapping = {
