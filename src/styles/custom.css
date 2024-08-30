@@ -235,7 +235,9 @@
   padding-left: 0;
   padding-right: 0;
 }
-
+.minHeight{
+  height: 80vh !important;
+}
 @media screen and (min-width: 767px) {
   .summary #drop {
     border: none;
@@ -1815,4 +1817,7 @@ body {
 /* data table search end position */
 .dt-search{
 text-align: end;
+}
+.dt-paging{
+  text-align: end; 
 }

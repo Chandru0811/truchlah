@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../asset/logo.png";
 import "../../styles/bootstrapCdn.css";
+
 function SideBar({ onLogout }) {
   const handleLogOutClick = () => {
     onLogout();
@@ -9,19 +10,10 @@ function SideBar({ onLogout }) {
 
   return (
     <nav
-      className="navbar navbar-vertical h-100 navbar-expand-lg p-0 navbar-light border-end-lg"
-      style={{
-        backgroundColor: "#fff",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        height: "100vh",
-        width: "250px",
-        overflowY: "auto",
-      }}
+      className="navbar show navbar-vertical navbar-expand-lg p-0 navbar-light border-bottom border-bottom-lg-0 border-end-lg"
       id="navbarVertical"
     >
-      <div className="container-fluid p-0 flex-column">
+      <div className="container-fluid ">
         <button
           className="navbar-toggler mx-2 p-1"
           type="button"
@@ -34,19 +26,15 @@ function SideBar({ onLogout }) {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div
-          className="collapse navbar-collapse flex-column"
-          id="sidebarCollapse"
+        <NavLink
+          style={{ background: "#fff" }}
+          className="navbar-brand py-2  px-lg-6 d-flex align-items-center justify-content-center p-4"
+          to="/"
         >
-          {" "}
-          <NavLink
-            style={{ background: "#fff"}}
-            className={`navbar-brand logo_ats py-lg-2 px-lg-6 d-flex align-items-center justify-content-center p-4`}
-            to="/"
-          >
-            <img src={Logo} alt="logo" style={{ width: "130px" }} />
-          </NavLink>
-          <ul className="navbar-nav flex-column">
+          <img src={Logo} alt="logo" style={{ width: "130px" }} />
+        </NavLink>
+        <div className="collapse navbar-collapse" id="sidebarCollapse">
+          <ul className="navbar-nav ">
             <li className="nav-item">
               <NavLink className="nav-link" to="/">
                 <i className="bx bx-bar-chart pe-3"></i> Dashboard
@@ -99,6 +87,7 @@ function SideBar({ onLogout }) {
               </NavLink>
             </li>
           </ul>
+
           <div className="ps-4 mt-auto w-100">
             <button
               id="logoutbtn"

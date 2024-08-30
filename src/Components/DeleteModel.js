@@ -39,15 +39,15 @@ const DeleteModel = ({ onSuccess, onDelete }) => {
         <Modal.Body>
           <p>Are you sure you want to delete?</p>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="p-2">
           <Button
-            className="btn btn-sm p-3 btn-secondary text-danger-hover linkPadding"
+            className="btn btn-sm btn-secondary text-danger-hover linkPadding"
             onClick={handleClose}
           >
             Close
           </Button>
           <Button
-            className="btn btn-sm p-3 btn-danger text-danger-hover linkPadding"
+            className="btn btn-sm btn-danger text-danger-hover linkPadding"
             onClick={handelDelete}
           >
             Delete
