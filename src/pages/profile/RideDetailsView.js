@@ -444,8 +444,8 @@ function RideDetailsView() {
                             data.bookingStatus?.status === "CANCELLED"
                               ? "red" // Red color for CANCELLED
                               : data.bookingStatus?.status === "COMPLETED"
-                              ? "green" // Green color for COMPLETED
-                              : "orange", // Orange color for other statuses
+                                ? "green" // Green color for COMPLETED
+                                : "orange", // Orange color for other statuses
                         }}
                       >
                         {data.bookingStatus?.status || "--"}
@@ -700,18 +700,18 @@ function RideDetailsView() {
                             <p className="mt-2" style={{ color: "#494949" }}>
                               {data?.bookingStatus?.ratingByUser !== undefined
                                 ? Array.from({ length: 5 }).map((_, index) =>
-                                    index < data.bookingStatus.ratingByUser ? (
-                                      <GoStarFill
-                                        key={index}
-                                        className="text-warning"
-                                      />
-                                    ) : (
-                                      <FaRegStar
-                                        key={index}
-                                        className="text-warning"
-                                      />
-                                    )
+                                  index < data.bookingStatus.ratingByUser ? (
+                                    <GoStarFill
+                                      key={index}
+                                      className="text-warning"
+                                    />
+                                  ) : (
+                                    <FaRegStar
+                                      key={index}
+                                      className="text-warning"
+                                    />
                                   )
+                                )
                                 : "--"}
                             </p>
                           </div>
@@ -768,18 +768,18 @@ function RideDetailsView() {
                             <p className="mt-2" style={{ color: "#494949" }}>
                               {data?.bookingStatus?.ratingByDriver !== undefined
                                 ? Array.from({ length: 5 }).map((_, index) =>
-                                    index < data.bookingStatus.ratingByDriver ? (
-                                      <GoStarFill
-                                        key={index}
-                                        className="text-warning"
-                                      />
-                                    ) : (
-                                      <FaRegStar
-                                        key={index}
-                                        className="text-warning"
-                                      />
-                                    )
+                                  index < data.bookingStatus.ratingByDriver ? (
+                                    <GoStarFill
+                                      key={index}
+                                      className="text-warning"
+                                    />
+                                  ) : (
+                                    <FaRegStar
+                                      key={index}
+                                      className="text-warning"
+                                    />
                                   )
+                                )
                                 : "--"}
                             </p>
                           </div>
@@ -807,15 +807,17 @@ function RideDetailsView() {
               )}
 
             <div className="my-3 d-flex justify-content-center">
-              {data.bookingStatus?.status === "COMPLETED" ||
-                (data.bookingStatus?.status === "CANCELLED" &&
-                  isPopupVisible && (
-                    <Popup
-                      togglePopup={togglePopup}
-                      onSuccess={fetchData}
-                      bookingId={data?.booking?.bookingId}
-                    />
-                  ))}
+              {(data.bookingStatus?.status === "COMPLETED" || data.bookingStatus?.status === "CANCELLED") &&
+                isPopupVisible &&
+                !data?.bookingStatus?.reviewByUser &&
+                !data?.bookingStatus?.rattingByUser && (
+                  <Popup
+                    togglePopup={togglePopup}
+                    onSuccess={fetchData}
+                    bookingId={data?.booking?.bookingId}
+                  />
+                )}
+
             </div>
           </div>
 

@@ -174,7 +174,6 @@ const BannerAndOffer = () => {
           </table>
         </div>
         
-        <div className="card-footer border-0 py-5"></div>
       </div>
     </div>
   {/* )} */}
