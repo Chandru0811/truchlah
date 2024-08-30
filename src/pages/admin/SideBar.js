@@ -71,7 +71,7 @@ function SideBar({ onLogout }) {
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/booking-management">
+              <NavLink className="nav-link" to="/bookingManagement">
                 <i className="bx bx-calendar pe-3"></i> Booking Management
               </NavLink>
             </li>
@@ -88,7 +88,7 @@ function SideBar({ onLogout }) {
             </li>
           </ul>
 
-          <div className="ps-4 mt-auto w-100">
+          <div className="ps-4 mt-auto w-100 mb-4">
             <button
               id="logoutbtn"
               className="text-start btn"

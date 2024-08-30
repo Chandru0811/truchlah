@@ -44,13 +44,15 @@ import ReviewAndFeedbackTeam from "../pages/ReviewAndFeedbackTeam";
 import ContactFormTeam from "../pages/ContactFormTeam/ContactFormTeam";
 import ContactFormTeamEdit from "../pages/ContactFormTeam/ContactFormTeamEdit";
 import ContactFormTeamView from "../pages/ContactFormTeam/ContactFormTeamView";
+import BookingManagment from "../pages/BookingManagment/BookingManagment";
+import BookingManagmentView from "../pages/BookingManagment/BookingManagmentView";
 
 function AdminLayout({ handleLogout }) {
   return (
       <BrowserRouter>
-        <div className="d-flex flex-column flex-lg-row h-100 " style={{background:"#ECECEC"}}>
+        <div className="d-flex flex-column flex-lg-row" style={{background:"#ECECEC"}}>
           <SideBar onLogout={handleLogout} />
-          <div className="flex-grow-1 " style={{height:"100vh"}}>
+          <div className="flex-grow-1 " style={{minHeight:"100vh"}}>
             <main className="py-1 " style={{background:"#ECECEC"}}>
               <Routes>
                 <Route path="/" element={<DashboardAdmin />} />
@@ -68,6 +70,9 @@ function AdminLayout({ handleLogout }) {
                 <Route path="/supportteammanagement/add" element={< SupportTeamManagementAdd />} />
                 <Route path="/supportteammanagement/edit" element={< SupportTeamManagementEdit />} />
                 <Route path="/supportteammanagement/view" element={< SupportTeamManagementView />} />
+
+                <Route path="/bookingManagement" element={< BookingManagment />} />
+                <Route path="/bookingManagement/view" element={< BookingManagmentView />} />
 
                 <Route path="/usermanagement" element={< UserManagement />} />
                 <Route path="/usermanagement/add" element={< UserManagementAdd />} />
