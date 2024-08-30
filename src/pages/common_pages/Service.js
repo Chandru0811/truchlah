@@ -417,7 +417,7 @@ function Service() {
                             }}
                           >
                             <FaWeightHanging />{" "}
-                            {weightMaping[item.vehicletypeId]}
+                            {`${weightMaping[item.vehicletypeId]} kg`}
                           </span>
                         </div>
                         <div className="d-flex justify-content-center pt-3">

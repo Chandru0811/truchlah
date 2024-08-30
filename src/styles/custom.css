@@ -1811,3 +1811,8 @@ body {
     background: "#fff" !important;
   }
 }
+
+/* data table search end position */
+.dt-search{
+text-align: end;
+}

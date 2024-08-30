@@ -10,62 +10,24 @@ import DeleteModel from "../../Components/DeleteModel";
 
 const VehicleManagement = () => {
   const tableRef = useRef(null);
-  const [datas, setDatas] = useState([]);
+  // const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     if (!loading) {
-//       initializeDataTable();
-//     }
-//     return () => {
-//       destroyDataTable();
-//     };
-//   }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
+ 
+  const datas=[
+    {
+      name:"prem",
+email:"email@gmail.com",
+mobile:"0909090909"
     }
-    $(tableRef.current).DataTable();
-  };
-
-  const destroyDataTable = () => {
+  ]
+ 
+  useEffect(() => {
     const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+
+    return () => {
       table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    // setLoading(true);
-    // try {
-    //   const response = await api.get("getAllMstrItems");
-    //   setDatas(response.data);
-    //   initializeDataTable(); 
-    // } catch (error) {
-    //   toast.error("Error refreshing data:", error?.response?.data?.message);
-    // } finally {
-    //   setLoading(false);
-    // }
-  };
-
-//   useEffect(() => {
-//     const getItemData = async () => {
-//       try {
-//         const resposnse = await api.get(
-//           "getAllMstrItems"
-//         );
-//         setDatas(resposnse.data);
-//       } catch (error) {
-//         toast.error("Error fetching data: ", error?.response?.data?.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     getItemData();
-//   }, []);
+    };
+  }, []);
 
   return (
     <div>
@@ -80,7 +42,7 @@ const VehicleManagement = () => {
     {/* ) : ( */}
     <div className="container-fluid px-2 minHeight">
       <div className="card shadow border-0 my-2">
-        <div className="container-fluid py-4">
+        <div className="container-fluid pt-4 pb-3">
           <div className="row align-items-center justify-content-between ">
             <div className="col">
               <div className="d-flex align-items-center gap-4">
@@ -98,10 +60,10 @@ const VehicleManagement = () => {
             </div>
           </div>
         </div>
-        <hr className="removeHrMargin"></hr>
+        <hr className="removeHrMargin mt-0"></hr>
        
         <div className="table-responsive p-2 minHeight">
-          <table ref={tableRef} className="display table">
+          <table ref={tableRef} className="display">
             <thead className="thead-light">
               <tr>
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
@@ -125,12 +87,12 @@ const VehicleManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {datas.map((data, index) => ( */}
+              {datas.map((data, index) => (
                 <tr>
                   <td className="text-center">1</td>
-                  <td className="text-center">itemCode</td>
-                  <td className="text-center">itemName</td>
-                  <td className="text-center">costPrice</td>
+                  <td className="text-center">{data.name}</td>
+                  <td className="text-center">{data.email}</td>
+                  <td className="text-center">{data.mobile}</td>
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">
@@ -145,14 +107,14 @@ const VehicleManagement = () => {
                         </button>
                       </Link>
                       <DeleteModel
-                        onSuccess={refreshData}
+                        // onSuccess={refreshData}
                         // path={`deleteMstrItem/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
                     </div>
                   </td>
                 </tr>
-              {/* ))} */}
+               ))} 
             </tbody>
           </table>
         </div>
