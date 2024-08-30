@@ -242,9 +242,11 @@
   padding-left: 0;
   padding-right: 0;
 }
+
 .minHeight{
-  height: 80vh !important;
+  min-height: 80vh !important;
 }
+
 @media screen and (min-width: 767px) {
   .summary #drop {
     border: none;
