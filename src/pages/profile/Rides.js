@@ -29,12 +29,14 @@ function Order() {
     setIsLoaded(true); // Show loader when clicking on HOUSE SHIFT
     setShowHouseShift(true);
     setShowItemShift(false);
+    setIsLoaded(false)
   };
 
   const itemSection = () => {
     setIsLoaded(true); // Show loader when clicking on ITEM SHIFT
     setShowItemShift(true);
     setShowHouseShift(false);
+    setIsLoaded(false)
   };
 
   const inprogressSection = () => {
@@ -42,6 +44,7 @@ function Order() {
     setShowInprogressSection(true);
     setShowCompletedSection(false);
     setShowCanceledSection(false);
+    setIsLoaded(false)
   };
 
   const completedSection = () => {
@@ -49,6 +52,7 @@ function Order() {
     setShowInprogressSection(false);
     setShowCanceledSection(false);
     setShowCompletedSection(true);
+    setIsLoaded(false)
   };
 
   const cancelSection = () => {
@@ -56,6 +60,7 @@ function Order() {
     setShowInprogressSection(false);
     setShowCompletedSection(false);
     setShowCanceledSection(true);
+    setIsLoaded(false)
   };
 
   useEffect(() => {

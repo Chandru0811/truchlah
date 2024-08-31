@@ -132,21 +132,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                               </div>
                               <div className="ride ">
                                 {isAuthenticate ? (
-                                  currentPath === "/map" ||
-                                  currentPath === "/service" ? (
-                                    <li className="nav-item">
-                                      <button
-                                        onClick={handleShow}
-                                        style={{ minWidth: "max-content" }}
-                                        type="button"
-                                        className="py-2 px-3"
-                                        id="NextMove"
-                                      >
-                                        Book Rides
-                                      </button>
-                                    </li>
-                                  ) : (
-                                    <Link to="/shift">
+                                  <Link to="/shift">
                                       <li className="nav-item">
                                         <button
                                           style={{ minWidth: "max-content" }}
@@ -158,7 +144,33 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                         </button>
                                       </li>
                                     </Link>
-                                  )
+                                  // currentPath === "/map" ||
+                                  // currentPath === "/service" ? (
+                                  //   <li className="nav-item">
+                                  //     <button
+                                  //       onClick={handleShow}
+                                  //       style={{ minWidth: "max-content" }}
+                                  //       type="button"
+                                  //       className="py-2 px-3"
+                                  //       id="NextMove"
+                                  //     >
+                                  //       Book Rides
+                                  //     </button>
+                                  //   </li>
+                                  // ) : (
+                                  //   <Link to="/shift">
+                                  //     <li className="nav-item">
+                                  //       <button
+                                  //         style={{ minWidth: "max-content" }}
+                                  //         type="button"
+                                  //         className="py-2 px-3"
+                                  //         id="NextMove"
+                                  //       >
+                                  //         Book Rides
+                                  //       </button>
+                                  //     </li>
+                                  //   </Link>
+                                  // )
                                 ) : (
                                   <Link to="/login">
                                     <li className="nav-item">

@@ -58,7 +58,7 @@ function UserLayout({
       <ToastContainer position="top-center" />
       <Head isAuthenticate={isAuthenticate} handleLogout={handleLogout} />
       <ScrollToTop />
-      <div style={{ marginTop: "88px" }}>
+      <div style={{ marginTop: "66px" }}>
         <Routes>
           <Route path="/" element={<Home isAuthenticate={isAuthenticate} />} />
           <Route

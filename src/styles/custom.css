@@ -522,6 +522,11 @@ body {
   font-weight: 500;
 }
 
+/* .navbar-light .navbar-nav .nav-link i:hover {
+  color: #fff;
+  font-weight: 500;
+} */
+
 .nav-link:hover {
   background-color: #02046b;
   border-radius: 5px;
@@ -581,6 +586,11 @@ body {
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out;
+}
+
+.logoutbtn:hover{
+color: #0077ff !important;
+/* background-color: #00387a !important; */
 }
 
 .Links {

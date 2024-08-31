@@ -91,7 +91,7 @@ function SideBar({ onLogout }) {
           <div className="ps-4 mt-auto w-100 mb-4">
             <button
               id="logoutbtn"
-              className="text-start btn"
+              className="text-start logoutbtn btn"
               onClick={handleLogOutClick}
             >
               <i className="bi bi-box-arrow-left pe-3"></i> Logout
