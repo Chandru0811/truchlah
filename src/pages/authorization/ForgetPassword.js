@@ -112,14 +112,14 @@ function ForgotPassword() {
                             type="email"
                             className={`form-control  ${
                               formik.touched.email && formik.errors.email
-                                ? "is-invalid"
+                                ? ""
                                 : ""
                             }`}
                             {...formik.getFieldProps("email")}
                             placeholder="Enter your name"
                           />
                           {formik.touched.email && formik.errors.email && (
-                            <div className="invalid-feedback">
+                            <div className="text-danger">
                               {formik.errors.email}
                             </div>
                           )}
@@ -137,7 +137,7 @@ function ForgotPassword() {
                             placeholder="Enter your password"
                             className={`form-control ${
                               formik.touched.password && formik.errors.password
-                                ? "is-invalid"
+                                ? ""
                                 : ""
                             }`}
                             {...formik.getFieldProps("password")}
@@ -165,7 +165,7 @@ function ForgotPassword() {
                           )}
                           {formik.touched.password &&
                             formik.errors.password && (
-                              <div className="invalid-feedback">
+                              <div className="text-danger">
                                 {formik.errors.password}
                               </div>
                             )}
@@ -184,7 +184,7 @@ function ForgotPassword() {
                             className={`form-control ${
                               formik.touched.confirmPassword &&
                               formik.errors.confirmPassword
-                                ? "is-invalid"
+                                ? ""
                                 : ""
                             }`}
                             {...formik.getFieldProps("confirmPassword")}
@@ -212,7 +212,7 @@ function ForgotPassword() {
                           )}
                           {formik.touched.confirmPassword &&
                             formik.errors.confirmPassword && (
-                              <div className="invalid-feedback">
+                              <div className="text-danger">
                                 {formik.errors.confirmPassword}
                               </div>
                             )}

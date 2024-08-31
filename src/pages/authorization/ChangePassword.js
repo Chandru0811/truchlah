@@ -13,6 +13,7 @@ function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const [oldPassword, setConfirmOldPassword] = useState(false);
+  const userName = sessionStorage.getItem("username");
   const navigate = useNavigate();
 
   const PasswordVisibility = (e) => {
@@ -31,12 +32,12 @@ function ChangePassword() {
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .matches(
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        "*Enter a valid email address"
-      )
-      .required("*Email is required"),
+    // email: Yup.string()
+    //   .matches(
+    //     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    //     "*Enter a valid email address"
+    //   )
+    //   .required("*Email is required"),
     password: Yup.string()
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
@@ -53,10 +54,10 @@ function ChangePassword() {
       )
       .required("*Please Enter your current password"),
   });
-
+  console.log("userName", userName)
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: userName,
       password: "",
       confirmPassword: "",
       oldPassword: "",
@@ -128,19 +129,12 @@ function ChangePassword() {
                           className="mb-3"
                         >
                           <Form.Control
-                            type="email"
-                            className={`form-control  ${formik.touched.email && formik.errors.email
-                              ? ""
-                              : ""
-                              }`}
-                            {...formik.getFieldProps("email")}
-                            placeholder="Enter your name"
+                            type="text"
+                            value={userName}
+                            readOnly
+                            className="form-control"
+                            style={{ backgroundColor: "#f8f9fa", border: "1px solid #ced4da" }}
                           />
-                          {formik.touched.email && formik.errors.email && (
-                            <div className="text-danger">
-                              {formik.errors.email}
-                            </div>
-                          )}
                         </FloatingLabel>
                       </div>
                       <div className="">
