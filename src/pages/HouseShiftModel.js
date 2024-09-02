@@ -94,6 +94,7 @@ function HouseShiftModel({
 
   return (
     <Modal show={show} onHide={() => {
+      formik.resetForm();
       onHide();
     }}>
       <Modal.Header closeButton>
