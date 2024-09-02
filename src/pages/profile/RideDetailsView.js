@@ -122,8 +122,8 @@ function RideDetailsView() {
   const handleRadioChange = (e) => {
     const value = e.target.value;
     formik.setFieldValue("cancelReason", value);
-    if (value !== "Others") {
-      setCustomReason(""); // Clear custom reason if "Others" is not selected
+    if (value !== "comments") {
+      setCustomReason("");
     }
   };
 
@@ -658,9 +658,9 @@ function RideDetailsView() {
                         </div>
                         <div className="col-md-12 col-12 ps-1">
                           <p style={{ color: "#4949491" }}>
-                            {data?.bookingStatus?.comments
-                              ? data.bookingStatus.comments
-                              : " "}
+                            {data?.bookingStatus?.comments === "UserCancellation-comments"
+                              ? "No Comments"
+                              : data.bookingStatus.comments}
                           </p>
                         </div>
                       </div>
@@ -960,17 +960,16 @@ function RideDetailsView() {
                           className="form-check-input"
                           id="reason6"
                           name="cancelReason"
-                          value="Others"
+                          value="comments"
                           onChange={handleRadioChange}
-                          checked={formik.values.cancelReason === "Others"}
+                          checked={formik.values.cancelReason === "comments"}
                         />
                         <label className="form-check-label" htmlFor="reason6">
                           Others
                         </label>
                       </div>
 
-                      {/* Conditionally render the textarea */}
-                      {formik.values.cancelReason === "Others" && (
+                      {formik.values.cancelReason === "comments" && (
                         <textarea
                           className="form-control mt-3"
                           placeholder="Write your reason here..."
