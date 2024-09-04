@@ -122,8 +122,8 @@ function RideDetailsView() {
   const handleRadioChange = (e) => {
     const value = e.target.value;
     formik.setFieldValue("cancelReason", value);
-    if (value !== "comments") {
-      setCustomReason("");
+    if (value !== "Others") {
+      setCustomReason(""); // Clear custom reason if "Others" is not selected
     }
   };
 
@@ -657,10 +657,12 @@ function RideDetailsView() {
                           </div>
                         </div>
                         <div className="col-md-12 col-12 ps-1">
-                          <p style={{ color: "#4949491" }}>
-                            {data?.bookingStatus?.comments === "UserCancellation-comments"
-                              ? "No Comments"
-                              : data.bookingStatus.comments}
+                          <p style={{ color: "#494949" }}>
+                            {data?.bookingStatus?.comments
+                              ? data.bookingStatus.comments.includes("Others")
+                                ? "No Comments"
+                                : data.bookingStatus.comments.replace("UserCancellation-", "")
+                              : " "}
                           </p>
                         </div>
                       </div>
@@ -670,73 +672,73 @@ function RideDetailsView() {
               </>
             )}
 
-            {data?.bookingStatus?.reviewByUser &&
-              data?.bookingStatus?.ratingByUser && (
-                <>
-                  <div className="row">
-                    <div className="col-lg-3"></div>
-                    <div className="col-lg-9">
-                      <p className="mt-5 ps-2">
-                        <b>Review By User:</b>
-                      </p>
-                    </div>
+            {(data?.bookingStatus?.reviewByUser || data?.bookingStatus?.ratingByUser) && (
+              <>
+                <div className="row">
+                  <div className="col-lg-3"></div>
+                  <div className="col-lg-9">
+                    <p className="mt-5 ps-2">
+                      <b>Review By User:</b>
+                    </p>
                   </div>
-                  <div className="d-flex justify-content-center my-2 ">
-                    <div className="card w-50">
-                      <div className="card-body py-0">
-                        <div className="row">
-                          <div className="col-md-6 col-12 ps-1">
-                            <div>
-                              <p className="mt-2" style={{ color: "#00316B" }}>
-                                <b>Rating By User</b>
-                              </p>
-                            </div>
-                          </div>
-                          <div
-                            className="col-md-6 col-12 ps-1"
-                            id="drop"
-                            style={{ borderBottom: "1px solid #e4e2e2" }}
-                          >
-                            <p className="mt-2" style={{ color: "#494949" }}>
-                              {data?.bookingStatus?.ratingByUser !== undefined
-                                ? Array.from({ length: 5 }).map((_, index) =>
-                                  index < data.bookingStatus.ratingByUser ? (
-                                    <GoStarFill
-                                      key={index}
-                                      className="text-warning"
-                                    />
-                                  ) : (
-                                    <FaRegStar
-                                      key={index}
-                                      className="text-warning"
-                                    />
-                                  )
-                                )
-                                : "--"}
+                </div>
+                <div className="d-flex justify-content-center my-2 ">
+                  <div className="card w-50">
+                    <div className="card-body py-0">
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="mt-2" style={{ color: "#00316B" }}>
+                              <b>Rating By User</b>
                             </p>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 ps-1">
-                            <div style={{ borderTop: "1px solid #e4e2e2" }}>
-                              <p className="mt-2" style={{ color: "#00316B" }}>
-                                <b>Comments</b>
-                              </p>
-                            </div>
-                          </div>
-                          <div className="col-md-12 col-12 ps-1">
-                            <p style={{ color: "#4949491" }}>
-                              {data?.bookingStatus?.reviewByUser
-                                ? data.bookingStatus.reviewByUser
-                                : " "}
+                        <div
+                          className="col-md-6 col-12 ps-1"
+                          id="drop"
+                          style={{ borderBottom: "1px solid #e4e2e2" }}
+                        >
+                          <p className="mt-2" style={{ color: "#494949" }}>
+                            {data?.bookingStatus?.ratingByUser !== undefined
+                              ? Array.from({ length: 5 }).map((_, index) =>
+                                index < data.bookingStatus.ratingByUser ? (
+                                  <GoStarFill
+                                    key={index}
+                                    className="text-warning"
+                                  />
+                                ) : (
+                                  <FaRegStar
+                                    key={index}
+                                    className="text-warning"
+                                  />
+                                )
+                              )
+                              : "--"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                            <p className="mt-2" style={{ color: "#00316B" }}>
+                              <b>Comments</b>
                             </p>
                           </div>
+                        </div>
+                        <div className="col-md-12 col-12 ps-1">
+                          <p style={{ color: "#4949491" }}>
+                            {data?.bookingStatus?.reviewByUser
+                              ? data.bookingStatus.reviewByUser
+                              : " "}
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                </>
-              )}
+                </div>
+              </>
+            )}
+
 
             {data.bookingStatus?.reviewByDriver &&
               data.bookingStatus?.ratingByDriver && (
@@ -960,16 +962,17 @@ function RideDetailsView() {
                           className="form-check-input"
                           id="reason6"
                           name="cancelReason"
-                          value="comments"
+                          value="Others"
                           onChange={handleRadioChange}
-                          checked={formik.values.cancelReason === "comments"}
+                          checked={formik.values.cancelReason === "Others"}
                         />
                         <label className="form-check-label" htmlFor="reason6">
                           Others
                         </label>
                       </div>
 
-                      {formik.values.cancelReason === "comments" && (
+                      {/* Conditionally render the textarea */}
+                      {formik.values.cancelReason === "Others" && (
                         <textarea
                           className="form-control mt-3"
                           placeholder="Write your reason here..."

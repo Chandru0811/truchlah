@@ -10,9 +10,11 @@ function Order() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const type = searchParams.get("type");
-  const [showInprogressSection, setShowInprogressSection] = useState(true);
+  const [showDraftSection, setShowDraftSection] = useState(true);
+  const [showInprogressSection, setShowInprogressSection] = useState(false);
   const [showCompletedSection, setShowCompletedSection] = useState(false);
   const [showCanceledSection, setShowCanceledSection] = useState(false);
+  const [draftCount, setDraftCount] = useState(0);
   const [inprogressCount, setInprogressCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
@@ -26,49 +28,63 @@ function Order() {
   console.log("Type:", shiftType);
 
   const houseSection = () => {
-    setIsLoaded(true); // Show loader when clicking on HOUSE SHIFT
+    // setIsLoaded(true);
     setShowHouseShift(true);
     setShowItemShift(false);
-    setIsLoaded(false)
+    // setIsLoaded(false)
   };
 
   const itemSection = () => {
-    setIsLoaded(true); // Show loader when clicking on ITEM SHIFT
+    // setIsLoaded(true);
     setShowItemShift(true);
     setShowHouseShift(false);
-    setIsLoaded(false)
+    // setIsLoaded(false)
+  };
+
+  const draftSection = () => {
+    // setIsLoaded(true);
+    setShowDraftSection(true);
+    setShowInprogressSection(false);
+    setShowCompletedSection(false);
+    setShowCanceledSection(false);
+    // setIsLoaded(false)
   };
 
   const inprogressSection = () => {
-    setIsLoaded(true); // Enable loader
+    // setIsLoaded(true);
+    setShowDraftSection(false);
     setShowInprogressSection(true);
     setShowCompletedSection(false);
     setShowCanceledSection(false);
-    setIsLoaded(false)
+    // setIsLoaded(false)
   };
 
   const completedSection = () => {
-    setIsLoaded(true); // Enable loader
+    // setIsLoaded(true);
+    setShowDraftSection(false);
     setShowInprogressSection(false);
     setShowCanceledSection(false);
     setShowCompletedSection(true);
-    setIsLoaded(false)
+    // setIsLoaded(false)
   };
 
   const cancelSection = () => {
-    setIsLoaded(true); // Enable loader
+    // setIsLoaded(true);
+    setShowDraftSection(false);
     setShowInprogressSection(false);
     setShowCompletedSection(false);
     setShowCanceledSection(true);
-    setIsLoaded(false)
+    // setIsLoaded(false)
   };
 
   useEffect(() => {
-    const status = showInprogressSection
-      ? "INPROGRESS"
-      : showCompletedSection
-        ? "COMPLETED"
-        : "CANCELLED";
+    const status = showDraftSection
+      ? "DRAFT_BOOKING"
+      : showInprogressSection
+        ? "INPROGRESS"
+        : showCompletedSection
+          ? "COMPLETED"
+          : "CANCELLED";
 
     const shiftType = showHouseShift ? "HOUSE" : "ITEM";
 
@@ -89,6 +105,7 @@ function Order() {
     // };
 
     const fetchData = async () => {
+      setIsLoaded(true);
       try {
         const response = await bookingApi.get(
           `fetchBookingDetailsByUser/${userId}?bookingType=${shiftType}`
@@ -97,6 +114,7 @@ function Order() {
           const responseData = response.data.responseBody;
           setData(responseData[status]);
           // Update badge counts
+          setDraftCount(responseData["DRAFT_BOOKING"]?.length || 0);
           setInprogressCount(responseData["INPROGRESS"]?.length || 0);
           setCompletedCount(responseData["COMPLETED"]?.length || 0);
           setCanceledCount(responseData["CANCELLED"]?.length || 0);
@@ -104,13 +122,13 @@ function Order() {
       } catch (error) {
         toast.error(error.message);
       } finally {
-        setIsLoaded(false); // Disable loader after data fetching
+        setIsLoaded(false);
       }
     };
 
     fetchData();
   }, [
-    showInprogressSection,
+    showDraftSection,
     showCompletedSection,
     showCanceledSection,
     showHouseShift,
@@ -191,9 +209,26 @@ function Order() {
         ) : (
           <>
             <div
-              className="col-12 d-flex justify-content-center mt-5 py-3"
-              // style={{ backgroundColor: "rgba(246, 222, 222, 0.58)" }}
-            >
+              className="col-12 d-flex justify-content-center mt-5 py-3">
+              <button
+                className={`mx-3 ${showDraftSection ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={draftSection}
+                style={{ position: 'relative' }}
+              >
+                DRAFT BOOKING
+                <span
+                  className="position-absolute start-100 translate-middle badge rag rounded-pill"
+                  style={{
+                    transform: 'translate(-50%, -50%)',
+                    fontSize: '0.75em',
+                    padding: '0.3em 0.6em'
+                  }}
+                >
+                  {draftCount}
+                </span>
+              </button>
+
               <button
                 className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
                 id="shift-btn"
@@ -269,11 +304,11 @@ function Order() {
                               Booking Id : {item.booking.bookingId ||
                                 ""}
                             </p>
-                            {!showCanceledSection && (
+                            {/* {!showCanceledSection && (
                             <p className="fw-normal">
                               Delivery Date : {item?.booking?.deliveryDate?.substring(0, 10) || ""}
                             </p>
-                          )}
+                          )} */}
                             <p>
                               {vehicleNameMap[item.booking.vehicletypeId] ||
                                 "Unknown Vehicle"}

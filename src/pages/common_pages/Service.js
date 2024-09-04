@@ -250,7 +250,7 @@ function Service() {
     2: VAN2,
     3: Lorry10,
     4: Lorry14,
-    5: Lorry24,
+    7: Lorry24,
   };
 
   const weightMaping = {
@@ -258,7 +258,7 @@ function Service() {
     2: 400,
     3: 600,
     4: 800,
-    5: 1000,
+    7: 1000,
   };
 
   return (

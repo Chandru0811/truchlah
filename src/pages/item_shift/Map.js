@@ -152,7 +152,7 @@ function Map() {
       // toast.error(
       //   error.message || "An error occurred while submitting the form."
       // );
-      toast.warning("Pleas Enter the Locations");
+      toast.warning("Please Enter the Locations");
     } finally {
       setLoadIndicator(false);
       setIsNextButtonDisabled(false);
