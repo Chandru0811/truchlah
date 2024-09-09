@@ -65,6 +65,7 @@ function Map() {
   const handleClose = () => { setShow(false) };
   const currentPath = location.pathname;
   console.log("Current path:", currentPath);
+  console.log("stops:", stops);
 
   const formik = useFormik({
     initialValues: {
@@ -277,7 +278,7 @@ function Map() {
   }, []);
 
   const handleAddStop = (title) => {
-     setModalTitle(title);
+    //  setModalTitle(title);
     if (
       formik.values.stops.length > 0 &&
       formik.values.stops[formik.values.stops.length - 1] === ""
@@ -287,6 +288,7 @@ function Map() {
       );
       return;
     }
+
     setStops([...stops, ""]);
     formik.setFieldValue("stops", [...formik.values.stops, ""]);
     setShowEditIcon((prevState) => ({
@@ -299,20 +301,33 @@ function Map() {
     const updatedStops = [...stops];
     updatedStops.splice(index, 1);
     setStops(updatedStops);
-
+  
+    // Update locationDetail based on the actual stop's state value
+    setLocationDetail((prevDetails) => {
+      const locationDetail = prevDetails.filter(
+        (item) => item.state !== `stop${index + 1}`
+      );
+      console.log("object",locationDetail)
+      return [...locationDetail];
+    });
+  
+    // Update Formik's stops
     const updatedFormikStops = [...formik.values.stops];
     updatedFormikStops.splice(index, 1);
     formik.setFieldValue("stops", updatedFormikStops);
+  
+    // Update edit icon state for stops
     const updatedEditIconStops = [...showEditIcon.stops];
     updatedEditIconStops.splice(index, 1);
     setShowEditIcon((prevState) => ({
       ...prevState,
       stops: updatedEditIconStops,
     }));
+  
     recalculateDirections();
-    setModalShow(false);
+    // setModalShow(false); Uncomment if you want to close the modal
   };
-
+  
   const handleStopChange = (index, value) => {
     const updatedStops = [...formik.values.stops];
     updatedStops[index] = value;

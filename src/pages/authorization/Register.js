@@ -111,7 +111,7 @@ function Register({ handleLogin }) {
       // console.log("values", values);
       try {
         const response = await userApi.post(`user/signup`, payload);
-        if (response.status === 200) {
+        if (response.status === 200 ) {
           toast.success(response.data.message);
           const mobileNo = `${values.countryCode}${values.mobileNo}`;
           try {
@@ -126,7 +126,21 @@ function Register({ handleLogin }) {
           }
         }
       } catch (error) {
-        if (error.response.status === 400) {
+        if (error.response.status === 409) {        
+          toast.warning(error.response.data.message);
+          console.log("object",error)
+          const mobileNo = `${values.countryCode}${values.mobileNo}`;
+          try {
+            const otpResponse = await userApi.post(
+              `user/sendOTP?phone=${mobileNo}`
+            );
+            if (otpResponse.status === 200) {
+              navigate("/otp", { state: { mobileNo } });
+            }
+          } catch (error) {
+            toast.error(error);
+          }
+        }else if (error.response.status === 400) {
           toast.warning(error.response.data.errorList[0].errorMessage);
           console.log("object", error.response.data.errorList[0].errorMessage);
         } else {
