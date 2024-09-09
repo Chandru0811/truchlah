@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 // import wallet from "../../asset/wallet.png";
@@ -14,13 +14,16 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { CgProfile } from "react-icons/cg";
 import profiles from "../../asset/user.png";
 import { TbLogout } from "react-icons/tb";
+import { toast } from "react-toastify";
+import { bookingApi, userApi } from "../../config/URL";
 
 function User({ handleLogout }) {
   const [, setShow] = useState(false);
-  const userName = sessionStorage.getItem("username");
+  const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
-  
+  const [data, setData] = useState([]);
+  console.log("object", data)
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Profile
@@ -42,6 +45,22 @@ function User({ handleLogout }) {
     handleLogout();
     navigate("/");
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await userApi.get(`user/byId/${userId}`);
+        if (response.data.success) {
+          setData(response.data.responseBody);
+        } else {
+          toast.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        toast.error("Error Fetching Data");
+      }
+    };
+    getData();
+  }, [userId]);
 
   return (
     <>
@@ -82,7 +101,9 @@ function User({ handleLogout }) {
                   alt="user"
                   width={100}
                 />
-                <p className="mb-0 mt-2">{userName}</p>
+                <p className="mb-0 mt-2">{data.firstName}{data.lastName}</p>
+                <p className="mb-0 mt-2">{data.email}</p>
+                <p className="mb-0 mt-2">+{data.countryCode} {data.mobileNo}</p>
               </div>
             </Offcanvas.Title>
           </div>
