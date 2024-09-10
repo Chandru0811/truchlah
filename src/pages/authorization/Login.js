@@ -78,14 +78,24 @@ function Login({ handleLogin, handleAdminLogin }) {
           }
         } catch (error) {
           if (error.response.status === 400) {
-            toast.warning(error.response.data.errorList[0].errorMessage);
+            const mobileNos =error.response.data.errorList[0].mobileNo
+            const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
+            try {
+              const otpResponse = await userApi.post(
+                `user/sendOTP?phone=${mobileNo}`
+              );
+              if (otpResponse.status === 200) {
+                navigate("/otp", { state: { mobileNo } });
+              }
+            } catch (error) {
+              toast.error(error);
+            }
           } else {
             toast.error(error);
           }
         }
       }
 
-      // Pass email and password to onLogin
     },
   });
 
