@@ -103,7 +103,10 @@ function User({ handleLogout }) {
                 />
                 <p className="mb-0 mt-2">{data.firstName}{data.lastName}</p>
                 <p className="mb-0 mt-2">{data.email}</p>
-                <p className="mb-0 mt-2">+{data.countryCode} {data.mobileNo}</p>
+                {/* <p className="mb-0 mt-2">+{data.countryCode} {data.mobileNo}</p> */}
+                <p className="mb-0 mt-2">
+                  {data.mobileNo !== 0 ? `+${data.countryCode} ${data.mobileNo}` : data.countryCode}
+                </p>
               </div>
             </Offcanvas.Title>
           </div>

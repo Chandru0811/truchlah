@@ -15,7 +15,7 @@ function Summary() {
   const [data, setData] = useState({});
   console.log("Summary Data is", data);
   const { bookingId } = useParams();
-  // console.log("bookingId", bookingId);
+  console.log("bookingId", bookingId);
   const [vechicle, setVechicle] = useState([]);
   // console.log("Api Data", data.booking);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,6 +68,24 @@ function Summary() {
       }
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
+    }
+  };
+
+  const handlePayment = async () => {
+    try {
+      const response = await bookingApi.post(
+        `booking/generateCardTransactionPaymentLink?bookingId=${bookingId}`
+      );
+      if (response.status === 201) {
+        window.open(response.data.paymentLink)
+        toast.success("Payment successful!");
+        // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
+        // sessionStorage.removeItem("shiftType");
+      } else {
+        toast.error("Payment failed, please try again.");
+      }
+    } catch (error) {
+      toast.error("Payment error: " + error.message);
     }
   };
 
@@ -514,10 +532,18 @@ function Summary() {
           <div className="text-center py-5">
             <button
               onClick={confirmCashPayment}
-              className="btn btn-primary px-5 py-2"
+              className="btn btn-primary px-5 py-2 me-4"
               id="NextMove"
             >
               Confirm and proceed with cash payment
+            </button>
+
+            <button
+              onClick={handlePayment}
+              className="btn btn-primary px-5 py-2"
+              id="NextMove"
+            >
+              Pay Now
             </button>
           </div>
         </div>
