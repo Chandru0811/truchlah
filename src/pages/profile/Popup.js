@@ -24,6 +24,7 @@ function Popup({ bookingId, onSuccess }) {
   const params = new URLSearchParams(location.search);
   const bookingIdValue = params.get("bookingId");
   const navigate = useNavigate();
+  
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
@@ -184,6 +185,7 @@ function Popup({ bookingId, onSuccess }) {
               type="submit"
               className="btn btn-primary px-5 py-2"
               id="NextMove"
+              disabled={!(formik.isValid && formik.dirty)}
             >
               Submit
             </button>
