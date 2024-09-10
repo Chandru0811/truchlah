@@ -61,7 +61,6 @@ function User({ handleLogout }) {
     };
     getData();
   }, [userId]);
-
   return (
     <>
       <OverlayTrigger placement="bottom" overlay={renderTooltip}>
@@ -101,12 +100,13 @@ function User({ handleLogout }) {
                   alt="user"
                   width={100}
                 />
-                <p className="mb-0 mt-2">{data.firstName}{data.lastName}</p>
-                <p className="mb-0 mt-2">{data.email}</p>
+                <p className="mb-0 mt-2">{data.firstName} {data.lastName}</p>
                 {/* <p className="mb-0 mt-2">+{data.countryCode} {data.mobileNo}</p> */}
                 <p className="mb-0 mt-2">
-                  {data.mobileNo !== 0 ? `+${data.countryCode} ${data.mobileNo}` : data.countryCode}
+                  {data.mobileNo !== 0 ? `${data?.countryCode === "+91" || data?.countryCode === "91" ? "91" : "65"} ${data.mobileNo}` : ""}
                 </p>
+                <p className="mb-0 mt-2">{data.email}</p>
+
               </div>
             </Offcanvas.Title>
           </div>

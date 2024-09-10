@@ -315,18 +315,21 @@ function Order() {
                             </p>
                             <p
                               style={{
-                                color: showInprogressSection
-                                  ? "orange" // Yellow color for INPROGRESS
-                                  : showCompletedSection
-                                    ? "green" // Green color for COMPLETED
-                                    : "red", // Red color for CANCELLED
+                                color: showDraftSection ? "orange" :
+                                  showInprogressSection
+                                    ? "orange" // Yellow color for INPROGRESS
+                                    : showCompletedSection
+                                      ? "green" // Green color for COMPLETED
+                                      : "red", // Red color for CANCELLED
                               }}
                             >
-                              {showInprogressSection
-                                ? "IN PROGRESS"
-                                : showCompletedSection
-                                  ? "COMPLETED"
-                                  : "CANCELLED"}
+                              {showDraftSection
+                                ? "DRAFT_BOOKING"
+                                : showInprogressSection
+                                  ? "INPROGRESS"
+                                  : showCompletedSection
+                                    ? "COMPLETED"
+                                    : "CANCELLED"}
                             </p>
 
                             <p style={{ marginTop: "0", marginBottom: "0" }}>
