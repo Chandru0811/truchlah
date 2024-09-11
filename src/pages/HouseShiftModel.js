@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { FaLocationDot, FaRegAddressCard } from "react-icons/fa6";
 import { IoMdContact } from "react-icons/io";
@@ -43,6 +43,7 @@ function HouseShiftModel({
   stops,
   setLocationDetail,
 }) {
+  const [isModified, setIsModified] = useState(false);
   const formik = useFormik({
     initialValues: {
       location: "",
@@ -69,6 +70,17 @@ function HouseShiftModel({
       });
       onHide();
       formik.resetForm();
+      
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
     },
   });
 
@@ -96,8 +108,10 @@ function HouseShiftModel({
     <Modal show={show} onHide={() => {
       formik.resetForm();
       onHide();
-    }}>
-      <Modal.Header closeButton>
+    }}
+    backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} >
+      <Modal.Header >
         <Modal.Title>
           {title !== "Pick Up Location" && title !== "Drop Location"
             ? `Stop ${title}`
@@ -216,7 +230,7 @@ function HouseShiftModel({
               </div>
             </div>
           </div>
-          <Modal.Footer>
+          <Modal.Footer className="pb-0">
             <button id="NextMove" className="btn text-white" type="submit">
               Next
             </button>

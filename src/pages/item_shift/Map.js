@@ -301,7 +301,7 @@ function Map() {
     const updatedStops = [...stops];
     updatedStops.splice(index, 1);
     setStops(updatedStops);
-  
+    recalculateDirections();
     // Update locationDetail based on the actual stop's state value
     setLocationDetail((prevDetails) => {
       const locationDetail = prevDetails.filter(
@@ -324,7 +324,7 @@ function Map() {
       stops: updatedEditIconStops,
     }));
   
-    recalculateDirections();
+   
     // setModalShow(false); Uncomment if you want to close the modal
   };
   
@@ -408,7 +408,7 @@ function Map() {
         );
       }
     }
-  }, [center, stops, formik.values.stops]);
+  }, [center, stops, formik.values.stops,directions]);
 
   useEffect(() => {
     recalculateDirections();

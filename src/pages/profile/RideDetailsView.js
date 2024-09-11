@@ -15,7 +15,7 @@ import Popup from "./Popup";
 import { useFormik } from "formik";
 import { Modal } from "react-bootstrap";
 import { Badge, Card, Space } from "antd";
-
+import * as Yup from "yup";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { GoStarFill } from "react-icons/go";
 import { FaRegStar } from "react-icons/fa6";
@@ -30,7 +30,6 @@ function RideDetailsView() {
   // console.log("Type:", shiftType);
   const [isPopupVisible, setPopupVisible] = useState(true);
   const [checkedValues, setCheckedValues] = useState([]);
-  const [customReason, setCustomReason] = useState("");
   const navigate = useNavigate();
   console.log("object", data);
 
@@ -43,38 +42,49 @@ function RideDetailsView() {
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
     } finally {
-      setIsLoading(false); // Set loading to false once data is fetched
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const validationSchema = Yup.object().shape({
+    cancelReason: Yup.string().required("*Please select a reason"),
+    comments: Yup.string().test(
+      "is-required-if-others",
+      "*Message is required",
+      function (value) {
+        const { cancelReason } = this.parent;
+        if (cancelReason === "Others") {
+          return !!value;
+        }
+        return true;
+      }
+    ),
+  });
 
   const formik = useFormik({
     initialValues: {
-      cancelReason: "", // Adding the cancelReason field to Formik
+      cancelReason: "",
       bookingId: "",
       cancelledBy: "",
       comments: "",
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
-      let selectedReason = "";
-
-      if (values.cancelReason === "Others" && customReason.trim() !== "") {
-        selectedReason = customReason;
-      } else {
-        selectedReason = values.cancelReason;
-      }
-
-      values.comments = selectedReason;
+      let selectedReason =
+        values.cancelReason === "Others"
+          ? values.comments
+          : values.cancelReason;
 
       const payload = {
         bookingId: bookingId.id,
         cancelledBy: "User",
-        comments: values.comments,
+        comments: selectedReason,
       };
+
       console.log("Payload Cancel:", payload);
       try {
         const response = await bookingApi.post(
@@ -84,6 +94,7 @@ function RideDetailsView() {
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/cancelorder");
+          formik.resetForm()
         } else {
           toast.error(response.data.message);
         }
@@ -113,19 +124,25 @@ function RideDetailsView() {
       } catch (e) {
         toast.error("Error Fetching Data : ", e);
       } finally {
-        setIsLoading(false); // Set loading to false once data is fetched
+        setIsLoading(false);
       }
     };
     getVechicle();
   }, []);
 
-  const handleRadioChange = (e) => {
-    const value = e.target.value;
-    formik.setFieldValue("cancelReason", value);
-    if (value !== "Others") {
-      setCustomReason(""); // Clear custom reason if "Others" is not selected
-    }
-  };
+//   const handleRadioChange = (e) => {
+//   formik.handleChange(e); 
+//   formik.setFieldTouched("cancelReason", true, true);
+//   if (e.target.value !== "Others") {
+//     formik.setFieldValue("comments", ""); 
+//   }
+// };
+
+const handleRadioChange = (e) => {
+  formik.handleChange(e);
+  formik.setFieldValue("cancelReason", e.target.value);
+  formik.validateField("cancelReason");
+};
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
@@ -444,8 +461,8 @@ function RideDetailsView() {
                             data.bookingStatus?.status === "CANCELLED"
                               ? "red" // Red color for CANCELLED
                               : data.bookingStatus?.status === "COMPLETED"
-                                ? "green" // Green color for COMPLETED
-                                : "orange", // Orange color for other statuses
+                              ? "green" // Green color for COMPLETED
+                              : "orange", // Orange color for other statuses
                         }}
                       >
                         {data.bookingStatus?.status || "--"}
@@ -661,7 +678,10 @@ function RideDetailsView() {
                             {data?.bookingStatus?.comments
                               ? data.bookingStatus.comments.includes("Others")
                                 ? "No Comments"
-                                : data.bookingStatus.comments.replace("UserCancellation-", "")
+                                : data.bookingStatus.comments.replace(
+                                    "UserCancellation-",
+                                    ""
+                                  )
                               : " "}
                           </p>
                         </div>
@@ -672,7 +692,8 @@ function RideDetailsView() {
               </>
             )}
 
-            {(data?.bookingStatus?.reviewByUser || data?.bookingStatus?.ratingByUser) && (
+            {(data?.bookingStatus?.reviewByUser ||
+              data?.bookingStatus?.ratingByUser) && (
               <>
                 <div className="row">
                   <div className="col-lg-3"></div>
@@ -701,18 +722,18 @@ function RideDetailsView() {
                           <p className="mt-2" style={{ color: "#494949" }}>
                             {data?.bookingStatus?.ratingByUser !== undefined
                               ? Array.from({ length: 5 }).map((_, index) =>
-                                index < data.bookingStatus.ratingByUser ? (
-                                  <GoStarFill
-                                    key={index}
-                                    className="text-warning"
-                                  />
-                                ) : (
-                                  <FaRegStar
-                                    key={index}
-                                    className="text-warning"
-                                  />
+                                  index < data.bookingStatus.ratingByUser ? (
+                                    <GoStarFill
+                                      key={index}
+                                      className="text-warning"
+                                    />
+                                  ) : (
+                                    <FaRegStar
+                                      key={index}
+                                      className="text-warning"
+                                    />
+                                  )
                                 )
-                              )
                               : "--"}
                           </p>
                         </div>
@@ -738,7 +759,6 @@ function RideDetailsView() {
                 </div>
               </>
             )}
-
 
             {data.bookingStatus?.reviewByDriver &&
               data.bookingStatus?.ratingByDriver && (
@@ -770,18 +790,19 @@ function RideDetailsView() {
                             <p className="mt-2" style={{ color: "#494949" }}>
                               {data?.bookingStatus?.ratingByDriver !== undefined
                                 ? Array.from({ length: 5 }).map((_, index) =>
-                                  index < data.bookingStatus.ratingByDriver ? (
-                                    <GoStarFill
-                                      key={index}
-                                      className="text-warning"
-                                    />
-                                  ) : (
-                                    <FaRegStar
-                                      key={index}
-                                      className="text-warning"
-                                    />
+                                    index <
+                                    data.bookingStatus.ratingByDriver ? (
+                                      <GoStarFill
+                                        key={index}
+                                        className="text-warning"
+                                      />
+                                    ) : (
+                                      <FaRegStar
+                                        key={index}
+                                        className="text-warning"
+                                      />
+                                    )
                                   )
-                                )
                                 : "--"}
                             </p>
                           </div>
@@ -809,7 +830,8 @@ function RideDetailsView() {
               )}
 
             <div className="my-3 d-flex justify-content-center">
-              {(data.bookingStatus?.status === "COMPLETED" || data.bookingStatus?.status === "CANCELLED") &&
+              {(data.bookingStatus?.status === "COMPLETED" ||
+                data.bookingStatus?.status === "CANCELLED") &&
                 isPopupVisible &&
                 !data?.bookingStatus?.reviewByUser &&
                 !data?.bookingStatus?.rattingByUser && (
@@ -819,7 +841,6 @@ function RideDetailsView() {
                     bookingId={data?.booking?.bookingId}
                   />
                 )}
-
             </div>
           </div>
 
@@ -860,142 +881,69 @@ function RideDetailsView() {
             <form onSubmit={formik.handleSubmit}>
               <Modal.Body>
                 <div className="container">
-                  <div>
-                    <div
-                      className=""
-                      style={{ backgroundColor: "#FFF", borderRadius: "5px" }}
-                    >
-                      <p className="">
-                        Before canceling, let us know why you’re leaving. Your
-                        response may be shared with the subscription provider.
-                      </p>
+                  <p>
+                    Before canceling, let us know why you’re leaving. Your
+                    response may be shared with the provider.
+                  </p>
 
-                      <div className="form-check">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          id="reason1"
-                          name="cancelReason"
-                          value="Driver is not allocated"
-                          onChange={handleRadioChange}
-                          checked={
-                            formik.values.cancelReason ===
-                            "Driver is not allocated"
-                          }
-                        />
-                        <label className="form-check-label" htmlFor="reason1">
-                          Driver is not allocated
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          id="reason2"
-                          name="cancelReason"
-                          value="Driver says he will be late"
-                          onChange={handleRadioChange}
-                          checked={
-                            formik.values.cancelReason ===
-                            "Driver says he will be late"
-                          }
-                        />
-                        <label className="form-check-label" htmlFor="reason2">
-                          Driver says he will be late
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          id="reason3"
-                          name="cancelReason"
-                          value="Vehicle cannot meet my requirement"
-                          onChange={handleRadioChange}
-                          checked={
-                            formik.values.cancelReason ===
-                            "Vehicle cannot meet my requirement"
-                          }
-                        />
-                        <label className="form-check-label" htmlFor="reason3">
-                          Vehicle cannot meet my requirement
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          id="reason4"
-                          name="cancelReason"
-                          value="I need to change my address & location"
-                          onChange={handleRadioChange}
-                          checked={
-                            formik.values.cancelReason ===
-                            "I need to change my address & location"
-                          }
-                        />
-                        <label className="form-check-label" htmlFor="reason4">
-                          I need to change my address & location
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          id="reason5"
-                          name="cancelReason"
-                          value="Driver is too far away and I need a shorter arrival time"
-                          onChange={handleRadioChange}
-                          checked={
-                            formik.values.cancelReason ===
-                            "Driver is too far away and I need a shorter arrival time"
-                          }
-                        />
-                        <label className="form-check-label" htmlFor="reason5">
-                          Driver is too far away and I need a shorter arrival
-                          time
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          type="radio"
-                          className="form-check-input"
-                          id="reason6"
-                          name="cancelReason"
-                          value="Others"
-                          onChange={handleRadioChange}
-                          checked={formik.values.cancelReason === "Others"}
-                        />
-                        <label className="form-check-label" htmlFor="reason6">
-                          Others
-                        </label>
-                      </div>
-
-                      {/* Conditionally render the textarea */}
-                      {formik.values.cancelReason === "Others" && (
-                        <textarea
-                          className="form-control mt-3"
-                          placeholder="Write your reason here..."
-                          {...formik.getFieldProps("comments")}
-                          value={formik.values.comments} // Bind value to Formik's comments state
-                          onChange={(e) => {
-                            formik.handleChange(e); // Let Formik handle the change
-                            setCustomReason(e.target.value); // Update customReason state if needed elsewhere
-                          }}
-                        ></textarea>
-                      )}
+                  {[
+                    "Driver is not allocated",
+                    "Driver says he will be late",
+                    "Vehicle cannot meet my requirement",
+                    "I need to change my address & location",
+                    "Driver is too far away and I need a shorter arrival time",
+                    "Others",
+                  ].map((reason, index) => (
+                    <>
+                    <div className="form-check" key={index}>
+                      <input
+                        type="radio"
+                        className="form-check-input"
+                        id={`reason${index}`}
+                        name="cancelReason"
+                        value={reason}
+                        onChange={handleRadioChange}
+                        checked={formik.values.cancelReason === reason}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor={`reason${index}`}
+                      >
+                        {reason}
+                      </label>
                     </div>
-                  </div>
+                    
+                      </>
+                  ))}
+
+                  {/* Validation message for cancelReason */}
+                  {formik.touched.cancelReason &&
+                      formik.errors.cancelReason && (
+                        <div className="text-danger">
+                          {formik.errors.cancelReason}
+                        </div>
+                      )}
+
+                  {formik.values.cancelReason === "Others" && (
+                    <>
+                      <textarea
+                        className={`form-control mt-3 ${formik.touched.comments && formik.errors.comments ? "is-invalid" : ""}`}
+                        placeholder="Write your reason here..."
+                        {...formik.getFieldProps("comments")}
+                      ></textarea>
+                      {formik.touched.comments && formik.errors.comments && (
+                        <div className="text-danger">
+                          {formik.errors.comments}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               </Modal.Body>
               <Modal.Footer>
-                <span>
-                  <div className="my-2">
-                    <button type="submit" className="btn btn-danger">
-                      Confirm
-                    </button>
-                  </div>
-                </span>
+                <button type="submit" className="btn btn-danger">
+                  Confirm
+                </button>
               </Modal.Footer>
             </form>
           </Modal>
