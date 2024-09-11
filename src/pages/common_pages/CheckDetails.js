@@ -77,7 +77,7 @@ function Summary() {
         `booking/generateCardTransactionPaymentLink?bookingId=${bookingId}`
       );
       if (response.status === 201) {
-        window.open(response.data.paymentLink)
+        window.open(response.data.paymentLink,"_self")
         toast.success("Payment successful!");
         // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
         // sessionStorage.removeItem("shiftType");
@@ -131,7 +131,7 @@ function Summary() {
       ) : (
         <div className="container-fluid pt-5" id="Ace">
           <div
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(-1, { state: { bookingId } })}
             data-toggle="tooltip"
             data-placement="bottom"
             title="Back"
@@ -535,7 +535,7 @@ function Summary() {
               className="btn btn-primary px-5 py-2 me-4"
               id="NextMove"
             >
-              Confirm and proceed with cash payment
+            Cash On Delivery
             </button>
 
             <button
