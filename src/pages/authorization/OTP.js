@@ -131,7 +131,7 @@ function OTP() {
                   <div>
                     {" "}
                     <div className="d-flex align-items-center justify-content-center">
-                      <p style={{ marginBottom: "0px" }}>Don't Recive OTP?</p>
+                      <p style={{ marginBottom: "0px" }}>Didn't Recive OTP?</p>
                       <button
                         className="btn text-primary"
                         type="button"

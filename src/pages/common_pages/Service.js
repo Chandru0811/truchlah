@@ -25,7 +25,8 @@ function Service() {
   const distanceValue = params.get("distance");
   console.log("est km", distanceValue);
   const locationValueString = params.get("location");
-  const bookingIdValue = params.get("bookingId");
+  const bookingId = params.get("bookingId");
+  console.log("bookingId",bookingId)
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   let locationValue = [];
@@ -45,6 +46,8 @@ function Service() {
   const currentDate = new Date();
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [data, setData] = useState("");
+  console.log("bookingIddata",data)
 
   // eligible date based on time
 
@@ -150,7 +153,7 @@ function Service() {
           userId: userId,
           type: shiftType,
           locationDetail: locationValue,
-          bookingId: bookingIdValue,
+          bookingId: bookingId,
           estKm: parseFloat(distanceValue),
           scheduledDate: `${values.date}T${values.time}:00.000Z`,
           deliveryDate: deliveryDate,
@@ -171,7 +174,7 @@ function Service() {
           console.log(response);
           if (response.status === 200) {
             toast.success("Vehicle selected successfully!");
-            navigate(`/summary/${bookingIdValue}`);
+            navigate(`/summary/${bookingId}`);
           } else {
             toast.error(response.data.message);
           }
@@ -185,6 +188,40 @@ function Service() {
       }
     },
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await bookingApi.get(
+          `booking/getBookingById/${bookingId}`
+        );
+        if (response.status === 200) {
+          setData(response.data.responseBody);
+          if (data) {
+            const booking = data?.booking;
+            if (booking) {
+              const [scheduledDate, scheduledTime] = booking?.scheduledDate
+                ? booking.scheduledDate.split("T")
+                : [null, null];
+              formik.setFieldValue("date", scheduledDate || formattedDate);
+              formik.setFieldValue("time", scheduledTime ? scheduledTime.slice(0, 5) : "");
+              formik.setFieldValue("vechicleTypeId", booking.vehicletypeId || "");
+              formik.setFieldValue("driverAsManpower", booking.helper === "Y" ? true : false);
+              formik.setFieldValue("extraManpower", booking.extraHelper === "Y" ? true : false);
+              formik.setFieldValue("quantity", booking.quantity || 0);
+              formik.setFieldValue("noOfPieces", booking.noOfPieces || 0);
+            }
+          }
+        }
+      } catch (error) {
+        toast.error("Error Fetching Data: " + error.message);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+    fetchData();
+
+  }, []);
 
   useEffect(() => {
     formik.setFieldValue("quantity", manpowerQuantity);
@@ -292,9 +329,8 @@ function Service() {
                 id="date"
                 name="date"
                 // min={currentData}
-                className={`form-control form-control-lg ${
-                  formik.touched.date && formik.errors.date ? "is-invalid" : ""
-                }`}
+                className={`form-control form-control-lg ${formik.touched.date && formik.errors.date ? "is-invalid" : ""
+                  }`}
                 {...formik.getFieldProps("date")}
                 onChange={(e) => formik.setFieldValue("date", e.target.value)}
               />
@@ -310,9 +346,8 @@ function Service() {
                 id="time"
                 name="time"
                 // min={currentTime}
-                className={`form-control form-control-lg ${
-                  formik.touched.time && formik.errors.time ? "is-invalid" : ""
-                }`}
+                className={`form-control form-control-lg ${formik.touched.time && formik.errors.time ? "is-invalid" : ""
+                  }`}
                 {...formik.getFieldProps("time")}
                 onChange={(e) => formik.setFieldValue("time", e.target.value)}
               />
@@ -436,12 +471,11 @@ function Service() {
                         <center>
                           <div className="form-check">
                             <input
-                              className={`form-check-input border-info ${
-                                formik.touched.vechicleTypeId &&
+                              className={`form-check-input border-info ${formik.touched.vechicleTypeId &&
                                 formik.errors.vechicleTypeId
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                                ? "is-invalid"
+                                : ""
+                                }`}
                               type="radio"
                               name="vechicleTypeId"
                               value={item.vechicleTypeId}
@@ -569,7 +603,6 @@ function Service() {
                 </div>
               </div>
             </div> */}
-
            
             <div className=" col-md-12 col-12 mb-3">
               {showQuantity && (

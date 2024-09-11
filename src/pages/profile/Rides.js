@@ -128,6 +128,7 @@ function Order() {
 
     fetchData();
   }, [
+    showInprogressSection,
     showDraftSection,
     showCompletedSection,
     showCanceledSection,
