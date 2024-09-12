@@ -79,8 +79,8 @@ function Summary() {
       if (response.status === 201) {
         window.open(response.data.paymentLink,"_self")
         toast.success("Payment successful!");
-        // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
-        // sessionStorage.removeItem("shiftType");
+        navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
+        sessionStorage.removeItem("shiftType");
       } else {
         toast.error("Payment failed, please try again.");
       }
