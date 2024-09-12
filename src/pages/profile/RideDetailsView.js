@@ -46,6 +46,12 @@ function RideDetailsView() {
     }
   };
 
+  const handleClick = () => {
+    navigate(
+      `/service?bookingId=${bookingId.id}`
+    );
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -130,19 +136,19 @@ function RideDetailsView() {
     getVechicle();
   }, []);
 
-//   const handleRadioChange = (e) => {
-//   formik.handleChange(e); 
-//   formik.setFieldTouched("cancelReason", true, true);
-//   if (e.target.value !== "Others") {
-//     formik.setFieldValue("comments", ""); 
-//   }
-// };
+  //   const handleRadioChange = (e) => {
+  //   formik.handleChange(e); 
+  //   formik.setFieldTouched("cancelReason", true, true);
+  //   if (e.target.value !== "Others") {
+  //     formik.setFieldValue("comments", ""); 
+  //   }
+  // };
 
-const handleRadioChange = (e) => {
-  formik.handleChange(e);
-  formik.setFieldValue("cancelReason", e.target.value);
-  formik.validateField("cancelReason");
-};
+  const handleRadioChange = (e) => {
+    formik.handleChange(e);
+    formik.setFieldValue("cancelReason", e.target.value);
+    formik.validateField("cancelReason");
+  };
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
@@ -461,8 +467,8 @@ const handleRadioChange = (e) => {
                             data.bookingStatus?.status === "CANCELLED"
                               ? "red" // Red color for CANCELLED
                               : data.bookingStatus?.status === "COMPLETED"
-                              ? "green" // Green color for COMPLETED
-                              : "orange", // Orange color for other statuses
+                                ? "green" // Green color for COMPLETED
+                                : "orange", // Orange color for other statuses
                         }}
                       >
                         {data.bookingStatus?.status || "--"}
@@ -679,9 +685,9 @@ const handleRadioChange = (e) => {
                               ? data.bookingStatus.comments.includes("Others")
                                 ? "No Comments"
                                 : data.bookingStatus.comments.replace(
-                                    "UserCancellation-",
-                                    ""
-                                  )
+                                  "UserCancellation-",
+                                  ""
+                                )
                               : " "}
                           </p>
                         </div>
@@ -694,34 +700,34 @@ const handleRadioChange = (e) => {
 
             {(data?.bookingStatus?.reviewByUser ||
               data?.bookingStatus?.ratingByUser) && (
-              <>
-                <div className="row">
-                  <div className="col-lg-3"></div>
-                  <div className="col-lg-9">
-                    <p className="mt-5 ps-2">
-                      <b>Review By User:</b>
-                    </p>
+                <>
+                  <div className="row">
+                    <div className="col-lg-3"></div>
+                    <div className="col-lg-9">
+                      <p className="mt-5 ps-2">
+                        <b>Review By User:</b>
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="d-flex justify-content-center my-2 ">
-                  <div className="card w-50">
-                    <div className="card-body py-0">
-                      <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div>
-                            <p className="mt-2" style={{ color: "#00316B" }}>
-                              <b>Rating By User</b>
-                            </p>
+                  <div className="d-flex justify-content-center my-2 ">
+                    <div className="card w-50">
+                      <div className="card-body py-0">
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div>
+                              <p className="mt-2" style={{ color: "#00316B" }}>
+                                <b>Rating By User</b>
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          className="col-md-6 col-12 ps-1"
-                          id="drop"
-                          style={{ borderBottom: "1px solid #e4e2e2" }}
-                        >
-                          <p className="mt-2" style={{ color: "#494949" }}>
-                            {data?.bookingStatus?.ratingByUser !== undefined
-                              ? Array.from({ length: 5 }).map((_, index) =>
+                          <div
+                            className="col-md-6 col-12 ps-1"
+                            id="drop"
+                            style={{ borderBottom: "1px solid #e4e2e2" }}
+                          >
+                            <p className="mt-2" style={{ color: "#494949" }}>
+                              {data?.bookingStatus?.ratingByUser !== undefined
+                                ? Array.from({ length: 5 }).map((_, index) =>
                                   index < data.bookingStatus.ratingByUser ? (
                                     <GoStarFill
                                       key={index}
@@ -734,31 +740,31 @@ const handleRadioChange = (e) => {
                                     />
                                   )
                                 )
-                              : "--"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div style={{ borderTop: "1px solid #e4e2e2" }}>
-                            <p className="mt-2" style={{ color: "#00316B" }}>
-                              <b>Comments</b>
+                                : "--"}
                             </p>
                           </div>
                         </div>
-                        <div className="col-md-12 col-12 ps-1">
-                          <p style={{ color: "#4949491" }}>
-                            {data?.bookingStatus?.reviewByUser
-                              ? data.bookingStatus.reviewByUser
-                              : " "}
-                          </p>
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                              <p className="mt-2" style={{ color: "#00316B" }}>
+                                <b>Comments</b>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-12 col-12 ps-1">
+                            <p style={{ color: "#4949491" }}>
+                              {data?.bookingStatus?.reviewByUser
+                                ? data.bookingStatus.reviewByUser
+                                : " "}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
 
             {data.bookingStatus?.reviewByDriver &&
               data.bookingStatus?.ratingByDriver && (
@@ -790,19 +796,19 @@ const handleRadioChange = (e) => {
                             <p className="mt-2" style={{ color: "#494949" }}>
                               {data?.bookingStatus?.ratingByDriver !== undefined
                                 ? Array.from({ length: 5 }).map((_, index) =>
-                                    index <
+                                  index <
                                     data.bookingStatus.ratingByDriver ? (
-                                      <GoStarFill
-                                        key={index}
-                                        className="text-warning"
-                                      />
-                                    ) : (
-                                      <FaRegStar
-                                        key={index}
-                                        className="text-warning"
-                                      />
-                                    )
+                                    <GoStarFill
+                                      key={index}
+                                      className="text-warning"
+                                    />
+                                  ) : (
+                                    <FaRegStar
+                                      key={index}
+                                      className="text-warning"
+                                    />
                                   )
+                                )
                                 : "--"}
                             </p>
                           </div>
@@ -828,6 +834,18 @@ const handleRadioChange = (e) => {
                   </div>
                 </>
               )}
+
+            {data.bookingStatus?.status === "DRAFT_BOOKING" && (
+              <div className="text-center py-3">
+                <button
+                  onClick={handleClick}
+                  className="btn btn-primary px-5 py-2"
+                  id="NextMove"
+                >
+                  Resume
+                </button>
+              </div>
+            )}
 
             <div className="my-3 d-flex justify-content-center">
               {(data.bookingStatus?.status === "COMPLETED" ||
@@ -895,34 +913,34 @@ const handleRadioChange = (e) => {
                     "Others",
                   ].map((reason, index) => (
                     <>
-                    <div className="form-check" key={index}>
-                      <input
-                        type="radio"
-                        className="form-check-input"
-                        id={`reason${index}`}
-                        name="cancelReason"
-                        value={reason}
-                        onChange={handleRadioChange}
-                        checked={formik.values.cancelReason === reason}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor={`reason${index}`}
-                      >
-                        {reason}
-                      </label>
-                    </div>
-                    
-                      </>
+                      <div className="form-check" key={index}>
+                        <input
+                          type="radio"
+                          className="form-check-input"
+                          id={`reason${index}`}
+                          name="cancelReason"
+                          value={reason}
+                          onChange={handleRadioChange}
+                          checked={formik.values.cancelReason === reason}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor={`reason${index}`}
+                        >
+                          {reason}
+                        </label>
+                      </div>
+
+                    </>
                   ))}
 
                   {/* Validation message for cancelReason */}
                   {formik.touched.cancelReason &&
-                      formik.errors.cancelReason && (
-                        <div className="text-danger">
-                          {formik.errors.cancelReason}
-                        </div>
-                      )}
+                    formik.errors.cancelReason && (
+                      <div className="text-danger">
+                        {formik.errors.cancelReason}
+                      </div>
+                    )}
 
                   {formik.values.cancelReason === "Others" && (
                     <>

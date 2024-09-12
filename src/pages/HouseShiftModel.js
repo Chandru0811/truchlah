@@ -70,7 +70,7 @@ function HouseShiftModel({
       });
       onHide();
       formik.resetForm();
-      
+
     },
     enableReinitialize: true,
     validateOnChange: true,
@@ -109,8 +109,8 @@ function HouseShiftModel({
       formik.resetForm();
       onHide();
     }}
-    backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} >
+      backdrop={isModified ? "static" : true}
+      keyboard={isModified ? false : true} >
       <Modal.Header >
         <Modal.Title>
           {title !== "Pick Up Location" && title !== "Drop Location"
@@ -231,6 +231,13 @@ function HouseShiftModel({
             </div>
           </div>
           <Modal.Footer className="pb-0">
+            <button id="NextMove" className="btn text-white" type="close"
+              onClick={() => {
+                // formik.resetForm();
+                onHide();
+              }}>
+              Close
+            </button>
             <button id="NextMove" className="btn text-white" type="submit">
               Next
             </button>
