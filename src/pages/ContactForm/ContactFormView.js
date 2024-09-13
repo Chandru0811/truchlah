@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { userApi } from "../../config/URL";
 // import api from "../../config/URL";
 // import toast from "react-hot-toast";
 
@@ -11,18 +13,16 @@ function ContactFormView() {
 
   useEffect(() => {
     const getItemData = async () => {
-    //   setLoading(true);
-    //   try {
-    //     const response = await api.get(
-    //       `getMstrItemsById/${id}`
-    //     );
-    //     setData(response.data);
-    //   } catch (error) {
-    //     toast.error("Error fetching data: ", error?.response?.data?.message);
-    //   }finally{
-    //     setLoading(false);
+      setLoading(true);
+      try {
+        const response = await userApi.get(`/userContactPage/byContactId/${id}`);
+        setData(response.data.responseBody);
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      }finally{
+        setLoading(false);
 
-    //   }
+      }
     };
     getItemData();
   }, [id]);
@@ -73,7 +73,7 @@ function ContactFormView() {
                   </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.itemCode || ""}</p>
+                  <p className="text-muted text-sm">: {data.name || ""}</p>
                 </div>
               </div>
             </div>
@@ -85,7 +85,7 @@ function ContactFormView() {
                   </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.itemName || ""}</p>
+                  <p className="text-muted text-sm">: {data.email || ""}</p>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@ function ContactFormView() {
                   </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.unit || ""} </p>
+                  <p className="text-muted text-sm">: {data.mobile || ""} </p>
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@ function ContactFormView() {
                   </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.unit || ""} </p>
+                  <p className="text-muted text-sm">: {data.enquiry || ""} </p>
                 </div>
               </div>
             </div>

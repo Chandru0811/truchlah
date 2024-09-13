@@ -4,7 +4,8 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
-
+import { userApi } from "../../config/URL";
+import { toast } from "react-toastify";
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
 // import api from "../../config/URL";
@@ -12,70 +13,71 @@ import DeleteModel from "../../Components/DeleteModel";
 const ContactForm = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const table = $(tableRef.current).DataTable();
-  
     return () => {
       table.destroy();
     };
   }, []);
 
-//   useEffect(() => {
-//     if (!loading) {
-//       initializeDataTable();
-//     }
-//     return () => {
-//       destroyDataTable();
-//     };
-//   }, [loading]);
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
 
-  // const initializeDataTable = () => {
-  //   if ($.fn.DataTable.isDataTable(tableRef.current)) {
-  //     // DataTable already initialized, no need to initialize again
-  //     return;
-  //   }
-  //   $(tableRef.current).DataTable();
-  // };
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      return;
+    }
+    $(tableRef.current).DataTable();
+  };
 
-  // const destroyDataTable = () => {
-  //   const table = $(tableRef.current).DataTable();
-  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-  //     table.destroy();
-  //   }
-  // };
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
 
-  // const refreshData = async () => {
-  //   destroyDataTable();
-    // setLoading(true);
-    // try {
-    //   const response = await api.get("getAllMstrItems");
-    //   setDatas(response.data);
-    //   initializeDataTable(); 
-    // } catch (error) {
-    //   toast.error("Error refreshing data:", error?.response?.data?.message);
-    // } finally {
-    //   setLoading(false);
-    // }
-  // };
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await userApi.get("getAllContactPageDetails");
+      setDatas(response.data);
+      initializeDataTable(); 
+    } catch (error) {
+      toast.error("Error refreshing data:", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   useEffect(() => {
-//     const getItemData = async () => {
-//       try {
-//         const resposnse = await api.get(
-//           "getAllMstrItems"
-//         );
-//         setDatas(resposnse.data);
-//       } catch (error) {
-//         toast.error("Error fetching data: ", error?.response?.data?.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     getItemData();
-//   }, []);
+  useEffect(() => {
+    const getItemData = async () => {
+      setLoading(true)
+      try {
+        const response = await userApi.get("getAllContactPageDetails");
+        setDatas(response.data);
+      } catch (error) {
+        toast.error(`Error fetching data: ${error?.response?.data?.message || error.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    getItemData();
+  }, []);
 
+ const deletefunction =async(dataId)=>{
+return  userApi.delete(`deleteContactPageDetails/${dataId}`)
+ }
   return (
     <div>
     {/* {loading ? ( */}
@@ -137,35 +139,36 @@ const ContactForm = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {datas.map((data, index) => ( */}
+              {datas?.map((data, index) => (
                 <tr>
-                  <td className="text-center">1</td>
-                  <td className="text-center">itemCode</td>
-                  <td className="text-center">itemName</td>
-                  <td className="text-center">costPrice</td>
-                  <td className="text-center">costPrice</td>
+                  <td className="text-center">{index+1}</td>
+                  <td className="text-center">{data.name}</td>
+                  <td className="text-center">{data.email}</td>
+                  <td className="text-center">{data.mobile}</td>
+                  <td className="text-center">{data.enquiry}</td>
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/contactform/view/`}>
+                      <Link to={`/contactform/view/${data.id}`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
                       </Link>
-                      <Link to={`/contactform/edit/`} className="px-2">
+                      <Link to={`/contactform/edit/${data.id}`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
                       </Link>
                       <DeleteModel
-                        // onSuccess={refreshData}
-                        // path={`deleteMstrItem/${data.id}`}
+                        onSuccess={refreshData}
+                        onDelete={()=>deletefunction(data.id)}
+                        // path={`deleteContactPageDetails/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
                     </div>
                   </td>
                 </tr>
-              {/* ))} */}
+               ))} 
             </tbody>
           </table>
         </div>

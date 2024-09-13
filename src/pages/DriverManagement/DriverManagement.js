@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
 
 // import DeleteModel from "../../components/common/DeleteModel";
-// import toast from "react-hot-toast";
-// import api from "../../config/URL";
+import toast from "react-hot-toast";
+import { driverApi } from "../../config/URL";
 
 const DriverManagement = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const table = $(tableRef.current).DataTable();
@@ -22,59 +22,59 @@ const DriverManagement = () => {
     };
   }, []);
 
-//   useEffect(() => {
-//     if (!loading) {
-//       initializeDataTable();
-//     }
-//     return () => {
-//       destroyDataTable();
-//     };
-//   }, [loading]);
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
 
-  // const initializeDataTable = () => {
-  //   if ($.fn.DataTable.isDataTable(tableRef.current)) {
-  //     // DataTable already initialized, no need to initialize again
-  //     return;
-  //   }
-  //   $(tableRef.current).DataTable();
-  // };
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
+    }
+    $(tableRef.current).DataTable();
+  };
 
-  // const destroyDataTable = () => {
-  //   const table = $(tableRef.current).DataTable();
-  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-  //     table.destroy();
-  //   }
-  // };
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
 
-//   const refreshData = async () => {
-//     destroyDataTable();
-//     setLoading(true);
-//     try {
-//       const response = await api.get("getAllMstrItems");
-//       setDatas(response.data);
-//       initializeDataTable(); 
-//     } catch (error) {
-//       toast.error("Error refreshing data:", error?.response?.data?.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await driverApi.get("driver");
+      setDatas(response.data.responseBody);
+      initializeDataTable(); 
+    } catch (error) {
+      toast.error("Error refreshing data:", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   useEffect(() => {
-//     const getItemData = async () => {
-//       try {
-//         const resposnse = await api.get(
-//           "getAllMstrItems"
-//         );
-//         setDatas(resposnse.data);
-//       } catch (error) {
-//         toast.error("Error fetching data: ", error?.response?.data?.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     getItemData();
-//   }, []);
+  useEffect(() => {
+    const getItemData = async () => {
+      try {
+        const resposnse = await driverApi.get(
+          "driver"
+        );
+        setDatas(resposnse.data.responseBody);
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemData();
+  }, []);
 
   return (
     <div>

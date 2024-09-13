@@ -58,8 +58,8 @@ function AdminLayout({ handleLogout }) {
                 <Route path="/" element={<DashboardAdmin />} />
                 <Route path="/vehiclemanagement" element={<VehicleManagement />} />
                 <Route path="/vehiclemanagement/add" element={<VehicleManagementAdd />} />
-                <Route path="/vehiclemanagement/edit" element={<VehicleManagementEdit />} />
-                <Route path="/vehiclemanagement/view" element={<VehicleManagementView />} />
+                <Route path="/vehiclemanagement/edit/:id" element={<VehicleManagementEdit />} />
+                <Route path="/vehiclemanagement/view/:id" element={<VehicleManagementView />} />
 
                 <Route path="/housecategorymanagement" element={< HouseCategoryManagement />} />
                 <Route path="/housecategorymanagement/add" element={< HouseCategoryManagementAdd />} />
@@ -76,8 +76,8 @@ function AdminLayout({ handleLogout }) {
 
                 <Route path="/usermanagement" element={< UserManagement />} />
                 <Route path="/usermanagement/add" element={< UserManagementAdd />} />
-                <Route path="/usermanagement/edit" element={< UserManagementEdit />} />
-                <Route path="/usermanagement/view" element={< UserManagementView />} />
+                <Route path="/usermanagement/edit/:id" element={< UserManagementEdit />} />
+                <Route path="/usermanagement/view/:id" element={< UserManagementView />} />
 
                 <Route path="/drivermanagement" element={< DriverManagement />} />
                 <Route path="/drivermanagement/add" element={< DriverManagementAdd />} />
@@ -86,14 +86,14 @@ function AdminLayout({ handleLogout }) {
 
                 <Route path="/bannerandoffer" element={< BannerAndOffer />} />
                 <Route path="/bannerandoffer/add" element={< BannerAndOfferAdd />} />
-                <Route path="/bannerandoffer/edit" element={< BannerAndOfferEdit />} />
-                <Route path="/bannerandoffer/view" element={< BannerAndOfferView />} />
+                <Route path="/bannerandoffer/edit/:id" element={< BannerAndOfferEdit />} />
+                <Route path="/bannerandoffer/view/:id" element={< BannerAndOfferView />} />
 
                 <Route path="/reviewandfeedback" element={< ReviewAndFeedback />} />
 
                 <Route path="/contactform" element={< ContactForm />} />
-                <Route path="/contactform/edit" element={< ContactFormEdit />} />
-                <Route path="/contactform/view" element={< ContactFormView />} />
+                <Route path="/contactform/edit/:id" element={< ContactFormEdit />} />
+                <Route path="/contactform/view/:id" element={< ContactFormView />} />
 
                 {/* Support Team */}
                 <Route path="/usermanagementteam" element={< UserManagementTeam />} />

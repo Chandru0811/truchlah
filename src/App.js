@@ -17,6 +17,7 @@ function UserRoute() {
 
   const handleAdminLogin = () => {
     sessionStorage.setItem("isAdmin", true);
+    sessionStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoic3JpQGdtYWlsLmNvbSIsImlhdCI6MTcyNjIyMjU1MSwiZXhwIjoxNzMzOTk4NTUxfQ.bms7mJlDFJnugfoj_SnI2z4Gul-BeakmrWDGOPkWDxNXAmOSxzcUQXvG0JavVZs0U6p7cHH2dVJVsQi9wkHV2w");
     setIsAuthenticate(false);
     setIsAdmin(true);
   };

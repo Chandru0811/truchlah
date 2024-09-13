@@ -4,6 +4,8 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
+import { userApi } from "../../config/URL";
+import { toast } from "react-toastify";
 
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
@@ -12,7 +14,7 @@ import DeleteModel from "../../Components/DeleteModel";
 const BannerAndOffer = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const table = $(tableRef.current).DataTable();
@@ -22,59 +24,62 @@ const BannerAndOffer = () => {
     };
   }, []);
 
-//   useEffect(() => {
-//     if (!loading) {
-//       initializeDataTable();
-//     }
-//     return () => {
-//       destroyDataTable();
-//     };
-//   }, [loading]);
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
 
-  // const initializeDataTable = () => {
-  //   if ($.fn.DataTable.isDataTable(tableRef.current)) {
-  //     // DataTable already initialized, no need to initialize again
-  //     return;
-  //   }
-  //   $(tableRef.current).DataTable();
-  // };
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      return;
+    }
+    $(tableRef.current).DataTable();
+  };
 
-  // const destroyDataTable = () => {
-  //   const table = $(tableRef.current).DataTable();
-  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-  //     table.destroy();
-  //   }
-  // };
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
 
-//   const refreshData = async () => {
-//     destroyDataTable();
-//     setLoading(true);
-//     try {
-//       const response = await api.get("getAllMstrItems");
-//       setDatas(response.data);
-//       initializeDataTable(); 
-//     } catch (error) {
-//       toast.error("Error refreshing data:", error?.response?.data?.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await userApi.get("getAllOffer");
+      if(response.data.status ===200){
+        setDatas(response.data.responseBody);
+        initializeDataTable();} 
+    } catch (error) {
+      toast.error("Error refreshing data:", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   useEffect(() => {
-//     const getItemData = async () => {
-//       try {
-//         const resposnse = await api.get(
-//           "getAllMstrItems"
-//         );
-//         setDatas(resposnse.data);
-//       } catch (error) {
-//         toast.error("Error fetching data: ", error?.response?.data?.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     getItemData();
-//   }, []);
+  useEffect(() => {
+    const getItemData = async () => {
+      setLoading(true);
+      try {
+        const response = await userApi.get("getAllOffer");
+        setDatas(response.data.responseBody);
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemData();
+  }, []);
+
+  const funDelete=(offerId)=>{
+    return userApi.delete(`deleteOffer/${offerId}`)
+  }
 
   return (
     <div>
@@ -125,51 +130,46 @@ const BannerAndOffer = () => {
                 {/* <th scope="col" className="text-center">
                   Mobile Number
                 </th> */}
-                {/* <th scope="col" className="text-center">
-                  Unit
-                </th> */}
                 <th scope="col" className="text-center">
                   ACTION
                 </th>
               </tr>
             </thead>
             <tbody>
-              {/* {datas.map((data, index) => ( */}
+              {datas?.map((data, index) => (
                 <tr>
-                  <td className="text-center">1</td>
-                  <td className="text-center">itemCode</td>
+                  <td className="text-center">{index +1}</td>
+                  <td className="text-center">{data.description}</td>
                   {/* <td className="text-center">itemName</td> */}
-                  {/* <td className="text-center">costPrice</td> */}
-                  {/* <td className="text-center">unit</td> */}
                   <td>
-                  {" "}
-                  {/* {data.status === "Active" ? ( */}
+                  {data.status === "Active" ? (
                     <span className="badge active">Active</span>
-                  {/* ) : ( */}
-                    {/* <span className="badge badges-Red">Inactive</span> */}
-                  {/* )} */}
+                  ) : (
+                    <span className="badge badges-Red">Inactive</span>
+                  )}
                 </td>
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/bannerandoffer/view/`}>
+                      <Link to={`/bannerandoffer/view/${data.offerId}`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
                       </Link>
-                      <Link to={`/bannerandoffer/edit/`} className="px-2">
+                      <Link to={`/bannerandoffer/edit/${data.offerId}`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
                       </Link>
                       <DeleteModel
-                        // onSuccess={refreshData}
+                        onSuccess={refreshData}
+                        onDelete={()=>funDelete(data.offerId)}
                         // path={`deleteMstrItem/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
                     </div>
                   </td>
                 </tr>
-              {/* ))} */}
+               ))} 
             </tbody>
           </table>
         </div>

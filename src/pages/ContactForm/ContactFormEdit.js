@@ -1,72 +1,73 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import api from "../../config/URL";
-// import toast from "react-hot-toast";
+import { userApi } from "../../config/URL";
 
 function ContactFormEdit() {
-  const [isSalesChecked, setIsSalesChecked] = useState(true);
-  const [isPurchaseChecked, setIsPurchaseChecked] = useState(true);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [loading, setLoading] = useState(false);
 
+  // Validation schema
   const validationSchema = Yup.object({
-    itemCode: Yup.string().required("*Code is required"),
-    itemName: Yup.string().required("*Name is required"),
+    name: Yup.string().required("*First name is required"),
+    email: Yup.string().email("Invalid email format").required("*Email is required"),
+    mobile: Yup.number().required("*Mobile number is required"),
+    enquiry: Yup.string().required("*Enquiry is required"),
   });
 
+  // Formik setup
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-            lastName: "string",
-            password: "string",
-            email: "string",
-            mobileNo: 0,
-            countryCode: "string",
-            refCode: "string",
-            loginType: "string",
+      name: "",
+      email: "",
+      mobile: "",
+      enquiry: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log("additems:", values);
       setLoading(true);
-    //   try {
-    //     const response = await api.post(`createMstrItems`, values);
-    //     console.log(response);
-    //     if (response.status === 201) {
-    //       toast.success(response.data.message);
-    //       console.log("Toast : ", response.data.message);
-    //       navigate("/items");
-    //     } else {
-    //       toast.error(response?.data?.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error("Error fetching data: ", error?.response?.data?.message);
-    //   } finally {
-    //     setLoading(false);
-    //   }
+      try {
+        const response = await userApi.put(
+          `/updateContactPageDetails/${id}`,
+          values,
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/contactform");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(`Error updating data: ${error?.response?.data?.message || error.message}`);
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
-  const handleSalesCheckboxChange = () => {
-    setIsSalesChecked((prevState) => !prevState);
-    // if (isSalesChecked) {
-    //   formik.setFieldValue("salesPrice", "");
-    //   formik.setFieldValue("salesAcc", "");
-    //   formik.setFieldValue("salesDesc", "");
-    // }
-  };
-
-  const handlePurchaseCheckboxChange = () => {
-    setIsPurchaseChecked((prevState) => !prevState);
-    // if (isPurchaseChecked) {
-    //   formik.setFieldValue("costPrice", "");
-    //   formik.setFieldValue("purchaseAcc", "");
-    //   formik.setFieldValue("vendor", "");
-    //   formik.setFieldValue("purchaseDesc", "");
-    // }
-  };
+  // Fetching existing data
+  useEffect(() => {
+    const getItemData = async () => {
+      setLoading(true);
+      try {
+        const response = await userApi.get(`/userContactPage/byContactId/${id}`);
+        formik.setValues({
+          name: response.data.responseBody.name || "",
+          email: response.data.responseBody.email || "",
+          mobile: response.data.responseBody.mobile || "",
+          enquiry: response.data.responseBody.enquiry || "",
+        });
+      } catch (error) {
+        toast.error(`Error fetching data: ${error?.response?.data?.message || error.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemData();
+  }, [id]);
 
   return (
     <div className="container-fluid p-2 minHeight m-0">
@@ -86,121 +87,89 @@ function ContactFormEdit() {
                       <span>Back</span>
                     </button>
                   </Link>
-                  <button
-                    type="submit"
-                    className="btn btn-sm btn-button"
-                    disabled={loading}
-                  >
+                  <button type="submit" className="btn btn-sm btn-button" disabled={loading}>
                     {loading ? (
-                      <span
-                        className="spinner-border spinner-border-sm"
-                        aria-hidden="true"
-                      ></span>
+                      <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
                     ) : (
-                      <span></span>
+                      <span>Save</span>
                     )}
-                    &nbsp;<span>Save</span>
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         <div className="card shadow border-0 my-2">
           <div className="container mb-5">
             <div className="row py-4">
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Name <span className="text-danger">*</span>
+                Name<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="itemCode"
-                    className={`form-control ${
-                      formik.touched.itemCode && formik.errors.itemCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("itemCode")}
+                    name="name"
+                    className={`form-control ${formik.touched.name && formik.errors.name ? "is-invalid" : ""}`}
+                    {...formik.getFieldProps("name")}
                   />
-                  {formik.touched.itemCode && formik.errors.itemCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.itemCode}
-                    </div>
+                  {formik.touched.name && formik.errors.name && (
+                    <div className="invalid-feedback">{formik.errors.name}</div>
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                 Email <span className="text-danger">*</span>
+                  Email <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="itemName"
-                    className={`form-control ${
-                      formik.touched.itemName && formik.errors.itemName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("itemName")}
+                    name="email"
+                    className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
+                    {...formik.getFieldProps("email")}
                   />
-                  {formik.touched.itemName && formik.errors.itemName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.itemName}
-                    </div>
+                  {formik.touched.email && formik.errors.email && (
+                    <div className="invalid-feedback">{formik.errors.email}</div>
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Phone Number <span className="text-danger">*</span>
+                  Mobile Number <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="itemCode"
-                    className={`form-control ${
-                      formik.touched.itemCode && formik.errors.itemCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("itemCode")}
+                    name="mobile"
+                    className={`form-control ${formik.touched.mobile && formik.errors.mobile ? "is-invalid" : ""}`}
+                    {...formik.getFieldProps("mobile")}
                   />
-                  {formik.touched.itemCode && formik.errors.itemCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.itemCode}
-                    </div>
+                  {formik.touched.mobile && formik.errors.mobile && (
+                    <div className="invalid-feedback">{formik.errors.mobile}</div>
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                 Enquiry <span className="text-danger">*</span>
+                  Enquiry <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="itemName"
-                    className={`form-control ${
-                      formik.touched.itemName && formik.errors.itemName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("itemName")}
+                    name="enquiry"
+                    className={`form-control ${formik.touched.enquiry && formik.errors.enquiry ? "is-invalid" : ""}`}
+                    {...formik.getFieldProps("enquiry")}
                   />
-                  {formik.touched.itemName && formik.errors.itemName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.itemName}
-                    </div>
+                  {formik.touched.enquiry && formik.errors.enquiry && (
+                    <div className="invalid-feedback">{formik.errors.enquiry}</div>
                   )}
                 </div>
               </div>
-             
-             
-           
-           
             </div>
           </div>
         </div>
