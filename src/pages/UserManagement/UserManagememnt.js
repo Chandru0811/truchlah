@@ -4,6 +4,8 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
+import { userApi } from "../../config/URL";
+import toast from "react-hot-toast";
 
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
@@ -15,69 +17,65 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const table = $(tableRef.current).DataTable();
-  
+    if (!loading) {
+      initializeDataTable();
+    }
     return () => {
-      table.destroy();
+      destroyDataTable();
     };
+  }, [loading]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
+    }
+    $(tableRef.current).DataTable();
+  };
+
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
+
+  const funDelete = (userId) => {
+    return userApi.delete(`deleteMstrItem/${userId}`)
+  }
+
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await userApi.get("/user");
+      setDatas(response.data);
+      initializeDataTable();
+    } catch (error) {
+      toast.error("Error refreshing data:", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const getItemData = async () => {
+      try {
+        const response = await userApi.get("/user",
+        );
+        setDatas(response.data.responseBody);
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemData();
   }, []);
-//   useEffect(() => {
-//     if (!loading) {
-//       initializeDataTable();
-//     }
-//     return () => {
-//       destroyDataTable();
-//     };
-//   }, [loading]);
-
-  // const initializeDataTable = () => {
-  //   if ($.fn.DataTable.isDataTable(tableRef.current)) {
-  //     // DataTable already initialized, no need to initialize again
-  //     return;
-  //   }
-  //   $(tableRef.current).DataTable();
-  // };
-
-  // const destroyDataTable = () => {
-  //   const table = $(tableRef.current).DataTable();
-  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-  //     table.destroy();
-  //   }
-  // };
-
-//   const refreshData = async () => {
-//     destroyDataTable();
-//     setLoading(true);
-//     try {
-//       const response = await api.get("getAllMstrItems");
-//       setDatas(response.data);
-//       initializeDataTable(); 
-//     } catch (error) {
-//       toast.error("Error refreshing data:", error?.response?.data?.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     const getItemData = async () => {
-//       try {
-//         const resposnse = await api.get(
-//           "getAllMstrItems"
-//         );
-//         setDatas(resposnse.data);
-//       } catch (error) {
-//         toast.error("Error fetching data: ", error?.response?.data?.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     getItemData();
-//   }, []);
 
   return (
     <div>
-    {/* {loading ? ( */}
+      {/* {loading ? ( */}
       {/* <div className="loader-container">
           <div class="Loader-Div">
         <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
@@ -85,91 +83,91 @@ const UserManagement = () => {
         </svg>
     </div>
       </div> */}
-    {/* ) : ( */}
-    <div className="container-fluid px-2 minHeight">
-      <div className="card shadow border-0 my-2">
-        <div className="container-fluid pt-4 pb-3">
-          <div className="row align-items-center justify-content-between ">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h1 className="h4 ls-tight headingColor ">User Management</h1>
+      {/* ) : ( */}
+      <div className="container-fluid px-2 minHeight">
+        <div className="card shadow border-0 my-2">
+          <div className="container-fluid pt-4 pb-3">
+            <div className="row align-items-center justify-content-between ">
+              <div className="col">
+                <div className="d-flex align-items-center gap-4">
+                  <h1 className="h4 ls-tight headingColor ">User Management</h1>
+                </div>
               </div>
-            </div>
-            <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/usermanagement/add">
-                  <button type="submit" className="btn btn-sm btn-button">
-                    <span>Add +</span>
-                  </button>
-                </Link>
+              <div className="col-auto">
+                <div className="hstack gap-2 justify-content-end">
+                  {/* <Link to="/usermanagement/add">
+                    <button type="submit" className="btn btn-sm btn-button">
+                      <span>Add +</span>
+                    </button>
+                  </Link> */}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <hr className="removeHrMargin mt-0"></hr>
-       
-        <div className="table-responsive p-2 minHeight">
-          <table ref={tableRef} className="display">
-            <thead className="thead-light">
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S.NO
-                </th>
-                <th scope="col" className="text-center">
-                  Name
-                </th>
-                <th scope="col" className="text-center">
-                  Email
-                </th>
-                <th scope="col" className="text-center">
-                  Mobile Number
-                </th>
-                {/* <th scope="col" className="text-center">
+          <hr className="removeHrMargin mt-0"></hr>
+
+          <div className="table-responsive p-2 minHeight">
+            <table ref={tableRef} className="display">
+              <thead className="thead-light">
+                <tr>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                    S.NO
+                  </th>
+                  <th scope="col" className="text-center">
+                    Name
+                  </th>
+                  <th scope="col" className="text-center">
+                    Email
+                  </th>
+                  <th scope="col" className="text-center">
+                    Mobile Number
+                  </th>
+                  {/* <th scope="col" className="text-center">
                   Unit
                 </th> */}
-                <th scope="col" className="text-center">
-                  ACTION
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {datas.map((data, index) => ( */}
-                <tr>
-                  <td className="text-center">1</td>
-                  <td className="text-center">Rajangam</td>
-                  <td className="text-center">raj@gmail.com</td>
-                  <td className="text-center">+91 6385988984</td>
-                  {/* <td className="text-center">unit</td> */}
-                  <td className="text-center">
-                    <div className="gap-2">
-                      <Link to={`/usermanagement/view/`}>
-                        <button className="btn btn-light btn-sm  shadow-none border-none">
-                          View
-                        </button>
-                      </Link>
-                      <Link to={`/usermanagement/edit/`} className="px-2">
-                        <button className="btn btn-light  btn-sm shadow-none border-none">
-                          Edit
-                        </button>
-                      </Link>
-                      <DeleteModel
-                        // onSuccess={refreshData}
-                        // path={`deleteMstrItem/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      />
-                    </div>
-                  </td>
+                  <th scope="col" className="text-center">
+                    ACTION
+                  </th>
                 </tr>
-              {/* ))} */}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {datas.map((data, index) => (
+                  <tr key={index}>
+                    <td className="text-center">{index + 1}</td>
+                    <td className="text-center">{data.firstName} {data.laststName}</td>
+                    <td className="text-center">{data.email}</td>
+                    <td className="text-center">{data.countryCode} {data.mobileNo}</td>
+                    <td className="text-center">
+                      <div className="gap-2">
+                        <Link to={`/usermanagement/view/${data.userId}`}>
+                          <button className="btn btn-light btn-sm  shadow-none border-none">
+                            View
+                          </button>
+                        </Link>
+                        {/* <Link to={`/usermanagement/edit/${data.userId}`} className="px-2">
+                          <button className="btn btn-light  btn-sm shadow-none border-none">
+                            Edit
+                          </button>
+                        </Link> */}
+                        <DeleteModel
+                          onSuccess={refreshData}
+                          onDelete={() => funDelete(data.userId)}
+                          // path={`deleteMstrItem/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+
         </div>
-        
-        
       </div>
+      {/* )} */}
     </div>
-  {/* )} */}
-  </div>
   );
 };
 

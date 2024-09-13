@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import toast from "react-hot-toast";
+import { driverApi } from "../../config/URL";
 
 function VehicleManagementAdd() {
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,6 @@ function VehicleManagementAdd() {
     initialValues: {
       vehicletypeId: "",
       type: "",
-      description: "",
       baseFare: "",
       perKm: "",
       helper: "",
@@ -54,14 +55,33 @@ function VehicleManagementAdd() {
       tenToTwelveCharge: "",
       twelveToSevenCharge: "",
       peakHourCharge: "",
+      description: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      // You might want to return or handle the form values as needed
-      console.log("Form values:", values);
-      // Simulate an API call and navigate
-      setLoading(false);
+      try {
+        const response = await driverApi.post(
+          `vehicle/vehicleType/create`,
+          values,
+        );
+
+        console.log(response);
+
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          console.log("Toast : ", response.data.message);
+          navigate("/vehiclemanagement");
+        } else {
+          toast.error(response?.data?.message);
+        }
+      } catch (error) {
+        toast.error(
+          `Error fetching data: ${error?.response?.data?.message || error.message}`
+        );
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -115,12 +135,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="vehicletypeId"
-                    className={`form-control ${
-                      formik.touched.vehicletypeId &&
+                    className={`form-control ${formik.touched.vehicletypeId &&
                       formik.errors.vehicletypeId
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("vehicletypeId")}
                   />
                   {formik.touched.vehicletypeId &&
@@ -139,11 +158,10 @@ function VehicleManagementAdd() {
                   <input
                     type="text"
                     name="type"
-                    className={`form-control ${
-                      formik.touched.type && formik.errors.type
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.type && formik.errors.type
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("type")}
                   />
                   {formik.touched.type && formik.errors.type && (
@@ -151,7 +169,7 @@ function VehicleManagementAdd() {
                   )}
                 </div>
               </div>
-             
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
                   Base Fare <span className="text-danger">*</span>
@@ -160,11 +178,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="baseFare"
-                    className={`form-control ${
-                      formik.touched.baseFare && formik.errors.baseFare
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.baseFare && formik.errors.baseFare
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("baseFare")}
                   />
                   {formik.touched.baseFare && formik.errors.baseFare && (
@@ -182,11 +199,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="perKm"
-                    className={`form-control ${
-                      formik.touched.perKm && formik.errors.perKm
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.perKm && formik.errors.perKm
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("perKm")}
                   />
                   {formik.touched.perKm && formik.errors.perKm && (
@@ -204,11 +220,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="helper"
-                    className={`form-control ${
-                      formik.touched.helper && formik.errors.helper
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.helper && formik.errors.helper
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("helper")}
                   />
                   {formik.touched.helper && formik.errors.helper && (
@@ -226,11 +241,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="extraHelper"
-                    className={`form-control ${
-                      formik.touched.extraHelper && formik.errors.extraHelper
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.extraHelper && formik.errors.extraHelper
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("extraHelper")}
                   />
                   {formik.touched.extraHelper && formik.errors.extraHelper && (
@@ -248,12 +262,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="tailGateCharge"
-                    className={`form-control ${
-                      formik.touched.tailGateCharge &&
+                    className={`form-control ${formik.touched.tailGateCharge &&
                       formik.errors.tailGateCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("tailGateCharge")}
                   />
                   {formik.touched.tailGateCharge &&
@@ -272,12 +285,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="overtimeCharge"
-                    className={`form-control ${
-                      formik.touched.overtimeCharge &&
+                    className={`form-control ${formik.touched.overtimeCharge &&
                       formik.errors.overtimeCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("overtimeCharge")}
                   />
                   {formik.touched.overtimeCharge &&
@@ -296,12 +308,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="nonLiftAccess"
-                    className={`form-control ${
-                      formik.touched.nonLiftAccess &&
+                    className={`form-control ${formik.touched.nonLiftAccess &&
                       formik.errors.nonLiftAccess
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("nonLiftAccess")}
                   />
                   {formik.touched.nonLiftAccess &&
@@ -320,11 +331,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="erpCharge"
-                    className={`form-control ${
-                      formik.touched.erpCharge && formik.errors.erpCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.erpCharge && formik.errors.erpCharge
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("erpCharge")}
                   />
                   {formik.touched.erpCharge && formik.errors.erpCharge && (
@@ -342,11 +352,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="cbdCharge"
-                    className={`form-control ${
-                      formik.touched.cbdCharge && formik.errors.cbdCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.cbdCharge && formik.errors.cbdCharge
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("cbdCharge")}
                   />
                   {formik.touched.cbdCharge && formik.errors.cbdCharge && (
@@ -364,12 +373,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="securedZoneCharge"
-                    className={`form-control ${
-                      formik.touched.securedZoneCharge &&
+                    className={`form-control ${formik.touched.securedZoneCharge &&
                       formik.errors.securedZoneCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("securedZoneCharge")}
                   />
                   {formik.touched.securedZoneCharge &&
@@ -388,11 +396,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="gst"
-                    className={`form-control ${
-                      formik.touched.gst && formik.errors.gst
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.gst && formik.errors.gst
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("gst")}
                   />
                   {formik.touched.gst && formik.errors.gst && (
@@ -408,11 +415,10 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="roundTrip"
-                    className={`form-control ${
-                      formik.touched.roundTrip && formik.errors.roundTrip
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.roundTrip && formik.errors.roundTrip
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("roundTrip")}
                   />
                   {formik.touched.roundTrip && formik.errors.roundTrip && (
@@ -430,12 +436,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="wrappingCharge"
-                    className={`form-control ${
-                      formik.touched.wrappingCharge &&
+                    className={`form-control ${formik.touched.wrappingCharge &&
                       formik.errors.wrappingCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("wrappingCharge")}
                   />
                   {formik.touched.wrappingCharge &&
@@ -454,12 +459,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="addStopCharge"
-                    className={`form-control ${
-                      formik.touched.addStopCharge &&
+                    className={`form-control ${formik.touched.addStopCharge &&
                       formik.errors.addStopCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("addStopCharge")}
                   />
                   {formik.touched.addStopCharge &&
@@ -478,12 +482,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="tenToTwelveCharge"
-                    className={`form-control ${
-                      formik.touched.tenToTwelveCharge &&
+                    className={`form-control ${formik.touched.tenToTwelveCharge &&
                       formik.errors.tenToTwelveCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("tenToTwelveCharge")}
                   />
                   {formik.touched.tenToTwelveCharge &&
@@ -502,12 +505,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="twelveToSevenCharge"
-                    className={`form-control ${
-                      formik.touched.twelveToSevenCharge &&
+                    className={`form-control ${formik.touched.twelveToSevenCharge &&
                       formik.errors.twelveToSevenCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("twelveToSevenCharge")}
                   />
                   {formik.touched.twelveToSevenCharge &&
@@ -526,12 +528,11 @@ function VehicleManagementAdd() {
                   <input
                     type="number"
                     name="peakHourCharge"
-                    className={`form-control ${
-                      formik.touched.peakHourCharge &&
+                    className={`form-control ${formik.touched.peakHourCharge &&
                       formik.errors.peakHourCharge
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("peakHourCharge")}
                   />
                   {formik.touched.peakHourCharge &&
@@ -549,11 +550,10 @@ function VehicleManagementAdd() {
                 <div className="mb-3">
                   <textarea
                     name="description"
-                    className={`form-control ${
-                      formik.touched.description && formik.errors.description
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.description && formik.errors.description
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("description")}
                   />
                   {formik.touched.description && formik.errors.description && (
