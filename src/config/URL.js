@@ -12,6 +12,12 @@ const userApi = axios.create({
   baseURL: "https://trucklah.com/user-service/api/",
 });
 
+// Driver controller instance
+const driverApi = axios.create({
+  // baseURL: "http://13.213.208.92:9083/driver-service/api/",
+  baseURL: "https://trucklah.com/driver-service/api/",
+});
+
 const addAuthInterceptor = (instance) => {
   instance.interceptors.request.use(
     function (config) {
@@ -32,5 +38,6 @@ const addAuthInterceptor = (instance) => {
 // Add interceptors to each instance
 addAuthInterceptor(bookingApi);
 addAuthInterceptor(userApi);
+addAuthInterceptor(driverApi);
 
-export { bookingApi, userApi };
+export { bookingApi, userApi ,driverApi};
