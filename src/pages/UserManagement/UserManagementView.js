@@ -65,12 +65,27 @@ function UserManagementView() {
                 <div className="row mb-3">
                   <div className="col-6 d-flex justify-content-start align-items-center">
                     <p className="text-sm">
-                      <b>Name</b>
+                      <b>First Name</b>
                     </p>
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                     : {`${data.firstName} ${data.lastName}` || ""}
+                     : {`${data.firstName}` || ""}
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-3">
+                  <div className="col-6 d-flex justify-content-start align-items-center">
+                    <p className="text-sm">
+                      <b>Last Name</b>
+                    </p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                     : {`${data.lastName}` || ""}
                     </p>
                   </div>
 
@@ -97,7 +112,7 @@ function UserManagementView() {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                     : {(data.countryCode + " " + data.mobileNo) || ""}
+                     : {(data.countryCode?data.countryCode:" " + " " + data.mobileNo) || ""}
                     </p>
                   </div>
                 </div>
@@ -106,11 +121,11 @@ function UserManagementView() {
                 <div className="row mb-3">
                   <div className="col-6 d-flex justify-content-start align-items-center">
                     <p className="text-sm">
-                      <b>Reference Code</b>
+                      <b>Role</b>
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">: {data.refCode || ""} </p>
+                    <p className="text-muted text-sm">: {data?.roles[0]?.name || ""} </p>
                   </div>
                 </div>
               </div>
