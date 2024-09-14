@@ -46,56 +46,59 @@ function Login({ handleLogin, handleAdminLogin }) {
     onSubmit: async (data, { resetForm }) => {
       console.log("Form submission data:", data);
       data.appCode = "TRUCK_USER";
-      if (data.username === "admin@gmail.com" && data.password === "12345678") {
-        toast.success("Login Successful!");
-        navigate("/");
-        resetForm();
-        handleAdminLogin();
-      } else {
-        try {
-          const response = await userApi.post(`user/login`, data, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          if (response.status === 200) {
+      // if (data.username === "admin@gmail.com" && data.password === "12345678") {
+      //   toast.success("Login Successful!");
+      //   navigate("/");
+      //   resetForm();
+      //   handleAdminLogin();
+      // } else {
+      try {
+        const response = await userApi.post(`user/login`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          if (response.data.responseBody.roles[0] === "ROLE_ADMIN") {
+            toast.success("Login Successful!");
+            navigate("/");
+            resetForm();
+            handleAdminLogin();
+          } else {
             toast.success("Login Successful!");
             navigate("/shift");
             resetForm();
             handleLogin();
-            sessionStorage.setItem("userId", response.data.responseBody.userId);
-            sessionStorage.setItem(
-              "roles",
-              response.data.responseBody.roles[0]
-            );
-            sessionStorage.setItem("token", response.data.responseBody.token);
-            sessionStorage.setItem(
-              "username",
-              response.data.responseBody.username
-            );
-          } else {
-            toast.error(response.data.message);
           }
-        } catch (error) {
-          if (error.response.status === 400) {
-            const mobileNos =error.response.data.errorList[0].mobileNo
-            const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
-            try {
-              const otpResponse = await userApi.post(
-                `user/sendOTP?phone=${mobileNo}`
-              );
-              if (otpResponse.status === 200) {
-                navigate("/otp", { state: { mobileNo } });
-              }
-            } catch (error) {
-              toast.error(error);
+          sessionStorage.setItem("userId", response.data.responseBody.userId);
+          sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+          sessionStorage.setItem("token", response.data.responseBody.token);
+          sessionStorage.setItem(
+            "username",
+            response.data.responseBody.username
+          );
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        if (error.response.status === 400) {
+          const mobileNos = error.response.data.errorList[0].mobileNo;
+          const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
+          try {
+            const otpResponse = await userApi.post(
+              `user/sendOTP?phone=${mobileNo}`
+            );
+            if (otpResponse.status === 200) {
+              navigate("/otp", { state: { mobileNo } });
             }
-          } else {
+          } catch (error) {
             toast.error(error);
           }
+        } else {
+          toast.error(error);
         }
       }
-
+      // }
     },
   });
 

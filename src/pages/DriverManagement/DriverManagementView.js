@@ -1,49 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import DriverManagement from "./DriverManagement";
+import { driverApi } from "../../config/URL";
+import toast from "react-hot-toast";
 // import api from "../../config/URL";
 // import toast from "react-hot-toast";
 
 function DriverManagementView() {
-  // const { id } = useParams();
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getItemData = async () => {
-      //   setLoading(true);
-      //   try {
-      //     const response = await api.get(
-      //       `getMstrItemsById/${id}`
-      //     );
-      //     setData(response.data);
-      //   } catch (error) {
-      //     toast.error("Error fetching data: ", error?.response?.data?.message);
-      //   }finally{
-      //     setLoading(false);
-
-      //   }
+        setLoading(true);
+        try {
+          const response = await driverApi.get(
+            `/driver/byId/${id}`
+          );
+          setData(response.data.responseBody);
+        } catch (error) {
+          toast.error("Error fetching data: ", error?.response?.data?.message);
+        }finally{
+          setLoading(false);
+        }
     };
     getItemData();
   }, [id]);
 
-  return (
+  return  (
     <div>
       {/* {loading ? (
-      <div className="loader-container">
-       <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
-    </div>
-      </div>
-    ) : ( */}
-
-      <div className="container-fluid px-2 minHeight">
-        <div className="card shadow border-0 mb-2 top-header">
-          <div className="container-fluid py-4">
-            <div className="row align-items-center">
+        <div className="loader-container">
+          <div className="Loader-Div">
+            <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
+              <polygon
+                fill="transparent"
+                stroke="blue"
+                strokeWidth="1.3"
+                points="16,0 32,32 0,32"
+              ></polygon>
+            </svg>
+          </div>
+        </div>
+      ) : ( */}
+        <div className="container-fluid px-2 minHeight">
+          <div className="card shadow border-0 mb-2 top-header">
+            <div className="container-fluid py-4">
               <div className="row align-items-center">
                 <div className="col">
                   <div className="d-flex align-items-center gap-4">
@@ -51,218 +54,151 @@ function DriverManagementView() {
                   </div>
                 </div>
                 <div className="col-auto">
-                  <div className="hstack gap-2 justify-content-start">
-                    <Link to="/drivermanagement">
-                      <button type="submit" className="btn btn-sm btn-light">
-                        <span>Back</span>
-                      </button>
-                    </Link>
-                  </div>
+                  <Link to="/drivermanagement">
+                    <button type="submit" className="btn btn-sm btn-light">
+                      <span>Back</span>
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="card shadow border-0 mb-2 minHeight">
-          <div className="container">
-            <div className="row mt-2 p-3">
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
+          <div className="card shadow border-0 mb-2 minHeight">
+            <div className="container">
+              <div className="row mt-2 p-3">
+                {/* Driver Details */}
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
                       <b>First Name</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.firstName || "Harishragav"}</p>
+                    </div>
+                    <div className="col-6 text-muted">: {data.firstName || "N/A"}</div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
                       <b>Last Name</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.lastName || "B"}</p>
+                    </div>
+                    <div className="col-6 text-muted">: {data.lastName || "N/A"}</div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Email</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.itemCode || "HR123"}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
                       <b>Mobile Number</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.mobileNumber || "+91 6385921328"}</p>
+                    </div>
+                    <div className="col-6 text-muted">: {data.mobileNo || "N/A"}</div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
                       <b>Email</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.email || "harish@gmail.com"} </p>
+                    </div>
+                    <div className="col-6 text-muted">: {data.email || "N/A"}</div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Reference Code</b>
-                    </p>
+                {/* <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>Driver ID</b>
+                    </div>
+                    <div className="col-6 text-muted">: {data.driverId || "N/A"}</div>
                   </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.refCode || "AS122"} </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Terms Condition</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.termsCondition || "Yes"} </p>
+                </div> */}
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>Demerit Points</b>
+                    </div>
+                    <div className="col-6 text-muted">: {data.demeritPoint || "N/A"}</div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Dirver Id</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.driverId || "HR6385"} </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Demerit Point</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.demeritPoint || "12"} </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
                       <b>Login Type</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.loginType || "Temporary"} </p>
+                    </div>
+                    <div className="col-6 text-muted">: {data.loginType || "N/A"}</div>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
+                {/* Add more fields as needed */}
+                {/* Image Fields */}
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
                       <b>Driver Photo</b>
-                    </p>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.driverPhotoUrl ? (
+                        <img src={data.driverPhotoUrl} alt="Driver" style={{ width: "100px" }} />
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
                   </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.driverPhoto || ""} </p>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>License Front:</b>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.licenseFrontUrl ? (
+                        <img src={data.licenseFrontUrl} alt="License Front" style={{ width: "100px" }} />
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>License Back:</b>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.licenseBackUrl ? (
+                        <img src={data.licenseBackUrl} alt="License Front" style={{ width: "100px" }} />
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>Id Front:</b>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.idFrontUrl ? (
+                        <img src={data.idFrontUrl} alt="License Front" style={{ width: "100px" }} />
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>Id Back:</b>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.idBackUrl ? (
+                        <img src={data.idBackUrl} alt="License Front" style={{ width: "100px" }} />
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Id Front</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.idFront || ""} </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Id Front</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.idFront || ""} </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>Id Back</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.idBack || ""} </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>License Front</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.licenseFront || ""} </p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-3">
-                  <div className="col-6 d-flex justify-content-start align-items-center">
-                    <p className="text-sm">
-                      <b>License Back</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: {data.licenseBack || ""} </p>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
-      </div>
       {/* )} */}
     </div>
   );

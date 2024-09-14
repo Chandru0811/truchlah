@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import 'antd/dist/reset.css';
+import "antd/dist/reset.css";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import AdminLayout from "./layouts/AdminLayout";
 import UserLayout from "./layouts/UserLayout";
+import { Toaster } from "react-hot-toast";
 
 function UserRoute() {
   const [isAuthenticate, setIsAuthenticate] = useState(false);
@@ -17,13 +18,11 @@ function UserRoute() {
 
   const handleAdminLogin = () => {
     sessionStorage.setItem("isAdmin", true);
-    sessionStorage.setItem("token", "eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwic3ViIjoic3JpQGdtYWlsLmNvbSIsImlhdCI6MTcyNjIyMjU1MSwiZXhwIjoxNzMzOTk4NTUxfQ.bms7mJlDFJnugfoj_SnI2z4Gul-BeakmrWDGOPkWDxNXAmOSxzcUQXvG0JavVZs0U6p7cHH2dVJVsQi9wkHV2w");
     setIsAuthenticate(false);
     setIsAdmin(true);
   };
 
   const handleLogout = async () => {
-    // Your logout logic
     sessionStorage.removeItem("isAdmin");
     sessionStorage.removeItem("isAuthenticate");
     sessionStorage.removeItem("roles");
@@ -45,6 +44,7 @@ function UserRoute() {
   return (
     <div>
       <ToastContainer position="top-center" />
+      <Toaster position="top-center" reverseOrder={false} />
       {isAdmin ? (
         <AdminLayout handleLogout={handleLogout} />
       ) : (

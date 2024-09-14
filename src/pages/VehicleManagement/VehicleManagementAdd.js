@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import toast from "react-hot-toast";
 import { driverApi } from "../../config/URL";
+import toast from "react-hot-toast";
 
 function VehicleManagementAdd() {
   const [loading, setLoading] = useState(false);

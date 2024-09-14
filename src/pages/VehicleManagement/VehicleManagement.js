@@ -48,7 +48,7 @@ const VehicleManagement = () => {
     setLoading(true);
     try {
       const response = await driverApi.get("vehicle/vehicleType");
-      setDatas(response.data);
+      setDatas(response.data.responseBody);
       initializeDataTable();
     } catch (error) {
       toast.error("Error refreshing data:", error?.response?.data?.message);

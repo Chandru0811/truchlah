@@ -54,7 +54,7 @@ function UserLayout({
   });
 
   return (
-    <Router>   
+    <Router>
       <Head isAuthenticate={isAuthenticate} handleLogout={handleLogout} />
       <ScrollToTop />
       <div style={{ marginTop: "66px" }}>

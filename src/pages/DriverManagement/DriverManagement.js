@@ -62,11 +62,10 @@ const DriverManagement = () => {
 
   useEffect(() => {
     const getItemData = async () => {
+      setLoading(true);
       try {
-        const resposnse = await driverApi.get(
-          "driver"
-        );
-        setDatas(resposnse.data.responseBody);
+        const response = await driverApi.get("driver");
+        setDatas(response.data.responseBody);
       } catch (error) {
         toast.error("Error fetching data: ", error?.response?.data?.message);
       } finally {
@@ -76,6 +75,9 @@ const DriverManagement = () => {
     getItemData();
   }, []);
 
+  const deleteFun=(driverId)=>{
+    return  driverApi.delete(`deleteDriverDetails/${driverId}`);
+  }
   return (
     <div>
     {/* {loading ? ( */}
@@ -134,34 +136,35 @@ const DriverManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {datas.map((data, index) => ( */}
+              {datas.map((data, index) => (
                 <tr>
-                  <td className="text-center">1</td>
-                  <td className="text-center">Harish</td>
-                  <td className="text-center">harish@gmail.com</td>
-                  <td className="text-center">+91 6385921329</td>
+                  <td className="text-center">{index +1}</td>
+                  <td className="text-center">{data.firstName}</td>
+                  <td className="text-center">{data.email}</td>
+                  <td className="text-center">{data.mobileNo}</td>
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/drivermanagement/view/`}>
+                      <Link to={`/drivermanagement/view/${data.driverId}`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
                       </Link>
-                      <Link to={`/drivermanagement/edit/`} className="px-2">
+                      <Link to={`/drivermanagement/edit/${data.driverId}`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
                       </Link>
                       <DeleteModel
-                        // onSuccess={refreshData}
+                        onSuccess={refreshData}
+                        onDelete={()=>deleteFun(data.driverId)}
                         // path={`deleteMstrItem/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
                     </div>
                   </td>
                 </tr>
-              {/* ))} */}
+               ))} 
             </tbody>
           </table>
         </div>

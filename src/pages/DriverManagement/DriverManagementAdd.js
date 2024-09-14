@@ -11,7 +11,6 @@ function DriverManagementAdd() {
   const [cPasswordVisible, setCPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const validationSchema = Yup.object({
     firstName: Yup.string().required("*First name is required"),
     lastName: Yup.string().required("*Last name is required"),
@@ -54,9 +53,6 @@ function DriverManagementAdd() {
     termsCondition: Yup.string().required(
       "*Terms and conditions must be accepted"
     ),
-    driverId: Yup.number()
-      .required("*Driver ID is required")
-      .typeError("*Driver ID must be a number"),
       driverPhoto: Yup.mixed().required('Driver Photo is required'),
       idFront: Yup.mixed().required('ID Front is required'),
       idBack: Yup.mixed().required('ID Back is required'),
@@ -78,7 +74,6 @@ function DriverManagementAdd() {
       password: "",
       refCode: "",
       termsCondition: "",
-      driverId: "",
       driverPhoto: null,
       idFront: null,
       idBack: null,
@@ -90,7 +85,7 @@ function DriverManagementAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("drivermanagement:", values);
-       const { driverPhoto, idFront, idBack, licenseFront, licenseBack,demeritPoint, ...value } = values;
+       const { driverPhoto, idFront, idBack, licenseFront, licenseBack,demeritPoint,refCode,loginType,termsCondition,cPassword, ...value } = values;
 
        const formData = new FormData();
        if (driverPhoto) formData.append('driverPhoto', driverPhoto);
@@ -100,27 +95,25 @@ function DriverManagementAdd() {
        if (licenseBack) formData.append('licenseBack', licenseBack);
        if (demeritPoint) formData.append('demeritPoint', demeritPoint);
  
-       const otherValues = value;
+       const otherValues ={ ...value,demeritPoint};
        setLoading(true);
         try {
-          const response = await driverApi.post(`driver/create`, formData);
+          const response = await driverApi.post(`driver/create`, otherValues);
           if (response.status === 201 || 200) {
-            // toast.success(response.data.message);
-            // console.log("Toast : ", response.data.message);
+            formData.append("driverId",response.data.responseBody.driverId)
             try {
-              const response = await driverApi.post(`driver/update`, otherValues);
+              const response = await driverApi.post(`driver/update`, formData);
               if (response.status === 201 || 200) {
                 toast.success(response.data.message);
-                // console.log("Toast : ", response.data.message);
+                navigate("/drivermanagement")
               }
             } catch (error) {
               toast.error("Error fetching data: ", error?.response?.data?.message);
             }
-          } else {
-            toast.error(response?.data?.message);
           }
         } catch (error) {
-          toast.error("Error fetching data: ", error?.response?.data?.message);
+          console.log(error?.response?.data?.serviceErrorList[0]?.errorMessage)
+          toast.error(error?.response?.data?.serviceErrorList[0]?.errorMessage);
         } finally {
           setLoading(false);
         }
@@ -362,28 +355,6 @@ function DriverManagementAdd() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Driver ID <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="driverId"
-                    className={`form-control ${
-                      formik.touched.driverId && formik.errors.driverId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("driverId")}
-                  />
-                  {formik.touched.driverId && formik.errors.driverId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.driverId}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
                   Driver Photo <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
@@ -395,7 +366,7 @@ function DriverManagementAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e)=> formik.setFieldValue("driverPhoto",e.target.value[0])}
+                    onChange={(e)=> formik.setFieldValue("driverPhoto",e.target.files[0])}
                   />
                   {formik.touched.driverPhoto && formik.errors.driverPhoto && (
                     <div className="invalid-feedback">
@@ -417,7 +388,7 @@ function DriverManagementAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e)=> formik.setFieldValue("idFront",e.target.value[0])}
+                    onChange={(e)=> formik.setFieldValue("idFront",e.target.files[0])}
                   />
                   {formik.touched.idFront && formik.errors.idFront && (
                     <div className="invalid-feedback">
@@ -439,7 +410,7 @@ function DriverManagementAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e)=> formik.setFieldValue("idBack",e.target.value[0])}
+                    onChange={(e)=> formik.setFieldValue("idBack",e.target.files[0])}
                   />
                   {formik.touched.idBack && formik.errors.idBack && (
                     <div className="invalid-feedback">
@@ -461,7 +432,7 @@ function DriverManagementAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e)=> formik.setFieldValue("licenseFront",e.target.value[0])}
+                    onChange={(e)=> formik.setFieldValue("licenseFront",e.target.files[0])}
                   />
                   {formik.touched.licenseFront &&
                     formik.errors.licenseFront && (
@@ -484,7 +455,7 @@ function DriverManagementAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e)=> formik.setFieldValue("licenseBack",e.target.value[0])}
+                    onChange={(e)=> formik.setFieldValue("licenseBack",e.target.files[0])}
                   />
                   {formik.touched.licenseBack && formik.errors.licenseBack && (
                     <div className="invalid-feedback">
