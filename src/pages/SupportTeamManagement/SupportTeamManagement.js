@@ -4,10 +4,8 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
-
-// import DeleteModel from "../../components/common/DeleteModel";
-// import toast from "react-hot-toast";
-// import api from "../../config/URL";
+import { userApi } from "../../config/URL";
+import toast from "react-hot-toast";
 
 const SupportTeamManagement = () => {
   const tableRef = useRef(null);
@@ -21,71 +19,76 @@ const SupportTeamManagement = () => {
       table.destroy();
     };
   }, []);
-//   useEffect(() => {
-//     if (!loading) {
-//       initializeDataTable();
-//     }
-//     return () => {
-//       destroyDataTable();
-//     };
-//   }, [loading]);
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
 
-  // const initializeDataTable = () => {
-  //   if ($.fn.DataTable.isDataTable(tableRef.current)) {
-  //     // DataTable already initialized, no need to initialize again
-  //     return;
-  //   }
-  //   $(tableRef.current).DataTable();
-  // };
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
+    }
+    $(tableRef.current).DataTable();
+  };
 
-  // const destroyDataTable = () => {
-  //   const table = $(tableRef.current).DataTable();
-  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-  //     table.destroy();
-  //   }
-  // };
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
 
-//   const refreshData = async () => {
-//     destroyDataTable();
-//     setLoading(true);
-//     try {
-//       const response = await api.get("getAllMstrItems");
-//       setDatas(response.data);
-//       initializeDataTable(); 
-//     } catch (error) {
-//       toast.error("Error refreshing data:", error?.response?.data?.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await userApi.get("staffs");
+      setDatas(response.data.responseBody);
+      initializeDataTable(); 
+    } catch (error) {
+      toast.error("Error refreshing data:", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   useEffect(() => {
-//     const getItemData = async () => {
-//       try {
-//         const resposnse = await api.get(
-//           "getAllMstrItems"
-//         );
-//         setDatas(resposnse.data);
-//       } catch (error) {
-//         toast.error("Error fetching data: ", error?.response?.data?.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     getItemData();
-//   }, []);
+  useEffect(() => {
+    const getItemData = async () => {
+      setLoading(true);
+      try {
+        const resposnse = await userApi.get("staffs");
+        setDatas(resposnse.data.responseBody);
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemData();
+  }, []);
 
+ const deleteFunc =(id)=>{
+  return userApi.delete(`deleteUserDetails/${id}`)
+ }
+ 
   return (
     <div>
-    {/* {loading ? ( */}
-      {/* <div className="loader-container">
-          <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
+     {loading ? (
+        <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+      </div>
+      <h3 className="darksoul-loader-h">Trucklah</h3>
     </div>
-      </div> */}
-    {/* ) : ( */}
+      ) : (
     <div className="container-fluid px-2 minHeight">
       <div className="card shadow border-0 my-2">
         <div className="container-fluid pt-4 pb-3">
@@ -133,34 +136,35 @@ const SupportTeamManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {datas.map((data, index) => ( */}
+              {datas.map((data, index) => (
                 <tr>
-                  <td className="text-center">1</td>
-                  <td className="text-center">itemCode</td>
-                  <td className="text-center">itemName</td>
-                  <td className="text-center">costPrice</td>
+                  <td className="text-center">{index+1}</td>
+                  <td className="text-center">{`${data.firstName} ${data.lastName}`}</td>
+                  <td className="text-center">{data.email}</td>
+                  <td className="text-center">{`${data.countryCode} ${data.mobileNo}`}</td>
                   {/* <td className="text-center">unit</td> */}
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/supportteammanagement/view/`}>
+                      <Link to={`/supportteammanagement/view/${data.userId}`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
                       </Link>
-                      <Link to={`/supportteammanagement/edit/`} className="px-2">
+                      <Link to={`/supportteammanagement/edit/${data.userId}`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
                       </Link>
                       <DeleteModel
-                        // onSuccess={refreshData}
+                        onSuccess={refreshData}
+                        onDelete={()=>deleteFunc(data.userId)}
                         // path={`deleteMstrItem/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
                     </div>
                   </td>
                 </tr>
-              {/* ))} */}
+               ))} 
             </tbody>
           </table>
         </div>
@@ -168,7 +172,7 @@ const SupportTeamManagement = () => {
         
       </div>
     </div>
-  {/* )} */}
+   )} 
   </div>
   );
 };

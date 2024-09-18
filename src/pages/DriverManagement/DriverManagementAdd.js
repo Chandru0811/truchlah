@@ -44,12 +44,16 @@ function DriverManagementAdd() {
       .email("*Invalid email format")
       .required("*Email is required"),
       password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters long'),
+  .required('Password is required')
+  .min(8, 'Password must be at least 8 characters long')
+  .matches(
+    /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+    'Password must contain at least one uppercase, one number, and one special character'
+  ),
       cPassword: Yup.string()
       .required('Confirm Password is required')
       .oneOf([Yup.ref('password'), null], 'Passwords must match'),
-    refCode: Yup.string().required("*Referral code is required"),
+    // refCode: Yup.string().required("*Referral code is required"),
     termsCondition: Yup.string().required(
       "*Terms and conditions must be accepted"
     ),
@@ -85,31 +89,54 @@ function DriverManagementAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("drivermanagement:", values);
-       const { driverPhoto, idFront, idBack, licenseFront, licenseBack,demeritPoint,refCode,loginType,termsCondition,cPassword, ...value } = values;
-
-       const formData = new FormData();
-       if (driverPhoto) formData.append('driverPhoto', driverPhoto);
-       if (idFront) formData.append('idFront', idFront);
-       if (idBack) formData.append('idBack', idBack);
-       if (licenseFront) formData.append('licenseFront', licenseFront);
-       if (licenseBack) formData.append('licenseBack', licenseBack);
-       if (demeritPoint) formData.append('demeritPoint', demeritPoint);
- 
-       const otherValues ={ ...value,demeritPoint};
+       
+      const formData = new FormData();
+      formData.append("firstName", values.firstName);
+      formData.append("lastName", values.lastName);
+      formData.append("countryCode", values.countryCode);
+      formData.append("mobileNo", values.mobileNo);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("refCode", values.refCode);
+      formData.append("termsCondition", values.termsCondition ? true : false);
+      formData.append("demeritPoint", values.demeritPoint);
+      formData.append("loginType", values.loginType);
+  
+      // Append file inputs if they exist
+      if (values.driverPhoto) {
+        formData.append("driverPhoto", values.driverPhoto);
+      }
+      if (values.idFront) {
+        formData.append("idFront", values.idFront);
+      }
+      if (values.idBack) {
+        formData.append("idBack", values.idBack);
+      }
+      if (values.licenseFront) {
+        formData.append("licenseFront", values.licenseFront);
+      }
+      if (values.licenseBack) {
+        formData.append("licenseBack", values.licenseBack);
+      }
        setLoading(true);
         try {
-          const response = await driverApi.post(`driver/create`, otherValues);
+          const response = await driverApi.post(`driver/createDriverByAdmin`, formData);
           if (response.status === 201 || 200) {
-            formData.append("driverId",response.data.responseBody.driverId)
-            try {
-              const response = await driverApi.post(`driver/update`, formData);
-              if (response.status === 201 || 200) {
                 toast.success(response.data.message);
                 navigate("/drivermanagement")
-              }
-            } catch (error) {
-              toast.error("Error fetching data: ", error?.response?.data?.message);
-            }
+            // try {
+            //   const response = await driverApi.post(`driver/update`, formData,{
+            //     headers: {
+            //       "Content-Type": "multipart/form-data",
+            //     },
+            //   });
+            //   if (response.status === 201 || 200) {
+            //     toast.success(response.data.message);
+            //     navigate("/drivermanagement")
+            //   }
+            // } catch (error) {
+            //   toast.error("Error fetching data: ", error?.response?.data?.message);
+            // }
           }
         } catch (error) {
           console.log(error?.response?.data?.serviceErrorList[0]?.errorMessage)
@@ -333,7 +360,7 @@ function DriverManagementAdd() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  Reference Code <span className="text-danger">*</span>
+                  Reference Code 
                 </label>
                 <div className="mb-3">
                   <input

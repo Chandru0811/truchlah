@@ -74,15 +74,17 @@ const VehicleManagement = () => {
 
   return (
     <div>
-      {/* {loading ? ( */}
-      {/* <div className="loader-container">
-          <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
+      {loading ? (
+      <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+      </div>
+      <h3 className="darksoul-loader-h">Trucklah</h3>
     </div>
-      </div> */}
-      {/* ) : ( */}
+      ) : (
       <div className="container-fluid px-2 minHeight">
         <div className="card shadow border-0 my-2">
           <div className="container-fluid pt-4 pb-3">
@@ -109,20 +111,20 @@ const VehicleManagement = () => {
             <table ref={tableRef} className="display">
               <thead className="thead-light">
                 <tr>
-                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }} className="text-center">
                     S.NO
                   </th>
-                  <th scope="col" className="text-center">
+                  {/* <th scope="col" className="text-center">
                     Vehicle Type Id
-                  </th>
+                  </th> */}
                   <th scope="col" className="text-center">
                     Vehicle Type
                   </th>
                   <th scope="col" className="text-center">
-                    Helper
+                    Base Fare
                   </th>
                   <th scope="col" className="text-center">
-                    ExtraHelper
+                    Per KM Fare
                   </th>
                   <th scope="col" className="text-center">
                     ACTION
@@ -133,10 +135,10 @@ const VehicleManagement = () => {
                 {datas.map((data, index) => (
                   <tr key={index}>
                     <td className="text-center">{index + 1}</td>
-                    <td className="text-center">{data.vehicletypeId}</td>
+                    {/* <td className="text-center">{data.vehicletypeId}</td> */}
                     <td className="text-center">{data.type}</td>
-                    <td className="text-center">{data.helper}</td>
-                    <td className="text-center">{data.extraHelper}</td>
+                    <td className="text-center">{data.baseFare}</td>
+                    <td className="text-center">{data.perKm}</td>
                     <td className="text-center">
                       <div className="gap-2">
                         <Link to={`/vehiclemanagement/view/${data.vehicletypeId}`}>
@@ -164,7 +166,7 @@ const VehicleManagement = () => {
           </div>
         </div>
       </div>
-      {/* )} */}
+     )} 
     </div>
   );
 };

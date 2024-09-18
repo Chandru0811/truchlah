@@ -1798,11 +1798,11 @@ color: #0077ff !important;
   }
 }
 .btn-button {
-  color: #fff;
+  color: #fff !important;
   padding: 0.5rem 0.9rem;
   font-weight: 600;
-  background-color: #4066D5;
-  border-color: #4066D5;
+  background-color: #4066D5 !important;
+  border-color: #4066D5 !important;
 }
 
  

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { driverApi } from "../../config/URL";
 // import api from "../../config/URL";
 // import toast from "react-hot-toast";
 
@@ -10,6 +12,8 @@ function DriverManagementEdit() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [cPasswordVisible, setCPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(true);
+  const {id}=useParams();
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -42,69 +46,97 @@ function DriverManagementEdit() {
         return false;
       }),
     email: Yup.string().email("*Invalid email format").required("*Email is required"),
-    password: Yup.string().required("*Password is required"),
+    // password: Yup.string().required("*Password is required"),
     refCode: Yup.string().required("*Referral code is required"),
     termsCondition: Yup.string().required("*Terms and conditions must be accepted"),
-    driverId: Yup.string().required("*Driver ID is required")
-      .typeError("*Driver ID must be a number"),
-    driverPhoto: Yup.string().required("*Driver photo is required"),
-    idFront: Yup.string().required("*ID front image is required"),
-    idBack: Yup.string().required("*ID back image is required"),
-    licenseFront: Yup.string().required("*License front image is required"),
-    licenseBack: Yup.string().required("*License back image is required"),
-    demeritPoint: Yup.string().required("*Demerit point is required")
-      .typeError("*Demerit point must be a number"),
     loginType: Yup.string().required("*Login type is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      firstName: "Harishragav",
-      lastName: "B",
-      countryCode: "+91",
-      mobileNo: "63859213",
-      email: "harish@gmail.com",
-      password: "Harish@123",
-      refCode: "HR123",
-      termsCondition: "Yes",
-      driverId: "HR6385",
+      firstName: "",
+      lastName: "",
+      countryCode: "",
+      mobileNo: "",
+      email: "",
+      password: "",
+      refCode: "",
+      termsCondition: "",
+      driverId: "",
       driverPhoto: "",
       idFront: "",
       idBack: "",
       licenseFront: "",
       licenseBack: "",
-      demeritPoint: "12",
-      loginType: "Temporary"
+      demeritPoint: "",
+      loginType: ""
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("drivermanagement:", values);
-      // setLoading(true);
-      //   try {
-      //     const response = await api.post(`createMstrItems`, values);
-      //     console.log(response);
-      //     if (response.status === 201) {
-      //       toast.success(response.data.message);
-      //       console.log("Toast : ", response.data.message);
-      //       navigate("/items");
-      //     } else {
-      //       toast.error(response?.data?.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error("Error fetching data: ", error?.response?.data?.message);
-      //   } finally {
-      //     setLoading(false);
-      //   }
+      const { driverPhoto, idFront, idBack, licenseFront, licenseBack,cPassword, ...value } = values;
+
+      const formData = new FormData();
+      if (driverPhoto) formData.append('driverPhoto', driverPhoto);
+      if (idFront) formData.append('idFront', idFront);
+      if (idBack) formData.append('idBack', idBack);
+      if (licenseFront) formData.append('licenseFront', licenseFront);
+      if (licenseBack) formData.append('licenseBack', licenseBack);
+      if (value.demeritPoint) formData.append('demeritPoint', value.demeritPoint);
+
+      setLoading(true);
+        try {
+          const response = await driverApi.put(`driver/updateDriverDetails/${id}`, value);
+          if (response.status === 201) {
+            formData.append("driverId",id)
+            try {
+              const response = await driverApi.post(`driver/update`, formData);
+              if (response.status === 201 || 200) {
+                toast.success(response.data.message);
+                navigate("/drivermanagement")
+              }
+            } catch (error) {
+              toast.error("Error fetching data: ", error?.response?.data?.message);
+            }
+          } else {
+            toast.error(response?.data?.message);
+          }
+        } catch (error) {
+          toast.error("Error fetching data: ", error?.response?.data?.message);
+        } finally {
+          setLoading(false);
+        }
     },
   });
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-  const toggleCPasswordVisibility = () => {
-    setCPasswordVisible(!cPasswordVisible);
-  };
+  useEffect(() => {
+    const getData = async () => {
+      setLoader(true)
+      try {
+        const response = await driverApi.get(`/driver/byId/${id}`);
+        formik.setValues(response.data.responseBody);
+      } catch (error) {
+        toast.error("Error Fetch Data ", error);
+      }finally{
+        setLoader(false)
+      }
+    };
+    getData();
+  }, []);
+
   return (
+    <>
+     {loading ? (
+        <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+      </div>
+      <h3 className="darksoul-loader-h">Trucklah</h3>
+    </div>
+      ) : (
     <div className="container-fluid px-2 pb-2 minHeight m-0">
       <form onSubmit={formik.handleSubmit}>
         <div className="card shadow border-0 mb-2 top-header">
@@ -200,7 +232,7 @@ function DriverManagementEdit() {
                         ? "is-invalid"
                         : ""
                         }`}
-                      style={{ maxWidth: "80px" }} // Adjust width as needed
+                      style={{ maxWidth: "80px" }}
                       {...formik.getFieldProps("countryCode")}
                     >
                       {/* <option value=""></option> */}
@@ -246,7 +278,7 @@ function DriverManagementEdit() {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Password <span className="text-danger">*</span>
                 </label>
@@ -269,7 +301,7 @@ function DriverManagementEdit() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Reference Code <span className="text-danger">*</span>
@@ -520,6 +552,8 @@ function DriverManagementEdit() {
         </div>
       </form>
     </div>
+      )}
+    </>
   );
 }
 

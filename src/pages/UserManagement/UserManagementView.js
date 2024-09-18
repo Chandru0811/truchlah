@@ -12,12 +12,15 @@ function UserManagementView() {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true)
       try {
         const response = await userApi.get(`/user/byId/${id}`,
         );
         setData(response.data.responseBody);
       } catch (error) {
         toast.error("Error Fetching Data ", error)
+      }finally{
+      setLoading(false)
       }
     };
     getData();
@@ -25,15 +28,17 @@ function UserManagementView() {
 
   return (
     <div>
-      {/* {loading ? (
-      <div className="loader-container">
-       <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
-    </div>
+       {loading ? (
+        <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
       </div>
-    ) : ( */}
+      <h3 className="darksoul-loader-h">Trucklah</h3>
+    </div>
+      ) : (
 
       <div className="container-fluid px-2 minHeight">
         <div className="card shadow border-0 mb-2 top-header">
@@ -112,7 +117,7 @@ function UserManagementView() {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">
-                     : {(data.countryCode?data.countryCode:" " + " " + data.mobileNo) || ""}
+                     : {(data.countryCode|| " ") + " " + (data.mobileNo ||" ")}
                     </p>
                   </div>
                 </div>
@@ -125,11 +130,11 @@ function UserManagementView() {
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">: {data?.roles[0]?.name || ""} </p>
+                    <p className="text-muted text-sm">: {data.roles && data?.roles[0]?.name || ""} </p>
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 col-12">
+              {/* <div className="col-md-6 col-12">
                 <div className="row mb-3">
                   <div className="col-6 d-flex justify-content-start align-items-center">
                     <p className="text-sm">
@@ -140,13 +145,13 @@ function UserManagementView() {
                     <p className="text-muted text-sm">: {data.loginType || ""} </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
             </div>
           </div>
         </div>
       </div>
-      {/* )} */}
+     )} 
     </div>
   );
 }

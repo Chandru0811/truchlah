@@ -1,73 +1,100 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import api from "../../config/URL";
-// import toast from "react-hot-toast";
+import { userApi } from "../../config/URL";
+import toast from "react-hot-toast";
 
 function SupportTeamManagementEdit() {
-  const [isSalesChecked, setIsSalesChecked] = useState(true);
-  const [isPurchaseChecked, setIsPurchaseChecked] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
-    itemCode: Yup.string().required("*Code is required"),
-    itemName: Yup.string().required("*Name is required"),
+    firstName: Yup.string().required("*First Name is required"),
+    lastName: Yup.string().required("*Last Name is required"),
+    email: Yup.string().email("*Invalid email").required("*Email is required"),
+    // password: Yup.string().required("*Password is required"),
+    countryCode: Yup.string().required("*Country code is required"),
+    mobileNo: Yup.number()
+      .required("*Phone number is required")
+      .test("mobileNo-length", function (value) {
+        const { countryCode } = this.parent;
+        if (countryCode === "65") {
+          return value?.toString().length === 8
+            ? true
+            : this.createError({
+                message: "Phone number must be 8 digits only",
+              });
+        }
+        if (countryCode === "91") {
+          return value?.toString().length === 10
+            ? true
+            : this.createError({
+                message: "Phone number must be 10 digits only",
+              });
+        }
+        return false;
+      }),
+    // refCode: Yup.string().required("*Reference Code is required"),
+    loginType: Yup.string().required("*Login Type is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       firstName: "",
-            lastName: "string",
-            password: "string",
-            email: "string",
-            mobileNo: 0,
-            countryCode: "string",
-            refCode: "string",
-            loginType: "string",
+      lastName: "",
+      password: "",
+      email: "",
+      mobileNo: "",
+      countryCode: "",
+      refCode: "",
+      loginType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log("additems:", values);
       setLoading(true);
-    //   try {
-    //     const response = await api.post(`createMstrItems`, values);
-    //     console.log(response);
-    //     if (response.status === 201) {
-    //       toast.success(response.data.message);
-    //       console.log("Toast : ", response.data.message);
-    //       navigate("/items");
-    //     } else {
-    //       toast.error(response?.data?.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error("Error fetching data: ", error?.response?.data?.message);
-    //   } finally {
-    //     setLoading(false);
-    //   }
+      try {
+        const response = await userApi.put(`user/UserDetails/${id}`, values);
+        console.log(response);
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/supportteammanagement");
+        } else {
+          toast.error(response?.data?.message);
+        }
+      } catch (error) {
+        toast.error("Error: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
-  const handleSalesCheckboxChange = () => {
-    setIsSalesChecked((prevState) => !prevState);
-    // if (isSalesChecked) {
-    //   formik.setFieldValue("salesPrice", "");
-    //   formik.setFieldValue("salesAcc", "");
-    //   formik.setFieldValue("salesDesc", "");
-    // }
-  };
-
-  const handlePurchaseCheckboxChange = () => {
-    setIsPurchaseChecked((prevState) => !prevState);
-    // if (isPurchaseChecked) {
-    //   formik.setFieldValue("costPrice", "");
-    //   formik.setFieldValue("purchaseAcc", "");
-    //   formik.setFieldValue("vendor", "");
-    //   formik.setFieldValue("purchaseDesc", "");
-    // }
-  };
-
+  useEffect(() => {
+    const getItemData = async () => {
+      setLoading(true);
+      try {
+        const response = await userApi.get(`user/byId/${id}`);
+        if (response.status === 200) {
+          formik.setValues({
+            ...formik.values,
+            firstName: response.data.responseBody.firstName,
+            lastName: response.data.responseBody.lastName,
+            email: response.data.responseBody.email,
+            mobileNo: response.data.responseBody.mobileNo,
+            countryCode: response.data.responseBody.countryCode,
+          });
+        }
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemData();
+  }, [id]);
   return (
     <div className="container-fluid p-2 minHeight m-0">
       <form onSubmit={formik.handleSubmit}>
@@ -76,7 +103,9 @@ function SupportTeamManagementEdit() {
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
-                  <h1 className="h4 ls-tight headingColor">Edit Support Team Management</h1>
+                  <h1 className="h4 ls-tight headingColor">
+                    Edit Support Team
+                  </h1>
                 </div>
               </div>
               <div className="col-auto">
@@ -97,9 +126,8 @@ function SupportTeamManagementEdit() {
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      <span></span>
+                      <span>Save</span>
                     )}
-                    &nbsp;<span>Save</span>
                   </button>
                 </div>
               </div>
@@ -109,6 +137,7 @@ function SupportTeamManagementEdit() {
         <div className="card shadow border-0 my-2">
           <div className="container mb-5">
             <div className="row py-4">
+              {/* First Name */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   First Name <span className="text-danger">*</span>
@@ -116,176 +145,180 @@ function SupportTeamManagementEdit() {
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="itemCode"
+                    name="firstName"
                     className={`form-control ${
-                      formik.touched.itemCode && formik.errors.itemCode
+                      formik.touched.firstName && formik.errors.firstName
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("itemCode")}
+                    {...formik.getFieldProps("firstName")}
                   />
-                  {formik.touched.itemCode && formik.errors.itemCode && (
+                  {formik.touched.firstName && formik.errors.firstName && (
                     <div className="invalid-feedback">
-                      {formik.errors.itemCode}
+                      {formik.errors.firstName}
                     </div>
                   )}
                 </div>
               </div>
+
+              {/* Last Name */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                 Last Name <span className="text-danger">*</span>
+                  Last Name <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="itemName"
+                    name="lastName"
                     className={`form-control ${
-                      formik.touched.itemName && formik.errors.itemName
+                      formik.touched.lastName && formik.errors.lastName
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("itemName")}
+                    {...formik.getFieldProps("lastName")}
                   />
-                  {formik.touched.itemName && formik.errors.itemName && (
+                  {formik.touched.lastName && formik.errors.lastName && (
                     <div className="invalid-feedback">
-                      {formik.errors.itemName}
+                      {formik.errors.lastName}
                     </div>
                   )}
                 </div>
               </div>
+
+              {/* Email */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Email <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
-                    type="text"
-                    name="itemCode"
+                    type="email"
+                    name="email"
                     className={`form-control ${
-                      formik.touched.itemCode && formik.errors.itemCode
+                      formik.touched.email && formik.errors.email
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("itemCode")}
+                    {...formik.getFieldProps("email")}
                   />
-                  {formik.touched.itemCode && formik.errors.itemCode && (
+                  {formik.touched.email && formik.errors.email && (
                     <div className="invalid-feedback">
-                      {formik.errors.itemCode}
+                      {formik.errors.email}
                     </div>
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
+
+              {/* Password */}
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                 Password <span className="text-danger">*</span>
+                  Password <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
-                    type="text"
-                    name="itemName"
+                    type="password"
+                    name="password"
                     className={`form-control ${
-                      formik.touched.itemName && formik.errors.itemName
+                      formik.touched.password && formik.errors.password
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("itemName")}
+                    {...formik.getFieldProps("password")}
                   />
-                  {formik.touched.itemName && formik.errors.itemName && (
+                  {formik.touched.password && formik.errors.password && (
                     <div className="invalid-feedback">
-                      {formik.errors.itemName}
+                      {formik.errors.password}
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
+
+              {/* Mobile Number */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Mobile Number <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
+                  <div className="input-group">
+                    <select
+                      name="countryCode"
+                      className={`form-select form-select-sm ${
+                        formik.touched.countryCode && formik.errors.countryCode
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      style={{ maxWidth: "80px" }}
+                      {...formik.getFieldProps("countryCode")}
+                    >
+                      <option value=""></option>
+                      <option value="91">+91</option>
+                      <option value="65">+65</option>
+                    </select>
+                    <input
+                      type="text"
+                      name="mobileNo"
+                      placeholder="Mobile Number"
+                      className={`form-control ${
+                        formik.touched.mobileNo && formik.errors.mobileNo
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("mobileNo")}
+                    />
+                    {formik.touched.mobileNo && formik.errors.mobileNo && (
+                      <div className="invalid-feedback">
+                        {formik.errors.mobileNo}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Reference Code */}
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">Reference Code</label>
+                <div className="mb-3">
                   <input
                     type="text"
-                    name="itemCode"
+                    name="refCode"
                     className={`form-control ${
-                      formik.touched.itemCode && formik.errors.itemCode
+                      formik.touched.refCode && formik.errors.refCode
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("itemCode")}
+                    {...formik.getFieldProps("refCode")}
                   />
-                  {formik.touched.itemCode && formik.errors.itemCode && (
+                  {formik.touched.refCode && formik.errors.refCode && (
                     <div className="invalid-feedback">
-                      {formik.errors.itemCode}
+                      {formik.errors.refCode}
                     </div>
                   )}
                 </div>
               </div>
+
+              {/* Login Type */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                 Country Code <span className="text-danger">*</span>
+                  Login Type <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="itemName"
+                    name="loginType"
                     className={`form-control ${
-                      formik.touched.itemName && formik.errors.itemName
+                      formik.touched.loginType && formik.errors.loginType
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("itemName")}
+                    {...formik.getFieldProps("loginType")}
                   />
-                  {formik.touched.itemName && formik.errors.itemName && (
+                  {formik.touched.loginType && formik.errors.loginType && (
                     <div className="invalid-feedback">
-                      {formik.errors.itemName}
+                      {formik.errors.loginType}
                     </div>
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                  Reference Code <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="itemCode"
-                    className={`form-control ${
-                      formik.touched.itemCode && formik.errors.itemCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("itemCode")}
-                  />
-                  {formik.touched.itemCode && formik.errors.itemCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.itemCode}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                 Login Type <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="itemName"
-                    className={`form-control ${
-                      formik.touched.itemName && formik.errors.itemName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("itemName")}
-                  />
-                  {formik.touched.itemName && formik.errors.itemName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.itemName}
-                    </div>
-                  )}
-                </div>
-              </div>
-           
             </div>
           </div>
         </div>
@@ -294,4 +327,4 @@ function SupportTeamManagementEdit() {
   );
 }
 
-export default SupportTeamManagementEdit
+export default SupportTeamManagementEdit;

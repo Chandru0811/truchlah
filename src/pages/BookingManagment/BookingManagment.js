@@ -4,6 +4,8 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
+import { bookingApi } from "../../config/URL";
+import toast from "react-hot-toast";
 
 // import DeleteModel from "../../components/common/DeleteModel";
 // import toast from "react-hot-toast";
@@ -21,60 +23,61 @@ const BookingManagment = () => {
       table.destroy();
     };
   }, []);
-//   useEffect(() => {
-//     if (!loading) {
-//       initializeDataTable();
-//     }
-//     return () => {
-//       destroyDataTable();
-//     };
-//   }, [loading]);
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
 
-  // const initializeDataTable = () => {
-  //   if ($.fn.DataTable.isDataTable(tableRef.current)) {
-  //     // DataTable already initialized, no need to initialize again
-  //     return;
-  //   }
-  //   $(tableRef.current).DataTable();
-  // };
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
+    }
+    $(tableRef.current).DataTable();
+  };
 
-  // const destroyDataTable = () => {
-  //   const table = $(tableRef.current).DataTable();
-  //   if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-  //     table.destroy();
-  //   }
-  // };
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
 
-//   const refreshData = async () => {
-//     destroyDataTable();
-//     setLoading(true);
-//     try {
-//       const response = await api.get("getAllMstrItems");
-//       setDatas(response.data);
-//       initializeDataTable(); 
-//     } catch (error) {
-//       toast.error("Error refreshing data:", error?.response?.data?.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await bookingApi.get("booking/getAllBookingDetailsWithOutToken");
+      setDatas(response.data);
+      initializeDataTable(); 
+    } catch (error) {
+      toast.error("Error refreshing data:", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   useEffect(() => {
-//     const getItemData = async () => {
-//       try {
-//         const resposnse = await api.get(
-//           "getAllMstrItems"
-//         );
-//         setDatas(resposnse.data);
-//       } catch (error) {
-//         toast.error("Error fetching data: ", error?.response?.data?.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     getItemData();
-//   }, []);
+  useEffect(() => {
+    const getItemData = async () => {
+      try {
+        const resposnse = await bookingApi.get(
+          "booking/getAllBookingDetailsWithOutToken"
+        );
+        setDatas(resposnse.data);
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItemData();
 
+  }, []);
+console.log("object1",datas)
   return (
     <div>
     {/* {loading ? ( */}
@@ -116,13 +119,13 @@ const BookingManagment = () => {
                   S.NO
                 </th>
                 <th scope="col" className="text-center">
-                  Name
+                Delivery Date
                 </th>
                 <th scope="col" className="text-center">
-                  Email
+                Booking Time
                 </th>
                 <th scope="col" className="text-center">
-                  Mobile Number
+                Est Km
                 </th>
                 {/* <th scope="col" className="text-center">
                   Unit
@@ -135,8 +138,8 @@ const BookingManagment = () => {
             <tbody>
               {/* {datas.map((data, index) => ( */}
                 <tr>
-                  <td className="text-center">1</td>
-                  <td className="text-center">itemCode</td>
+                  <td className="text-center">{+1}</td>
+                  <td className="text-center"></td>
                   <td className="text-center">itemName</td>
                   <td className="text-center">costPrice</td>
                   {/* <td className="text-center">unit</td> */}
@@ -160,7 +163,7 @@ const BookingManagment = () => {
                     </div>
                   </td>
                 </tr>
-              {/* ))} */}
+              {/* ))}  */}
             </tbody>
           </table>
         </div>

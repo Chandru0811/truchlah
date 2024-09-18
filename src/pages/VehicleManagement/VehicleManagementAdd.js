@@ -65,9 +65,7 @@ function VehicleManagementAdd() {
           `vehicle/vehicleType/create`,
           values,
         );
-
         console.log(response);
-
         if (response.status === 200) {
           toast.success(response.data.message);
           console.log("Toast : ", response.data.message);
@@ -94,7 +92,7 @@ function VehicleManagementAdd() {
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
                   <h1 className="h4 ls-tight headingColor">
-                    Add Vehicle Management
+                    Add Vehicle
                   </h1>
                 </div>
               </div>
@@ -127,7 +125,7 @@ function VehicleManagementAdd() {
         <div className="card shadow minHeight border-0 my-2">
           <div className="container mb-5">
             <div className="row py-4">
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
                   Vehicle Type ID <span className="text-danger">*</span>
                 </label>
@@ -149,10 +147,10 @@ function VehicleManagementAdd() {
                       </div>
                     )}
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
-                  Type <span className="text-danger">*</span>
+                 Vehicle Name <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
@@ -172,7 +170,7 @@ function VehicleManagementAdd() {
 
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
-                  Base Fare <span className="text-danger">*</span>
+                  Base charge<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input

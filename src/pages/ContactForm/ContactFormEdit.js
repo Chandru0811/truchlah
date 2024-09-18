@@ -9,6 +9,7 @@ function ContactFormEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   // Validation schema
   const validationSchema = Yup.object({
@@ -51,7 +52,7 @@ function ContactFormEdit() {
   // Fetching existing data
   useEffect(() => {
     const getItemData = async () => {
-      setLoading(true);
+      setLoader(true);
       try {
         const response = await userApi.get(`/userContactPage/byContactId/${id}`);
         formik.setValues({
@@ -63,13 +64,25 @@ function ContactFormEdit() {
       } catch (error) {
         toast.error(`Error fetching data: ${error?.response?.data?.message || error.message}`);
       } finally {
-        setLoading(false);
+        setLoader(false);
       }
     };
     getItemData();
   }, [id]);
 
   return (
+    <div>
+       {loader ? (
+        <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+      </div>
+      <h3 className="darksoul-loader-h">Trucklah</h3>
+    </div>
+      ) : (
     <div className="container-fluid p-2 minHeight m-0">
       <form onSubmit={formik.handleSubmit}>
         <div className="card shadow border-0 mb-2 top-header">
@@ -174,6 +187,8 @@ function ContactFormEdit() {
           </div>
         </div>
       </form>
+    </div>
+      )}
     </div>
   );
 }

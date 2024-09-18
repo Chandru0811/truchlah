@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { userApi } from "../../config/URL";
 // import api from "../../config/URL";
 // import toast from "react-hot-toast";
 
@@ -15,33 +17,33 @@ function SupportTeamManagementAdd() {
   const validationSchema = Yup.object({
     firstName: Yup.string().required("*First Name is required"),
     lastName: Yup.string().required("*Last Name is required"),
-    password: Yup.string().required("*Password is required"),
+    password: Yup.string()
+  .required('*Password is required')
+  .min(8, '*Password must be at least 8 characters long')
+  .matches(
+    /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+    'Password must contain at least one uppercase, one number, and one special character'
+  ),
     cPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "*Passwords must match")
       .required("*Confirm Password is required"),
     email: Yup.string()
       .email("*Invalid email address")
       .required("*Email is required"),
-
-    countryCode: Yup.string().required("Country code is required"),
-    mobileNo: Yup.string()
-      .required("Phone number is required")
+    countryCode: Yup.string().required("*Country code is required"),
+    mobileNo: Yup.number()
+      .required("*Phone number is required")
       .test("mobileNo-length", function (value) {
         const { countryCode } = this.parent;
-        if (value && /\s/.test(value)) {
-          return this.createError({
-            message: "Phone number should not contain spaces",
-          });
-        }
         if (countryCode === "65") {
-          return value && value.length === 8
+          return value?.toString().length === 8
             ? true
             : this.createError({
                 message: "Phone number must be 8 digits only",
               });
         }
         if (countryCode === "91") {
-          return value && value.length === 10
+          return value?.toString().length === 10
             ? true
             : this.createError({
                 message: "Phone number must be 10 digits only",
@@ -49,7 +51,10 @@ function SupportTeamManagementAdd() {
         }
         return false;
       }),
-    refCode: Yup.string().required("*Reference Code is required"),
+    // refCode: Yup.string().required("*Reference Code is required"),
+    loginType: Yup.string().required("*Login Type is required"),
+    agreeConditionOne: Yup.boolean().oneOf([true], "*This condition must be accepted").required(),
+    // agreeConditionTwo: Yup.boolean().oneOf([true], "*This condition must be accepted").required(),
   });
 
   const formik = useFormik({
@@ -62,26 +67,33 @@ function SupportTeamManagementAdd() {
       mobileNo: "",
       countryCode: "",
       refCode: "",
+      loginType: "",
+      agreeConditionOne: false,
+      agreeConditionTwo: false,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("additems:", values);
-      // setLoading(true);
-      //   try {
-      //     const response = await api.post(`createMstrItems`, values);
-      //     console.log(response);
-      //     if (response.status === 201) {
-      //       toast.success(response.data.message);
-      //       console.log("Toast : ", response.data.message);
-      //       navigate("/items");
-      //     } else {
-      //       toast.error(response?.data?.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error("Error fetching data: ", error?.response?.data?.message);
-      //   } finally {
-      //     setLoading(false);
-      //   }
+      values.agreeConditionTwo = true
+      setLoading(true);
+      try {
+        const response = await userApi.post(`staff/signup`, values);
+        console.log(response);
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/supportteammanagement");
+        } else {
+          toast.error(response?.data?.message);
+        }
+      } catch (error) {
+        if (error.response.status ===409){
+          toast.error(error?.response?.data?.message);
+        }else{
+          toast.error(error?.response?.data?.errorList[0]?.errorMessage);
+        }
+        
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -91,6 +103,7 @@ function SupportTeamManagementAdd() {
   const toggleCPasswordVisibility = () => {
     setCPasswordVisible(!cPasswordVisible);
   };
+
   return (
     <div className="container-fluid px-2 pb-2 minHeight m-0">
       <form onSubmit={formik.handleSubmit}>
@@ -130,9 +143,11 @@ function SupportTeamManagementAdd() {
             </div>
           </div>
         </div>
-        <div className="card shadow  border-0 my-2" >
+
+        <div className="card shadow border-0 my-2">
           <div className="container mb-5">
             <div className="row py-4">
+              {/* Input Fields */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   First Name <span className="text-danger">*</span>
@@ -155,6 +170,7 @@ function SupportTeamManagementAdd() {
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Last Name <span className="text-danger">*</span>
@@ -177,6 +193,7 @@ function SupportTeamManagementAdd() {
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Email <span className="text-danger">*</span>
@@ -199,6 +216,7 @@ function SupportTeamManagementAdd() {
                   )}
                 </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Mobile Number <span className="text-danger">*</span>
@@ -212,7 +230,7 @@ function SupportTeamManagementAdd() {
                           ? "is-invalid"
                           : ""
                       }`}
-                      style={{ maxWidth: "80px" }} // Adjust width as needed
+                      style={{ maxWidth: "80px" }}
                       {...formik.getFieldProps("countryCode")}
                     >
                       <option value=""></option>
@@ -238,31 +256,38 @@ function SupportTeamManagementAdd() {
                   </div>
                 </div>
               </div>
+
+              {/* Password Fields */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Password <span className="text-danger">*</span>
                 </label>
                 <div className="input-group mb-3">
-                    <input
-                      type={passwordVisible ? "text" : "password"}
-                      name="password"
-                      className={`form-control ${
-                        formik.touched.password && formik.errors.password
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("password")}
-                    />
-                    <span className="input-group-text" onClick={togglePasswordVisibility}>
-                      {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                    </span>
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    className={`form-control ${
+                      formik.touched.password && formik.errors.password
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("password")}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                  </button>
                   {formik.touched.password && formik.errors.password && (
                     <div className="invalid-feedback">
                       {formik.errors.password}
                     </div>
                   )}
-                  </div>
+                </div>
               </div>
+
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Confirm Password <span className="text-danger">*</span>
@@ -278,9 +303,13 @@ function SupportTeamManagementAdd() {
                     }`}
                     {...formik.getFieldProps("cPassword")}
                   />
-                  <span className="input-group-text" onClick={toggleCPasswordVisibility}>
-                      {cPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                    </span>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={toggleCPasswordVisibility}
+                  >
+                    {cPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+                  </button>
                   {formik.touched.cPassword && formik.errors.cPassword && (
                     <div className="invalid-feedback">
                       {formik.errors.cPassword}
@@ -288,6 +317,8 @@ function SupportTeamManagementAdd() {
                   )}
                 </div>
               </div>
+
+              {/* Ref Code */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Reference Code <span className="text-danger">*</span>
@@ -309,6 +340,109 @@ function SupportTeamManagementAdd() {
                     </div>
                   )}
                 </div>
+              </div>
+
+              {/* Login Type */}
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Login Type <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <select
+                    name="loginType"
+                    className={`form-control ${
+                      formik.touched.loginType && formik.errors.loginType
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("loginType")}
+                  >
+                    <option value=""></option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="SUPPORT">Support</option>
+                  </select>
+                  {formik.touched.loginType && formik.errors.loginType && (
+                    <div className="invalid-feedback">
+                      {formik.errors.loginType}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Agreement Checkboxes */}
+              {/* <div className="col-md-6 col-12 mb-2">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    name="agreeConditionOne"
+                    className={`form-check-input ${
+                      formik.touched.agreeConditionOne &&
+                      formik.errors.agreeConditionOne
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("agreeConditionOne")}
+                  />
+                  <label className="form-check-label">
+                    I agree to the first condition.
+                  </label>
+                  {formik.touched.agreeConditionOne &&
+                    formik.errors.agreeConditionOne && (
+                      <div className="invalid-feedback">
+                        {formik.errors.agreeConditionOne}
+                      </div>
+                    )}
+                </div>
+
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    name="agreeConditionTwo"
+                    className={`form-check-input ${
+                      formik.touched.agreeConditionTwo &&
+                      formik.errors.agreeConditionTwo
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("agreeConditionTwo")}
+                  />
+                  <label className="form-check-label">
+                    I agree to the second condition.
+                  </label>
+                  {formik.touched.agreeConditionTwo &&
+                    formik.errors.agreeConditionTwo && (
+                      <div className="invalid-feedback">
+                        {formik.errors.agreeConditionTwo}
+                      </div>
+                    )}
+                </div>
+              </div> */}
+              <div className=" col-12 mb-2">
+                <label className="form-label">Terms Condition</label>
+                <div className="form-check  d-flex ">
+                  <input
+                    type="checkbox"
+                    id="termsCheckbox"
+                    name="agreeConditionOne"
+                    className={`form-check-input ${
+                      formik.touched.agreeConditionOne &&
+                      formik.errors.agreeConditionOne
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("agreeConditionOne")}
+                  />
+                  &nbsp; &nbsp;{" "}
+                  <label className="form-check-label" htmlFor="termsCheckbox">
+                    I agree all statements in Terms and Conditions.
+                  </label>
+                </div>
+                  {formik.touched.agreeConditionOne &&
+                    formik.errors.agreeConditionOne && (
+                      <small className="text-danger ">
+                        {formik.errors.agreeConditionOne}
+                      </small>
+                    )}
               </div>
             </div>
           </div>

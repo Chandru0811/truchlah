@@ -7,14 +7,10 @@ import DeleteModel from "../../Components/DeleteModel";
 import { userApi } from "../../config/URL";
 import { toast } from "react-toastify";
 
-// import DeleteModel from "../../components/common/DeleteModel";
-// import toast from "react-hot-toast";
-// import api from "../../config/URL";
-
 const BannerAndOffer = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const table = $(tableRef.current).DataTable();
@@ -82,23 +78,24 @@ const BannerAndOffer = () => {
   }
 
   return (
-    <div>
-    {/* {loading ? ( */}
-      {/* <div className="loader-container">
-          <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
-    </div>
-      </div> */}
-    {/* ) : ( */}
     <div className="container-fluid px-2 minHeight">
+     {loading ? (
+        <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+      </div>
+      <h3 className="darksoul-loader-h">Trucklah</h3>
+    </div>
+      ) : (
       <div className="card shadow border-0 my-2">
         <div className="container-fluid pt-4 pb-3">
           <div className="row align-items-center justify-content-between ">
             <div className="col">
               <div className="d-flex align-items-center gap-4">
-                <h1 className="h4 ls-tight headingColor ">Banner And offer</h1>
+                <h1 className="h4 ls-tight headingColor ">Banner and Offer</h1>
               </div>
             </div>
             <div className="col-auto">
@@ -118,7 +115,7 @@ const BannerAndOffer = () => {
           <table ref={tableRef} className="display">
             <thead className="thead-light">
               <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                <th scope="col" style={{ whiteSpace: "nowrap" }} className="text-center">
                   S.NO
                 </th>
                 <th scope="col" className="text-center">
@@ -141,7 +138,7 @@ const BannerAndOffer = () => {
                   <td className="text-center">{index +1}</td>
                   <td className="text-center">{data.description}</td>
                   {/* <td className="text-center">itemName</td> */}
-                  <td>
+                  <td className="text-center">
                   {data.status === "Active" ? (
                     <span className="badge active">Active</span>
                   ) : (
@@ -175,9 +172,8 @@ const BannerAndOffer = () => {
         </div>
         
       </div>
+   )} 
     </div>
-  {/* )} */}
-  </div>
   );
 };
 

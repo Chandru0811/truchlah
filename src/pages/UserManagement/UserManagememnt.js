@@ -41,7 +41,7 @@ const UserManagement = () => {
   };
 
   const funDelete = (userId) => {
-    return userApi.delete(`deleteMstrItem/${userId}`)
+    return userApi.delete(`deleteUserDetails/${userId}`)
   }
 
   const refreshData = async () => {
@@ -49,7 +49,7 @@ const UserManagement = () => {
     setLoading(true);
     try {
       const response = await userApi.get("/user");
-      setDatas(response.data);
+      setDatas(response.data.responseBody);
       initializeDataTable();
     } catch (error) {
       toast.error("Error refreshing data:", error?.response?.data?.message);
@@ -75,15 +75,17 @@ const UserManagement = () => {
 
   return (
     <div>
-      {/* {loading ? ( */}
-      {/* <div className="loader-container">
-          <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
+      {loading ? (
+      <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+      </div>
+      <h3 className="darksoul-loader-h">Trucklah</h3>
     </div>
-      </div> */}
-      {/* ) : ( */}
+      ) : (
       <div className="container-fluid px-2 minHeight">
         <div className="card shadow border-0 my-2">
           <div className="container-fluid pt-4 pb-3">
@@ -166,7 +168,7 @@ const UserManagement = () => {
 
         </div>
       </div>
-      {/* )} */}
+       )}
     </div>
   );
 };

@@ -101,11 +101,11 @@ function AdminLayout({ handleLogout }) {
                 element={<SupportTeamManagementAdd />}
               />
               <Route
-                path="/supportteammanagement/edit"
+                path="/supportteammanagement/edit/:id"
                 element={<SupportTeamManagementEdit />}
               />
               <Route
-                path="/supportteammanagement/view"
+                path="/supportteammanagement/view/:id"
                 element={<SupportTeamManagementView />}
               />
 

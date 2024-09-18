@@ -23,23 +23,24 @@ function VehicleManagementView() {
 
   return (
     <div>
-      {/* {loading ? (
-      <div className="loader-container">
-       <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
-    </div>
+      {loading ? (
+      <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
       </div>
-    ) : ( */}
-
+      <h3 className="darksoul-loader-h">Trucklah</h3>
+    </div>
+    ) : (
       <div className="container-fluid px-2 minHeight">
         <div className="card shadow border-0 mb-2 top-header">
           <div className="container-fluid py-4">
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
-                  <h1 className="h4 ls-tight headingColor">View Vehicle Management</h1>
+                  <h1 className="h4 ls-tight headingColor">View Vehicle</h1>
                 </div>
               </div>
               <div className="col-auto">
@@ -252,7 +253,7 @@ function VehicleManagementView() {
           </div>
         </div>
       </div>
-      {/* )} */}
+     )} 
     </div>
   );
 }

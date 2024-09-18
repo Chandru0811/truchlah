@@ -25,15 +25,17 @@ function BannerAndOfferView() {
 
   return (
     <div>
-      {/* {loading ? (
-        <div className="loader-container">
-          <div className="Loader-Div">
-            <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-              <polygon fill="transparent" stroke="blue" strokeWidth="1.3" points="16,0 32,32 0,32"></polygon>
-            </svg>
-          </div>
-        </div>
-      ) : ( */}
+      {loading ? (
+        <div className="darksoul-layout">
+      <div className="darksoul-grid">
+        <div className="item1"></div>
+        <div className="item2"></div>
+        <div className="item3"></div>
+        <div className="item4"></div>
+      </div>
+      <h3 className="darksoul-loader-h">Trucklah</h3>
+    </div>
+      ) : (
         <div className="container-fluid px-2 minHeight">
           <div className="card shadow border-0 mb-2 top-header">
             <div className="container-fluid py-4">
@@ -107,7 +109,7 @@ function BannerAndOfferView() {
             </div>
           </div>
         </div>
-      {/* )} */}
+      )} 
     </div>
   );
 }
