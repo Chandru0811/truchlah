@@ -58,6 +58,7 @@ function AdminLayout({ handleLogout }) {
           <main className="py-1 " style={{ background: "#ECECEC" }}>
             <Routes>
               <Route path="/" element={<DashboardAdmin />} />
+              <Route path="*" element={<DashboardAdmin />} />
               <Route
                 path="/vehiclemanagement"
                 element={<VehicleManagement />}

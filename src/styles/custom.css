@@ -1811,17 +1811,17 @@ color: #0077ff !important;
 
 .badge.active {
   color: #fff;
-  background-color: #5cb85c; /* Green color */
+  background-color: #5cb85c; 
   display: inline-block;
-  padding: 0.2em 0.4em; /* Smaller padding */
-  font-size: 1em; /* Smaller font size */
-  font-weight: 700;
+  padding: 0.25em 0.45em; 
+  font-size: 15px; 
+  font-weight: bold;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   align-items: center;
   vertical-align: baseline;
-  border-radius: 0.2rem; /* Slightly smaller border radius */
+  border-radius: 0.3rem; 
 }
 
 
@@ -1841,4 +1841,8 @@ text-align: end;
 }
 .dt-paging{
   text-align: end; 
+}
+
+[aria-label="ACTION: Activate to sort: Activate to sort"] .dt-column-order{
+  display: none ;
 }

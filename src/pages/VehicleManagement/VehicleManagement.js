@@ -121,10 +121,10 @@ const VehicleManagement = () => {
                     Vehicle Type
                   </th>
                   <th scope="col" className="text-center">
-                    Base Fare
+                    Base Charge
                   </th>
                   <th scope="col" className="text-center">
-                    Per KM Fare
+                    Per KM Charge
                   </th>
                   <th scope="col" className="text-center">
                     ACTION

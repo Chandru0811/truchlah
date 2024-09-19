@@ -82,6 +82,8 @@ function Login({ handleLogin, handleAdminLogin }) {
         }
       } catch (error) {
         if (error.response.status === 400) {
+          toast.error(error.response.data.errorList[0].errorMessage)
+          if(error.response.data.errorList[0].countryCode){  
           const mobileNos = error.response.data.errorList[0].mobileNo;
           const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
           try {
@@ -93,6 +95,7 @@ function Login({ handleLogin, handleAdminLogin }) {
             }
           } catch (error) {
             toast.error(error);
+          }
           }
         } else {
           toast.error(error);

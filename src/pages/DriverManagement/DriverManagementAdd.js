@@ -89,7 +89,7 @@ function DriverManagementAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("drivermanagement:", values);
-       
+  
       const formData = new FormData();
       formData.append("firstName", values.firstName);
       formData.append("lastName", values.lastName);
@@ -98,11 +98,10 @@ function DriverManagementAdd() {
       formData.append("email", values.email);
       formData.append("password", values.password);
       formData.append("refCode", values.refCode);
-      formData.append("termsCondition", values.termsCondition ? true : false);
+      formData.append("termsCondition", values.termsCondition ? 'true' : 'false');
       formData.append("demeritPoint", values.demeritPoint);
       formData.append("loginType", values.loginType);
   
-      // Append file inputs if they exist
       if (values.driverPhoto) {
         formData.append("driverPhoto", values.driverPhoto);
       }
@@ -118,34 +117,23 @@ function DriverManagementAdd() {
       if (values.licenseBack) {
         formData.append("licenseBack", values.licenseBack);
       }
-       setLoading(true);
-        try {
-          const response = await driverApi.post(`driver/createDriverByAdmin`, formData);
-          if (response.status === 201 || 200) {
-                toast.success(response.data.message);
-                navigate("/drivermanagement")
-            // try {
-            //   const response = await driverApi.post(`driver/update`, formData,{
-            //     headers: {
-            //       "Content-Type": "multipart/form-data",
-            //     },
-            //   });
-            //   if (response.status === 201 || 200) {
-            //     toast.success(response.data.message);
-            //     navigate("/drivermanagement")
-            //   }
-            // } catch (error) {
-            //   toast.error("Error fetching data: ", error?.response?.data?.message);
-            // }
-          }
-        } catch (error) {
-          console.log(error?.response?.data?.serviceErrorList[0]?.errorMessage)
-          toast.error(error?.response?.data?.serviceErrorList[0]?.errorMessage);
-        } finally {
-          setLoading(false);
+  
+      setLoading(true);
+      try {
+        const response = await driverApi.post(`driver/createDriverByAdmin`, formData);
+        if (response.status === 201 || response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/drivermanagement");
         }
+      } catch (error) {
+        console.log(error?.response?.data?.serviceErrorList[0]?.errorMessage);
+        toast.error(error?.response?.data?.serviceErrorList[0]?.errorMessage);
+      } finally {
+        setLoading(false);
+      }
     },
   });
+  
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -306,7 +294,7 @@ function DriverManagementAdd() {
                 <label className="form-label">
                   Password <span className="text-danger">*</span>
                 </label>
-                <div className="mb-3 position-relative">
+                <div className="mb-3 input-group">
                   <input
                     type={passwordVisible ? "text" : "password"}
                     name="password"
@@ -317,12 +305,13 @@ function DriverManagementAdd() {
                     }`}
                     {...formik.getFieldProps("password")}
                   />
-                  <span
-                    className="position-absolute end-0 top-50 translate-middle-y me-3 cursor-pointer"
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"  style={{border:"1px solid #dee2e6"}}
                     onClick={togglePasswordVisibility}
                   >
                     {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                  </span>
+                  </button>
                   {formik.touched.password && formik.errors.password && (
                     <div className="invalid-feedback">
                       {formik.errors.password}
@@ -334,7 +323,7 @@ function DriverManagementAdd() {
                 <label className="form-label">
                   Confirm Password <span className="text-danger">*</span>
                 </label>
-                <div className="mb-3 position-relative">
+                <div className="mb-3 input-group">
                   <input
                     type={cPasswordVisible ? "text" : "password"}
                     name="cPassword"
@@ -345,12 +334,13 @@ function DriverManagementAdd() {
                     }`}
                     {...formik.getFieldProps("cPassword")}
                   />
-                  <span
-                    className="position-absolute end-0 top-50 translate-middle-y me-3 cursor-pointer"
+                   <button
+                    type="button"
+                    className="btn btn-outline-secondary" style={{border:"1px solid #dee2e6"}}
                     onClick={toggleCPasswordVisibility}
                   >
                     {cPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                  </span>
+                  </button>
                   {formik.touched.cPassword && formik.errors.cPassword && (
                     <div className="invalid-feedback">
                       {formik.errors.cPassword}
@@ -541,7 +531,7 @@ function DriverManagementAdd() {
               </div>
               <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">Terms Condition</label>
-                <div className="form-check mb-3 d-flex ">
+                <div className="form-check  d-flex ">
                   <input
                     type="checkbox"
                     id="termsCheckbox"
@@ -558,13 +548,13 @@ function DriverManagementAdd() {
                   <label className="form-check-label" htmlFor="termsCheckbox">
                     I agree all statements in Terms and Conditions.
                   </label>
+                </div>
                   {formik.touched.termsCondition &&
                     formik.errors.termsCondition && (
-                      <div className="invalid-feedback">
+                      <small className="text-danger">
                         {formik.errors.termsCondition}
-                      </div>
+                      </small>
                     )}
-                </div>
               </div>
             </div>
           </div>

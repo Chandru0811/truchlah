@@ -122,7 +122,7 @@ const BannerAndOffer = () => {
                   Description
                 </th>
                 <th scope="col" className="text-center">
-                  status
+                  Status
                 </th>
                 {/* <th scope="col" className="text-center">
                   Mobile Number

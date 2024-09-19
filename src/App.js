@@ -9,7 +9,7 @@ import { Toaster } from "react-hot-toast";
 function UserRoute() {
   const [isAuthenticate, setIsAuthenticate] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const [loader, setLoader] = useState(true);
   const handleLogin = () => {
     sessionStorage.setItem("isAuthenticate", true);
     setIsAuthenticate(true);
@@ -34,26 +34,34 @@ function UserRoute() {
   };
 
   useEffect(() => {
+    setLoader(true);
     const isAdminFromStorage = sessionStorage.getItem("isAdmin") === "true";
     const isAuthenticateFromStorage =
       sessionStorage.getItem("isAuthenticate") === "true";
     setIsAuthenticate(isAuthenticateFromStorage);
     setIsAdmin(isAdminFromStorage);
+    setLoader(false)
   }, []);
 
   return (
     <div>
-      <ToastContainer position="top-center" />
-      <Toaster position="top-center" reverseOrder={false} />
-      {isAdmin ? (
-        <AdminLayout handleLogout={handleLogout} />
+      {loader ? (
+        ""
       ) : (
-        <UserLayout
-          isAuthenticate={isAuthenticate}
-          handleAdminLogin={handleAdminLogin}
-          handleLogin={handleLogin}
-          handleLogout={handleLogout}
-        />
+        <>
+          <ToastContainer position="top-center" />
+          <Toaster position="top-center" reverseOrder={false} />
+          {isAdmin ? (
+            <AdminLayout handleLogout={handleLogout} />
+          ) : (
+            <UserLayout
+              isAuthenticate={isAuthenticate}
+              handleAdminLogin={handleAdminLogin}
+              handleLogin={handleLogin}
+              handleLogout={handleLogout}
+            />
+          )}
+        </>
       )}
     </div>
   );

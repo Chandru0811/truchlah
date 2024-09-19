@@ -35,7 +35,6 @@ const addAuthInterceptor = (instance) => {
   );
 };
 
-// Add interceptors to each instance
 addAuthInterceptor(bookingApi);
 addAuthInterceptor(userApi);
 addAuthInterceptor(driverApi);

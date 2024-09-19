@@ -10,7 +10,7 @@ function VehicleManagementAdd() {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
-    vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
+    // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
     type: Yup.string().required("*Type is required"),
     description: Yup.string().required("*Description is required"),
     baseFare: Yup.number().required("*Base fare is required"),
@@ -170,7 +170,7 @@ function VehicleManagementAdd() {
 
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
-                  Base charge<span className="text-danger">*</span>
+                  Base Charge<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
