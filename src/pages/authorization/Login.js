@@ -94,7 +94,7 @@ function Login({ handleLogin, handleAdminLogin }) {
               navigate("/otp", { state: { mobileNo } });
             }
           } catch (error) {
-            toast.error(error);
+            console.log(error);
           }
           }
         } else {
@@ -157,13 +157,19 @@ function Login({ handleLogin, handleAdminLogin }) {
         },
       });
       if (response.status === 200) {
-        toast.success("Login Successful!");
-        navigate("/shift");
-        handleLogin();
+        
         sessionStorage.setItem("userId", response.data.responseBody.userId);
         sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
         sessionStorage.setItem("token", response.data.responseBody.token);
         sessionStorage.setItem("username", response.data.responseBody.username);
+        if (response.data.responseBody.mobileVerified==="N"){
+          navigate(`/mobile/verify`)
+        }else{
+          toast.success("Login Successful!");
+          navigate("/shift");
+          handleLogin();
+        }
+        
       } else {
         toast.error(response.data.message);
       }

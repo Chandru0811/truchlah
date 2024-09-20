@@ -72,7 +72,31 @@ function VehicleManagementView() {
                     </div>
                   </div>
                 </div>
-
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
+                        <b>Vehicle Capacity</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {`${data.vehicleCapacity}Kg` || ""}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
+                        <b>Vehicle Status</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {data.vehicleStatus || ""}</p>
+                    </div>
+                  </div>
+                </div>
+                
                 <div className="col-md-6 col-12">
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
@@ -304,6 +328,20 @@ function VehicleManagementView() {
                       <p className="text-muted text-sm">
                         : {data.peakHourCharge || ""}
                       </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>Vehicle Image</b>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.vehicleImage ? (
+                        <img src={data.vehicleImage} alt="Driver" style={{ width: "100px" }} />
+                      ) : (
+                        "N/A"
+                      )}
                     </div>
                   </div>
                 </div>

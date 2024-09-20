@@ -12,6 +12,9 @@ function VehicleManagementAdd() {
   const validationSchema = Yup.object({
     // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
     type: Yup.string().required("*Type is required"),
+    imageUrl: Yup.string().required("*Type is required"),
+    vehicleCapacity: Yup.mixed().required("*Type is required"),
+    vehicleStatus: Yup.string().required("*Type is required"),
     description: Yup.string().required("*Description is required"),
     baseFare: Yup.number().required("*Base fare is required"),
     perKm: Yup.number().required("*Per KM charge is required"),
@@ -36,8 +39,9 @@ function VehicleManagementAdd() {
 
   const formik = useFormik({
     initialValues: {
-      vehicletypeId: "",
       type: "",
+      vehicleCapacity:"",
+      vehicleStatus:"",
       baseFare: "",
       perKm: "",
       helper: "",
@@ -56,14 +60,25 @@ function VehicleManagementAdd() {
       twelveToSevenCharge: "",
       peakHourCharge: "",
       description: "",
+      imageUrl:null
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
+      const formData =new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+       if (key ==="imageUrl"){
+        if(value){
+          formData.append(key,value)
+        }
+       }else{
+         formData.append(key,value)
+       }
+      });
       try {
         const response = await driverApi.post(
-          `vehicle/vehicleType/create`,
-          values,
+          `vehicle/addVehicleType`,
+          formData,
         );
         console.log(response);
         if (response.status === 200) {
@@ -167,7 +182,67 @@ function VehicleManagementAdd() {
                   )}
                 </div>
               </div>
-
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label mb-0">
+                 Vehicle Capacity<span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    name="vehicleCapacity"
+                    className={`form-control ${formik.touched.vehicleCapacity && formik.errors.vehicleCapacity
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("vehicleCapacity")}
+                  />
+                  {formik.touched.vehicleCapacity && formik.errors.vehicleCapacity && (
+                    <div className="invalid-feedback">{formik.errors.vehicleCapacity}</div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label mb-0">
+                 Vehicle Status<span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <select
+                    type="text"
+                    name="vehicleStatus"
+                    className={`form-select ${formik.touched.vehicleStatus && formik.errors.vehicleStatus
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("vehicleStatus")}
+                  >
+                    <option value={""}></option>
+                    <option value={"ACTIVE"}>Active</option>
+                    <option value={"INACTIVE"}>InActive</option>
+                  </select>
+                  {formik.touched.vehicleStatus && formik.errors.vehicleStatus && (
+                    <div className="invalid-feedback">{formik.errors.vehicleStatus}</div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label mb-0">
+                 Vehicle Image<span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="imageUrl"
+                    className={`form-control ${formik.touched.imageUrl && formik.errors.imageUrl
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                      onChange={(e)=>formik.setFieldValue("imageUrl",e.target.files[0])}
+                  />
+                  {formik.touched.imageUrl && formik.errors.imageUrl && (
+                    <div className="invalid-feedback">{formik.errors.imageUrl}</div>
+                  )}
+                </div>
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
                   Base Charge<span className="text-danger">*</span>

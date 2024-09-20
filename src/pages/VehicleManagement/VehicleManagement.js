@@ -121,10 +121,16 @@ const VehicleManagement = () => {
                     Vehicle Type
                   </th>
                   <th scope="col" className="text-center">
+                    Vehicle Capacity
+                  </th>
+                  <th scope="col" className="text-center">
                     Base Charge
                   </th>
                   <th scope="col" className="text-center">
                     Per KM Charge
+                  </th>
+                  <th scope="col" className="text-center">
+                    Status
                   </th>
                   <th scope="col" className="text-center">
                     ACTION
@@ -135,10 +141,17 @@ const VehicleManagement = () => {
                 {datas.map((data, index) => (
                   <tr key={index}>
                     <td className="text-center">{index + 1}</td>
-                    {/* <td className="text-center">{data.vehicletypeId}</td> */}
                     <td className="text-center">{data.type}</td>
+                    <td className="text-center">{`${data.vehicleCapacity}Kg`}</td>
                     <td className="text-center">{data.baseFare}</td>
                     <td className="text-center">{data.perKm}</td>
+                    <td className="text-center">
+                  {data.vehicleStatus === "ACTIVE" ? (
+                    <span className="badge active">Active</span>
+                  ) : (
+                    <span className="badge badges-Red">Inactive</span>
+                  )}
+                </td>
                     <td className="text-center">
                       <div className="gap-2">
                         <Link to={`/vehiclemanagement/view/${data.vehicletypeId}`}>

@@ -40,6 +40,8 @@ import RideDetailsView from "../pages/profile/RideDetailsView";
 import Popup from "../pages/profile/Popup";
 import ChangePassword from "../pages/authorization/ChangePassword";
 import ScrollToTop from "../pages/ScroolToTop";
+import PaymentUnsuccessful from "../pages/common_pages/UnSuccessFul";
+import MobileNumVerify from "../pages/authorization/MobileNumVerify";
 
 
 function UserLayout({
@@ -86,6 +88,7 @@ function UserLayout({
           <Route path="/termsandcondition" element={<TermsCondition />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/pricing" element={<Priceing />} />
+          <Route path="/mobile/verify" element={<MobileNumVerify />} />
           {isAuthenticate && (
             <>
               <Route path="/map" element={<Map />} />
@@ -100,6 +103,7 @@ function UserLayout({
               <Route path="/confirmlocation" element={<ConfirmLocation />} />
               <Route path="/service" element={<Service />} />
               <Route path="/successful" element={<SuccessFul />} />
+              <Route path="/unsuccessful" element={<PaymentUnsuccessful />} />
               <Route path="/summary/:bookingId" element={<Summary />} />
               <Route path="/payments" element={<Payment />} />
               <Route path="/invoices" element={<Invoices />} />

@@ -3,7 +3,7 @@ import { FaPhoneAlt } from 'react-icons/fa';
 
 const Support = () => {
   return (
-    <div className="container d-flex justify-content-center" style={{ marginTop: "100px" }}>
+    <div className="container d-flex justify-content-center mb-4" style={{ marginTop: "100px" }}>
       <div
         className="card d-flex align-items-center justify-content-center w-75 fw-bold shadow-lg"
         style={{
