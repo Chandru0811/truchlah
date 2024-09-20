@@ -142,7 +142,7 @@ const BannerAndOffer = () => {
                   {data.status === "Active" ? (
                     <span className="badge active">Active</span>
                   ) : (
-                    <span className="badge badges-Red">Inactive</span>
+                    <span className="badge inactive">Inactive</span>
                   )}
                 </td>
                   <td className="text-center">
