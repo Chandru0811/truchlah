@@ -1740,10 +1740,9 @@ color: #0077ff !important;
   background-color: rgb(226, 57, 57);
   color: white;
   /* border-radius: 50%; */
-  padding: 0.3em 0.6em;
+  padding: 0.3em 0.8em;
   font-size: 0.75em;
   vertical-align: super;
-  margin-left: 0.5em;
 }
 
 .rag {

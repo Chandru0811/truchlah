@@ -81,7 +81,7 @@ function Login({ handleLogin, handleAdminLogin }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if (error.response.status === 400) {
+        if (error.response.status === 409) {
           toast.error(error.response.data.errorList[0].errorMessage)
           if(error.response.data.errorList[0].countryCode){  
           const mobileNos = error.response.data.errorList[0].mobileNo;
@@ -98,7 +98,7 @@ function Login({ handleLogin, handleAdminLogin }) {
           }
           }
         } else {
-          toast.error(error);
+          toast.error(error.response.data.errorList[0].errorMessage);
         }
       }
       // }
@@ -157,7 +157,6 @@ function Login({ handleLogin, handleAdminLogin }) {
         },
       });
       if (response.status === 200) {
-        
         sessionStorage.setItem("userId", response.data.responseBody.userId);
         sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
         sessionStorage.setItem("token", response.data.responseBody.token);

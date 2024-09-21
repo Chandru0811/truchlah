@@ -149,7 +149,7 @@ const VehicleManagement = () => {
                   {data.vehicleStatus === "ACTIVE" ? (
                     <span className="badge active">Active</span>
                   ) : (
-                    <span className="badge badges-Red">Inactive</span>
+                    <span className="badge badges-Red inactive">Inactive</span>
                   )}
                 </td>
                     <td className="text-center">

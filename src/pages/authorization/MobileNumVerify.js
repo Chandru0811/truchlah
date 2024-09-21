@@ -33,8 +33,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const MobileNumVerify = () => {
- const navigate =useNavigate();
-
+  const navigate = useNavigate();
+  const id =sessionStorage.getItem("userId")
+console.log("id",id)
   const formik = useFormik({
     initialValues: {
       countryCode: "",
@@ -43,13 +44,26 @@ const MobileNumVerify = () => {
     validationSchema,
     onSubmit: async (data, { setSubmitting, resetForm }) => {
       setSubmitting(true);
+      const payload ={
+        newMobileNumber:data.mobileNo,
+        countryCode:data.countryCode
+      }
       const mobileNo = `${data.countryCode}${data.mobileNo}`;
       try {
-        const otpResponse = await userApi.post(
-          `user/sendOTP?phone=${mobileNo}`
+        const otpResponse = await userApi.put(
+          `user/updateMobile/${id}`,payload
         );
         if (otpResponse.status === 200) {
-          navigate("/otp", { state: { mobileNo } });
+          try {
+            const otpResponse = await userApi.post(
+              `user/sendOTP?phone=${mobileNo}`
+            );
+            if (otpResponse.status === 200) {
+              navigate("/otp", { state: { mobileNo } });
+            }
+          } catch (error) {
+            toast.error("Failed to send OTP. Please try again.");
+          }
         }
       } catch (error) {
         toast.error("Failed to send OTP. Please try again.");

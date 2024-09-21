@@ -85,11 +85,11 @@ function AdminLayout({ handleLogout }) {
                 element={<HouseCategoryManagementAdd />}
               />
               <Route
-                path="/housecategorymanagement/edit"
+                path="/housecategorymanagement/edit/:id"
                 element={<HouseCategoryManagementEdit />}
               />
               <Route
-                path="/housecategorymanagement/view"
+                path="/housecategorymanagement/view/:id"
                 element={<HouseCategoryManagementView />}
               />
 
@@ -112,7 +112,7 @@ function AdminLayout({ handleLogout }) {
 
               <Route path="/bookingManagement" element={<BookingManagment />} />
               <Route
-                path="/bookingManagement/view"
+                path="/bookingManagement/view/:id"
                 element={<BookingManagmentView />}
               />
 
