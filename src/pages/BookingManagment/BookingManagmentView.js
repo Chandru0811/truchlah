@@ -55,6 +55,7 @@ function BookingManagmentView() {
     };
 
     const getDriversBasedOnVehicleTypeId = async () => {
+      if(vehicleTypeId){
       setLoading(true);
       try {
         const response = await driverApi.get(
@@ -67,6 +68,7 @@ function BookingManagmentView() {
       } finally {
         setLoading(false);
       }
+    }
     };
 
     getBookingById();
