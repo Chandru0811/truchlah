@@ -11,6 +11,8 @@ function BookingManagmentView() {
   console.log("Driver List Data:", driversListData);
 
   const [loading, setLoading] = useState(true);
+  const [spinner, setSpinner] = useState(false);
+
   const vehicleTypeId = data?.booking?.vehicletypeId;
 
   const formik = useFormik({
@@ -36,7 +38,7 @@ function BookingManagmentView() {
 
       console.log("Selected Driver Id:", selectedDriver); // Debugging
       console.log("Accepted By (Driver Name):", acceptedBy); // Debugging
-
+      setSpinner(true);
       try {
         const response = await driverApi.post(
           "/driver/acceptBooking",
@@ -54,6 +56,8 @@ function BookingManagmentView() {
         }
       } catch (error) {
         toast.error(error);
+      } finally {
+        setSpinner(false);
       }
     },
   });
@@ -170,13 +174,22 @@ function BookingManagmentView() {
                         )}
                       </select>
                       <button
-                        className="btn btn btn-sm bg-gradient bg-primary py-1 text-white"
                         type="submit"
+                        className="btn btn-sm btn-button"
                         disabled={
-                          !driversListData || driversListData.length === 0
-                        }
+                          spinner ||
+                          !driversListData ||
+                          driversListData.length === 0
+                        } // Combined conditions for disabling the button
                       >
-                        Assign
+                        {spinner ? (
+                          <span
+                            className="spinner-border spinner-border-sm"
+                            aria-hidden="true"
+                          ></span>
+                        ) : (
+                          <span>Assign</span>
+                        )}
                       </button>
                     </div>
                   </div>
