@@ -4,25 +4,24 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
-import { bookingApi } from "../../config/URL";
 import toast from "react-hot-toast";
-
-// import DeleteModel from "../../components/common/DeleteModel";
-// import toast from "react-hot-toast";
-// import api from "../../config/URL";
+import { bookingApi } from "../../config/URL";
 
 const BookingManagment = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
+  console.log("Booking Datas:", datas);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const table = $(tableRef.current).DataTable();
-  
+
     return () => {
       table.destroy();
     };
   }, []);
+
   useEffect(() => {
     if (!loading) {
       initializeDataTable();
@@ -51,9 +50,11 @@ const BookingManagment = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await bookingApi.get("booking/getAllBookingDetailsWithOutToken");
-      setDatas(response.data);
-      initializeDataTable(); 
+      const response = await bookingApi.get(
+        "/booking/getAllBookingDetailsByAdmin"
+      );
+      setDatas(response.data.responseBody);
+      initializeDataTable();
     } catch (error) {
       toast.error("Error refreshing data:", error?.response?.data?.message);
     } finally {
@@ -63,11 +64,13 @@ const BookingManagment = () => {
 
   useEffect(() => {
     const getItemData = async () => {
+      setLoading(true);
       try {
-        const resposnse = await bookingApi.get(
-          "booking/getAllBookingDetailsWithOutToken"
+        const response = await bookingApi.get(
+          "/booking/getAllBookingDetailsByAdmin"
         );
-        setDatas(resposnse.data);
+        setDatas(response.data);
+        console.log("Response :", response.data);
       } catch (error) {
         toast.error("Error fetching data: ", error?.response?.data?.message);
       } finally {
@@ -75,104 +78,111 @@ const BookingManagment = () => {
       }
     };
     getItemData();
-
   }, []);
-console.log("object1",datas)
+
+  const deleteFun = (bookingId) => {
+    return bookingApi.delete(`booking/delete/booking/${bookingId}`);
+  };
+
   return (
     <div>
-    {/* {loading ? ( */}
-      {/* <div className="loader-container">
-          <div class="Loader-Div">
-        <svg id="triangle" width="50px" height="50px" viewBox="-3 -4 39 39">
-            <polygon fill="transparent" stroke="blue" stroke-width="1.3" points="16,0 32,32 0,32"></polygon>
-        </svg>
-    </div>
-      </div> */}
-    {/* ) : ( */}
-    <div className="container-fluid px-2 minHeight">
-      <div className="card shadow border-0 my-2">
-        <div className="container-fluid pt-4 pb-3">
-          <div className="row align-items-center justify-content-between ">
-            <div className="col">
-              <div className="d-flex align-items-center gap-4">
-                <h1 className="h4 ls-tight headingColor ">Booking Management</h1>
+      {loading ? (
+        <div className="darksoul-layout">
+          <div className="darksoul-grid">
+            <div className="item1"></div>
+            <div className="item2"></div>
+            <div className="item3"></div>
+            <div className="item4"></div>
+          </div>
+          <h3 className="darksoul-loader-h">Trucklah</h3>
+        </div>
+      ) : (
+        <div className="container-fluid px-2 minHeight">
+          <div className="card shadow border-0 my-2">
+            <div className="container-fluid pt-4 pb-3">
+              <div className="row align-items-center justify-content-between ">
+                <div className="col">
+                  <div className="d-flex align-items-center gap-4">
+                    <h1 className="h4 ls-tight headingColor ">
+                      Booking Management
+                    </h1>
+                  </div>
+                </div>
+                
               </div>
             </div>
-            {/* <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/supportteammanagement/add">
-                  <button type="submit" className="btn btn-sm btn-button">
-                    <span>Add +</span>
-                  </button>
-                </Link>
-              </div>
-            </div> */}
-          </div>
-        </div>
-        <hr className="removeHrMargin mt-0"></hr>
-       
-        <div className="table-responsive p-2 minHeight">
-          <table ref={tableRef} className="display">
-            <thead className="thead-light">
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S.NO
-                </th>
-                <th scope="col" className="text-center">
-                Delivery Date
-                </th>
-                <th scope="col" className="text-center">
-                Booking Time
-                </th>
-                <th scope="col" className="text-center">
-                Est Km
-                </th>
-                {/* <th scope="col" className="text-center">
-                  Unit
-                </th> */}
-                <th scope="col" className="text-center">
-                  ACTION
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {datas.map((data, index) => ( */}
-                <tr>
-                  <td className="text-center">{+1}</td>
-                  <td className="text-center"></td>
-                  <td className="text-center">itemName</td>
-                  <td className="text-center">costPrice</td>
-                  {/* <td className="text-center">unit</td> */}
-                  <td className="text-center">
-                    <div className="gap-2">
-                      <Link to={`/bookingManagement/view/`}>
-                        <button className="btn btn-light btn-sm  shadow-none border-none">
-                          View
-                        </button>
-                      </Link>
-                      {/* <Link to={`/supportteammanagement/edit/`} className="px-2">
+            <hr className="removeHrMargin mt-0"></hr>
+            <div className="table-responsive p-2 minHeight">
+              <table ref={tableRef} className="display">
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                      S.NO
+                    </th>
+                    <th scope="col" className="text-center">
+                      Delivery Date
+                    </th>
+                    <th scope="col" className="text-center">
+                      Booking Time
+                    </th>
+                    <th scope="col" className="text-center">
+                      Est Km
+                    </th>
+                    <th scope="col" className="text-center">
+                      ACTION
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {datas?.map((data, index) => (
+                    <tr>
+                      <td className="text-center">{index + 1}</td>
+                      <td className="text-center">
+                        {data.bookingDetails?.deliveryDate
+                          ? data.bookingDetails.deliveryDate.split("T")[0]
+                          : "yyyy-mm-dd"}{" "}
+                        {/* Shows 'N/A' if deliveryDate is undefined */}
+                      </td>
+                      <td className="text-center">
+                        {data.bookingDetails?.deliveryDate
+                          ? data.bookingDetails.deliveryDate
+                              .split("T")[1]
+                              ?.slice(0, 5)
+                          : "00:00"}{" "}
+                        {/* Shows 'N/A' if deliveryDate is undefined */}
+                      </td>
+                      <td className="text-center">
+                        {data.bookingDetails.estKm || "0.0 Km"}
+                      </td>
+                      <td className="text-center">
+                        <div className="gap-2">
+                          <Link to={`/bookingManagement/view/${data.bookingId}`}>
+                            <button className="btn btn-light btn-sm  shadow-none border-none">
+                              View
+                            </button>
+                          </Link>
+                          {/* <Link to={`/bookingManagement/edit/${data.bookingId}`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
                         </button>
                       </Link> */}
-                      <DeleteModel
-                        // onSuccess={refreshData}
-                        // path={`deleteMstrItem/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              {/* ))}  */}
-            </tbody>
-          </table>
+                          <DeleteModel
+                            onSuccess={refreshData}
+                            onDelete={() => deleteFun(data.bookingId)}
+                            // path={`deleteMstrItem/${data.id}`}
+                            style={{ display: "inline-block" }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        
-        
-      </div>
+      )}
     </div>
-  {/* )} */}
-  </div>
   );
 };
 
