@@ -5,30 +5,48 @@ import { bookingApi, driverApi } from "../../config/URL";
 import { useFormik } from "formik";
 
 function BookingManagmentView() {
-  // const { id } = useParams();
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [driversListData, setDriversListData] = useState([]);
+  console.log("Driver List Data:", driversListData);
+
   const [loading, setLoading] = useState(true);
-  console.log("Data:", data?.booking?.vehicletypeId);
-  console.log("driversListData:", driversListData);
   const vehicleTypeId = data?.booking?.vehicletypeId;
-  const selectedDriverID = driversListData.id;
 
   const formik = useFormik({
     initialValues: {
       bookingId: id,
-      driverId: selectedDriverID,
-      vehicleId: vehicleTypeId,
+      driverId: "",
       acceptedBy: "",
     },
     onSubmit: async (values) => {
+      const selectedDriver = driversListData.find(
+        (driver) => driver.id === parseInt(values.driverId)
+      );
+
+      // Store the driverName if the selectedDriver exists
+      const acceptedBy = selectedDriver ? selectedDriver.driverName : "";
+
+      // Create the payload with the acceptedBy value
+      const payload = {
+        driverId: values.driverId,
+        acceptedBy: acceptedBy, // driverName stored here
+        bookingId: values.bookingId,
+      };
+
+      console.log("Selected Driver Id:", selectedDriver); // Debugging
+      console.log("Accepted By (Driver Name):", acceptedBy); // Debugging
+
       try {
-        const response = await driverApi.post("/driver/acceptBooking", values, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await driverApi.post(
+          "/driver/acceptBooking",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
         } else {
@@ -55,25 +73,25 @@ function BookingManagmentView() {
     };
 
     const getDriversBasedOnVehicleTypeId = async () => {
-      if(vehicleTypeId){
-      setLoading(true);
-      try {
-        const response = await driverApi.get(
-          `/getDriversBasedOnVehicleTypeId/${vehicleTypeId}`
-        );
-        setDriversListData(response.data.responseBody);
-        console.log("Driver Based On Vehicle Type ID:", response.data);
-      } catch (error) {
-        toast.error("Error fetching data: ", error?.response?.data?.message);
-      } finally {
-        setLoading(false);
+      if (vehicleTypeId) {
+        setLoading(true);
+        try {
+          const response = await driverApi.get(
+            `/getDriversBasedOnVehicleTypeId/${vehicleTypeId}`
+          );
+          setDriversListData(response.data.responseBody);
+          console.log("Driver Based On Vehicle Type ID:", response.data);
+        } catch (error) {
+          toast.error("Error fetching data: ", error?.response?.data?.message);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
     };
 
     getBookingById();
     getDriversBasedOnVehicleTypeId();
-  }, [id ,vehicleTypeId]);
+  }, [id, vehicleTypeId]);
 
   return (
     <div>
@@ -123,7 +141,17 @@ function BookingManagmentView() {
                         className="form-select w-25 me-3"
                         name="driverId"
                         value={formik.values.driverId}
-                        onChange={(e) => formik.setFieldValue('driverId', e.target.value)}
+                        onChange={(e) => {
+                          const selectedId = e.target.value;
+                          const selectedDriver = driversListData.find(
+                            (driver) => driver.id === selectedId
+                          );
+                          formik.setFieldValue("driverId", selectedId);
+                          formik.setFieldValue(
+                            "acceptedBy",
+                            selectedDriver ? selectedDriver.driverName : ""
+                          );
+                        }}
                       >
                         <option value="" disabled>
                           Select Driver
@@ -136,12 +164,17 @@ function BookingManagmentView() {
                             </option>
                           ))
                         ) : (
-                          <option value="" disabled>No drivers available</option>
+                          <option value="" disabled>
+                            No drivers available
+                          </option>
                         )}
                       </select>
                       <button
                         className="btn btn btn-sm bg-gradient bg-primary py-1 text-white"
                         type="submit"
+                        disabled={
+                          !driversListData || driversListData.length === 0
+                        }
                       >
                         Assign
                       </button>

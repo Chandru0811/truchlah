@@ -120,6 +120,9 @@ const BookingManagment = () => {
                       S.NO
                     </th>
                     <th scope="col" className="text-center">
+                      User Name
+                    </th>
+                    <th scope="col" className="text-center">
                       Delivery Date
                     </th>
                     <th scope="col" className="text-center">
@@ -137,6 +140,9 @@ const BookingManagment = () => {
                   {datas?.map((data, index) => (
                     <tr>
                       <td className="text-center">{index + 1}</td>
+                      <td className="text-center">
+                        {data.bookingDetails.userName || ""}
+                      </td>
                       <td className="text-center">
                         {data.bookingDetails?.deliveryDate
                           ? data.bookingDetails.deliveryDate.split("T")[0]
