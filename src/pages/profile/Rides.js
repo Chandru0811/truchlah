@@ -210,9 +210,9 @@ function Order() {
         ) : (
           <>
             <div
-              className="col-12 d-flex justify-content-center mt-5 py-3">
+              className="col-12 d-flex justify-content-center mt-5 py-3 flex-wrap">
               <button
-                className={`mx-3 ${showDraftSection ? "underline" : ""}`}
+                className={`mx-3 my-1 ${showDraftSection ? "underline" : ""}`}
                 id="shift-btn"
                 onClick={draftSection}
                 style={{ position: 'relative' }}
@@ -257,12 +257,12 @@ function Order() {
               >
                 COMPLETED
                 <span
-                  className="position-absolute start-100 translate-middle badge rounded-pill"
-                  style={{
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: '0.75em',
-                    padding: '0.3em 0.6em'
-                  }}
+                 className="position-absolute start-100 translate-middle badge rag rounded-pill"
+                 style={{
+                   transform: 'translate(-50%, -50%)',
+                   fontSize: '0.75em',
+                   padding: '0.3em 0.6em'
+                 }}
                 >
                   {completedCount}
                 </span>
@@ -276,7 +276,7 @@ function Order() {
               >
                 CANCELLED
                 <span
-                  className="position-absolute start-100 translate-middle badge rounded-pill"
+                  className="position-absolute start-100 translate-middle badge rag rounded-pill"
                   style={{
                     transform: 'translate(-50%, -50%)',
                     fontSize: '0.75em',
