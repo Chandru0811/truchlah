@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/custom.css";
 import { Link, useSearchParams } from "react-router-dom";
 import success from "../../asset/tick.gif";
+import toast from "react-hot-toast";
 
 function Successfull() {
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type");
   const bookingId = searchParams.get("bookingId");
+  const result = searchParams.get("result");
+  const refNo = searchParams.get("refNo");
+
+  useEffect(() => {
+    if (result === "success") {
+      toast.success("Payment successful!");
+    }
+  }, []);
 
   return (
     <section className="Success">
@@ -18,14 +27,19 @@ function Successfull() {
               <div className="card">
                 <center>
                   <div className="d-flex justify-content-center align-item-center mt-2">
-                    <img src={success} style={{border:"none" ,width:"200px"}}/>
+                    <img
+                      src={success}
+                      style={{ border: "none", width: "200px" }}
+                      alt="Success"
+                    />
                   </div>
                 </center>
                 <span className="fw-bolder">Booking Id: {bookingId}</span>
                 <h5 className="mt-4" style={{ color: "#1bc24a" }}>
-                  Order Successful
+                  Order {result === "success" ? "Successful" : "Failed"}
                 </h5>
                 <p className="mt-2">Thank you so much for your order</p>
+                <p>Reference No: {refNo}</p>
                 <center>
                   <Link to={`/rides?type=${type}`}>
                     <button

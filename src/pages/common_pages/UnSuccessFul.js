@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/custom.css";
 import { Link, useSearchParams } from "react-router-dom";
-import error from "../../asset/rewards.png"; 
 import { GiCancel } from "react-icons/gi";
+import toast from "react-hot-toast";
+
 function PaymentUnsuccessful() {
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type");
   const bookingId = searchParams.get("bookingId");
+  const result = searchParams.get("result");
+  const refNo = searchParams.get("refNo");
+
+  useEffect(() => {
+    if (result === "success") {
+      toast.success("Payment successful!");
+    }
+  }, []);
 
   return (
     <section className="PaymentUnsuccessful" style={{background:"#faf5f6"}}>

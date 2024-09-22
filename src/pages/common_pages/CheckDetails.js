@@ -76,10 +76,11 @@ function Summary() {
       const response = await bookingApi.post(
         `booking/generateCardTransactionPaymentLink?bookingId=${bookingId}`
       );
-      if (response.status === 201) {
-        window.open(response.data.paymentLink,"_self")
-        toast.success("Payment successful!");
-        navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
+      if (response.status === (201 || 200)) {
+        const paymentLink = response.data.paymentLink.replace('?', '&');
+        window.open(paymentLink,"_self")
+        // toast.success("Payment successful!");
+        // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
         sessionStorage.removeItem("shiftType");
       } else {
         toast.error("Payment failed, please try again.");

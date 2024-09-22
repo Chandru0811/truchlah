@@ -94,7 +94,7 @@ function Login({ handleLogin, handleAdminLogin }) {
               navigate("/otp", { state: { mobileNo } });
             }
           } catch (error) {
-            console.log(error);
+            console.log(error.response.data.errorList[0].errorMessage);
           }
           }
         } else {
