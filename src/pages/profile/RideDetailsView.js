@@ -601,6 +601,79 @@ function RideDetailsView() {
               </div>
             </div>
 
+            <>
+                <div className="row">
+                  <div className="col-lg-3"></div>
+                  <div className="col-lg-9">
+                    <p className="mt-5 ps-2">
+                      <b>Payment Detail:</b>
+                    </p>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-center my-2 ">
+                  <div className="card w-50">
+                    <div className="card-body py-0">
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
+                              <b>Payment Mode</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 ps-1" id="drop">
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.transactionDetails?.paymentMode || "--"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
+                              <b>Payment Status</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 ps-1" id="drop">
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.transactionDetails?.paymentStatus === "N" ? "No" : "Yes" || "--"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
+                              <b>Tax Amount</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 ps-1" id="drop">
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.transactionDetails?.txnAmount || "0.0"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
+                              <b>Resp Code</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 ps-1" id="drop">
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.transactionDetails?.respCode || "0"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+
             {data.bookingStatus?.status === "CANCELLED" && (
               <>
                 <div className="row">
@@ -842,7 +915,7 @@ function RideDetailsView() {
                   className="btn btn-primary px-5 py-2"
                   id="NextMove"
                 >
-                  Resume
+                  Resume Booking
                 </button>
               </div>
             )}
@@ -862,7 +935,7 @@ function RideDetailsView() {
             </div>
           </div>
 
-          {data.bookingStatus?.status !== "COMPLETED" &&
+          {data.transactionDetails?.paymentMode === "CASH" && data.bookingStatus?.status !== "COMPLETED" &&
             data.bookingStatus?.status !== "CANCELLED" && (
               <div
                 className="container-fluid py-4"

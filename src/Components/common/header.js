@@ -6,12 +6,12 @@ import {
   Modal,
   Button,
 } from "react-bootstrap";
-import logo from "../../asset/logo.png";
+import logo from "../../asset/NewLogo.png";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import "../../styles/custom.css";
 import React, { useEffect, useState } from "react";
 import User from "../../pages/profile/Profile";
-
+import { FaRegUser } from "react-icons/fa";
 function OffcanvasExample({ isAuthenticate, handleLogout }) {
   const [showMain, setShowMain] = useState(false);
   const [show, setShow] = useState(false);
@@ -25,7 +25,9 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
   const handleCloseMain = () => setShowMain(false);
   const handleShowMain = () => setShowMain(true);
   const handleShow = () => setShow(true);
-  const handleClose = () => {setShow(false)};
+  const handleClose = () => {
+    setShow(false);
+  };
 
   return (
     <section className="header">
@@ -35,8 +37,18 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
         </Modal.Header>
         <Modal.Body>Are you sure you want to cancel the order?</Modal.Body>
         <Modal.Footer className="p-1">
-          <button className="btn btn-danger btn-sm px-3" onClick={handleClose}>No</button>
-          <button className="btn btn-info btn-sm px-3" onClick={()=>{handleClose(); navigate("/shift")}}>Yes</button>
+          <button className="btn btn-danger btn-sm px-3" onClick={handleClose}>
+            No
+          </button>
+          <button
+            className="btn btn-info btn-sm px-3"
+            onClick={() => {
+              handleClose();
+              navigate("/shift");
+            }}
+          >
+            Yes
+          </button>
         </Modal.Footer>
       </Modal>
       <>
@@ -44,7 +56,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
           <>
             <Navbar
               key={expand}
-              bg="light"
+              style={{ background: "#acff3b" }}
               expand={expand}
               className="fixed-top"
               id="img"
@@ -79,48 +91,28 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                         <Nav className="flex-grow-1 pe-3">
                           <div className="col-1"></div>
                           <div className="col-lg-8">
-                            <ul className=" navbar-nav">
-                              <li className="nav-item px-2">
-                                <Link className="Links" to="/">
-                                  HOME
+                            <ul className="navbar-nav d-flex justify-content-end align-content-center">
+                              <li className="nav-item menus px-2">
+                                <Link className="Links fs-5 fw-bold" to="/">
+                                  Business
                                 </Link>
                               </li>
-                              <li className="nav-item px-2">
-                                <Link className="Links" to="/ShiftPack">
-                                  OUR SERVICES
+                              <li className="nav-item menus px-2">
+                                <Link
+                                  className="Links fs-5 fw-bold"
+                                  to="/"
+                                >
+                                  Individuals
                                 </Link>
                               </li>
-                              <li className="nav-item px-2">
-                                <Link className="Links" to="/about">
-                                  ABOUT US
+                              <li className="nav-item menus px-2">
+                                <Link
+                                  className="Links fs-5 fw-bold"
+                                  to="/"
+                                >
+                                  Drivers
                                 </Link>
                               </li>
-                              <li className="nav-item px-2">
-                                <Link className="Links" to="/contact">
-                                  CONTACT US
-                                </Link>
-                              </li>
-                              {/* <li className="nav-item px-2">
-                                <Link className="Links" to="/pricing">
-                                  PRICING
-                                </Link>
-                              </li> */}
-                              {isAuthenticate ? (
-                                <></>
-                              ) : (
-                                <>
-                                  <li className="nav-item px-2">
-                                    <Link className="Links" to="/register">
-                                      REGISTER
-                                    </Link>
-                                  </li>
-                                  <li className="nav-item px-2">
-                                    <Link className="Links" to="/login">
-                                      LOGIN
-                                    </Link>
-                                  </li>
-                                </>
-                              )}
                             </ul>
                           </div>
                           <div className="col-3">
@@ -133,54 +125,24 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                               <div className="ride ">
                                 {isAuthenticate ? (
                                   <Link to="/shift">
-                                      <li className="nav-item">
-                                        <button
-                                          style={{ minWidth: "max-content" }}
-                                          type="button"
-                                          className="py-2 px-3"
-                                          id="NextMove"
-                                        >
-                                          Book Rides
-                                        </button>
-                                      </li>
-                                    </Link>
-                                  // currentPath === "/map" ||
-                                  // currentPath === "/service" ? (
-                                  //   <li className="nav-item">
-                                  //     <button
-                                  //       onClick={handleShow}
-                                  //       style={{ minWidth: "max-content" }}
-                                  //       type="button"
-                                  //       className="py-2 px-3"
-                                  //       id="NextMove"
-                                  //     >
-                                  //       Book Rides
-                                  //     </button>
-                                  //   </li>
-                                  // ) : (
-                                  //   <Link to="/shift">
-                                  //     <li className="nav-item">
-                                  //       <button
-                                  //         style={{ minWidth: "max-content" }}
-                                  //         type="button"
-                                  //         className="py-2 px-3"
-                                  //         id="NextMove"
-                                  //       >
-                                  //         Book Rides
-                                  //       </button>
-                                  //     </li>
-                                  //   </Link>
-                                  // )
+                                    <li className="nav-item">
+                                      <button
+                                        type="button"
+                                        className="login-btn py-2 px-3"
+                                      >
+                                        Book Ride
+                                      </button>
+                                    </li>
+                                  </Link>
                                 ) : (
                                   <Link to="/login">
                                     <li className="nav-item">
                                       <button
-                                        style={{ minWidth: "max-content" }}
                                         type="button"
-                                        className="py-2 px-3"
-                                        id="NextMove"
+                                        className="login-btn py-2 px-3"
                                       >
-                                        Book Rides
+                                        <FaRegUser className="mb-1 me-2" />{" "}
+                                        Login
                                       </button>
                                     </li>
                                   </Link>
@@ -198,7 +160,6 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
           </>
         ))}
       </>
-      
     </section>
   );
 }

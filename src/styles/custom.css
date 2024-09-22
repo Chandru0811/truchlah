@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Afacad", system-ui !important;
 }
 
 /* common */
@@ -497,7 +497,7 @@ body {
   scroll-padding-top: 20%;
 }
 
-.navbar {
+/* .navbar {
   display: flex;
   color: rgba(255, 255, 255, 0.72);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -505,9 +505,9 @@ body {
 
 .navbar img {
   width: 110px;
-}
+} */
 
-.navbar-light .navbar-nav .nav-link {
+/* .navbar-light .navbar-nav .nav-link {
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 700;
@@ -520,21 +520,21 @@ body {
 .navbar-light .navbar-nav .nav-link:hover {
   color: #fff;
   font-weight: 500;
-}
+} */
 
 /* .navbar-light .navbar-nav .nav-link i:hover {
   color: #fff;
   font-weight: 500;
 } */
 
-.nav-link:hover {
+/* .nav-link:hover {
   background-color: #02046b;
   border-radius: 5px;
 }
 
 .nav-link.active {
   background-color: #02046b;
-}
+} */
 
 #pro-btn {
   font-size: 25px;
@@ -567,14 +567,14 @@ body {
   }
 }
 
-.navbar-light .navbar-nav .Links {
-  font-family: "Montserrat";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 13px;
-  padding-left: 30px;
-  line-height: 18px;
-  color: #161515;
+.NavBar{
+  display: flex !important;
+  justify-content : end !important;
+  align-items: center !important;
+}
+
+.main-logo{
+  width: 150% !important;
 }
 
 .Links {
@@ -592,7 +592,7 @@ body {
 color: #0077ff !important;
 /* background-color: #00387a !important; */
 }
-
+/* 
 .Links {
   display: block;
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
@@ -627,7 +627,7 @@ color: #0077ff !important;
     padding-right: var(--bs-navbar-nav-link-padding-x);
     padding-left: var(--bs-navbar-nav-link-padding-x);
   }
-}
+} */
 
 /* Hero  */
 
@@ -1823,8 +1823,78 @@ color: #0077ff !important;
   vertical-align: baseline;
   border-radius: 0.3rem; 
 }
+/* Styles for the login button */
+.login-btn {
+  background: #333333;
+  color: #acff3b;
+  font-size: 18px;
+  font-family: "Afacad", system-ui;
+  border-radius: 5px;
+}
 
+.login-btn:hover {
+  background: #333333;
+  color: #acff3b;
+  font-size: 18px;
+  font-family: "Afacad", system-ui;
+  border-radius: 5px;
+}
 
+/* Styles for the header menu */
+.menus{
+  font-weight: 500;
+  /* font-size: 18px; */
+  font-family: "Afacad", system-ui;
+  color: #000000 !important;
+  margin-right: 20px;
+  text-decoration: none;
+}
+
+.menus :hover {
+  font-weight: 700;
+  color: #000 !important;
+}
+
+.menus .Links {
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.menus .Links::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #000;
+  transition: width 0.3s ease;
+}
+
+.menus .Links:hover::after {
+  width: 100%;
+  color: #000000 !important;
+}
+
+/* Flexbox alignment for login button on larger screens */
+.login-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 30px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .login-btn {
+    width: 100%;
+    text-align: center;
+  }
+  .header-menu {
+    text-align: center;
+    flex-direction: column;
+  }
+}
 
 @media (min-width: 992px) {
   .logo_ats {
@@ -1835,6 +1905,15 @@ color: #0077ff !important;
   }
 }
 
+@media (max-width: 756px) {
+  .login-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 0px;
+  }
+}
 /* data table search end position */
 .dt-search{
 text-align: end;
