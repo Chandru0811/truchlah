@@ -13,6 +13,7 @@ function DriverManagementEdit() {
   const [cPasswordVisible, setCPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [data, setData] = useState();
   const {id}=useParams();
   const navigate = useNavigate();
 
@@ -46,10 +47,11 @@ function DriverManagementEdit() {
         return false;
       }),
     email: Yup.string().email("*Invalid email format").required("*Email is required"),
+    demeritPoint: Yup.number().typeError("*Demerit Point Must Be a Digit").notRequired(),
     // password: Yup.string().required("*Password is required"),
-    refCode: Yup.string().required("*Referral code is required"),
-    termsCondition: Yup.string().required("*Terms and conditions must be accepted"),
-    loginType: Yup.string().required("*Login type is required"),
+    // refCode: Yup.string().required("*Referral code is required"),
+    // termsCondition: Yup.string().required("*Terms and conditions must be accepted"),
+    // loginType: Yup.string().required("*Login type is required"),
   });
 
   const formik = useFormik({
@@ -60,8 +62,8 @@ function DriverManagementEdit() {
       mobileNo: "",
       email: "",
       password: "",
-      refCode: "",
-      termsCondition: "",
+      // refCode: "",
+      // termsCondition: "",
       driverId: "",
       driverPhoto: "",
       idFront: "",
@@ -69,12 +71,12 @@ function DriverManagementEdit() {
       licenseFront: "",
       licenseBack: "",
       demeritPoint: "",
-      loginType: ""
+      // loginType: ""
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("drivermanagement:", values);
-      const { driverPhoto, idFront, idBack, licenseFront, licenseBack,cPassword, ...value } = values;
+      const { driverPhoto, idFront, idBack, licenseFront, licenseBack,cPassword,loginType,termsCondition,refCode, ...value } = values;
 
       const formData = new FormData();
       if (driverPhoto) formData.append('driverPhoto', driverPhoto);
@@ -87,11 +89,11 @@ function DriverManagementEdit() {
       setLoading(true);
         try {
           const response = await driverApi.put(`driver/updateDriverDetails/${id}`, value);
-          if (response.status === 201) {
+          if (response.status === 200) {
             formData.append("driverId",id)
             try {
               const response = await driverApi.post(`driver/update`, formData);
-              if (response.status === 201 || 200) {
+              if (response.status === 200||response.status === 201) {
                 toast.success(response.data.message);
                 navigate("/drivermanagement")
               }
@@ -115,6 +117,7 @@ function DriverManagementEdit() {
       try {
         const response = await driverApi.get(`/driver/byId/${id}`);
         formik.setValues(response.data.responseBody);
+        setData(response.data.responseBody)
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       }finally{
@@ -302,7 +305,7 @@ function DriverManagementEdit() {
                   )}
                 </div>
               </div> */}
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Reference Code <span className="text-danger">*</span>
                 </label>
@@ -322,7 +325,7 @@ function DriverManagementEdit() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Driver Id <span className="text-danger">*</span>
@@ -470,7 +473,7 @@ function DriverManagementEdit() {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Login Type <span className="text-danger">*</span>
                 </label>
@@ -490,9 +493,9 @@ function DriverManagementEdit() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
-            <div className="col-md-6 col-12 mb-2">
+            {/* <div className="col-md-6 col-12 mb-2">
               <label className="form-label">
                 Terms Condition
               </label>
@@ -547,7 +550,7 @@ function DriverManagementEdit() {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </form>

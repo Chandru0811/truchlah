@@ -15,9 +15,9 @@ function HouseCategoryManagementView() {
     const getData = async () => {
       setLoader(true);
       try {
-        const response = await bookingApi.get(`/${id}`);
+        const response = await bookingApi.get(`getAllHouseShifting/${id}?id=${id}`);
         if (response.status === 200) {
-          setData(response.data.responseBody);
+          setData(response.data);
         }
       } catch (error) {
         toast.error("Error Fetch Data ", error);
@@ -77,12 +77,12 @@ function HouseCategoryManagementView() {
                     <div className="row mb-3">
                       <div className="col-6 d-flex justify-content-start align-items-center">
                         <p className="text-sm">
-                          <b>Name</b>
+                          <b>House Category Name</b>
                         </p>
                       </div>
                       <div className="col-6">
                         <p className="text-muted text-sm">
-                          : {data.itemCode || ""}
+                          : {data.houseCategoryName || ""}
                         </p>
                       </div>
                     </div>
@@ -91,12 +91,12 @@ function HouseCategoryManagementView() {
                     <div className="row mb-3">
                       <div className="col-6 d-flex justify-content-start align-items-center">
                         <p className="text-sm">
-                          <b>Email</b>
+                          <b>Price</b>
                         </p>
                       </div>
                       <div className="col-6">
                         <p className="text-muted text-sm">
-                          : {data.itemCode || ""}
+                          : {data.price || ""}
                         </p>
                       </div>
                     </div>
@@ -105,54 +105,12 @@ function HouseCategoryManagementView() {
                     <div className="row mb-3">
                       <div className="col-6 d-flex justify-content-start align-items-center">
                         <p className="text-sm">
-                          <b>Mobile Number</b>
+                          <b>Status</b>
                         </p>
                       </div>
                       <div className="col-6">
                         <p className="text-muted text-sm">
-                          : {data.itemName || ""}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row mb-3">
-                      <div className="col-6 d-flex justify-content-start align-items-center">
-                        <p className="text-sm">
-                          <b>Country Code</b>
-                        </p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          : {data.unit || ""}{" "}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row mb-3">
-                      <div className="col-6 d-flex justify-content-start align-items-center">
-                        <p className="text-sm">
-                          <b>Reference Code</b>
-                        </p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          : {data.unit || ""}{" "}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row mb-3">
-                      <div className="col-6 d-flex justify-content-start align-items-center">
-                        <p className="text-sm">
-                          <b>Login Type</b>
-                        </p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          : {data.unit || ""}{" "}
+                          : {data.houseStatus || ""}
                         </p>
                       </div>
                     </div>

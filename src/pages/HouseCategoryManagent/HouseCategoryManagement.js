@@ -73,9 +73,11 @@ const HouseCategoryManagement = () => {
     };
     getItemData();
   }, []);
+
   const funDelete=(houseTypeId)=>{
-    return bookingApi.delete(`/vehicle/deleteHouseShifting/${houseTypeId}`)
+    return bookingApi.delete(`/deleteHouseShifting/${houseTypeId}`)
   }
+  
   return (
     <div>
       {loading ? (
@@ -126,9 +128,9 @@ const HouseCategoryManagement = () => {
                     <th scope="col" className="text-center">
                       Price
                     </th>
-                    {/* <th scope="col" className="text-center">
-                      Mobile Number
-                    </th> */}
+                    <th scope="col" className="text-center">
+                      Status
+                    </th>
                     {/* <th scope="col" className="text-center">
                   Unit
                 </th> */}
@@ -143,7 +145,13 @@ const HouseCategoryManagement = () => {
                     <td className="text-center">{index+1}</td>
                     <td className="text-center">{data.houseCategoryName}</td>
                     <td className="text-center">{data.price}</td>
-                    {/* <td className="text-center">costPrice</td> */}
+                    <td className="text-center">
+                  {data.houseStatus === "ACTIVE" ? (
+                    <span className="badge active">Active</span>
+                  ) : (
+                    <span className="badge badges-Red inactive">Inactive</span>
+                  )}
+                </td>
                     {/* <td className="text-center">unit</td> */}
                     <td className="text-center">
                       <div className="gap-2">

@@ -12,8 +12,8 @@ function PaymentUnsuccessful() {
   const refNo = searchParams.get("refNo");
 
   useEffect(() => {
-    if (result === "success") {
-      toast.success("Payment successful!");
+    if (result === "error") {
+      toast.success("Payment Failed!");
     }
   }, []);
 

@@ -104,7 +104,7 @@ function UserLayout({
               <Route path="/houseshift" element={<HouseShift />} />
               <Route path="/confirmlocation" element={<ConfirmLocation />} />
               <Route path="/service" element={<Service />} />
-              <Route path="/successful" element={<SuccessFul />} />
+              <Route path="/paymentstatus" element={<SuccessFul />} />
               <Route path="/unsuccessful" element={<PaymentUnsuccessful />} />
               <Route path="/summary/:bookingId" element={<Summary />} />
               <Route path="/payments" element={<Payment />} />

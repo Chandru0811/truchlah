@@ -22,6 +22,7 @@ import { FaRegStar } from "react-icons/fa6";
 function RideDetailsView() {
   const [show, setShow] = useState(false);
   const [data, setData] = useState({});
+  const [locationDetail, setLocationDetail] = useState([]);
   const bookingId = useParams();
   // console.log("bookingId", bookingId);
   const [vechicle, setVechicle] = useState([]);
@@ -31,7 +32,10 @@ function RideDetailsView() {
   const [isPopupVisible, setPopupVisible] = useState(true);
   const [checkedValues, setCheckedValues] = useState([]);
   const navigate = useNavigate();
-  console.log("object", data);
+  console.log("Booking Data:", data);
+  console.log("Location Details Data:", locationDetail);
+
+
 
   const fetchData = async () => {
     try {
@@ -39,6 +43,7 @@ function RideDetailsView() {
         `booking/getBookingById/${bookingId.id}`
       );
       setData(response.data.responseBody);
+      setLocationDetail(response?.data?.responseBody?.bookingTripLocations)
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
     } finally {
@@ -47,8 +52,9 @@ function RideDetailsView() {
   };
 
   const handleClick = () => {
+    const locations = encodeURIComponent(JSON.stringify(locationDetail));
     navigate(
-      `/service?bookingId=${bookingId.id}`
+      `/service?bookingId=${bookingId.id}&location=${locations}&estKm=${350}`
     );
   };
 
@@ -135,14 +141,6 @@ function RideDetailsView() {
     };
     getVechicle();
   }, []);
-
-  //   const handleRadioChange = (e) => {
-  //   formik.handleChange(e); 
-  //   formik.setFieldTouched("cancelReason", true, true);
-  //   if (e.target.value !== "Others") {
-  //     formik.setFieldValue("comments", ""); 
-  //   }
-  // };
 
   const handleRadioChange = (e) => {
     formik.handleChange(e);

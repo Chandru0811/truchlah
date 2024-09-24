@@ -54,9 +54,9 @@ function DriverManagementAdd() {
       .required('Confirm Password is required')
       .oneOf([Yup.ref('password'), null], 'Passwords must match'),
     // refCode: Yup.string().required("*Referral code is required"),
-    termsCondition: Yup.string().required(
-      "*Terms and conditions must be accepted"
-    ),
+    // termsCondition: Yup.string().required(
+    //   "*Terms and conditions must be accepted"
+    // ),
       driverPhoto: Yup.mixed().required('Driver Photo is required'),
       idFront: Yup.mixed().required('ID Front is required'),
       idBack: Yup.mixed().required('ID Back is required'),
@@ -65,7 +65,7 @@ function DriverManagementAdd() {
     demeritPoint: Yup.number()
       .required("*Demerit point is required")
       .typeError("*Demerit point must be a number"),
-    loginType: Yup.string().required("*Login type is required"),
+    // loginType: Yup.string().required("*Login type is required"),
   });
 
   const formik = useFormik({
@@ -76,15 +76,15 @@ function DriverManagementAdd() {
       mobileNo: "",
       email: "",
       password: "",
-      refCode: "",
-      termsCondition: "",
+      // refCode: "",
+      // termsCondition: "",
       driverPhoto: null,
       idFront: null,
       idBack: null,
       licenseFront: null,
       licenseBack: null,
       demeritPoint: "",
-      loginType: "",
+      // loginType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -97,10 +97,10 @@ function DriverManagementAdd() {
       formData.append("mobileNo", values.mobileNo);
       formData.append("email", values.email);
       formData.append("password", values.password);
-      formData.append("refCode", values.refCode);
-      formData.append("termsCondition", values.termsCondition ? 'true' : 'false');
+      // formData.append("refCode", values.refCode);
+      // formData.append("termsCondition", values.termsCondition ? 'true' : 'false');
       formData.append("demeritPoint", values.demeritPoint);
-      formData.append("loginType", values.loginType);
+      // formData.append("loginType", values.loginType);
   
       if (values.driverPhoto) {
         formData.append("driverPhoto", values.driverPhoto);
@@ -348,7 +348,7 @@ function DriverManagementAdd() {
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Reference Code 
                 </label>
@@ -369,7 +369,7 @@ function DriverManagementAdd() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Driver Photo <span className="text-danger">*</span>
@@ -504,7 +504,7 @@ function DriverManagementAdd() {
                     )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Login Type <span className="text-danger">*</span>
                 </label>
@@ -528,8 +528,8 @@ function DriverManagementAdd() {
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="col-md-12 col-12 mb-2">
+              </div> */}
+              {/* <div className="col-md-12 col-12 mb-2">
                 <label className="form-label">Terms Condition</label>
                 <div className="form-check  d-flex ">
                   <input
@@ -555,7 +555,7 @@ function DriverManagementAdd() {
                         {formik.errors.termsCondition}
                       </small>
                     )}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
