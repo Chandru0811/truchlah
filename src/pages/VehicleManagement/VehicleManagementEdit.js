@@ -16,7 +16,7 @@ function VehicleManagementEdit() {
   const validationSchema = Yup.object({
     // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
     type: Yup.string().required("*Type is required"),
-    vehicleCapacity: Yup.mixed().required("*Type is required"),
+    vehicleCapacity: Yup.string().required("*Capacity is required"),
     vehicleStatus: Yup.string().required("*Type is required"),
     description: Yup.string().required("*Description is required"),
     baseFare: Yup.number().required("*Base fare is required"),
@@ -136,9 +136,7 @@ function VehicleManagementEdit() {
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
-                  <h1 className="h4 ls-tight headingColor">
-                    Add Vehicle
-                  </h1>
+                  <h1 className="h4 ls-tight headingColor">Add Vehicle</h1>
                 </div>
               </div>
               <div className="col-auto">
@@ -195,16 +193,17 @@ function VehicleManagementEdit() {
               </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
-                 Vehicle Name <span className="text-danger">*</span>
+                  Vehicle Name <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="text"
                     name="type"
-                    className={`form-control ${formik.touched.type && formik.errors.type
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.type && formik.errors.type
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("type")}
                   />
                   {formik.touched.type && formik.errors.type && (
@@ -214,62 +213,78 @@ function VehicleManagementEdit() {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
-                 Vehicle Capacity<span className="text-danger">*</span>
+                  Vehicle Capacity<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
                     type="text"
                     name="vehicleCapacity"
-                    className={`form-control ${formik.touched.vehicleCapacity && formik.errors.vehicleCapacity
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.vehicleCapacity &&
+                      formik.errors.vehicleCapacity
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("vehicleCapacity")}
                   />
-                  {formik.touched.vehicleCapacity && formik.errors.vehicleCapacity && (
-                    <div className="invalid-feedback">{formik.errors.vehicleCapacity}</div>
-                  )}
+                  {formik.touched.vehicleCapacity &&
+                    formik.errors.vehicleCapacity && (
+                      <div className="invalid-feedback">
+                        {formik.errors.vehicleCapacity}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
-                 Vehicle Status<span className="text-danger">*</span>
+                  Vehicle Status<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <select
                     type="text"
                     name="vehicleStatus"
-                    className={`form-select ${formik.touched.vehicleStatus && formik.errors.vehicleStatus
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-select ${
+                      formik.touched.vehicleStatus &&
+                      formik.errors.vehicleStatus
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("vehicleStatus")}
                   >
                     <option value={""}></option>
                     <option value={"ACTIVE"}>Active</option>
                     <option value={"INACTIVE"}>InActive</option>
                   </select>
-                  {formik.touched.vehicleStatus && formik.errors.vehicleStatus && (
-                    <div className="invalid-feedback">{formik.errors.vehicleStatus}</div>
-                  )}
+                  {formik.touched.vehicleStatus &&
+                    formik.errors.vehicleStatus && (
+                      <div className="invalid-feedback">
+                        {formik.errors.vehicleStatus}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
-                 Vehicle Image<span className="text-danger">*</span>
+                  Vehicle Image<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
                     type="file"
                     name="imageUrl"
-                    className={`form-control ${formik.touched.imageUrl && formik.errors.imageUrl
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                      onChange={(e)=>formik.setFieldValue("imageUrl",e.target.files[0])}
+                    className={`form-control ${
+                      formik.touched.imageUrl && formik.errors.imageUrl
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(e) =>
+                      formik.setFieldValue("imageUrl", e.target.files[0])
+                    }
                   />
                   {formik.touched.imageUrl && formik.errors.imageUrl && (
-                    <div className="invalid-feedback">{formik.errors.imageUrl}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.imageUrl}
+                    </div>
                   )}
                 </div>
               </div>
@@ -279,12 +294,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="baseFare"
-                    className={`form-control ${formik.touched.baseFare && formik.errors.baseFare
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.baseFare && formik.errors.baseFare
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("baseFare")}
                   />
                   {formik.touched.baseFare && formik.errors.baseFare && (
@@ -300,12 +317,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="perKm"
-                    className={`form-control ${formik.touched.perKm && formik.errors.perKm
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.perKm && formik.errors.perKm
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("perKm")}
                   />
                   {formik.touched.perKm && formik.errors.perKm && (
@@ -321,12 +340,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="helper"
-                    className={`form-control ${formik.touched.helper && formik.errors.helper
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.helper && formik.errors.helper
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("helper")}
                   />
                   {formik.touched.helper && formik.errors.helper && (
@@ -342,12 +363,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="extraHelper"
-                    className={`form-control ${formik.touched.extraHelper && formik.errors.extraHelper
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.extraHelper && formik.errors.extraHelper
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("extraHelper")}
                   />
                   {formik.touched.extraHelper && formik.errors.extraHelper && (
@@ -363,13 +386,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="tailGateCharge"
-                    className={`form-control ${formik.touched.tailGateCharge &&
+                    className={`form-control ${
+                      formik.touched.tailGateCharge &&
                       formik.errors.tailGateCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("tailGateCharge")}
                   />
                   {formik.touched.tailGateCharge &&
@@ -386,13 +411,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="overtimeCharge"
-                    className={`form-control ${formik.touched.overtimeCharge &&
+                    className={`form-control ${
+                      formik.touched.overtimeCharge &&
                       formik.errors.overtimeCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("overtimeCharge")}
                   />
                   {formik.touched.overtimeCharge &&
@@ -409,13 +436,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="nonLiftAccess"
-                    className={`form-control ${formik.touched.nonLiftAccess &&
+                    className={`form-control ${
+                      formik.touched.nonLiftAccess &&
                       formik.errors.nonLiftAccess
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("nonLiftAccess")}
                   />
                   {formik.touched.nonLiftAccess &&
@@ -432,12 +461,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="erpCharge"
-                    className={`form-control ${formik.touched.erpCharge && formik.errors.erpCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.erpCharge && formik.errors.erpCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("erpCharge")}
                   />
                   {formik.touched.erpCharge && formik.errors.erpCharge && (
@@ -453,12 +484,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="cbdCharge"
-                    className={`form-control ${formik.touched.cbdCharge && formik.errors.cbdCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.cbdCharge && formik.errors.cbdCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("cbdCharge")}
                   />
                   {formik.touched.cbdCharge && formik.errors.cbdCharge && (
@@ -474,13 +507,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="securedZoneCharge"
-                    className={`form-control ${formik.touched.securedZoneCharge &&
+                    className={`form-control ${
+                      formik.touched.securedZoneCharge &&
                       formik.errors.securedZoneCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("securedZoneCharge")}
                   />
                   {formik.touched.securedZoneCharge &&
@@ -497,12 +532,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="gst"
-                    className={`form-control ${formik.touched.gst && formik.errors.gst
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.gst && formik.errors.gst
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("gst")}
                   />
                   {formik.touched.gst && formik.errors.gst && (
@@ -516,12 +553,14 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="roundTrip"
-                    className={`form-control ${formik.touched.roundTrip && formik.errors.roundTrip
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.roundTrip && formik.errors.roundTrip
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("roundTrip")}
                   />
                   {formik.touched.roundTrip && formik.errors.roundTrip && (
@@ -537,13 +576,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="wrappingCharge"
-                    className={`form-control ${formik.touched.wrappingCharge &&
+                    className={`form-control ${
+                      formik.touched.wrappingCharge &&
                       formik.errors.wrappingCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("wrappingCharge")}
                   />
                   {formik.touched.wrappingCharge &&
@@ -560,13 +601,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="addStopCharge"
-                    className={`form-control ${formik.touched.addStopCharge &&
+                    className={`form-control ${
+                      formik.touched.addStopCharge &&
                       formik.errors.addStopCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("addStopCharge")}
                   />
                   {formik.touched.addStopCharge &&
@@ -583,13 +626,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="tenToTwelveCharge"
-                    className={`form-control ${formik.touched.tenToTwelveCharge &&
+                    className={`form-control ${
+                      formik.touched.tenToTwelveCharge &&
                       formik.errors.tenToTwelveCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("tenToTwelveCharge")}
                   />
                   {formik.touched.tenToTwelveCharge &&
@@ -606,13 +651,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="twelveToSevenCharge"
-                    className={`form-control ${formik.touched.twelveToSevenCharge &&
+                    className={`form-control ${
+                      formik.touched.twelveToSevenCharge &&
                       formik.errors.twelveToSevenCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("twelveToSevenCharge")}
                   />
                   {formik.touched.twelveToSevenCharge &&
@@ -629,13 +676,15 @@ function VehicleManagementEdit() {
                 </label>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    type="text"
                     name="peakHourCharge"
-                    className={`form-control ${formik.touched.peakHourCharge &&
+                    className={`form-control ${
+                      formik.touched.peakHourCharge &&
                       formik.errors.peakHourCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("peakHourCharge")}
                   />
                   {formik.touched.peakHourCharge &&
@@ -653,10 +702,11 @@ function VehicleManagementEdit() {
                 <div className="mb-3">
                   <textarea
                     name="description"
-                    className={`form-control ${formik.touched.description && formik.errors.description
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.description && formik.errors.description
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("description")}
                   />
                   {formik.touched.description && formik.errors.description && (
