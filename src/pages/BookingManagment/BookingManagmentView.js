@@ -200,9 +200,9 @@ function BookingManagmentView() {
                         disabled={
                           spinner ||
                           !driversListData ||
-                          driversListData.length === 0 ||
-                          data?.bookingStatus?.status === "ASSIGNED"
-                        } // Combined conditions for disabling the button
+                          driversListData.length === 0
+                          // data?.bookingStatus?.status === "ASSIGNED"
+                        }
                       >
                         {spinner ? (
                           <span

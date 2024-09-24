@@ -25,6 +25,11 @@ function Service() {
   const distanceValue = params.get("distance");
   console.log("est km", distanceValue);
   const locationValueString = params.get("location");
+  const estKm = params.get("estKm");
+
+  console.log("locationValueString:",locationValueString);
+  console.log("EST KM:",estKm);
+  
   const bookingId = params.get("bookingId");
   console.log("bookingId",bookingId)
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -33,7 +38,7 @@ function Service() {
   try {
     locationValue = JSON.parse(decodeURIComponent(locationValueString));
   } catch (error) {
-    console.error("Failed to parse location value:", error);
+    console.error("Failed to parse location value rrrrr:", error);
   }
 
   const [vechicle, setVechicle] = useState([]);
@@ -154,7 +159,7 @@ function Service() {
           type: shiftType,
           locationDetail: locationValue,
           bookingId: bookingId,
-          estKm: parseFloat(distanceValue),
+          estKm: parseFloat(distanceValue) || estKm,
           scheduledDate: `${values.date}T${values.time}:00.000Z`,
           deliveryDate: deliveryDate,
           quantity: values.extraManpower ? values.quantity : 0,
@@ -171,7 +176,7 @@ function Service() {
         setLoadIndicator(true);
         try {
           const response = await bookingApi.post(`booking/update`, payload);
-          console.log(response);
+          console.log("Response:",response);
           if (response.status === 200) {
             toast.success("Vehicle selected successfully!");
             navigate(`/summary/${bookingId}`);
