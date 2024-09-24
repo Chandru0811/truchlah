@@ -3,6 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { bookingApi, driverApi } from "../../config/URL";
 import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object({
+  driverId: Yup.string().required("*Driver is required"),
+});
 
 function BookingManagmentView() {
   const { id } = useParams();
@@ -15,12 +20,26 @@ function BookingManagmentView() {
 
   const vehicleTypeId = data?.booking?.vehicletypeId;
 
+  const getBookingById = async () => {
+    setLoading(true);
+    try {
+      const response = await bookingApi.get(`/booking/getBookingById/${id}`);
+      setData(response.data.responseBody);
+      console.log("Booking By ID :", response.data.responseBody);
+    } catch (error) {
+      toast.error("Error fetching data: ", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       bookingId: id,
       driverId: "",
       acceptedBy: "",
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       const selectedDriver = driversListData.find(
         (driver) => driver.id === parseInt(values.driverId)
@@ -51,6 +70,8 @@ function BookingManagmentView() {
         );
         if (response.status === 200) {
           toast.success(response.data.message);
+          getBookingById();
+
         } else {
           toast.error(response.data.message);
         }
@@ -62,20 +83,9 @@ function BookingManagmentView() {
     },
   });
 
-  useEffect(() => {
-    const getBookingById = async () => {
-      setLoading(true);
-      try {
-        const response = await bookingApi.get(`/booking/getBookingById/${id}`);
-        setData(response.data.responseBody);
-        console.log("Booking By ID :", response.data.responseBody);
-      } catch (error) {
-        toast.error("Error fetching data: ", error?.response?.data?.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+ 
 
+  useEffect(() => {
     const getDriversBasedOnVehicleTypeId = async () => {
       if (vehicleTypeId) {
         setLoading(true);
@@ -141,8 +151,13 @@ function BookingManagmentView() {
                 <form onSubmit={formik.handleSubmit}>
                   <div className="col-md-12 col-12 text-end">
                     <div className="d-flex justify-content-end align-items-center">
-                      <select
-                        className="form-select w-25 me-3"
+                     <div className="w-25 me-3">
+                     <select
+                        className={`form-select ${
+                          formik.touched.status && formik.errors.status
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         name="driverId"
                         value={formik.values.driverId}
                         onChange={(e) => {
@@ -173,13 +188,20 @@ function BookingManagmentView() {
                           </option>
                         )}
                       </select>
+                      {formik.touched.driverId && formik.errors.driverId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.driverId}
+                    </div>
+                  )}
+                     </div>
                       <button
                         type="submit"
                         className="btn btn-sm btn-button"
                         disabled={
                           spinner ||
                           !driversListData ||
-                          driversListData.length === 0
+                          driversListData.length === 0 ||
+                          data?.bookingStatus?.status === "ASSIGNED"
                         } // Combined conditions for disabling the button
                       >
                         {spinner ? (
@@ -224,7 +246,7 @@ function BookingManagmentView() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : BID{data?.booking?.bookingId || "--"}
+                                : {data?.booking?.bookingId || "--"}
                               </p>
                             </div>
                           </div>
@@ -352,7 +374,7 @@ function BookingManagmentView() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.booking?.estKm || ""}{" "}
+                                : {data?.booking?.roundTrip || ""}{" "}
                               </p>
                             </div>
                           </div>
@@ -368,6 +390,24 @@ function BookingManagmentView() {
                               <p className="text-muted text-sm">
                                 :{" "}
                                 {data?.booking?.scheduledDate.substring(
+                                  0,
+                                  10
+                                ) || ""}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Delivery Date</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                :{" "}
+                                {data?.booking?.deliveryDate.substring(
                                   0,
                                   10
                                 ) || ""}{" "}
@@ -558,7 +598,7 @@ function BookingManagmentView() {
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
-                                    : {location.pickupCountryCode || " "}{" "}
+                                    : +{location.pickupCountryCode || " "}{" "}
                                     {location.pickupMobile || " "}
                                   </p>
                                 </div>
@@ -616,7 +656,7 @@ function BookingManagmentView() {
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
-                                    : {location.dropoffCountryCode || " "}
+                                    : +{location.dropoffCountryCode || " "}{" "}
                                     {location.dropoffMobile || " "}
                                   </p>
                                 </div>

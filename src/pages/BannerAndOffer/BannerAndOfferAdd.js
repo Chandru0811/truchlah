@@ -29,7 +29,7 @@ function BannerAndOfferAdd() {
       formData.append("attachment", values.attachment);
       formData.append("description", values.description);
       try {
-        const response = await userApi.post("createOffer", formData);
+        const response = await userApi.post("createOfferFiles", formData);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/bannerandoffer");

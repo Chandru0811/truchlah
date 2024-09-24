@@ -130,6 +130,7 @@ function Map() {
     const payload = {
       userId: userId,
       type: shiftType,
+      // estKm:distance,
       locationDetail: locationDetail,
     };
 
