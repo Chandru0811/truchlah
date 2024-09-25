@@ -119,7 +119,7 @@ function HouseCategoryManagementAdd() {
                   Price<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
-                  <input
+                  <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
                     type="text"
                     name="price"
                     className={`form-control ${

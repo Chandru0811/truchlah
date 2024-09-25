@@ -14,13 +14,15 @@ function BannerAndOfferEdit() {
   const validationSchema = Yup.object({
     status: Yup.string().required("*Status is required"),
     attachment: Yup.mixed()
-      .required("*Attachment is required")
-      .test("fileSize", "*File size is too large", (value) => {
-        return value && value.size <= 1024 * 1024; // max 1MB file size
-      })
-      .test("fileType", "*Unsupported file format", (value) => {
-        return value && ["image/jpeg", "image/png"].includes(value.type); // only allow jpeg and png
-      }),
+  .test("fileSize", "*File size is too large", (value) => {
+    // Check if value exists and has a size, or if it's empty (for optional attachment)
+    return !value || (value.size && value.size <= 1024 * 1024); // Max 1MB file size
+  })
+  .test("fileType", "*Unsupported file format", (value) => {
+    // Check if value exists and has a type, or if it's empty (for optional attachment)
+    return !value || ["image/jpeg", "image/png"].includes(value.type); // Only allow jpeg and png
+  }).notRequired(),
+
     description: Yup.string().required("*Description is required"),
   });
 
@@ -116,7 +118,7 @@ function BannerAndOfferEdit() {
                       <button
                         type="submit"
                         className="btn btn-sm btn-button"
-                        disabled={!formik.isValid || loading}
+                        disabled={loading}
                       >
                         {loading ? (
                           <span
@@ -189,7 +191,7 @@ function BannerAndOfferEdit() {
                         src={data.attachment}
                         alt="Attachment"
                         className="img-fluid"
-                        style={{ maxWidth: "70%", height: "auto" }}
+                        style={{ maxWidth: "40%", height: "auto" }}
                       />
                     ) : (
                       <p className="text-muted text-sm">No attachment</p>

@@ -138,7 +138,7 @@ const ContactForm = () => {
                     {/* <th scope="col" className="text-center">
                   Unit
                 </th> */}
-                    <th scope="col" className="text-center">
+                    <th scope="col" className="text-center"  aria-disabled="true" style={{ pointerEvents: "none" }}>
                       ACTION
                     </th>
                   </tr>

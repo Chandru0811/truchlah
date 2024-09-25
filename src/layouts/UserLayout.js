@@ -43,7 +43,6 @@ import ScrollToTop from "../pages/ScroolToTop";
 import PaymentUnsuccessful from "../pages/common_pages/UnSuccessFul";
 import MobileNumVerify from "../pages/authorization/MobileNumVerify";
 
-
 function UserLayout({
   handleAdminLogin,
   isAuthenticate,
@@ -56,14 +55,17 @@ function UserLayout({
   });
 
   return (
-    <Router>
+    <Router basename="/auth">
       <Head isAuthenticate={isAuthenticate} handleLogout={handleLogout} />
       <ScrollToTop />
       <div style={{ marginTop: "66px" }}>
         <Routes>
-          <Route path="/" element={<Home isAuthenticate={isAuthenticate} />} />
           <Route
-            path="/login"
+            path="/home"
+            element={<Home isAuthenticate={isAuthenticate} />}
+          />
+          <Route
+            path="/"
             element={
               <Login
                 handleLogin={handleLogin}
@@ -112,8 +114,6 @@ function UserLayout({
               <Route path="/rides" element={<Order />} />
               <Route path="/coupons" element={<Coupons />} />
               <Route path="/price" element={<Price />} />
-              
-              
 
               <Route
                 path="/ridedetailsview/:id"
@@ -123,7 +123,15 @@ function UserLayout({
               <Route path="/changepassword" element={<ChangePassword />} />
             </>
           )}
-          <Route path="*" element={<NotFound />} />
+          <Route
+            path="*"
+            element={
+              <Login
+                handleLogin={handleLogin}
+                handleAdminLogin={handleAdminLogin}
+              />
+            }
+          />
         </Routes>
       </div>
       <BackToTopButton />

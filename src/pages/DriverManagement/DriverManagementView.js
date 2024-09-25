@@ -85,7 +85,7 @@ function DriverManagementView() {
                     <div className="col-6">
                       <b>Mobile Number</b>
                     </div>
-                    <div className="col-6 text-muted">: {data.mobileNo || "N/A"}</div>
+                    <div className="col-6 text-muted">: {`+${data.countryCode} ${data.mobileNo}` || "N/A"}</div>
                   </div>
                 </div>
                 <div className="col-md-6 col-12">
@@ -104,7 +104,7 @@ function DriverManagementView() {
                     <div className="col-6 text-muted">: {data.driverId || "N/A"}</div>
                   </div>
                 </div> */}
-                <div className="col-md-6 col-12">
+                {/* <div className="col-md-6 col-12">
                   <div className="row mb-3">
                     <div className="col-6">
                       <b>Demerit Points</b>
@@ -119,7 +119,7 @@ function DriverManagementView() {
                     </div>
                     <div className="col-6 text-muted">: {data.loginType || "N/A"}</div>
                   </div>
-                </div>
+                </div> */}
                 {/* Add more fields as needed */}
                 {/* Image Fields */}
                 <div className="col-md-6 col-12">

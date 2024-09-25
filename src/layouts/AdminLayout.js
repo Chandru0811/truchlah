@@ -48,7 +48,7 @@ import BookingManagmentView from "../pages/BookingManagment/BookingManagmentView
 
 function AdminLayout({ handleLogout }) {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/auth">
       <div
         className="d-flex flex-column flex-lg-row  "
         style={{ background: "#ECECEC" }}
