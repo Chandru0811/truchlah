@@ -234,13 +234,13 @@ function Register({ handleLogin }) {
       <div
         className="row align-items-center"
         style={{
-          backgroundColor: "#9AB8DD",
+          backgroundColor: "#e6ffe4",
         }}
       >
         <div
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
           style={{
-            backgroundColor: "#9AB8DD",
+            backgroundColor: "#e6ffe4",
             height: "100%",
           }}
         >
@@ -641,8 +641,8 @@ function Register({ handleLogin }) {
                   </div>
                   <button
                     type="submit"
-                    style={{ width: "100%" }}
-                    className="btn btn-primary"
+                    style={{ width: "100%",backgroundColor:"#333" }}
+                    className="btn btn-primary border-0"
                   >
                     Submit
                   </button>
