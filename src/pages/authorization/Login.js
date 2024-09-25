@@ -222,13 +222,13 @@ function Login({ handleLogin, handleAdminLogin }) {
       <div
         className="row align-items-center"
         style={{
-          backgroundColor: "#9AB8DD",
+          backgroundColor: "#e6ffe4",
         }}
       >
         <div
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
           style={{
-            backgroundColor: "#9AB8DD",
+            backgroundColor: "#e6ffe4",
             height: "100%",
           }}
         >
@@ -382,8 +382,8 @@ function Login({ handleLogin, handleAdminLogin }) {
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn btn-primary py-2"
-                        style={{ width: "100%" }}
+                        className="btn btn-primary py-2 border-0"
+                        style={{ width: "100%",backgroundColor:"#333" }}
                       >
                         Login{" "}
                       </button>
