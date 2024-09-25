@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { bookingApi, driverApi } from "../../config/URL";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { Badge } from "antd";
 const validationSchema = Yup.object({
   driverId: Yup.string().required("*Driver is required"),
 });
@@ -69,9 +69,8 @@ function BookingManagmentView() {
           }
         );
         if (response.status === 200) {
-          toast.success(response.data.message);
+          toast.success("Driver Assigned Successfully");
           getBookingById();
-
         } else {
           toast.error(response.data.message);
         }
@@ -83,7 +82,46 @@ function BookingManagmentView() {
     },
   });
 
- 
+  // Function to format the booking status text and return related background color
+  const formatBookingStatus = (status) => {
+    switch (status) {
+      case "DRAFT_BOOKING":
+        return {
+          text: "Draft Booking",
+          backgroundColor: "#fcd162", // Warning color (example)
+        };
+      case "CANCELLED":
+        return {
+          text: "Cancelled",
+          backgroundColor: "#f04545", // Danger color (example)
+        };
+      case "BOOKED":
+        return {
+          text: "Booked",
+          backgroundColor: "#2593fb", // Info color (example)
+        };
+      case "COMPLETED":
+        return {
+          text: "Completed",
+          backgroundColor: "#17e540", // Success color (example)
+        };
+        case "ASSIGNED":
+          return {
+            text: "Assigned",
+            backgroundColor: "#acff3b", // Success color (example)
+          };
+      default:
+        return {
+          text: "Unknown",
+          backgroundColor: "#6d736e", // Default color (example)
+        };
+    }
+  };
+
+  // Get the formatted status and background color
+  const { text: bookingStatus, backgroundColor } = formatBookingStatus(
+    data?.bookingStatus?.status || "Unknown"
+  );
 
   useEffect(() => {
     const getDriversBasedOnVehicleTypeId = async () => {
@@ -151,49 +189,49 @@ function BookingManagmentView() {
                 <form onSubmit={formik.handleSubmit}>
                   <div className="col-md-12 col-12 text-end">
                     <div className="d-flex justify-content-end align-items-center">
-                     <div className="w-25 me-3">
-                     <select
-                        className={`form-select ${
-                          formik.touched.status && formik.errors.status
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        name="driverId"
-                        value={formik.values.driverId}
-                        onChange={(e) => {
-                          const selectedId = e.target.value;
-                          const selectedDriver = driversListData.find(
-                            (driver) => driver.id === selectedId
-                          );
-                          formik.setFieldValue("driverId", selectedId);
-                          formik.setFieldValue(
-                            "acceptedBy",
-                            selectedDriver ? selectedDriver.driverName : ""
-                          );
-                        }}
-                      >
-                        <option value="" disabled>
-                          Select Driver
-                        </option>
-                        {Array.isArray(driversListData) &&
-                        driversListData.length > 0 ? (
-                          driversListData.map((driver) => (
-                            <option key={driver.id} value={driver.id}>
-                              {driver.driverName}
-                            </option>
-                          ))
-                        ) : (
+                      <div className="w-25 me-3">
+                        <select
+                          className={`form-select ${
+                            formik.touched.status && formik.errors.status
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          name="driverId"
+                          value={formik.values.driverId}
+                          onChange={(e) => {
+                            const selectedId = e.target.value;
+                            const selectedDriver = driversListData.find(
+                              (driver) => driver.id === selectedId
+                            );
+                            formik.setFieldValue("driverId", selectedId);
+                            formik.setFieldValue(
+                              "acceptedBy",
+                              selectedDriver ? selectedDriver.driverName : ""
+                            );
+                          }}
+                        >
                           <option value="" disabled>
-                            No drivers available
+                            Select Driver
                           </option>
+                          {Array.isArray(driversListData) &&
+                          driversListData.length > 0 ? (
+                            driversListData.map((driver) => (
+                              <option key={driver.id} value={driver.id}>
+                                {driver.driverName}
+                              </option>
+                            ))
+                          ) : (
+                            <option value="" disabled>
+                              No drivers available
+                            </option>
+                          )}
+                        </select>
+                        {formik.touched.driverId && formik.errors.driverId && (
+                          <div className="invalid-feedback">
+                            {formik.errors.driverId}
+                          </div>
                         )}
-                      </select>
-                      {formik.touched.driverId && formik.errors.driverId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.driverId}
-                    </div>
-                  )}
-                     </div>
+                      </div>
                       <button
                         type="submit"
                         className="btn btn-sm btn-button"
@@ -218,8 +256,20 @@ function BookingManagmentView() {
                 </form>
               </div>
               <div className="row mt-2 p-3">
+                <Badge.Ribbon
+                  className="px-4 py-1 fs-6"
+                  text={bookingStatus}
+                  placement="start"
+                  style={{
+                    backgroundColor: backgroundColor,
+                    color: "#fff", // Text color for better contrast
+                    zIndex: "100",
+                    fontSize: "15px", // Increase font size
+                    left:"4px"
+                  }}
+                />
                 <div class="accordion" id="accordionPanelsStayOpenExample">
-                  <div class="accordion-item">
+                  <div class="accordion-item pt-5">
                     <h2 class="accordion-header">
                       <button
                         class="accordion-button"
@@ -313,7 +363,7 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Helper</b>
+                                <b>Manpower</b>
                               </p>
                             </div>
                             <div className="col-6">
@@ -407,10 +457,8 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                {data?.booking?.deliveryDate.substring(
-                                  0,
-                                  10
-                                ) || ""}{" "}
+                                {data?.booking?.deliveryDate.substring(0, 10) ||
+                                  ""}{" "}
                               </p>
                             </div>
                           </div>
@@ -677,20 +725,7 @@ function BookingManagmentView() {
                                 </div>
                               </div>
                             </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Status</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {location.subStatus || ""}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
+                            
                           </div>
                         ))
                       ) : (
@@ -700,7 +735,6 @@ function BookingManagmentView() {
                       )}
                     </div>
                   </div>
-
                   <div class="accordion-item">
                     <h2 class="accordion-header">
                       <button
@@ -793,7 +827,6 @@ function BookingManagmentView() {
                       </div>
                     </div>
                   </div>
-
                   <div class="accordion-item">
                     <h2 class="accordion-header">
                       <button

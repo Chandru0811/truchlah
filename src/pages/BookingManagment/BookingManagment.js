@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import DeleteModel from "../../Components/DeleteModel";
 import toast from "react-hot-toast";
 import { bookingApi } from "../../config/URL";
+import { Avatar, Badge, Space } from "antd";
 
 const BookingManagment = () => {
   const tableRef = useRef(null);
@@ -108,7 +109,6 @@ const BookingManagment = () => {
                     </h1>
                   </div>
                 </div>
-                
               </div>
             </div>
             <hr className="removeHrMargin mt-0"></hr>
@@ -120,18 +120,18 @@ const BookingManagment = () => {
                       S.NO
                     </th>
                     <th scope="col" className="text-center">
-                      User Name
+                      Booking ID
                     </th>
                     <th scope="col" className="text-center">
-                      Delivery Date
-                    </th>
-                    <th scope="col" className="text-center">
-                      Booking Time
+                      Booking Date & Time
                     </th>
                     <th scope="col" className="text-center">
                       Est Km
                     </th>
                     <th scope="col" className="text-center">
+                      Amount
+                    </th>
+                    <th scope="col" className="text-center" aria-disabled="true" style={{ pointerEvents: "none" }}>
                       ACTION
                     </th>
                   </tr>
@@ -140,38 +140,51 @@ const BookingManagment = () => {
                   {datas?.map((data, index) => (
                     <tr>
                       <td className="text-center">{index + 1}</td>
+                      <td className="text-center">{data.bookingId || ""}</td>
                       <td className="text-center">
-                        {data.bookingDetails.username || ""}
-                      </td> 
-                      <td className="text-center">
-                        {data.bookingDetails?.deliveryDate
-                          ? data.bookingDetails.deliveryDate.split("T")[0]
-                          : "yyyy-mm-dd"}{" "}
-                        {/* Shows 'N/A' if deliveryDate is undefined */}
+                        {data.bookingTime ? (
+                          <>
+                            {data.bookingTime.substring(0, 10)} <b>&</b>{" "}
+                            {new Date(data.bookingTime).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            })}
+                          </>
+                        ) : (
+                          " "
+                        )}
                       </td>
+                      <td className="text-center">{data.estKm || ""}</td>
                       <td className="text-center">
-                        {data.bookingDetails?.deliveryDate
-                          ? data.bookingDetails.deliveryDate
-                              .split("T")[1]
-                              ?.slice(0, 5)
-                          : "00:00"}{" "}
-                        {/* Shows 'N/A' if deliveryDate is undefined */}
-                      </td>
-                      <td className="text-center">
-                        {data.bookingDetails.estKm || "0.0 Km"}
+                        {data.totalAmount || "0.0"}
                       </td>
                       <td className="text-center">
                         <div className="gap-2">
-                          <Link to={`/bookingManagement/view/${data.bookingId}`}>
-                            <button className="btn btn-light btn-sm  shadow-none border-none">
-                              View
-                            </button>
+                          <Link
+                            to={`/bookingManagement/view/${data.bookingId}`}
+                          >
+                            <Space size="small">
+                              {data.status === "ASSIGNED" ? (
+                                <Badge
+                                  size="small"
+                                  color="#acff3b"
+                                  count=" "
+                                  placement="start"
+                                  style={{right:"41px" ,color:"#acff3b"}}
+                                >
+                                  <button className="btn btn-light btn-sm shadow-none border-none">
+                                    View
+                                  </button>
+                                </Badge>
+                              ) : (
+                                <button className="btn btn-light btn-sm shadow-none border-none">
+                                  View
+                                </button>
+                              )}
+                            </Space>
                           </Link>
-                          {/* <Link to={`/bookingManagement/edit/${data.bookingId}`} className="px-2">
-                        <button className="btn btn-light  btn-sm shadow-none border-none">
-                          Edit
-                        </button>
-                      </Link> */}
+
                           <DeleteModel
                             onSuccess={refreshData}
                             onDelete={() => deleteFun(data.bookingId)}

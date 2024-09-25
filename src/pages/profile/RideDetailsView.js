@@ -19,6 +19,7 @@ import * as Yup from "yup";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { GoStarFill } from "react-icons/go";
 import { FaRegStar } from "react-icons/fa6";
+
 function RideDetailsView() {
   const [show, setShow] = useState(false);
   const [data, setData] = useState({});
@@ -34,8 +35,6 @@ function RideDetailsView() {
   const navigate = useNavigate();
   console.log("Booking Data:", data);
   console.log("Location Details Data:", locationDetail);
-
-
 
   const fetchData = async () => {
     try {

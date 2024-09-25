@@ -13,9 +13,11 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 function Summary() {
   const [data, setData] = useState({});
-  console.log("Summary Data is", data);
+  const [loadIndicator1, setLoadIndicator1] = useState(false);
+  const [loadIndicator2, setLoadIndicator2] = useState(false);
+
   const { bookingId } = useParams();
-  console.log("bookingId", bookingId);
+  // console.log("bookingId", bookingId);
   const [vechicle, setVechicle] = useState([]);
   // console.log("Api Data", data.booking);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,6 +59,7 @@ function Summary() {
   };
 
   const confirmCashPayment = async () => {
+    setLoadIndicator1(true);
     try {
       const response = await bookingApi.post(
         `booking/cashPayment/${bookingId}`
@@ -68,10 +71,14 @@ function Summary() {
       }
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
+    } finally {
+      setLoadIndicator1(false);
     }
   };
 
   const handlePayment = async () => {
+    setLoadIndicator2(true);
+
     try {
       const response = await bookingApi.post(
         `booking/generateCardTransactionPaymentLink?bookingId=${bookingId}`
@@ -87,6 +94,8 @@ function Summary() {
       }
     } catch (error) {
       toast.error("Payment error: " + error.message);
+    } finally {
+      setLoadIndicator2(false);
     }
   };
 
@@ -536,6 +545,12 @@ function Summary() {
               className="btn btn-primary px-5 py-2 me-4"
               id="NextMove"
             >
+              {loadIndicator1 && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
             Cash On Delivery
             </button>
 
@@ -544,6 +559,12 @@ function Summary() {
               className="btn btn-primary px-5 py-2"
               id="NextMove"
             >
+              {loadIndicator2 && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
               Pay Now
             </button>
           </div>
