@@ -48,7 +48,7 @@ const BannerAndOffer = () => {
     setLoading(true);
     try {
       const response = await userApi.get("getAllOffer");
-      if(response.data.status ===200){
+      if(response.status === 200){
         setDatas(response.data.responseBody);
         initializeDataTable();} 
     } catch (error) {
@@ -127,7 +127,7 @@ const BannerAndOffer = () => {
                 {/* <th scope="col" className="text-center">
                   Mobile Number
                 </th> */}
-                <th scope="col" className="text-center">
+                <th scope="col" className="text-center"  aria-disabled="true" style={{ pointerEvents: "none" }}>
                   ACTION
                 </th>
               </tr>

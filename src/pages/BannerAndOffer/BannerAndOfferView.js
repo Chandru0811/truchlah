@@ -76,6 +76,18 @@ function BannerAndOfferView() {
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
                       <p className="text-sm">
+                        <b>Description</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {data.description || ""}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
                         <b>Attachment</b>
                       </p>
                     </div>
@@ -85,7 +97,7 @@ function BannerAndOfferView() {
                           src={data.attachment}
                           alt="Attachment"
                           className="img-fluid"
-                          style={{ maxWidth: "100%", height: "auto" }}
+                          style={{ maxWidth: "50%", height: "auto" }}
                         />
                       ) : (
                         <p className="text-muted text-sm">No attachment</p>
@@ -93,18 +105,7 @@ function BannerAndOfferView() {
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 col-12">
-                  <div className="row mb-3">
-                    <div className="col-6 d-flex justify-content-start align-items-center">
-                      <p className="text-sm">
-                        <b>Description</b>
-                      </p>
-                    </div>
-                    <div className="col-6">
-                      <p className="text-muted text-sm">: {data.description || ""}</p>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
           </div>

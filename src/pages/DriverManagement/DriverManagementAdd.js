@@ -63,8 +63,8 @@ function DriverManagementAdd() {
       licenseFront: Yup.mixed().required('License Front is required'),
       licenseBack: Yup.mixed().required('License Back is required'),
     demeritPoint: Yup.number()
-      .required("*Demerit point is required")
-      .typeError("*Demerit point must be a number"),
+    .typeError("*Demerit point must be a number")
+    .notRequired(),
     // loginType: Yup.string().required("*Login type is required"),
   });
 
