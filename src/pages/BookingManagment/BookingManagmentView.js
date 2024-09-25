@@ -105,11 +105,11 @@ function BookingManagmentView() {
           text: "Completed",
           backgroundColor: "#17e540", // Success color (example)
         };
-        case "ASSIGNED":
-          return {
-            text: "Assigned",
-            backgroundColor: "#acff3b", // Success color (example)
-          };
+      case "ASSIGNED":
+        return {
+          text: "Assigned",
+          backgroundColor: "#acff3b", // Success color (example)
+        };
       default:
         return {
           text: "Unknown",
@@ -183,6 +183,19 @@ function BookingManagmentView() {
               </div>
             </div>
           </div>
+          <Badge.Ribbon
+                  className="px-4 py-1 fs-6"
+                  text={bookingStatus}
+                  placement="start"
+                  style={{
+                    backgroundColor: backgroundColor,
+                    color: "#fff", // Text color for better contrast
+                    zIndex: "100",
+                    fontSize: "15px", // Increase font size
+                    left: "-9px",
+                    top:"20px"
+                  }}
+                />
           <div className="card shadow border-0 mb-2 minHeight">
             <div className="container">
               <div className="row mt-2 p-3">
@@ -238,8 +251,8 @@ function BookingManagmentView() {
                         disabled={
                           spinner ||
                           !driversListData ||
-                          driversListData.length === 0
-                          // data?.bookingStatus?.status === "ASSIGNED"
+                          driversListData.length === 0 || 
+                          data?.bookingStatus?.status === "CANCELLED"
                         }
                       >
                         {spinner ? (
@@ -256,7 +269,7 @@ function BookingManagmentView() {
                 </form>
               </div>
               <div className="row mt-2 p-3">
-                <Badge.Ribbon
+                {/* <Badge.Ribbon
                   className="px-4 py-1 fs-6"
                   text={bookingStatus}
                   placement="start"
@@ -265,11 +278,11 @@ function BookingManagmentView() {
                     color: "#fff", // Text color for better contrast
                     zIndex: "100",
                     fontSize: "15px", // Increase font size
-                    left:"4px"
+                    left: "4px",
                   }}
-                />
+                /> */}
                 <div class="accordion" id="accordionPanelsStayOpenExample">
-                  <div class="accordion-item pt-5">
+                  <div class="accordion-item">
                     <h2 class="accordion-header">
                       <button
                         class="accordion-button"
@@ -518,78 +531,11 @@ function BookingManagmentView() {
                         aria-expanded="false"
                         aria-controls="panelsStayOpen-collapseTwo"
                       >
-                        Booking Status
-                      </button>
-                    </h2>
-                    <div
-                      id="panelsStayOpen-collapseTwo"
-                      class="accordion-collapse collapse"
-                    >
-                      <div class="accordion-body row mt-2 p-3">
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Last Modified Date</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                :{" "}
-                                {data?.bookingStatus?.lastModifiedDate.substring(
-                                  0,
-                                  10
-                                ) || ""}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Status</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data?.bookingStatus?.status || ""}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>User Notified</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                :{data?.bookingStatus?.userNotified || ""}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header">
-                      <button
-                        class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#panelsStayOpen-collapseThree"
-                        aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseThree"
-                      >
                         Booking Trip Locations
                       </button>
                     </h2>
                     <div
-                      id="panelsStayOpen-collapseThree"
+                      id="panelsStayOpen-collapseTwo"
                       class="accordion-collapse collapse"
                     >
                       {data?.bookingTripLocations?.length > 0 ? (
@@ -725,7 +671,6 @@ function BookingManagmentView() {
                                 </div>
                               </div>
                             </div>
-                            
                           </div>
                         ))
                       ) : (
@@ -741,15 +686,15 @@ function BookingManagmentView() {
                         class="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#panelsStayOpen-collapseFour"
+                        data-bs-target="#panelsStayOpen-collapseThree"
                         aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseFour"
+                        aria-controls="panelsStayOpen-collapseThree"
                       >
                         Transaction Details
                       </button>
                     </h2>
                     <div
-                      id="panelsStayOpen-collapseFour"
+                      id="panelsStayOpen-collapseThree"
                       class="accordion-collapse collapse"
                     >
                       <div class="accordion-body row mt-2 p-3">
@@ -833,15 +778,15 @@ function BookingManagmentView() {
                         class="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#panelsStayOpen-collapseFive"
+                        data-bs-target="#panelsStayOpen-collapseFoure"
                         aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseFive"
+                        aria-controls="panelsStayOpen-collapseFoure"
                       >
                         User Details
                       </button>
                     </h2>
                     <div
-                      id="panelsStayOpen-collapseFive"
+                      id="panelsStayOpen-collapseFoure"
                       class="accordion-collapse collapse"
                     >
                       <div class="accordion-body row mt-2 p-3">
@@ -935,6 +880,78 @@ function BookingManagmentView() {
                       </div>
                     </div>
                   </div>
+                  {data.bookingStatus.accepetedBy && (
+                    <>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseFive"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseFive"
+                          >
+                            Driver Details
+                          </button>
+                        </h2>
+                        <div
+                          id="panelsStayOpen-collapseFive"
+                          class="accordion-collapse collapse"
+                        >
+                          <div class="accordion-body row mt-2 p-3">
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Driver Name</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    : {data?.bookingStatus?.accepetedBy || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Accepted Date</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {data?.bookingStatus?.acceptedDate.substring(
+                                      0,
+                                      10
+                                    ) || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>User Notified</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{data?.bookingStatus?.userNotified || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
