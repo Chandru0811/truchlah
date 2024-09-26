@@ -99,7 +99,7 @@ function DriverManagementEdit() {
       if (values.idBack) formData.append("idBack", values.idBack);
       if (values.licenseFront) formData.append("licenseFront", values.licenseFront);
       if (values.licenseBack) formData.append("licenseBack", values.licenseBack);
-        formData.append("demeritPoint", values.demeritPoint);
+        formData.append("demeritPoint", 0);
         formData.append("firstName", values.firstName);
         formData.append("lastName", values.lastName);
         formData.append("email", values.email);
@@ -569,7 +569,7 @@ function DriverManagementEdit() {
                       </div>
                     )}
                   </div>
-                  <div className="col-md-6 col-12 mb-2">
+                  {/* <div className="col-md-6 col-12 mb-2">
                     <label className="form-label">
                       Demerit Point <span className="text-danger">*</span>
                     </label>
@@ -592,7 +592,7 @@ function DriverManagementEdit() {
                           </div>
                         )}
                     </div>
-                  </div>
+                  </div> */}
                   {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Login Type <span className="text-danger">*</span>

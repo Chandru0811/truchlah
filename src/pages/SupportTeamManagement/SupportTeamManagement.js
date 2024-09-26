@@ -11,7 +11,7 @@ const SupportTeamManagement = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-
+const roles =sessionStorage.getItem("roles")
   useEffect(() => {
     const table = $(tableRef.current).DataTable();
   
@@ -100,11 +100,12 @@ const SupportTeamManagement = () => {
             </div>
             <div className="col-auto">
               <div className="hstack gap-2 justify-content-end">
+              {roles !== "ROLE_STAFF" &&(
                 <Link to="/supportteammanagement/add">
                   <button type="submit" className="btn btn-sm btn-button">
                     <span>Add +</span>
                   </button>
-                </Link>
+                </Link>)}
               </div>
             </div>
           </div>
@@ -130,9 +131,10 @@ const SupportTeamManagement = () => {
                 {/* <th scope="col" className="text-center">
                   Unit
                 </th> */}
+                {roles !== "ROLE_STAFF" &&(
                 <th scope="col" className="text-center"  aria-disabled="true" style={{ pointerEvents: "none" }}>
                   ACTION
-                </th>
+                </th>)}
               </tr>
             </thead>
             <tbody>
@@ -143,13 +145,15 @@ const SupportTeamManagement = () => {
                   <td className="text-center">{data.email}</td>
                   <td className="text-center">{`${data.countryCode} ${data.mobileNo}`}</td>
                   {/* <td className="text-center">unit</td> */}
+                  {roles !== "ROLE_STAFF" &&(<>
                   <td className="text-center">
                     <div className="gap-2">
-                      <Link to={`/supportteammanagement/view/${data.userId}`}>
+                      {/* <Link to={`/supportteammanagement/view/${data.userId}`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
-                      </Link>
+                      </Link> */}
+                      
                       <Link to={`/supportteammanagement/edit/${data.userId}`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
                           Edit
@@ -163,6 +167,7 @@ const SupportTeamManagement = () => {
                       />
                     </div>
                   </td>
+                  </>)}
                 </tr>
                ))} 
             </tbody>
