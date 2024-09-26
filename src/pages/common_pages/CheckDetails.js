@@ -28,7 +28,7 @@ function Summary() {
     const fetchData = async () => {
       try {
         const response = await bookingApi.get(
-          `booking/getBookingById/${bookingId}`
+          `booking/getBookingByIdAdmin/${bookingId}`
         );
         if (response.status === 200) {
           setData(response.data.responseBody);

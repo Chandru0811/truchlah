@@ -8,6 +8,11 @@ import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
 
+const validationSchema = Yup.object({
+  reviewComments: Yup.string().required("Comments are required"),
+  rating: Yup.number().required("Rating is required"),
+});
+
 const colors = {
   orange: "#FFBA5A",
   grey: "#a9a9a9",
@@ -19,12 +24,11 @@ function Popup({ bookingId, onSuccess }) {
   const [show, setShow] = useState(false);
   const [reviewType, setReviewType] = useState("General");
   const handleShow = () => setShow(true);
-  const validationSchema = Yup.object({});
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const bookingIdValue = params.get("bookingId");
   const navigate = useNavigate();
-  
+
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
@@ -35,6 +39,7 @@ function Popup({ bookingId, onSuccess }) {
       reviewComments: "",
       rating: "",
     },
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       const payload = {
         reviewComments: values.reviewComments,
@@ -80,95 +85,67 @@ function Popup({ bookingId, onSuccess }) {
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
-            {reviewType === "General" && (
-              <div className="containers" id="General">
-                <div className="col-md-12 col-12 mb-2">Rating: {rating}</div>
-                <div className="col-md-12 col-12 mb-2">
-                  {[...Array(5)].map((star, index) => {
-                    const ratingValue = index + 1;
+            <div className="containers" id="General">
+              <div className="col-md-12 col-12 mb-2">Rating: {rating}</div>
+              <div className="col-md-12 col-12 mb-2">
+                {[...Array(5)].map((star, index) => {
+                  const ratingValue = index + 1;
 
-                    return (
-                      <label key={index}>
-                        <input
-                          type="radio"
-                          name="rating"
-                          value={ratingValue}
-                          onClick={() => {
-                            setRating(ratingValue);
-                            formik.setFieldValue("rating", ratingValue);
-                          }}
-                          style={{ visibility: "hidden" }}
-                        />
-                        <FaStar
-                          className="star"
-                          color={
-                            ratingValue <= (hover || rating)
-                              ? "#ffc107"
-                              : "#e4e5e9"
-                          }
-                          size={25}
-                          onMouseEnter={() => setHover(ratingValue)}
-                          onMouseLeave={() => setHover(null)}
-                        />
-                      </label>
-                    );
-                  })}
-                </div>
-                <div className="col-md-12 col-12 mb-2">
-                  <label className="form-lable">Comments</label>
-                  <div className="mb-3">
-                    <textarea
-                      type="text"
-                      rows={6}
-                      className="form-control"
-                      name="reviewComments"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.reviewComments}
-                    />
+                  return (
+                    <label key={index}>
+                      <input
+                        type="radio"
+                        name="rating"
+                        value={ratingValue}
+                        onClick={() => {
+                          setRating(ratingValue);
+                          formik.setFieldValue("rating", ratingValue);
+                        }}
+                        // {...formik.getFieldProps('rating')}
+                        style={{ visibility: "hidden" }}
+                      />
+                      <FaStar
+                        className="star"
+                        color={
+                          ratingValue <= (hover || rating)
+                            ? "#ffc107"
+                            : "#e4e5e9"
+                        }
+                        size={25}
+                        onMouseEnter={() => setHover(ratingValue)}
+                        onMouseLeave={() => setHover(null)}
+                      />
+                    </label>
+                  );
+                })}
+                {formik.touched.rating && formik.errors.rating ? (
+                  <div className="invalid-feedback d-block">
+                    {formik.errors.rating}
                   </div>
-                </div>
+                ) : null}
               </div>
-            )}
-            {reviewType === "Screening" && (
-              <div className="container" id="Screening">
-                <div className="col-md-7 col-12 my-4">
-                  <lable className="form-lable">Select Type</lable>
-                  <select
-                    name="selectType"
-                    {...formik.getFieldProps("selectType")}
-                    className={`form-select    ${
-                      formik.touched.selectType && formik.errors.selectType
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  >
-                    <option selected></option>
-                    <option value="Pre-Screening">Pre-Screening</option>
-                  </select>
+              <div className="col-md-12 col-12 mb-2">
+                <label className="form-lable">Comments</label>
+                <div className="mb-3">
+                  <textarea
+                    type="text"
+                    rows={6}
+                    className="form-control"
+                    name="reviewComments"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.reviewComments}
+                    // {...formik.getFieldProps('reviewComments')}
+                  />
                 </div>
-                <div className="col-md-7 col-12 my-3">
-                  <lable className="form-lable">Choose Assessments</lable>
-                  <select
-                    name="chooseAssesment"
-                    {...formik.getFieldProps("chooseAssesment")}
-                    className={`form-select    ${
-                      formik.touched.chooseAssesment &&
-                      formik.errors.chooseAssesment
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  >
-                    <option selected></option>
-                    <option value="Candidate General Assessment">
-                      Candidate General Assessment
-                    </option>
-                    <option value="Java Developer">Java Developer</option>
-                    <option value="ReactJs Developer">ReactJs Developer</option>
-                  </select>
-                </div>
+                {formik.touched.reviewComments &&
+                formik.errors.reviewComments ? (
+                  <div className="invalid-feedback">
+                    {formik.errors.reviewComments}
+                  </div>
+                ) : null}
               </div>
-            )}
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <span>

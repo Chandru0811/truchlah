@@ -2,11 +2,12 @@ import React from "react";
 import "../../styles/custom.css";
 import google from "../../asset/googleLogo.png";
 import app from "../../asset/appleLogo.png";
-import { FaTwitter, FaFacebookF, FaLinkedin } from "react-icons/fa";
+import { FaFacebookF, FaLinkedin } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 
 function foot({ isAuthenticate }) {
@@ -188,7 +189,7 @@ function foot({ isAuthenticate }) {
               style={{ textDecoration: "none", color: "#acff3b" }}
               rel="noreferrer"
             >
-              <FaTwitter className="me-3 " size="25px"></FaTwitter>
+              <FaXTwitter className="me-3 " size="25px"></FaXTwitter>
             </a>
             <a
               href="https://www.instagram.com/ecscloudinfotech/"

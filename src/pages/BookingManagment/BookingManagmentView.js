@@ -781,7 +781,7 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Tax Amount</b>
+                                <b>Transaction Amount</b>
                               </p>
                             </div>
                             <div className="col-6">
@@ -795,7 +795,7 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Tax ID</b>
+                                <b>Transaction ID</b>
                               </p>
                             </div>
                             <div className="col-6">
@@ -809,7 +809,7 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Tax Refrence</b>
+                                <b>Transaction Refrence</b>
                               </p>
                             </div>
                             <div className="col-6">
