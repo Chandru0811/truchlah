@@ -35,6 +35,7 @@ function RideDetailsView() {
   const navigate = useNavigate();
   console.log("Booking Data:", data);
   console.log("Location Details Data:", locationDetail);
+  const shiftType = sessionStorage.getItem("shiftType");
 
   const fetchData = async () => {
     try {
@@ -56,7 +57,7 @@ function RideDetailsView() {
 
     const locations = encodeURIComponent(JSON.stringify(locationDetail));
     navigate(
-      `/service?bookingId=${bookingId.id}&location=${locations}&estKm=${estKm}`
+      `/service?bookingId=${bookingId.id}&location=${locations}&estKm=${estKm}&type=${shiftType}`
     );
   };
 

@@ -28,6 +28,7 @@ function Service() {
   console.log("est km", distanceValue);
   const locationValueString = params.get("location");
   const estKm = params.get("estKm");
+  const type = params.get("type");
 
   console.log("locationValueString:", locationValueString);
   console.log("EST KM:", estKm);
@@ -160,7 +161,7 @@ function Service() {
 
         const payload = {
           userId: userId,
-          type: shiftType,
+          type: shiftType || type,
           locationDetail: locationValue,
           bookingId: bookingId,
           estKm: parseFloat(distanceValue) || estKm,
