@@ -59,7 +59,7 @@ function Login({ handleLogin, handleAdminLogin }) {
           },
         });
         if (response.status === 200) {
-          if (response.data.responseBody.roles[0] === "ROLE_ADMIN") {
+          if (response.data.responseBody.roles[0] === "ROLE_ADMIN" || response.data.responseBody.roles[0] === "ROLE_STAFF") {
             toast.success("Login Successful!");
             navigate("/");
             resetForm();

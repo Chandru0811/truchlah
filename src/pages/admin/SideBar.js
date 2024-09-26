@@ -4,6 +4,7 @@ import Logo from "../../asset/logo.png";
 import "../../styles/bootstrapCdn.css";
 
 function SideBar({ onLogout }) {
+  const role =sessionStorage.getItem("roles")
   const handleLogOutClick = () => {
     onLogout();
   };
@@ -40,16 +41,19 @@ function SideBar({ onLogout }) {
                 <i className="bx bx-bar-chart pe-3"></i> Dashboard
               </NavLink>
             </li>
+            {role !== "ROLE_STAFF" &&(<>
             <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/vehiclemanagement">
                 <i className="bx bx-car pe-3"></i> Vehicle Management
               </NavLink>
             </li>
+            
             <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/housecategorymanagement">
                 <i className="bx bx-home pe-3"></i> House Category
               </NavLink>
-            </li>
+            </li></>
+            )}
             <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/supportteammanagement">
                 <i className="bx bx-support pe-3"></i> Support Team
