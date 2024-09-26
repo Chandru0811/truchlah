@@ -175,7 +175,7 @@ function Service() {
           roundTrip: values.roundTripRequired ? "Y" : "N",
           vehicleType: selectedOption.type,
           promoCode: "",
-          actualKm: parseFloat(distanceValue),
+          actualKm: parseFloat(distanceValue) || estKm,
         };
         setLoadIndicator(true);
         try {
