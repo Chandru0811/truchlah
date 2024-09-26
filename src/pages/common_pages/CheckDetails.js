@@ -66,7 +66,7 @@ function Summary() {
       );
       if (response.status === 200) {
         // navigate(`/successful?type=${data?.booking?.bookingType}`);
-        navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
+        navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=success`);
         sessionStorage.removeItem("shiftType");
       }
     } catch (error) {
