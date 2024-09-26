@@ -130,7 +130,7 @@ function Map() {
     const payload = {
       userId: userId,
       type: shiftType,
-      // estKm:distance,
+      estKm:distance,
       locationDetail: locationDetail,
     };
 
@@ -395,7 +395,7 @@ function Map() {
               }
               setDirections(result);
               const distanceInKm = (totalDistance / 1000).toFixed(2);
-              setDistance(`${distanceInKm} km`);
+              setDistance(`${distanceInKm}`);
               setDuration(`${Math.floor(totalDuration / 60)} mins`);
               if (distanceInKm === "0.00") {
                 setIsNextButtonDisabled(true);

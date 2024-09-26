@@ -108,7 +108,7 @@ function BookingManagmentView() {
       case "ASSIGNED":
         return {
           text: "Assigned",
-          backgroundColor: "#acff3b", // Success color (example)
+          backgroundColor: "#28d8b7", // Success color (example)
         };
       default:
         return {
@@ -184,18 +184,18 @@ function BookingManagmentView() {
             </div>
           </div>
           <Badge.Ribbon
-                  className="px-4 py-1 fs-6"
-                  text={bookingStatus}
-                  placement="start"
-                  style={{
-                    backgroundColor: backgroundColor,
-                    color: "#fff", // Text color for better contrast
-                    zIndex: "100",
-                    fontSize: "15px", // Increase font size
-                    left: "-9px",
-                    top:"20px"
-                  }}
-                />
+            className="px-4 py-1 fs-6"
+            text={bookingStatus}
+            placement="start"
+            style={{
+              backgroundColor: backgroundColor,
+              color: "#fff", // Text color for better contrast
+              zIndex: "100",
+              fontSize: "15px", // Increase font size
+              left: "-9px",
+              top: "20px",
+            }}
+          />
           <div className="card shadow border-0 mb-2 minHeight">
             <div className="container">
               <div className="row mt-2 p-3">
@@ -251,7 +251,7 @@ function BookingManagmentView() {
                         disabled={
                           spinner ||
                           !driversListData ||
-                          driversListData.length === 0 || 
+                          driversListData.length === 0 ||
                           data?.bookingStatus?.status === "CANCELLED"
                         }
                       >
@@ -332,14 +332,28 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Delivery Date</b>
+                                <b>Booking Date</b>
                               </p>
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                {data?.booking?.deliveryDate.substring(0, 10) ||
-                                  ""}
+                                  {data.user?.createdDate ? (
+                                  <>
+                                    {data.user?.createdDate.substring(0, 10)} <b>&</b>{" "}
+                                    {new Date(
+                                      data.user?.createdDate
+                                    ).toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: true,
+                                    })}
+                                  </>
+                                ) : (
+                                  " "
+                                )}
+
+                                  
                               </p>
                             </div>
                           </div>
@@ -382,6 +396,20 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 : {data?.booking?.helper || ""}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Extra Manpower</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data?.booking?.extraHelper || ""}{" "}
                               </p>
                             </div>
                           </div>
@@ -452,10 +480,20 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                {data?.booking?.scheduledDate.substring(
-                                  0,
-                                  10
-                                ) || ""}{" "}
+                                {data.booking?.scheduledDate ? (
+                                  <>
+                                    {data.booking?.scheduledDate.substring(0, 10)} <b>&</b>{" "}
+                                    {new Date(
+                                      data.booking?.scheduledDate
+                                    ).toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: true,
+                                    })}
+                                  </>
+                                ) : (
+                                  " "
+                                )}
                               </p>
                             </div>
                           </div>
@@ -470,8 +508,20 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                {data?.booking?.deliveryDate.substring(0, 10) ||
-                                  ""}{" "}
+                                  {data.booking?.deliveryDate ? (
+                                  <>
+                                    {data.booking?.deliveryDate.substring(0, 10)} <b>&</b>{" "}
+                                    {new Date(
+                                      data.booking?.deliveryDate
+                                    ).toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: true,
+                                    })}
+                                  </>
+                                ) : (
+                                  " "
+                                )}
                               </p>
                             </div>
                           </div>
@@ -815,8 +865,20 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                {data?.user?.createdDate.substring(0, 10) ||
-                                  " "}
+                                  {data.user?.createdDate ? (
+                                  <>
+                                    {data.user?.createdDate.substring(0, 10)} <b>&</b>{" "}
+                                    {new Date(
+                                      data.user?.createdDate
+                                    ).toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: true,
+                                    })}
+                                  </>
+                                ) : (
+                                  " "
+                                )}
                               </p>
                             </div>
                           </div>

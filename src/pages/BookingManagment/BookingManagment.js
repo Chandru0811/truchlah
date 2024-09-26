@@ -82,7 +82,7 @@ const BookingManagment = () => {
   }, []);
 
   const deleteFun = (bookingId) => {
-    return bookingApi.delete(`booking/delete/booking/${bookingId}`);
+    return bookingApi.delete(`booking/delete/${bookingId}`);
   };
 
   return (
@@ -131,7 +131,15 @@ const BookingManagment = () => {
                     <th scope="col" className="text-center">
                       Amount
                     </th>
-                    <th scope="col" className="text-center" aria-disabled="true" style={{ pointerEvents: "none" }}>
+                    <th scope="col" className="text-center">
+                      Status
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-center"
+                      aria-disabled="true"
+                      style={{ pointerEvents: "none" }}
+                    >
                       ACTION
                     </th>
                   </tr>
@@ -160,27 +168,45 @@ const BookingManagment = () => {
                         {data.totalAmount || "0.0"}
                       </td>
                       <td className="text-center">
+                        {data.status === "DRAFT_BOOKING" ? (
+                          <span className="badge" style={{background:"#fcd162"}}>Draft Booking</span>
+                        ) : data.status === "CANCELLED" ? (
+                          <span className="badge" style={{background:"#f04545"}}>Cancelled</span>
+                        ) : data.status === "BOOKED" ? (
+                          <span className="badge" style={{background:"#2593fb"}}>Booked</span>
+                        ) : data.status === "COMPLETED" ? (
+                          <span className="badge" style={{background:"#17e540"}}>Completed</span>
+                        ) : data.status === "ASSIGNED" ? (
+                          <span className="badge" style={{background:"#28d8b7"}}>Assigned</span>
+                        ) : (
+                          <span className="badge" style={{background:"#6d736e"}}>Unknown</span>
+                        )}
+                      </td>
+
+                      <td className="text-center">
                         <div className="gap-2">
                           <Link
                             to={`/bookingManagement/view/${data.bookingId}`}
                           >
                             <Space size="small">
                               {data.status === "ASSIGNED" ? (
+                               
+                                <button className="btn btn-light btn-sm shadow-none border-none">
+                                View
+                              </button>
+                              ) : (
                                 <Badge
                                   size="small"
                                   color="#acff3b"
-                                  count=" "
+                                  count={" "}
                                   placement="start"
-                                  style={{right:"41px" ,color:"#acff3b"}}
+                                  style={{ right: "41px", color: "#333" ,minWidth:"8px" ,height:"8px" }}
+                                  className="p-0"
                                 >
                                   <button className="btn btn-light btn-sm shadow-none border-none">
                                     View
                                   </button>
                                 </Badge>
-                              ) : (
-                                <button className="btn btn-light btn-sm shadow-none border-none">
-                                  View
-                                </button>
                               )}
                             </Space>
                           </Link>
