@@ -5,6 +5,8 @@ import { bookingApi, driverApi } from "../../config/URL";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Badge } from "antd";
+import { FaLink } from "react-icons/fa";
+
 const validationSchema = Yup.object({
   driverId: Yup.string().required("*Driver is required"),
 });
@@ -199,74 +201,79 @@ function BookingManagmentView() {
           <div className="card shadow border-0 mb-2 minHeight">
             <div className="container">
               <div className="row mt-2 p-3">
-                <form onSubmit={formik.handleSubmit}>
-                  <div className="col-md-12 col-12 text-end">
-                    <div className="d-flex justify-content-end align-items-center">
-                      <div className="w-25 me-3">
-                        <select
-                          className={`form-select ${
-                            formik.touched.status && formik.errors.status
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                          name="driverId"
-                          value={formik.values.driverId}
-                          onChange={(e) => {
-                            const selectedId = e.target.value;
-                            const selectedDriver = driversListData.find(
-                              (driver) => driver.id === selectedId
-                            );
-                            formik.setFieldValue("driverId", selectedId);
-                            formik.setFieldValue(
-                              "acceptedBy",
-                              selectedDriver ? selectedDriver.driverName : ""
-                            );
-                          }}
-                        >
-                          <option value="" disabled>
-                            Select Driver
-                          </option>
-                          {Array.isArray(driversListData) &&
-                          driversListData.length > 0 ? (
-                            driversListData.map((driver) => (
-                              <option key={driver.id} value={driver.id}>
-                                {driver.driverName}
-                              </option>
-                            ))
-                          ) : (
+                {bookingStatus === "Cancelled" ? (
+                  <div></div>
+                ) : (
+                  <form onSubmit={formik.handleSubmit}>
+                    <div className="col-md-12 col-12 text-end">
+                      <div className="d-flex justify-content-end align-items-center">
+                        <div className="w-25 me-3">
+                          <select
+                            className={`form-select ${
+                              formik.touched.status && formik.errors.status
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            name="driverId"
+                            value={formik.values.driverId}
+                            onChange={(e) => {
+                              const selectedId = e.target.value;
+                              const selectedDriver = driversListData.find(
+                                (driver) => driver.id === selectedId
+                              );
+                              formik.setFieldValue("driverId", selectedId);
+                              formik.setFieldValue(
+                                "acceptedBy",
+                                selectedDriver ? selectedDriver.driverName : ""
+                              );
+                            }}
+                          >
                             <option value="" disabled>
-                              No drivers available
+                              Select Driver
                             </option>
+                            {Array.isArray(driversListData) &&
+                            driversListData.length > 0 ? (
+                              driversListData.map((driver) => (
+                                <option key={driver.id} value={driver.id}>
+                                  {driver.driverName}
+                                </option>
+                              ))
+                            ) : (
+                              <option value="" disabled>
+                                No drivers available
+                              </option>
+                            )}
+                          </select>
+                          {formik.touched.driverId &&
+                            formik.errors.driverId && (
+                              <div className="invalid-feedback">
+                                {formik.errors.driverId}
+                              </div>
+                            )}
+                        </div>
+                        <button
+                          type="submit"
+                          className="btn btn-sm btn-button"
+                          disabled={
+                            spinner ||
+                            !driversListData ||
+                            driversListData.length === 0 ||
+                            data?.bookingStatus?.status === "CANCELLED"
+                          }
+                        >
+                          {spinner ? (
+                            <span
+                              className="spinner-border spinner-border-sm"
+                              aria-hidden="true"
+                            ></span>
+                          ) : (
+                            <span>Assign</span>
                           )}
-                        </select>
-                        {formik.touched.driverId && formik.errors.driverId && (
-                          <div className="invalid-feedback">
-                            {formik.errors.driverId}
-                          </div>
-                        )}
+                        </button>
                       </div>
-                      <button
-                        type="submit"
-                        className="btn btn-sm btn-button"
-                        disabled={
-                          spinner ||
-                          !driversListData ||
-                          driversListData.length === 0 ||
-                          data?.bookingStatus?.status === "CANCELLED"
-                        }
-                      >
-                        {spinner ? (
-                          <span
-                            className="spinner-border spinner-border-sm"
-                            aria-hidden="true"
-                          ></span>
-                        ) : (
-                          <span>Assign</span>
-                        )}
-                      </button>
                     </div>
-                  </div>
-                </form>
+                  </form>
+                )}
               </div>
               <div className="row mt-2 p-3">
                 {/* <Badge.Ribbon
@@ -338,9 +345,10 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                  {data.user?.createdDate ? (
+                                {data.user?.createdDate ? (
                                   <>
-                                    {data.user?.createdDate.substring(0, 10)} <b>&</b>{" "}
+                                    {data.user?.createdDate.substring(0, 10)}{" "}
+                                    <b>&</b>{" "}
                                     {new Date(
                                       data.user?.createdDate
                                     ).toLocaleTimeString([], {
@@ -352,8 +360,6 @@ function BookingManagmentView() {
                                 ) : (
                                   " "
                                 )}
-
-                                  
                               </p>
                             </div>
                           </div>
@@ -482,7 +488,11 @@ function BookingManagmentView() {
                                 :{" "}
                                 {data.booking?.scheduledDate ? (
                                   <>
-                                    {data.booking?.scheduledDate.substring(0, 10)} <b>&</b>{" "}
+                                    {data.booking?.scheduledDate.substring(
+                                      0,
+                                      10
+                                    )}{" "}
+                                    <b>&</b>{" "}
                                     {new Date(
                                       data.booking?.scheduledDate
                                     ).toLocaleTimeString([], {
@@ -508,9 +518,13 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                  {data.booking?.deliveryDate ? (
+                                {data.booking?.deliveryDate ? (
                                   <>
-                                    {data.booking?.deliveryDate.substring(0, 10)} <b>&</b>{" "}
+                                    {data.booking?.deliveryDate.substring(
+                                      0,
+                                      10
+                                    )}{" "}
+                                    <b>&</b>{" "}
                                     {new Date(
                                       data.booking?.deliveryDate
                                     ).toLocaleTimeString([], {
@@ -591,6 +605,7 @@ function BookingManagmentView() {
                       {data?.bookingTripLocations?.length > 0 ? (
                         data.bookingTripLocations.map((location, index) => (
                           <div class="accordion-body row mt-2 p-3">
+                            {/* {location.stoppingPoint === 1 &&(<h4>Pickup Location</h4>)} */}
                             <div className="col-md-6 col-12">
                               <div className="row mb-3">
                                 <div className="col-6 d-flex justify-content-start align-items-center">
@@ -767,12 +782,12 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Resp Code</b>
+                                <b>Payment Mode</b>
                               </p>
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.transactionDetails?.respCode || "0"}
+                                : {data?.transactionDetails?.paymentMode || "0"}
                               </p>
                             </div>
                           </div>
@@ -865,9 +880,10 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                  {data.user?.createdDate ? (
+                                {data.user?.createdDate ? (
                                   <>
-                                    {data.user?.createdDate.substring(0, 10)} <b>&</b>{" "}
+                                    {data.user?.createdDate.substring(0, 10)}{" "}
+                                    <b>&</b>{" "}
                                     {new Date(
                                       data.user?.createdDate
                                     ).toLocaleTimeString([], {
@@ -976,11 +992,11 @@ function BookingManagmentView() {
                                 </div>
                               </div>
                             </div>
-                            <div className="col-md-6 col-12">
+                            <div className="col-md-6 col-12 position-relative">
                               <div className="row mb-3">
                                 <div className="col-6 d-flex justify-content-start align-items-center">
                                   <p className="text-sm">
-                                    <b>Accepted Date</b>
+                                    <b>Assigned Date</b>
                                   </p>
                                 </div>
                                 <div className="col-6">
@@ -993,9 +1009,20 @@ function BookingManagmentView() {
                                   </p>
                                 </div>
                               </div>
+                              <Link
+                                to={`/drivermanagement/view/${data?.bookingStatus?.driverId}`}
+                                title="View Driver Details" 
+                              >
+                                <span
+                                  className="position-absolute"
+                                  style={{ top: "0", right: "18px" }}
+                                >
+                                  <FaLink />
+                                </span>
+                              </Link>
                             </div>
 
-                            <div className="col-md-6 col-12">
+                            {/* <div className="col-md-6 col-12">
                               <div className="row mb-3">
                                 <div className="col-6 d-flex justify-content-start align-items-center">
                                   <p className="text-sm">
@@ -1008,7 +1035,7 @@ function BookingManagmentView() {
                                   </p>
                                 </div>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>

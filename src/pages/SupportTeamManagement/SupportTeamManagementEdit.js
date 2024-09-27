@@ -38,7 +38,7 @@ function SupportTeamManagementEdit() {
         return false;
       }),
     // refCode: Yup.string().required("*Reference Code is required"),
-    loginType: Yup.string().required("*Login Type is required"),
+    // loginType: Yup.string().required("*Login Type is required"),
   });
 
   const formik = useFormik({
@@ -49,8 +49,8 @@ function SupportTeamManagementEdit() {
       email: "",
       mobileNo: "",
       countryCode: "",
-      refCode: "",
-      loginType: "",
+      // refCode: "",
+      // loginType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -275,7 +275,7 @@ function SupportTeamManagementEdit() {
               </div>
 
               {/* Reference Code */}
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">Reference Code</label>
                 <div className="mb-3">
                   <input
@@ -294,10 +294,10 @@ function SupportTeamManagementEdit() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               {/* Login Type */}
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Login Type <span className="text-danger">*</span>
                 </label>
@@ -318,7 +318,7 @@ function SupportTeamManagementEdit() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

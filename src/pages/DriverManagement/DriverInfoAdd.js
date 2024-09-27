@@ -88,8 +88,8 @@ const DriverInfoAdd = forwardRef(
         idFront: null,
         idBack: null,
         licenseFront: null,
-        licenseBack: null,
-        demeritPoint: "",
+        // licenseBack: null,
+        // demeritPoint: "",
         // loginType: "",
       },
       validationSchema: validationSchema,
@@ -105,7 +105,7 @@ const DriverInfoAdd = forwardRef(
         formData.append("password", values.password);
         // formData.append("refCode", values.refCode);
         // formData.append("termsCondition", values.termsCondition ? 'true' : 'false');
-        formData.append("demeritPoint", values.demeritPoint);
+        // formData.append("demeritPoint", values.demeritPoint);
         // formData.append("loginType", values.loginType);
 
         if (values.driverPhoto) {
@@ -361,6 +361,7 @@ const DriverInfoAdd = forwardRef(
                   <input
                     type="file"
                     name="driverPhoto"
+                    accept="image/jpeg, image/png, application/pdf"
                     className={`form-control ${
                       formik.touched.driverPhoto && formik.errors.driverPhoto
                         ? "is-invalid"
@@ -377,13 +378,14 @@ const DriverInfoAdd = forwardRef(
                   )}
                 </div>
               </div>
+              <div className="col-md-6 col-12 mb-2"></div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   ID Front <span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
                   <input
-                    type="file"
+                    type="file" accept="image/jpeg, image/png, application/pdf"
                     name="idFront"
                     className={`form-control ${
                       formik.touched.idFront && formik.errors.idFront
@@ -407,7 +409,7 @@ const DriverInfoAdd = forwardRef(
                 </label>
                 <div className="mb-3">
                   <input
-                    type="file"
+                    type="file" accept="image/jpeg, image/png, application/pdf"
                     name="idBack"
                     className={`form-control ${
                       formik.touched.idBack && formik.errors.idBack
@@ -431,7 +433,7 @@ const DriverInfoAdd = forwardRef(
                 </label>
                 <div className="mb-3">
                   <input
-                    type="file"
+                    type="file" accept="image/jpeg, image/png, application/pdf"
                     name="licenseFront"
                     className={`form-control ${
                       formik.touched.licenseFront && formik.errors.licenseFront
@@ -456,7 +458,7 @@ const DriverInfoAdd = forwardRef(
                 </label>
                 <div className="mb-3">
                   <input
-                    type="file"
+                    type="file" accept="image/jpeg, image/png, application/pdf"
                     name="licenseBack"
                     className={`form-control ${
                       formik.touched.licenseBack && formik.errors.licenseBack
@@ -474,7 +476,7 @@ const DriverInfoAdd = forwardRef(
                   )}
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Demerit Points <span className="text-danger">*</span>
                 </label>
@@ -496,7 +498,7 @@ const DriverInfoAdd = forwardRef(
                       </div>
                     )}
                 </div>
-              </div>
+              </div> */}
               {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Login Type <span className="text-danger">*</span>

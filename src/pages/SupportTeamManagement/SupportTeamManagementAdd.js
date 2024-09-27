@@ -52,7 +52,7 @@ function SupportTeamManagementAdd() {
         return false;
       }),
     // refCode: Yup.string().required("*Reference Code is required"),
-    loginType: Yup.string().required("*Login Type is required"),
+    // loginType: Yup.string().required("*Login Type is required"),
     agreeConditionOne: Yup.boolean().oneOf([true], "*This condition must be accepted").required(),
     // agreeConditionTwo: Yup.boolean().oneOf([true], "*This condition must be accepted").required(),
   });
@@ -66,8 +66,8 @@ function SupportTeamManagementAdd() {
       email: "",
       mobileNo: "",
       countryCode: "",
-      refCode: "",
-      loginType: "",
+      // refCode: "",
+      // loginType: "",
       agreeConditionOne: false,
       agreeConditionTwo: false,
     },
@@ -319,7 +319,7 @@ function SupportTeamManagementAdd() {
               </div>
 
               {/* Ref Code */}
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Reference Code <span className="text-danger">*</span>
                 </label>
@@ -340,10 +340,10 @@ function SupportTeamManagementAdd() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               {/* Login Type */}
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
                   Login Type <span className="text-danger">*</span>
                 </label>
@@ -367,7 +367,7 @@ function SupportTeamManagementAdd() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               {/* Agreement Checkboxes */}
               {/* <div className="col-md-6 col-12 mb-2">

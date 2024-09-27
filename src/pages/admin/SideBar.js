@@ -70,16 +70,17 @@ function SideBar({ onLogout }) {
               </NavLink>
             </li>
             <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/bannerandoffer">
-                <i className="bx bx-gift pe-3"></i> Banners and Offers
-              </NavLink>
-            </li>
-            <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/bookingManagement">
                 <i className="bx bx-calendar pe-3"></i> Booking Management
               </NavLink>
             </li>
             <li className="nav-item pt-2">
+              <NavLink className="nav-link" to="/bannerandoffer">
+                <i className="bx bx-gift pe-3"></i> Banners and Offers
+              </NavLink>
+            </li>
+            
+            {/* <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/reviewandfeedback">
                 <i className="bx bx-message-square-dots pe-3"></i> Reviews and
                 Feedback
@@ -89,7 +90,7 @@ function SideBar({ onLogout }) {
               <NavLink className="nav-link" to="/contactform">
                 <i className="bx bx-envelope pe-3"></i> Contact Form
               </NavLink>
-            </li>
+            </li> */}
           </ul>
 
           <div className="ps-4 mt-auto w-100 mb-4">

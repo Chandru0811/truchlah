@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/custom.css";
 import Logins from "../../asset/Login.png";
-import { AiOutlineGoogle } from "react-icons/ai";
+// import { AiOutlineGoogle } from "react-icons/ai";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,9 +12,10 @@ import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { LoginSocialFacebook } from "reactjs-social-login";
+// import { LoginSocialFacebook } from "reactjs-social-login";
 // import { GoogleLoginButton } from "react-social-login-buttons";
-import { FaSquareFacebook } from "react-icons/fa6";
+// import { FaSquareFacebook } from "react-icons/fa6";
+// import { TiWarning } from "react-icons/ti";
 // import { LoginSocialGoogle } from "reactjs-social-login";
 const validationSchema = Yup.object().shape({
   username: Yup.string().required("*Email is required"),
@@ -82,7 +83,8 @@ function Login({ handleLogin, handleAdminLogin }) {
         }
       } catch (error) {
         if (error.response.status === 409) {
-          toast.error(error.response.data.errorList[0].errorMessage)
+          toast.warning(error.response.data.errorList[0].errorMessage
+          )
           if(error.response.data.errorList[0].countryCode){  
           const mobileNos = error.response.data.errorList[0].mobileNo;
           const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
@@ -181,41 +183,41 @@ function Login({ handleLogin, handleAdminLogin }) {
     }
   };
 
-  const handleFaceBookLoginSuccess = async (response) => {
-    console.log("FaceBook Login Response:", response);
-    const payload = {
-      firstName: response.data.first_name,
-      lastName: response.data.last_name,
-      email: response.data.email,
-      profileImage: response.data.picture.data.url,
-      loginType: "google",
-    };
-    console.log("Payload :", payload);
-    // try {
-    //   const response = await userApi.post("/user/signWithGoogle", payload, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   if (response.status === 200) {
-    //     toast.success("Login Successful!");
-    //     navigate("/shift");
-    //     handleLogin();
-    //     sessionStorage.setItem("userId", response.data.responseBody.userId);
-    //     sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
-    //     sessionStorage.setItem("token", response.data.responseBody.token);
-    //     sessionStorage.setItem("username", response.data.responseBody.username);
-    //   } else {
-    //     toast.error(response.data.message);
-    //   }
-    // } catch (error) {
-    //   if (error.response?.status === 400) {
-    //     toast.warning(error.response.data.errorList[0].errorMessage);
-    //   } else {
-    //     toast.error(error.message);
-    //   }
-    // }
-  };
+  // const handleFaceBookLoginSuccess = async (response) => {
+  //   console.log("FaceBook Login Response:", response);
+  //   const payload = {
+  //     firstName: response.data.first_name,
+  //     lastName: response.data.last_name,
+  //     email: response.data.email,
+  //     profileImage: response.data.picture.data.url,
+  //     loginType: "google",
+  //   };
+  //   console.log("Payload :", payload);
+  //   // try {
+  //   //   const response = await userApi.post("/user/signWithGoogle", payload, {
+  //   //     headers: {
+  //   //       "Content-Type": "application/json",
+  //   //     },
+  //   //   });
+  //   //   if (response.status === 200) {
+  //   //     toast.success("Login Successful!");
+  //   //     navigate("/shift");
+  //   //     handleLogin();
+  //   //     sessionStorage.setItem("userId", response.data.responseBody.userId);
+  //   //     sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
+  //   //     sessionStorage.setItem("token", response.data.responseBody.token);
+  //   //     sessionStorage.setItem("username", response.data.responseBody.username);
+  //   //   } else {
+  //   //     toast.error(response.data.message);
+  //   //   }
+  //   // } catch (error) {
+  //   //   if (error.response?.status === 400) {
+  //   //     toast.warning(error.response.data.errorList[0].errorMessage);
+  //   //   } else {
+  //   //     toast.error(error.message);
+  //   //   }
+  //   // }
+  // };
 
   return (
     <div className="container-fluid">

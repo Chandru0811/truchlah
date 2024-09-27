@@ -45,10 +45,12 @@ import ContactFormTeamEdit from "../pages/ContactFormTeam/ContactFormTeamEdit";
 import ContactFormTeamView from "../pages/ContactFormTeam/ContactFormTeamView";
 import BookingManagment from "../pages/BookingManagment/BookingManagment";
 import BookingManagmentView from "../pages/BookingManagment/BookingManagmentView";
+import ScrollToTop from "../pages/admin/ScrollToTop";
 
 function AdminLayout({ handleLogout }) {
   return (
     <BrowserRouter basename="/auth">
+      <ScrollToTop />
       <div
         className="d-flex flex-column flex-lg-row  "
         style={{ background: "#ECECEC" }}

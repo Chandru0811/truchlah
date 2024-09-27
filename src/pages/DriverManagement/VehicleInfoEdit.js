@@ -1,40 +1,41 @@
 import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { driverApi, userApi } from "../../config/URL";
-import toast from "react-hot-toast";
+    forwardRef,
+    useEffect,
+    useImperativeHandle,
+    useState,
+  } from "react";
+  import { Link, useNavigate } from "react-router-dom";
+  import { useFormik } from "formik";
+  import * as Yup from "yup";
+  import { driverApi, userApi } from "../../config/URL";
+  import toast from "react-hot-toast";
+  
+  const validationSchema = Yup.object({
+    vehicleType: Yup.string().required("Vehicle type is required"),
+    vehicleBrand: Yup.string().required("Vehicle brand is required"),
+    registrationNo: Yup.string().required("Registration number is required"),
+    // .matches(/^[A-Z0-9-]+$/, "Registration number must be valid"),
+    registrationYear: Yup.number()
+      .required("Registration year is required")
+      .min(1900, "Enter a valid year")
+      .max(new Date().getFullYear(), "Enter a valid year"),
+    vehicleModel: Yup.string().required("Vehicle model is required"),
+    vehicleName: Yup.string().required("Vehicle name is required"),
+    //   description: Yup.string().required("Description is required"),
+    vehicleSize: Yup.string().required("Vehicle size is required"),
+    vehicleWeight: Yup.number()
+      .required("Vehicle weight is required")
+      .min(1, "Weight must be greater than zero"),
+    ownedBy: Yup.string().required("Owner is required"),
+    // vehicleBackImg: Yup.mixed().required("ID Back is required"),
+    // vehicleFrontImg: Yup.mixed().required("License Front is required"),
+  });
 
-const validationSchema = Yup.object({
-  vehicleType: Yup.string().required("Vehicle type is required"),
-  vehicleBrand: Yup.string().required("Vehicle brand is required"),
-  registrationNo: Yup.string().required("Registration number is required"),
-  // .matches(/^[A-Z0-9-]+$/, "Registration number must be valid"),
-  registrationYear: Yup.number()
-    .required("Registration year is required")
-    .min(1900, "Enter a valid year")
-    .max(new Date().getFullYear(), "Enter a valid year"),
-  vehicleModel: Yup.string().required("Vehicle model is required"),
-  vehicleName: Yup.string().required("Vehicle name is required"),
-  //   description: Yup.string().required("Description is required"),
-  vehicleSize: Yup.string().required("Vehicle size is required"),
-  vehicleWeight: Yup.number()
-    .required("Vehicle weight is required")
-    .min(1, "Weight must be greater than zero"),
-  ownedBy: Yup.string().required("Owner is required"),
-  vehicleBackImg: Yup.mixed().required("ID Back is required"),
-  vehicleFrontImg: Yup.mixed().required("License Front is required"),
-});
-const VehicleInfoAdd = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+const VehicleInfoEdit = forwardRef(
+    ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
     const[vehicle,setVehicle]=useState()
+    
     const formik = useFormik({
       initialValues: {
         vehicleType: "",
@@ -55,22 +56,6 @@ const VehicleInfoAdd = forwardRef(
         console.log("drivermanagement:", values);
 
         const formDatas = new FormData();
-        // formData.append(
-        //   "vehicleRequest",
-        //   JSON.stringify({
-        //     driverId: formData.driverId,
-        //     vehicleType: values.vehicleType,
-        //     vehicleBrand: values.vehicleBrand,
-        //     registrationNo: values.registrationNo,
-        //     registrationYear: values.registrationYear,
-        //     vehicleModel: values.vehicleModel,
-        //     vehicleName: values.vehicleName,
-        //     description: values.description,
-        //     vehicleSize: values.vehicleSize,
-        //     vehicleWeight: values.vehicleWeight,
-        //     ownedBy: values.ownedBy,
-        //   })
-        // );
         formDatas.append("vehicleType", values.vehicleType);
         formDatas.append("vehicleBrand", values.vehicleBrand);
         formDatas.append("registrationNo", values.registrationNo);
@@ -109,22 +94,23 @@ const VehicleInfoAdd = forwardRef(
     });
 
     useImperativeHandle(ref, () => ({
-      driverVehicleAdd: formik.handleSubmit,
+        driverVehicleEdit: formik.handleSubmit,
     }));
 
-    useEffect(() => {
-      const getVechicle = async () => {
-        try {
-          const response = await userApi.get("vehicle/vehicleType");
-          setVehicle(response.data.responseBody);
-        } catch (e) {
-          toast.error("Error Fetching Data : ", e);
-        }
-      };
-      getVechicle();
-    }, []);
-    return (
-      <div className="container-fluid px-2 pb-2  m-0">
+    // useEffect(() => {
+    //   const getVechicle = async () => {
+    //     try {
+    //       const response = await userApi.get("vehicle/vehicleType");
+    //       setVehicle(response.data.responseBody);
+    //     } catch (e) {
+    //       toast.error("Error Fetching Data : ", e);
+    //     }
+    //   };
+    //   getVechicle();
+    // }, []);
+
+  return (
+    <div className="container-fluid px-2 pb-2  m-0">
         <form onSubmit={formik.handleSubmit}>
           <div className="container mb-2">
             <div className="row py-4">
@@ -398,8 +384,7 @@ const VehicleInfoAdd = forwardRef(
           </div>
         </form>
       </div>
-    );
-  }
-);
+  )
+})
 
-export default VehicleInfoAdd;
+export default VehicleInfoEdit

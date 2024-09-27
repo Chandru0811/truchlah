@@ -48,13 +48,13 @@ const BookingManagment = () => {
   };
 
   const refreshData = async () => {
-    destroyDataTable();
     setLoading(true);
+    destroyDataTable();
     try {
       const response = await bookingApi.get(
         "/booking/getAllBookingDetailsByAdmin"
       );
-      setDatas(response.data.responseBody);
+      setDatas(response.data);
       initializeDataTable();
     } catch (error) {
       toast.error("Error refreshing data:", error?.response?.data?.message);
@@ -189,12 +189,12 @@ const BookingManagment = () => {
                             to={`/bookingManagement/view/${data.bookingId}`}
                           >
                             <Space size="small">
-                              {data.status === "ASSIGNED" ? (
+                              {/* {data.status === "ASSIGNED" ? ( */}
                                
-                                <button className="btn btn-light btn-sm shadow-none border-none">
+                                <button className="btn btn-light btn-sm shadow-none border-none me-2">
                                 View
                               </button>
-                              ) : (
+                              {/* ) : (
                                 <Badge
                                   size="small"
                                   color="#acff3b"
@@ -207,7 +207,7 @@ const BookingManagment = () => {
                                     View
                                   </button>
                                 </Badge>
-                              )}
+                              )} */}
                             </Space>
                           </Link>
 
