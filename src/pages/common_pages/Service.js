@@ -166,7 +166,7 @@ function Service() {
           bookingId: bookingId,
           estKm: parseFloat(distanceValue) || estKm,
           scheduledDate: `${values.date}T${values.time}:00.000Z`,
-          deliveryDate: deliveryDate,
+          // deliveryDate: deliveryDate,
           quantity: values.extraManpower ? values.quantity : 0,
           msgToDriver: values.messageToDriver,
           noOfPieces: values.noOfPieces,
@@ -303,22 +303,6 @@ function Service() {
     // formik.setFieldValue("time", formattedTime);
   }, []);
 
-  // const imageMapping = {
-  //   1: VAN1,
-  //   2: VAN2,
-  //   3: Lorry10,
-  //   4: Lorry14,
-  //   24: vechicle.vehicleImage
-  // };
-
-  // const weightMaping = {
-  //   1: 200,
-  //   2: 400,
-  //   3: 600,
-  //   4: 800,
-  //   7: 1000,
-  // };
-
   return (
     <div
       className="container-fluid"
@@ -326,7 +310,7 @@ function Service() {
       style={{ backgroundColor: "#faf5f6" }}
     >
       <form onSubmit={formik.handleSubmit}>
-        <div className="container-fluid pt-3 ">
+        {/* <div className="container-fluid pt-3 ">
           <div
             onClick={() => navigate(-1)}
             data-toggle="tooltip"
@@ -337,7 +321,7 @@ function Service() {
           >
             <IoArrowBackCircleOutline size={30} />
           </div>
-        </div>
+        </div> */}
         <div className="container">
           <h2 className="text-center my-3" id="AvaHeading">
             SERVICE
@@ -609,7 +593,7 @@ function Service() {
                             borderRadius: "5px",
                           }}
                         >
-                          <FaWeightHanging /> {`${item.baseFare} kg`}
+                          <FaWeightHanging /> {`${item.vehicleCapacity} kg`}
                         </span>
                       </div>
                       <div className="d-flex justify-content-center pt-3">

@@ -89,7 +89,7 @@ function Successfull() {
                   your details and try again.
                 </p>
               )}
-              <p>Reference No: {refNo}</p>
+              {/* <p>Reference No: {refNo}</p> */}
               <center>
                 {result === "success" ? (
                   <Link to={`/rides?type=${type}`}>

@@ -68,9 +68,12 @@ function Summary() {
         // navigate(`/successful?type=${data?.booking?.bookingType}`);
         navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=success`);
         sessionStorage.removeItem("shiftType");
+      } else{
+        navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
       }
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
+      navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
     } finally {
       setLoadIndicator1(false);
     }
@@ -91,9 +94,11 @@ function Summary() {
         sessionStorage.removeItem("shiftType");
       } else {
         toast.error("Payment failed, please try again.");
+        navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
       }
     } catch (error) {
-      toast.error("Payment error: " + error.message);
+      console.error("Payment error: " + error.message);
+      navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
     } finally {
       setLoadIndicator2(false);
     }

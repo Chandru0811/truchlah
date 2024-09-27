@@ -53,12 +53,18 @@ function RideDetailsView() {
 
   const handleClick = () => {
     const estKm = data.booking.estKm;
-    console.log("EST KM:", estKm);
-
     const locations = encodeURIComponent(JSON.stringify(locationDetail));
-    navigate(
-      `/service?bookingId=${bookingId.id}&location=${locations}&estKm=${estKm}&type=${shiftType}`
-    );
+    console.log("scheduledDate:",data?.booking?.scheduledDate);
+    
+    if(!data?.booking?.scheduledDate){
+      navigate(
+        `/service?bookingId=${bookingId.id}&location=${locations}&estKm=${estKm}&type=${shiftType}`
+      );
+    } else{
+      navigate(
+        `/summary/${bookingId.id}`
+      );
+    }  
   };
 
   useEffect(() => {
