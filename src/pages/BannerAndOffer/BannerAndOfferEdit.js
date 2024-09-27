@@ -15,12 +15,10 @@ function BannerAndOfferEdit() {
     status: Yup.string().required("*Status is required"),
     attachment: Yup.mixed()
   .test("fileSize", "*File size is too large", (value) => {
-    // Check if value exists and has a size, or if it's empty (for optional attachment)
-    return !value || (value.size && value.size <= 1024 * 1024); // Max 1MB file size
+    return !value || (value.size && value.size <= 1024 * 1024); 
   })
   .test("fileType", "*Unsupported file format", (value) => {
-    // Check if value exists and has a type, or if it's empty (for optional attachment)
-    return !value || ["image/jpeg", "image/png"].includes(value.type); // Only allow jpeg and png
+    return !value || ["image/jpeg", "image/png"].includes(value.type); 
   }).notRequired(),
 
     description: Yup.string().required("*Description is required"),
@@ -172,6 +170,7 @@ function BannerAndOfferEdit() {
                       <input
                         type="file"
                         name="attachment"
+                        accept="image/jpeg, image/png"
                         className={`form-control ${
                           formik.touched.attachment && formik.errors.attachment
                             ? "is-invalid"

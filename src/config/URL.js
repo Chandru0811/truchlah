@@ -2,19 +2,19 @@ import axios from "axios";
 
 // Booking controller instance
 const bookingApi = axios.create({
-  // baseURL: "http://52.74.83.44:7080/booking-service/api/",
+  // baseURL: "http://13.213.208.92:9084/booking-service/api/",
   baseURL: "https://uat.hrisasia.com/booking-service/api/",
 });
 
 // User controller instance
 const userApi = axios.create({
-  // baseURL: "http://52.74.83.44:7080/user-service/api/",
+  // baseURL: "http://13.213.208.92:9083/user-service/api/",
   baseURL: "https://uat.hrisasia.com/user-service/api/",
 });
 
 // Driver controller instance
 const driverApi = axios.create({
-  // baseURL: "http://52.74.83.44:7080/driver-service/api/",
+  // baseURL: "http://13.213.208.92:9085/driver-service/api",
   baseURL: "https://uat.hrisasia.com/driver-service/api/",
 });
 

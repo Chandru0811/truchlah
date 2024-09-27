@@ -180,7 +180,7 @@ function Service() {
         };
         setLoadIndicator(true);
         try {
-          const response = await bookingApi.post(`booking/update`, payload);
+          const response = await bookingApi.put(`booking/update`, payload);
           console.log("Response:", response);
           if (response.status === 200) {
             toast.success("Vehicle selected successfully!");

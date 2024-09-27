@@ -123,6 +123,7 @@ function BannerAndOfferAdd() {
                   <input
                     type="file"
                     name="attachment"
+                    accept="image/jpeg, image/png"
                     className={`form-control ${
                       formik.touched.attachment && formik.errors.attachment
                         ? "is-invalid"
