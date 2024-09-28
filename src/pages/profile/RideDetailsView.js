@@ -54,17 +54,15 @@ function RideDetailsView() {
   const handleClick = () => {
     const estKm = data.booking.estKm;
     const locations = encodeURIComponent(JSON.stringify(locationDetail));
-    console.log("scheduledDate:",data?.booking?.scheduledDate);
-    
-    if(!data?.booking?.scheduledDate){
+    console.log("scheduledDate:", data?.booking?.scheduledDate);
+
+    if (!data?.booking?.scheduledDate) {
       navigate(
         `/service?bookingId=${bookingId.id}&location=${locations}&estKm=${estKm}&type=${shiftType}`
       );
-    } else{
-      navigate(
-        `/summary/${bookingId.id}`
-      );
-    }  
+    } else {
+      navigate(`/summary/${bookingId.id}`);
+    }
   };
 
   useEffect(() => {
@@ -379,6 +377,14 @@ function RideDetailsView() {
                               </div>
                             </div>
                             <div className="col-md-6 col-12 ps-1" id="drop">
+                              <p>
+                                <span style={{ color: "#00316B" }}>
+                                  <b>Location: </b>
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {stop.dropoff || "--"}
+                                </span>
+                              </p>
                               <p className="line">
                                 <span style={{ color: "#00316B" }}>
                                   <b>Name :</b>{" "}
@@ -401,14 +407,6 @@ function RideDetailsView() {
                                 </span>
                                 <span style={{ color: "#494949" }}>
                                   {stop.dropoffMobile || "--"}
-                                </span>
-                              </p>
-                              <p>
-                                <span style={{ color: "#00316B" }}>
-                                  <b>Location: </b>
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {stop.dropoff || "--"}
                                 </span>
                               </p>
                             </div>
@@ -627,6 +625,20 @@ function RideDetailsView() {
                         <div className="col-md-6 col-12 ps-1">
                           <div>
                             <p className="line" style={{ color: "#00316B" }}>
+                              <b>Transaction Amount</b>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 ps-1" id="drop">
+                          <p className="line" style={{ color: "#494949" }}>
+                            {data?.transactionDetails?.txnAmount || "0.0"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 ps-1">
+                          <div>
+                            <p className="line" style={{ color: "#00316B" }}>
                               <b>Payment Mode</b>
                             </p>
                           </div>
@@ -647,27 +659,11 @@ function RideDetailsView() {
                         </div>
                         <div className="col-md-6 col-12 ps-1" id="drop">
                           <p className="line" style={{ color: "#494949" }}>
-                            {data?.transactionDetails?.paymentStatus === "N"
-                              ? "No"
-                              : "Yes" || "--"}
+                            {data?.transactionDetails?.paymentStatus || "--"}
                           </p>
                         </div>
                       </div>
-                      <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div>
-                            <p className="line" style={{ color: "#00316B" }}>
-                              <b>Transaction Amount</b>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12 ps-1" id="drop">
-                          <p className="line" style={{ color: "#494949" }}>
-                            {data?.transactionDetails?.txnAmount || "0.0"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
+                      {/* <div className="row">
                         <div className="col-md-6 col-12 ps-1">
                           <div>
                             <p className="line" style={{ color: "#00316B" }}>
@@ -680,7 +676,7 @@ function RideDetailsView() {
                             {data?.transactionDetails?.respCode || "0"}
                           </p>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

@@ -327,7 +327,7 @@ function Order() {
                               {showDraftSection
                                 ? "DRAFT_BOOKING"
                                 : showInprogressSection
-                                  ? "INPROGRESS"
+                                  ? "BOOKED"
                                   : showCompletedSection
                                     ? "COMPLETED"
                                     : "CANCELLED"}

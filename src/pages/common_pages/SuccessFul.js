@@ -20,13 +20,13 @@ function Successfull() {
 
   console.log("result", secondParams);
   
-  useEffect(() => {
-    if (result === "success") {
-      toast.success("Payment successful!");
-    }else if(result === "error"){
-      toast.error("Payment Failed!");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (result === "success") {
+  //     toast.success("Payment successful!");
+  //   }else if(result === "error"){
+  //     toast.error("Payment Failed!");
+  //   }
+  // }, []);
 
   return (
     <section
@@ -63,7 +63,7 @@ function Successfull() {
                   <h4 className="titleStyle mt-5">Congratulations</h4>
 
                   <span className="smallTextStyle">
-                    Booking Id: {bookingId.split("?")[0]}
+                    Booking ID: {bookingId.split("?")[0]}
                   </span>
                 </>
               )}
@@ -82,7 +82,7 @@ function Successfull() {
                   </span>
               )}
               {result === "success" ? (
-                <p className="mt-2">Thank you so much for your order</p>
+                <p className="mt-2">Thank You</p>
               ) : (
                 <p className="mt-4 mx-3">
                   We encountered an issue processing your payment. Please check
