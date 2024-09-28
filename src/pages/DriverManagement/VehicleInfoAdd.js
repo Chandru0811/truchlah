@@ -71,6 +71,7 @@ const VehicleInfoAdd = forwardRef(
         //     ownedBy: values.ownedBy,
         //   })
         // );
+        formDatas.append("driverId", formData.driverId);
         formDatas.append("vehicleType", values.vehicleType);
         formDatas.append("vehicleBrand", values.vehicleBrand);
         formDatas.append("registrationNo", values.registrationNo);
@@ -90,8 +91,8 @@ const VehicleInfoAdd = forwardRef(
 
         setLoadIndicators(true);
         try {
-          const response = await driverApi.put(
-            `vehicle/updateVehicleDetailsByAdmin/${formData.driverId}`,
+          const response = await driverApi.post(
+            `vehicle/createVehicleDetailsByAdmin`,
             formDatas
           );
           if (response.status === 201 || response.status === 200) {

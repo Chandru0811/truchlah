@@ -58,7 +58,7 @@ function BookingManagmentView() {
       };
 
       console.log("Selected Driver Id:", selectedDriver); // Debugging
-      console.log("Accepted By (Driver Name):", acceptedBy); // Debugging
+      console.log("Accepted By (Driver Name):", acceptedBy); 
       setSpinner(true);
       try {
         const response = await driverApi.post(
@@ -77,7 +77,7 @@ function BookingManagmentView() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error?.response?.data?.message);
       } finally {
         setSpinner(false);
       }

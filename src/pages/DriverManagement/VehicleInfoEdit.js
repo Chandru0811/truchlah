@@ -76,12 +76,11 @@ const VehicleInfoEdit = forwardRef(
         setLoadIndicators(true);
         try {
           const response = await driverApi.put(
-            `vehicle/updateVehicleDetailsByAdmin/${formData.driverId}`,
+            `vehicle/updateVehicleDetailsByAdmin/${formData.vehicleId}`,
             formDatas
           );
           if (response.status === 201 || response.status === 200) {
             toast.success(response.data.message);
-            handleNext();
             navigate("/drivermanagement");
           }
         } catch (error) {
@@ -97,17 +96,17 @@ const VehicleInfoEdit = forwardRef(
         driverVehicleEdit: formik.handleSubmit,
     }));
 
-    // useEffect(() => {
-    //   const getVechicle = async () => {
-    //     try {
-    //       const response = await userApi.get("vehicle/vehicleType");
-    //       setVehicle(response.data.responseBody);
-    //     } catch (e) {
-    //       toast.error("Error Fetching Data : ", e);
-    //     }
-    //   };
-    //   getVechicle();
-    // }, []);
+    useEffect(() => {
+      const getVechicle = async () => {
+        try {
+          const response = await userApi.get("vehicle/vehicleType");
+          setVehicle(response.data.responseBody);
+        } catch (e) {
+          toast.error("Error Fetching Data : ", e);
+        }
+      };
+      getVechicle();
+    }, []);
 
   return (
     <div className="container-fluid px-2 pb-2  m-0">

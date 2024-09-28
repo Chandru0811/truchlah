@@ -12,11 +12,6 @@ import { driverApi } from "../../config/URL";
 
 const DriverInfoEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    // const [loading, setLoading] = useState(false);
-    // const [loader, setLoader] = useState(true);
-    const [data, setData] = useState();
-    // const { id } = useParams();
-    const navigate = useNavigate();
 
     const validationSchema = Yup.object({
       firstName: Yup.string().required("*First name is required"),
@@ -73,59 +68,49 @@ const DriverInfoEdit = forwardRef(
       onSubmit: async (values) => {
         console.log("drivermanagement:", values);
 
-        const formData = new FormData();
-        if (values.driverPhoto)
-          formData.append("driverPhoto", values.driverPhoto);
-        if (values.idFront) formData.append("idFront", values.idFront);
-        if (values.idBack) formData.append("idBack", values.idBack);
-        if (values.licenseFront)
-          formData.append("licenseFront", values.licenseFront);
-        if (values.licenseBack)
-          formData.append("licenseBack", values.licenseBack);
-        formData.append("demeritPoint", 0);
-        formData.append("firstName", values.firstName);
-        formData.append("lastName", values.lastName);
-        formData.append("email", values.email);
-        formData.append("mobileNo", values.mobileNo);
-        formData.append("countryCode", values.countryCode);
-        formData.append("password", values.password);
+        const formDatas = new FormData();
+        formDatas.append("demeritPoint", 0);
+        formDatas.append("firstName", values.firstName);
+        formDatas.append("lastName", values.lastName);
+        formDatas.append("email", values.email);
+        formDatas.append("mobileNo", values.mobileNo);
+        formDatas.append("countryCode", values.countryCode);
+        formDatas.append("password", values.password);
+        if (values.driverPhoto)formDatas.append("driverPhoto", values.driverPhoto);
+        if (values.idFront) formDatas.append("idFront", values.idFront);
+        if (values.idBack) formDatas.append("idBack", values.idBack);
+        if (values.licenseFront)formDatas.append("licenseFront", values.licenseFront);
+        if (values.licenseBack)formDatas.append("licenseBack", values.licenseBack);
 
-        //   setLoadIndicators(true);
-        //   try {
-        //     const response = await driverApi.put(
-        //       `driver/updateDriver/${id}`,
-        //       formData
-        //     );
-        //     if (response.status === 200) {
-        //       toast.success(response.data.message);
-        //       navigate("/drivermanagement");
-        //       // formData.append("driverId", id);
-        //       // try {
-        //       //   const response = await driverApi.post(`driver/update`, formData);
-        //       //   if (response.status === 200 || response.status === 201) {
-        //       //
-        //       //
-        //       //   }
-        //       // } catch (error) {
-        //       //   toast.error(
-        //       //     "Error fetching data: ",
-        //       //     error?.response?.data?.message
-        //       //   );
-        //       // }
-        //     } else {
-        //       toast.error(response?.data?.message);
-        //     }
-        //   } catch (error) {
-        //     toast.error("Error fetching data: ", error?.response?.data?.message);
-        //   } finally {
-        //     setLoadIndicators(false);
-        //   }
+          setLoadIndicators(true);
+          try {
+            const response = await driverApi.put(
+              `driver/updateDriver/${formData.driverId}`,
+              formDatas
+            );
+            if (response.status === 200) {
+              setFormData(response.data.responseBody)
+              toast.success(response.data.message);
+              handleNext();
+              
+            } else {
+              toast.error(response?.data?.message);
+            }
+          } catch (error) {
+            toast.error("Error fetching data: ", error?.response?.data?.message);
+          } finally {
+            setLoadIndicators(false);
+          }
       },
     });
 
     useImperativeHandle(ref, () => ({
       driverPersonalEdit: formik.handleSubmit,
     }));
+
+    useEffect(()=>{
+      formik.setValues(formData)
+    },[])
 
     return (
       <div className="container-fluid minHeight m-0">
@@ -260,13 +245,13 @@ const DriverInfoEdit = forwardRef(
                     </div>
                   )}
                 </div>
-                {(data?.driverPhotoUrl || formik.values.driverPhoto) && (
+                {(formData?.driverPhotoUrl || formik.values.driverPhoto) && (
                   <div>
                     <img
                       src={
                         formik.values.imageUrl
                           ? URL.createObjectURL(formik.values.imageUrl)
-                          : data.driverPhotoUrl
+                          : formData.driverPhotoUrl
                       }
                       alt="Vehicle"
                       className="img-fluid"
@@ -298,13 +283,13 @@ const DriverInfoEdit = forwardRef(
                     </div>
                   )}
                 </div>
-                {(data?.idFrontUrl || formik.values.idFront) && (
+                {(formData?.idFrontUrl || formik.values.idFront) && (
                   <div>
                     <img
                       src={
                         formik.values.idFront
                           ? URL.createObjectURL(formik.values.idFront)
-                          : data.idFrontUrl
+                          : formData.idFrontUrl
                       }
                       alt="Vehicle"
                       className="img-fluid"
@@ -335,13 +320,13 @@ const DriverInfoEdit = forwardRef(
                     </div>
                   )}
                 </div>
-                {(data?.idBackUrl || formik.values.idBack) && (
+                {(formData?.idBackUrl || formik.values.idBack) && (
                   <div>
                     <img
                       src={
                         formik.values.idBack
                           ? URL.createObjectURL(formik.values.idBack)
-                          : data.idBackUrl
+                          : formData.idBackUrl
                       }
                       alt="Vehicle"
                       className="img-fluid"
@@ -373,13 +358,13 @@ const DriverInfoEdit = forwardRef(
                       </div>
                     )}
                 </div>
-                {(data?.licenseFrontUrl || formik.values.licenseFront) && (
+                {(formData?.licenseFrontUrl || formik.values.licenseFront) && (
                   <div>
                     <img
                       src={
                         formik.values.licenseFront
                           ? URL.createObjectURL(formik.values.licenseFront)
-                          : data.licenseFrontUrl
+                          : formData.licenseFrontUrl
                       }
                       alt="Vehicle"
                       className="img-fluid"
@@ -410,13 +395,13 @@ const DriverInfoEdit = forwardRef(
                     </div>
                   )}
                 </div>
-                {(data?.licenseBackUrl || formik.values.licenseBack) && (
+                {(formData?.licenseBackUrl || formik.values.licenseBack) && (
                   <div>
                     <img
                       src={
                         formik.values.licenseBack
                           ? URL.createObjectURL(formik.values.licenseBack)
-                          : data.licenseBackUrl
+                          : formData.licenseBackUrl
                       }
                       alt="Vehicle"
                       className="img-fluid"

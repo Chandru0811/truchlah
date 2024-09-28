@@ -19,17 +19,15 @@ const steps = [
   { tooltip: "Vehicle Information" },
 ];
 function DriverManagementEdit() {
-  const { DriverId } = useParams();
+  const { id } = useParams();
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const [loadIndicator, setLoadIndicator] = useState(false);
   const childRef = useRef();
-  const [formData, setFormData] = useState({ DriverId });
+  const [formData, setFormData] = useState({ driverId:id });
   const [loading, setLoading] = useState(false);
-  const [loader, setLoader] = useState(true);
-  const [data, setData] = useState();
-  const { id } = useParams();
 
+  console.log("formData",formData)
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
@@ -67,21 +65,20 @@ function DriverManagementEdit() {
     }
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     setLoader(true);
-  //     try {
-  //       const response = await driverApi.get(`/driver/byId/${id}`);
-  //       formik.setValues(response.data.responseBody);
-  //       setData(response.data.responseBody);
-  //     } catch (error) {
-  //       toast.error("Error Fetch Data ", error);
-  //     } finally {
-  //       setLoader(false);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const response = await driverApi.get(`/driver/byId/${id}`);
+        setFormData(response.data.responseBody);
+      } catch (error) {
+        toast.error("Error Fetch Data ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <>
