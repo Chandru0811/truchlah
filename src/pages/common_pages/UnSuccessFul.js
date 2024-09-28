@@ -11,11 +11,11 @@ function PaymentUnsuccessful() {
   const result = searchParams.get("result");
   const refNo = searchParams.get("refNo");
 
-  useEffect(() => {
-    if (result === "error") {
-      toast.success("Payment Failed!");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (result === "error") {
+  //     toast.success("Payment Failed!");
+  //   }
+  // }, []);
 
   return (
     <section className="PaymentUnsuccessful" style={{background:"#faf5f6"}}>
@@ -31,7 +31,7 @@ function PaymentUnsuccessful() {
                     <GiCancel className="text-danger my-5" size={70}/>
                   </div>
                 </center>
-                <span className="fw-bolder">Booking Id: {bookingId}</span>
+                <span className="fw-bolder">Booking ID: {bookingId}</span>
                 <h5 className="mt-4" style={{ color: "#e74c3c" }}>
                   Payment Unsuccessful
                 </h5>
