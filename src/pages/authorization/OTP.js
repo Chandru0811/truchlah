@@ -5,8 +5,9 @@ import { Button, Form } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { userApi } from "../../config/URL";
+import handleLoginMethod from "./handleLoginMethod";
 
-function OTP() {
+function OTP({ handleLogin, handleAdminLogin }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { mobileNo } = location.state || {};
@@ -64,7 +65,9 @@ function OTP() {
       const response = await userApi.post(`user/verifyotp`, formData);
       if (response.status === 200) {
         toast.success(response.data.message);
-        navigate("/login");
+        const responseNavigate = handleLoginMethod(response.data.responseBody,handleLogin, handleAdminLogin )
+        console.log("responseNavigate",responseNavigate)
+        navigate(responseNavigate);
       } else {
         toast.error(response.data.message);
       }

@@ -72,7 +72,8 @@ function VehicleManagementEdit() {
       setLoading(true);
       console.log(values);
       const formData = new FormData();
-      Object.entries(values).forEach(([key, value]) => {
+      const {vehicleImage,...valuess} =values
+      Object.entries(valuess).forEach(([key, value]) => {
         if (key === "imageUrl" && value) {
           formData.append(key, value);
         } else if (key !== "imageUrl") {

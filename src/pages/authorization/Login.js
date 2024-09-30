@@ -85,19 +85,23 @@ function Login({ handleLogin, handleAdminLogin }) {
         if (error.response.status === 409) {
           toast.warning(error.response.data.errorList[0].errorMessage
           )
-          if(error.response.data.errorList[0].countryCode){  
+          if(error.response.data.errorList[0].countryCode){ 
+          const userId=error.response.data.errorList[0].userId; 
           const mobileNos = error.response.data.errorList[0].mobileNo;
           const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
-          try {
-            const otpResponse = await userApi.post(
-              `user/sendOTP?phone=${mobileNo}`
-            );
-            if (otpResponse.status === 200) {
-              navigate("/otp", { state: { mobileNo } });
-            }
-          } catch (error) {
-            console.log(error.response.data.errorList[0].errorMessage);
-          }
+          if (mobileNos === 0){
+            navigate(`/mobile/verify`,{state:{userId:userId}})
+          }else{
+            try {
+              const otpResponse = await userApi.post(
+                `user/sendOTP?phone=${mobileNo}`
+              );
+              if (otpResponse.status === 200) {
+                navigate("/otp", { state: { mobileNo } });
+              }
+            } catch (error) {
+              console.log(error.response.data.errorList[0].errorMessage);
+            }}
           }
         } else {
           toast.error(error.response.data.errorList[0].errorMessage);

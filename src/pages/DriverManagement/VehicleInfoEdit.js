@@ -1,41 +1,41 @@
 import React, {
-    forwardRef,
-    useEffect,
-    useImperativeHandle,
-    useState,
-  } from "react";
-  import { Link, useNavigate } from "react-router-dom";
-  import { useFormik } from "formik";
-  import * as Yup from "yup";
-  import { driverApi, userApi } from "../../config/URL";
-  import toast from "react-hot-toast";
-  
-  const validationSchema = Yup.object({
-    vehicleType: Yup.string().required("Vehicle type is required"),
-    vehicleBrand: Yup.string().required("Vehicle brand is required"),
-    registrationNo: Yup.string().required("Registration number is required"),
-    // .matches(/^[A-Z0-9-]+$/, "Registration number must be valid"),
-    registrationYear: Yup.number()
-      .required("Registration year is required")
-      .min(1900, "Enter a valid year")
-      .max(new Date().getFullYear(), "Enter a valid year"),
-    vehicleModel: Yup.string().required("Vehicle model is required"),
-    vehicleName: Yup.string().required("Vehicle name is required"),
-    //   description: Yup.string().required("Description is required"),
-    vehicleSize: Yup.string().required("Vehicle size is required"),
-    vehicleWeight: Yup.number()
-      .required("Vehicle weight is required")
-      .min(1, "Weight must be greater than zero"),
-    ownedBy: Yup.string().required("Owner is required"),
-    // vehicleBackImg: Yup.mixed().required("ID Back is required"),
-    // vehicleFrontImg: Yup.mixed().required("License Front is required"),
-  });
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { driverApi, userApi } from "../../config/URL";
+import toast from "react-hot-toast";
+
+const validationSchema = Yup.object({
+  vehicleType: Yup.string().required("Vehicle type is required"),
+  vehicleBrand: Yup.string().required("Vehicle brand is required"),
+  registrationNo: Yup.string().required("Registration number is required"),
+  // .matches(/^[A-Z0-9-]+$/, "Registration number must be valid"),
+  registrationYear: Yup.number()
+    .required("Registration year is required")
+    .min(1900, "Enter a valid year")
+    .max(new Date().getFullYear(), "Enter a valid year"),
+  vehicleModel: Yup.string().required("Vehicle model is required"),
+  vehicleName: Yup.string().required("Vehicle name is required"),
+  //   description: Yup.string().required("Description is required"),
+  vehicleSize: Yup.string().required("Vehicle size is required"),
+  vehicleWeight: Yup.number()
+    .required("Vehicle weight is required")
+    .min(1, "Weight must be greater than zero"),
+  ownedBy: Yup.string().required("Owner is required"),
+  // vehicleBackImg: Yup.mixed().required("ID Back is required"),
+  // vehicleFrontImg: Yup.mixed().required("License Front is required"),
+});
 
 const VehicleInfoEdit = forwardRef(
-    ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
-    const[vehicle,setVehicle]=useState()
-    
+    const [vehicle, setVehicle] = useState();
+
     const formik = useFormik({
       initialValues: {
         vehicleType: "",
@@ -75,10 +75,19 @@ const VehicleInfoEdit = forwardRef(
 
         setLoadIndicators(true);
         try {
-          const response = await driverApi.put(
-            `vehicle/updateVehicleDetailsByAdmin/${formData.vehicleId}`,
-            formDatas
-          );
+          let response;
+          if(formData.vehicleDetails?.vehicleId){
+            response = await driverApi.put(
+              `vehicle/updateVehicleDetailsByAdmin/${formData.vehicleDetails?.vehicleId}`,
+              formDatas
+            );
+          }else{
+            formDatas.append("driverId",formData.driverId)
+            response = await driverApi.put(
+              `vehicle/VehicleDetailsByAdmin`,
+              formDatas
+            );
+          }
           if (response.status === 201 || response.status === 200) {
             toast.success(response.data.message);
             navigate("/drivermanagement");
@@ -93,7 +102,7 @@ const VehicleInfoEdit = forwardRef(
     });
 
     useImperativeHandle(ref, () => ({
-        driverVehicleEdit: formik.handleSubmit,
+      driverVehicleEdit: formik.handleSubmit,
     }));
 
     useEffect(() => {
@@ -108,8 +117,19 @@ const VehicleInfoEdit = forwardRef(
       getVechicle();
     }, []);
 
-  return (
-    <div className="container-fluid px-2 pb-2  m-0">
+    useEffect(() => {
+      formData.vehicleDetails &&
+        formik.setValues({
+          // ...formik.values,
+          vehicleType: formData.vehicleDetails?.vehicleType?.type || "",
+          vehicleBrand: formData.vehicleBrand || "",
+          ...formik.vehicleDetails
+        });
+    }, [formData]);
+
+
+    return (
+      <div className="container-fluid px-2 pb-2  m-0">
         <form onSubmit={formik.handleSubmit}>
           <div className="container mb-2">
             <div className="row py-4">
@@ -128,10 +148,10 @@ const VehicleInfoEdit = forwardRef(
                   {...formik.getFieldProps("vehicleType")}
                 >
                   <option value={""}>Select the vechicle</option>
-                  {vehicle&&
-                  vehicle.map((data,i)=>(
-                    <option value={data.type}>{data.type}</option>
-                  ))}
+                  {vehicle &&
+                    vehicle.map((data, i) => (
+                      <option value={data.type}>{data.type}</option>
+                    ))}
                 </select>
                 {formik.touched.vehicleType && formik.errors.vehicleType && (
                   <div className="invalid-feedback">
@@ -189,7 +209,13 @@ const VehicleInfoEdit = forwardRef(
                 <label className="form-label mb-1">Registration Year</label>
                 <span className="text-danger">*</span>
                 <input
-                  type="text" onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                  type="text"
+                  onInput={(event) => {
+                    event.target.value = event.target.value.replace(
+                      /[^0-9]/g,
+                      ""
+                    );
+                  }}
                   name="registrationYear"
                   className={`form-control ${
                     formik.touched.registrationYear &&
@@ -317,7 +343,8 @@ const VehicleInfoEdit = forwardRef(
                 <label className="form-label mb-1">Vehicle Front Img</label>
                 <span className="text-danger">*</span>
                 <input
-                  type="file" accept="image/jpeg, image/png"
+                  type="file"
+                  accept="image/jpeg, image/png"
                   name="vehicleFrontImg"
                   className={`form-control ${
                     formik.touched.vehicleFrontImg &&
@@ -341,7 +368,8 @@ const VehicleInfoEdit = forwardRef(
                 <label className="form-label mb-1">Vehicle Back Img</label>
                 <span className="text-danger">*</span>
                 <input
-                  type="file" accept="image/jpeg, image/png"
+                  type="file"
+                  accept="image/jpeg, image/png"
                   name="vehicleBackImg"
                   className={`form-control ${
                     formik.touched.vehicleBackImg &&
@@ -383,7 +411,8 @@ const VehicleInfoEdit = forwardRef(
           </div>
         </form>
       </div>
-  )
-})
+    );
+  }
+);
 
-export default VehicleInfoEdit
+export default VehicleInfoEdit;

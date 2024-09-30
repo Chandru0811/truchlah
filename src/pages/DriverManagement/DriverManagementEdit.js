@@ -69,7 +69,7 @@ function DriverManagementEdit() {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await driverApi.get(`/driver/byId/${id}`);
+        const response = await driverApi.get(`driver/getVehicleDetailsByDriverId/${id}`);
         setFormData(response.data.responseBody);
       } catch (error) {
         toast.error("Error Fetch Data ", error);

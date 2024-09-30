@@ -12,7 +12,6 @@ import { driverApi } from "../../config/URL";
 
 const DriverInfoEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-
     const validationSchema = Yup.object({
       firstName: Yup.string().required("*First name is required"),
       lastName: Yup.string().required("*Last name is required"),
@@ -76,31 +75,40 @@ const DriverInfoEdit = forwardRef(
         formDatas.append("mobileNo", values.mobileNo);
         formDatas.append("countryCode", values.countryCode);
         formDatas.append("password", values.password);
-        if (values.driverPhoto)formDatas.append("driverPhoto", values.driverPhoto);
+        if (values.driverPhoto)
+          formDatas.append("driverPhoto", values.driverPhoto);
         if (values.idFront) formDatas.append("idFront", values.idFront);
         if (values.idBack) formDatas.append("idBack", values.idBack);
-        if (values.licenseFront)formDatas.append("licenseFront", values.licenseFront);
-        if (values.licenseBack)formDatas.append("licenseBack", values.licenseBack);
+        if (values.licenseFront)
+          formDatas.append("licenseFront", values.licenseFront);
+        if (values.licenseBack)
+          formDatas.append("licenseBack", values.licenseBack);
 
-          setLoadIndicators(true);
-          try {
-            const response = await driverApi.put(
-              `driver/updateDriver/${formData.driverId}`,
-              formDatas
+        setLoadIndicators(true);
+        try {
+          const response = await driverApi.put(
+            `driver/updateDriver/${formData.driverId}`,
+            formDatas
+          );
+          if (response.status === 200) {
+            const updatedFormData = { ...formData };
+            Object.entries(response.data.responseBody).forEach(
+              ([key, value]) => {
+                updatedFormData[key] = value; 
+              }
             );
-            if (response.status === 200) {
-              setFormData(response.data.responseBody)
-              toast.success(response.data.message);
-              handleNext();
-              
-            } else {
-              toast.error(response?.data?.message);
-            }
-          } catch (error) {
-            toast.error("Error fetching data: ", error?.response?.data?.message);
-          } finally {
-            setLoadIndicators(false);
+
+            setFormData(updatedFormData);
+            toast.success(response.data.message);
+            handleNext();
+          } else {
+            toast.error(response?.data?.message);
           }
+        } catch (error) {
+          toast.error("Error fetching data: ", error?.response?.data?.message);
+        } finally {
+          setLoadIndicators(false);
+        }
       },
     });
 
@@ -108,9 +116,9 @@ const DriverInfoEdit = forwardRef(
       driverPersonalEdit: formik.handleSubmit,
     }));
 
-    useEffect(()=>{
-      formik.setValues(formData)
-    },[])
+    useEffect(() => {
+      formik.setValues(formData);
+    }, []);
 
     return (
       <div className="container-fluid minHeight m-0">

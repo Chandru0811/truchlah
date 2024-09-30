@@ -86,7 +86,8 @@ function UserLayout({
           <Route path="/ShiftPack" element={<ShiftPack />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/forgetpassword" element={<ForgotPassword />} />
-          <Route path="/otp" element={<OTP />} />
+          <Route path="/otp" element={<OTP handleLogin={handleLogin}
+                handleAdminLogin={handleAdminLogin}/>} />
           <Route path="/termsandcondition" element={<TermsCondition />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/pricing" element={<Priceing />} />

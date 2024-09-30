@@ -34,6 +34,8 @@ const validationSchema = Yup.object().shape({
 
 const MobileNumVerify = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userId } = location.state || {};
   const id =sessionStorage.getItem("userId")
 console.log("id",id)
   const formik = useFormik({
@@ -50,8 +52,9 @@ console.log("id",id)
       }
       const mobileNo = `${data.countryCode}${data.mobileNo}`;
       try {
+        const userIds =id ? id : userId
         const otpResponse = await userApi.put(
-          `user/updateMobile/${id}`,payload
+          `user/updateMobile/${userIds}`,payload
         );
         if (otpResponse.status === 200) {
           try {
