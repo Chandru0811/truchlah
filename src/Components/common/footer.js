@@ -85,6 +85,15 @@ function foot({ isAuthenticate }) {
                       Log in
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="https://uat.trucklah.com/contact_us.html"
+                      className="h text-decoration-none"
+                      style={{ color: "#acff3b" }}
+                    >
+                      Contact Us
+                    </Link>
+                  </li>
                 </>
               )}
               <li>

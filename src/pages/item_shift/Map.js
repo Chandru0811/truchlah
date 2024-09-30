@@ -298,6 +298,7 @@ function Map() {
     }));
     // setModalShow(true);
   };
+  
   const handleDeleteStop = (index) => {
     const updatedStops = [...stops];
     updatedStops.splice(index, 1);
@@ -434,23 +435,6 @@ function Map() {
       console.error("Geolocation is not supported by this browser.");
     }
   }, []);
-
-  // useEffect(() => {
-  //   const handlePopState = (event) => {
-  //     if (location.pathname === '/map') {
-  //       event.preventDefault();
-  //       handleShow();
-  //       window.history.pushState(null, '');
-  //     }
-  //   };
-
-  //   window.addEventListener('popstate', handlePopState);
-  //   window.history.pushState(null, '');
-
-  //   return () => {
-  //     window.removeEventListener('popstate', handlePopState);
-  //   };
-  // }, [location, navigate]);
 
   if (!isLoaded) {
     return (
@@ -644,7 +628,7 @@ function Map() {
                   <div className="d-flex justify-content-end">
                     <button
                       type="button"
-                      className="btn btn-primary mb-3"
+                      className="btn btn-primary mb-3 shadow-none"
                       style={{
                         backgroundColor: "transparent",
                         color: "red",

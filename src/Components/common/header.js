@@ -91,29 +91,36 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                         <Nav className="flex-grow-1 pe-3">
                           <div className="col-1"></div>
                           <div className="col-lg-8">
-                            <ul className="navbar-nav d-flex justify-content-end align-content-center">
-                              <li className="nav-item menus px-2">
-                                <Link className="Links fs-5 fw-bold" to="/">
-                                  Business
-                                </Link>
-                              </li>
-                              <li className="nav-item menus px-2">
-                                <Link
-                                  className="Links fs-5 fw-bold"
-                                  to="/"
-                                >
-                                  Individuals
-                                </Link>
-                              </li>
-                              <li className="nav-item menus px-2">
-                                <Link
-                                  className="Links fs-5 fw-bold"
-                                  to="/"
-                                >
-                                  Drivers
-                                </Link>
-                              </li>
-                            </ul>
+                            {isAuthenticate ? (
+                              <></>
+                            ) : (
+                              <ul className="navbar-nav d-flex justify-content-end align-content-center">
+                                <li className="nav-item menus px-2">
+                                  <Link
+                                    className="Links fs-5 fw-bold"
+                                    to="https://trucklah.com/business.html"
+                                  >
+                                    Business
+                                  </Link>
+                                </li>
+                                <li className="nav-item menus px-2">
+                                  <Link
+                                    className="Links fs-5 fw-bold"
+                                    to="https://trucklah.com/individuals.html"
+                                  >
+                                    Individuals
+                                  </Link>
+                                </li>
+                                <li className="nav-item menus px-2">
+                                  <Link
+                                    className="Links fs-5 fw-bold"
+                                    to="https://trucklah.com/driver_partner_jobs.html"
+                                  >
+                                    Drivers
+                                  </Link>
+                                </li>
+                              </ul>
+                            )}
                           </div>
                           <div className="col-3">
                             <div className="d-lg-flex justify-content-end">

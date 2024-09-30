@@ -56,6 +56,7 @@ function Summary() {
     3: <img src={Lorry10} alt="SomeOther" className="img-fluid mt-3" />,
     4: <img src={Lorry14} alt="Ace" className="img-fluid mt-3" />,
     5: <img src={Lorry24} alt="Ace" className="img-fluid mt-3" />,
+    6: <img src={Lorry24} alt="Ace" className="img-fluid mt-3" />,
   };
 
   const confirmCashPayment = async () => {
@@ -168,6 +169,7 @@ function Summary() {
           </div>
           <center>
             {vehicleImages[data.booking?.vehicletypeId] || null}
+            {/* <img  src={vechicle?.vehicleImage?.[0] || 'defaultImageURL'}  alt="vechicle" className="img-fluid mt-3" /> */}
             <p className="mt-3">
               {vehicleNameMap[data.booking?.vehicletypeId]}
             </p>
