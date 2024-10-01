@@ -245,7 +245,9 @@ const DriverInfoEdit = forwardRef(
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("driverPhoto")}
+                    onChange={(e) =>
+                      formik.setFieldValue("driverPhoto", e.target.files[0])
+                    }
                   />
                   {formik.touched.driverPhoto && formik.errors.driverPhoto && (
                     <div className="invalid-feedback">
@@ -257,11 +259,11 @@ const DriverInfoEdit = forwardRef(
                   <div>
                     <img
                       src={
-                        formik.values.imageUrl
-                          ? URL.createObjectURL(formik.values.imageUrl)
+                        formik.values.driverPhoto
+                          ? URL.createObjectURL(formik.values.driverPhoto)
                           : formData.driverPhotoUrl
                       }
-                      alt="Vehicle"
+                      alt="driver"
                       className="img-fluid"
                       style={{ maxWidth: "20%" }}
                     />
@@ -283,7 +285,9 @@ const DriverInfoEdit = forwardRef(
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("idFront")}
+                    onChange={(e) =>
+                      formik.setFieldValue("idFront", e.target.files[0])
+                    }
                   />
                   {formik.touched.idFront && formik.errors.idFront && (
                     <div className="invalid-feedback">
@@ -320,7 +324,9 @@ const DriverInfoEdit = forwardRef(
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("idBack")}
+                    onChange={(e) =>
+                      formik.setFieldValue("idBack", e.target.files[0])
+                    }
                   />
                   {formik.touched.idBack && formik.errors.idBack && (
                     <div className="invalid-feedback">
@@ -357,7 +363,9 @@ const DriverInfoEdit = forwardRef(
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("licenseFront")}
+                    onChange={(e) =>
+                      formik.setFieldValue("licenseFront", e.target.files[0])
+                    }
                   />
                   {formik.touched.licenseFront &&
                     formik.errors.licenseFront && (
@@ -395,7 +403,9 @@ const DriverInfoEdit = forwardRef(
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("licenseBack")}
+                    onChange={(e) =>
+                      formik.setFieldValue("licenseBack", e.target.files[0])
+                    }
                   />
                   {formik.touched.licenseBack && formik.errors.licenseBack && (
                     <div className="invalid-feedback">

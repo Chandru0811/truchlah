@@ -11,7 +11,7 @@ import { driverApi, userApi } from "../../config/URL";
 import toast from "react-hot-toast";
 
 const validationSchema = Yup.object({
-  vehicleType: Yup.string().required("Vehicle type is required"),
+  vehicleTypeIdType: Yup.string().required("Vehicle type is required"),
   vehicleBrand: Yup.string().required("Vehicle brand is required"),
   registrationNo: Yup.string().required("Registration number is required"),
   // .matches(/^[A-Z0-9-]+$/, "Registration number must be valid"),
@@ -38,7 +38,7 @@ const VehicleInfoEdit = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        vehicleType: "",
+        vehicleTypeIdType: "",
         vehicleBrand: "",
         registrationNo: "",
         registrationYear: "",
@@ -56,7 +56,7 @@ const VehicleInfoEdit = forwardRef(
         console.log("drivermanagement:", values);
 
         const formDatas = new FormData();
-        formDatas.append("vehicleType", values.vehicleType);
+        formDatas.append("vehicleType", values.vehicleTypeIdType);
         formDatas.append("vehicleBrand", values.vehicleBrand);
         formDatas.append("registrationNo", values.registrationNo);
         formDatas.append("registrationYear", values.registrationYear);
@@ -76,13 +76,13 @@ const VehicleInfoEdit = forwardRef(
         setLoadIndicators(true);
         try {
           let response;
-          if(formData.vehicleDetails?.vehicleId){
+          if (formData.vehicleDetails?.vehicleId) {
             response = await driverApi.put(
               `vehicle/updateVehicleDetailsByAdmin/${formData.vehicleDetails?.vehicleId}`,
               formDatas
             );
-          }else{
-            formDatas.append("driverId",formData.driverId)
+          } else {
+            formDatas.append("driverId", formData.driverId);
             response = await driverApi.put(
               `vehicle/VehicleDetailsByAdmin`,
               formDatas
@@ -120,13 +120,10 @@ const VehicleInfoEdit = forwardRef(
     useEffect(() => {
       formData.vehicleDetails &&
         formik.setValues({
-          // ...formik.values,
-          vehicleType: formData.vehicleDetails?.vehicleType?.type || "",
-          vehicleBrand: formData.vehicleBrand || "",
-          ...formik.vehicleDetails
+          ...formik.values,
+          ...formData.vehicleDetails,
         });
     }, [formData]);
-
 
     return (
       <div className="container-fluid px-2 pb-2  m-0">
@@ -139,13 +136,14 @@ const VehicleInfoEdit = forwardRef(
                 <span className="text-danger">*</span>
                 <select
                   type="text"
-                  name="vehicleType"
+                  name="vehicleTypeIdType"
                   className={`form-select ${
-                    formik.touched.vehicleType && formik.errors.vehicleType
+                    formik.touched.vehicleTypeIdType &&
+                    formik.errors.vehicleTypeIdType
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("vehicleType")}
+                  {...formik.getFieldProps("vehicleTypeIdType")}
                 >
                   <option value={""}>Select the vechicle</option>
                   {vehicle &&
@@ -153,11 +151,12 @@ const VehicleInfoEdit = forwardRef(
                       <option value={data.type}>{data.type}</option>
                     ))}
                 </select>
-                {formik.touched.vehicleType && formik.errors.vehicleType && (
-                  <div className="invalid-feedback">
-                    {formik.errors.vehicleType}
-                  </div>
-                )}
+                {formik.touched.vehicleTypeIdType &&
+                  formik.errors.vehicleTypeIdType && (
+                    <div className="invalid-feedback">
+                      {formik.errors.vehicleTypeIdType}
+                    </div>
+                  )}
               </div>
 
               {/* Vehicle Brand */}
@@ -342,51 +341,79 @@ const VehicleInfoEdit = forwardRef(
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-1">Vehicle Front Img</label>
                 <span className="text-danger">*</span>
-                <input
-                  type="file"
-                  accept="image/jpeg, image/png"
-                  name="vehicleFrontImg"
-                  className={`form-control ${
-                    formik.touched.vehicleFrontImg &&
-                    formik.errors.vehicleFrontImg
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={(e) =>
-                    formik.setFieldValue("vehicleFrontImg", e.target.files[0])
-                  }
-                />
-                {formik.touched.vehicleFrontImg &&
-                  formik.errors.vehicleFrontImg && (
-                    <div className="invalid-feedback">
-                      {formik.errors.vehicleFrontImg}
-                    </div>
-                  )}
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    name="vehicleFrontImg"
+                    className={`form-control ${
+                      formik.touched.vehicleFrontImg &&
+                      formik.errors.vehicleFrontImg
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(e) =>
+                      formik.setFieldValue("vehicleFrontImg", e.target.files[0])
+                    }
+                  />
+                </div>
+                {(formData?.vehicleDetails?.vehicleFrontImg ||
+                  formik.values.vehicleFrontImg) && (
+                  <div>
+                    <img
+                      src={
+                        formik.values?.vehicleFrontImg instanceof File
+                          ? URL.createObjectURL(formik.values.vehicleFrontImg)
+                          : formData?.vehicleDetails?.vehicleFrontImg
+                      }
+                      alt="Vehicle"
+                      className="img-fluid"
+                      style={{ maxWidth: "20%" }}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-1">Vehicle Back Img</label>
                 <span className="text-danger">*</span>
-                <input
-                  type="file"
-                  accept="image/jpeg, image/png"
-                  name="vehicleBackImg"
-                  className={`form-control ${
-                    formik.touched.vehicleBackImg &&
-                    formik.errors.vehicleBackImg
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={(e) =>
-                    formik.setFieldValue("vehicleBackImg", e.target.files[0])
-                  }
-                />
-                {formik.touched.vehicleBackImg &&
-                  formik.errors.vehicleBackImg && (
-                    <div className="invalid-feedback">
-                      {formik.errors.vehicleBackImg}
-                    </div>
-                  )}
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    name="vehicleBackImg"
+                    className={`form-control ${
+                      formik.touched.vehicleBackImg &&
+                      formik.errors.vehicleBackImg
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(e) =>
+                      formik.setFieldValue("vehicleBackImg", e.target.files[0])
+                    }
+                  />
+                  {formik.touched.vehicleBackImg &&
+                    formik.errors.vehicleBackImg && (
+                      <div className="invalid-feedback">
+                        {formik.errors.vehicleBackImg}
+                      </div>
+                    )}
+                </div>
+                {(formData?.vehicleDetails?.vehicleBackImg ||
+                  formik.values.vehicleBackImg) && (
+                  <div>
+                    <img
+                      src={
+                        formik.values?.vehicleBackImg instanceof File
+                          ? URL.createObjectURL(formik.values.vehicleBackImg)
+                          : formData?.vehicleDetails?.vehicleBackImg
+                      }
+                      alt="Vehicle"
+                      className="img-fluid"
+                      style={{ maxWidth: "20%" }}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Description */}
