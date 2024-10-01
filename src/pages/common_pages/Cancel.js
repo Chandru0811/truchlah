@@ -23,7 +23,7 @@ function Cancel() {
                 </h5>
                 <p className="mt-2">Sorry for inconvenient</p>
                 <center>
-                  <Link to="/">
+                  <Link to="/shift">
                     <button
                       id="button"
                       type="button"

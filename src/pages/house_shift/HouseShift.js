@@ -69,7 +69,8 @@ function HouseShift() {
     onSubmit: async (values) => {
       const payload = {
         userId: userId,
-        type: shiftType,
+        type: "",
+        estKm: distance,
         locationDetail: locationDetail,
       };
       // console.log("Form values:", payload);
@@ -405,8 +406,8 @@ function HouseShift() {
                 <div className="row my-2">
                   <select
                     className="form-select form-select-lg rounded-5"
-                    name="category"
-                    {...formik.getFieldProps("category")}
+                    name="type"
+                    {...formik.getFieldProps("type")}
                     style={{
                       width: "500px",
                       height: "50px",

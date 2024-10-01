@@ -1815,17 +1815,20 @@ body {
   border: none;
 }
 
-.card-hover {
+/* Shift Type  */
+.card-hover1 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
-
+.card-hover1:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
 .card-hover2 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
-
-.card-hover:hover {
+.card-hover2:hover {
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }

@@ -19,7 +19,7 @@ function Shift() {
 
           <div className="row justify-content-center mb-3">
             <div
-              className="col-6 justify-content-center card shadow-sm mb-5 mt-5 card-hover"
+              className="col-6 justify-content-center card shadow-sm mb-5 mt-5 card-hover1"
               style={{ width: '70%' }}
             >
               <Link
