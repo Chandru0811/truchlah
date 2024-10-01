@@ -5,12 +5,13 @@ const handleLoginMethod = (data,handleLogin, handleAdminLogin ) => {
     toast.error("Invalid login data!");
     return "/login"; 
   }
+  console.log("data.role",data.roles[0].name)
   sessionStorage.setItem("userId", data.userId);
-  sessionStorage.setItem("roles", data.roles[0]);
+  sessionStorage.setItem("roles", data.roles[0].name);
   sessionStorage.setItem("token", data.token);
-  sessionStorage.setItem("username", data.username);
+  sessionStorage.setItem("username", data.firstName);
 
-  if (data?.roles?.[0] === "ROLE_ADMIN" || data?.roles?.[0] === "ROLE_STAFF") {
+  if (data?.roles?.[0].name === "ROLE_ADMIN" || data?.roles?.[0].name === "ROLE_STAFF") {
     toast.success("Login Successful!");
     handleAdminLogin();
    return "/" 

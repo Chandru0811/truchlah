@@ -25,7 +25,7 @@ function BookingManagmentView() {
   const getBookingById = async () => {
     setLoading(true);
     try {
-      const response = await bookingApi.get(`/booking/getBookingById/${id}`);
+      const response = await bookingApi.get(`/booking/getBookingByIdAdmin/${id}`);
       setData(response.data.responseBody);
       console.log("Booking By ID :", response.data.responseBody);
     } catch (error) {
@@ -958,7 +958,7 @@ function BookingManagmentView() {
                       </div>
                     </div>
                   </div>
-                  {data.bookingStatus.accepetedBy && (
+                  {data.bookingStatus?.accepetedBy && (
                     <>
                       <div class="accordion-item">
                         <h2 class="accordion-header">

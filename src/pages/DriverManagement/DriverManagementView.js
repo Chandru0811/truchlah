@@ -372,7 +372,15 @@ function DriverManagementView() {
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleBrand}
+                                  {data?.vehicleDetails?.licenseFrontUrl ? (
+                                <img
+                                  src={data?.vehicleDetails?.licenseFrontUrl}
+                                  alt="License Front"
+                                  style={{ width: "100px" }}
+                                />
+                              ) : (
+                                "N/A"
+                              )}
                                   </p>
                                 </div>
                               </div>
@@ -386,7 +394,15 @@ function DriverManagementView() {
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleBrand}
+                                  {data?.vehicleDetails?.licenseFrontUrl ? (
+                                <img
+                                  src={data?.vehicleDetails?.licenseFrontUrl}
+                                  alt="License Front"
+                                  style={{ width: "100px" }}
+                                />
+                              ) : (
+                                "N/A"
+                              )}
                                   </p>
                                 </div>
                               </div>

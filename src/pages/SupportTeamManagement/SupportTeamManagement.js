@@ -75,7 +75,19 @@ const roles =sessionStorage.getItem("roles")
  const deleteFunc =(id)=>{
   return userApi.delete(`deleteUserDetails/${id}`)
  }
- 
+ const handleStatusChange=async()=>{
+  destroyDataTable();
+     setLoading(true);
+      try {
+        const resposnse = await userApi.get("staffs");
+        setDatas(resposnse.data.responseBody);
+        initializeDataTable(); 
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+ }
   return (
     <div>
      {loading ? (
@@ -128,9 +140,9 @@ const roles =sessionStorage.getItem("roles")
                 <th scope="col" className="text-center">
                   Mobile Number
                 </th>
-                {/* <th scope="col" className="text-center">
-                  Unit
-                </th> */}
+                <th scope="col" className="text-center">
+                  Status
+                </th>
                 {roles !== "ROLE_STAFF" &&(
                 <th scope="col" className="text-center"  aria-disabled="true" style={{ pointerEvents: "none" }}>
                   ACTION
@@ -144,7 +156,7 @@ const roles =sessionStorage.getItem("roles")
                   <td className="text-center">{`${data.firstName} ${data.lastName}`}</td>
                   <td className="text-center">{data.email}</td>
                   <td className="text-center">{`${data.countryCode} ${data.mobileNo}`}</td>
-                  {/* <td className="text-center">unit</td> */}
+                  <td className="text-center">{<button className={``} onClick={handleStatusChange}>{data.roles[0].status}</button>}</td>
                   {roles !== "ROLE_STAFF" &&(<>
                   <td className="text-center">
                     <div className="gap-2">
