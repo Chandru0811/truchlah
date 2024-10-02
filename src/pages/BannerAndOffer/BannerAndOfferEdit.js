@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { userApi } from "../../config/URL";
+import Cropper from "react-easy-crop";
+import { getCroppedImg } from "../common_pages/cropImageHelper";
 
 function BannerAndOfferEdit() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
   const { id } = useParams();
+  const [imageSrc, setImageSrc] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -35,7 +43,7 @@ function BannerAndOfferEdit() {
       setLoading(true);
       const formData = new FormData();
       formData.append("status", values.status);
-      formData.append("attachment", values.attachment);
+      formData.append("attachment", croppedImage);
       formData.append("description", values.description);
       try {
         const response = await userApi.put(`updateOfferFile/${id}`, formData);
@@ -53,9 +61,9 @@ function BannerAndOfferEdit() {
     },
   });
 
-  const handleFileChange = (event) => {
-    formik.setFieldValue("attachment", event.currentTarget.files[0]);
-  };
+  // const handleFileChange = (event) => {
+  //   formik.setFieldValue("attachment", event.currentTarget.files[0]);
+  // };
 
   useEffect(() => {
     const getItemData = async () => {
@@ -81,6 +89,32 @@ function BannerAndOfferEdit() {
     getItemData();
   }, [id]);
 
+  const handleFileChange = (event) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result); // Show image in cropper
+        setShowCropper(true); // Open cropper modal
+      };
+      reader.readAsDataURL(file);
+    }
+    formik.setFieldValue("attachment", event.currentTarget.files[0]);
+  };
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCrop = useCallback(async () => {
+    try {
+      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); // Get cropped image
+      setCroppedImage(croppedImageData); // Set the cropped image to submit
+      setShowCropper(false); // Close cropper modal
+    } catch (e) {
+      console.error(e);
+    }
+  }, [croppedAreaPixels, imageSrc]);
   return (
     <div>
       {loading ? (
@@ -185,9 +219,9 @@ function BannerAndOfferEdit() {
                           </div>
                         )}
                     </div>
-                    {data.attachment ? (
+                    {(data.attachment ||croppedImage) ? (
                       <img
-                        src={data.attachment}
+                        src={croppedImage?URL.createObjectURL(croppedImage):data.attachment}
                         alt="Attachment"
                         className="img-fluid"
                         style={{ maxWidth: "40%", height: "auto" }}
@@ -224,6 +258,28 @@ function BannerAndOfferEdit() {
                 </div>
               </div>
             </div>
+            {showCropper && (
+          <div className="row">
+            <div className="col-12">
+              <div className="cropper-container">
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={4 / 2}
+                  onCropChange={setCrop}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                />
+              </div>
+              <div className="text-center mt-3 position-absolute" style={{top:"70%",left:"34%"}}>
+                <button className="btn btn-sm btn-primary " type="button" onClick={handleCrop}>
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
           </form>
         </div>
       )}

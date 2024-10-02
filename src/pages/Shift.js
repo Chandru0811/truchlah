@@ -9,7 +9,8 @@ function Shift() {
   // const [type , setType] = useState({});
 
   const logType = (selectedType) => {
-    // console.log("Shift Type:", selectedType);
+    console.log("Selected Shift Type:", selectedType);
+    sessionStorage.removeItem("shiftType");
     sessionStorage.setItem("shiftType", selectedType);
   };
   return (
@@ -21,11 +22,12 @@ function Shift() {
             <div
               className="col-6 justify-content-center card shadow-sm mb-5 mt-5 card-hover1"
               style={{ width: '70%' }}
+              onClick={()=>logType("HOUSE")}
             >
               <Link
                 to={{
                   pathname: "/map",
-                  state: { logType: logType("ITEM") },
+                  // state: { logType: logType("ITEM") },
                 }}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
@@ -54,6 +56,7 @@ function Shift() {
 
             <div className="col-6 justify-content-center card shadow-sm card-hover2"
               style={{ width: '70%' }}
+              onClick={()=>logType("HOUSE")}
             >
               <Link
                 to={{

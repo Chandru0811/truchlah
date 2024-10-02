@@ -63,7 +63,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
             >
               <Container fluid>
                 <Navbar.Brand>
-                  <Link to="/">
+                  <Link to="https://uat.trucklah.com/">
                     <img src={logo} alt="Trucklah" className="img-fluid" />
                   </Link>
                 </Navbar.Brand>

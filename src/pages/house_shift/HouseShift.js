@@ -26,6 +26,7 @@ import fetchAllCategorysWithIds from "../../pages/Lists/CategoryList";
 const validationSchema = Yup.object().shape({
   pickupLocation: Yup.string().required("!Pickup Location is required"),
   dropLocation: Yup.string().required("!Drop Location is required"),
+  type:Yup.string().required("!Catagories is required"),
 });
 
 function HouseShift() {
@@ -44,8 +45,7 @@ function HouseShift() {
   const [modalTitle, setModalTitle] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
   const [markerPosition, setMarkerPosition] = useState(null);
-  const [destinationMarkerPosition, setDestinationMarkerPosition] =
-    useState(null);
+  const [destinationMarkerPosition, setDestinationMarkerPosition] = useState(null);
   const [directions, setDirections] = useState(null);
   const [locationDetail, setLocationDetail] = useState([]);
   console.log("Location Details is ", locationDetail);
@@ -69,13 +69,14 @@ function HouseShift() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+
       const payload = {
         userId: userId,
         type: values.type,
         estKm: distance,
         locationDetail: locationDetail,
       };
-      // console.log("Form values:", payload);
+      console.log("Form values:", values);
       try {
         const response = await bookingApi.post(`booking/create`, payload);
         if (response.status === 200) {
@@ -195,7 +196,7 @@ function HouseShift() {
 
               // Extract distance and duration
               const route = result.routes[0].legs[0];
-              setDistance(route.distance.text);
+              setDistance(route.distance.text?.split(" ")[0]);
               setDuration(route.duration.text);
             } else {
               console.error(`Error fetching directions ${result}`);
@@ -420,7 +421,7 @@ function HouseShift() {
                 <div className="row my-2">
                   <select
                     className="form-select form-select-lg rounded-5"
-                    name="type"
+                    // name="type"
                     {...formik.getFieldProps("type")}
                     style={{
                       width: "500px",
@@ -442,11 +443,16 @@ function HouseShift() {
                     <option value="4 BHK">4 BHK</option> */}
                     {categorys &&
                       categorys.map((category) => (
-                        <option key={category.id} value={category.id}>
+                        <option key={category.id} value={category.houseCategoryName}>
                           {category.houseCategoryName}
                         </option>
                       ))}
                   </select>
+                  {formik.touched.firstName && formik.errors.firstName && (
+                    <small className="text-danger">
+                      {formik.errors.firstName}
+                    </small>
+                  )}
                 </div>
                 <div className="text-center mt-2">
                   {/* <Link to="/service">

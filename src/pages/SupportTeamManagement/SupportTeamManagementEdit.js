@@ -37,7 +37,7 @@ function SupportTeamManagementEdit() {
         }
         return false;
       }),
-    // refCode: Yup.string().required("*Reference Code is required"),
+    staffActiveStatus: Yup.string().required("*Active status is required"),
     // loginType: Yup.string().required("*Login Type is required"),
   });
 
@@ -49,18 +49,27 @@ function SupportTeamManagementEdit() {
       email: "",
       mobileNo: "",
       countryCode: "",
-      // refCode: "",
+      staffActiveStatus: true,
       // loginType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      const { staffActiveStatus,...value } = values;
       setLoading(true);
       try {
-        const response = await userApi.put(`user/UserDetails/${id}`, values);
-        console.log(response);
+        const response = await userApi.put(`user/UserDetails/${id}`, value);
         if (response.status === 200) {
-          toast.success(response.data.message);
-          navigate("/supportteammanagement");
+          try {
+            const responses = await userApi.put(`staff/staffStatusUpdate/${id}?status=${staffActiveStatus}`);
+            if (responses.status === 200) {
+              toast.success(response.data.message);
+              navigate("/supportteammanagement");
+            } else {
+              toast.error(responses?.data?.message);
+            }
+          } catch (error) {
+            toast.error("Error: ", error?.response?.data?.message);
+          }
         } else {
           toast.error(response?.data?.message);
         }
@@ -85,6 +94,7 @@ function SupportTeamManagementEdit() {
             email: response.data.responseBody.email,
             mobileNo: response.data.responseBody.mobileNo,
             countryCode: response.data.responseBody.countryCode,
+            staffActiveStatus:response.data.responseBody.staffActiveStatus
           });
         }
       } catch (error) {
@@ -275,26 +285,30 @@ function SupportTeamManagementEdit() {
               </div>
 
               {/* Reference Code */}
-              {/* <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">Reference Code</label>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">Active Status</label><span className="text-danger">*</span>
                 <div className="mb-3">
-                  <input
+                  <select
                     type="text"
-                    name="refCode"
-                    className={`form-control ${
-                      formik.touched.refCode && formik.errors.refCode
+                    name="staffActiveStatus"
+                    className={`form-select ${
+                      formik.touched.staffActiveStatus && formik.errors.staffActiveStatus
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("refCode")}
-                  />
-                  {formik.touched.refCode && formik.errors.refCode && (
+                    {...formik.getFieldProps("staffActiveStatus")}
+                  >
+                    <option value={""}>Select the Status</option>
+                    <option value={true}>Active</option>
+                    <option value={false}>InActive</option>
+                  </select>
+                  {formik.touched.staffActiveStatus && formik.errors.staffActiveStatus && (
                     <div className="invalid-feedback">
-                      {formik.errors.refCode}
+                      {formik.errors.staffActiveStatus}
                     </div>
                   )}
                 </div>
-              </div> */}
+              </div>
 
               {/* Login Type */}
               {/* <div className="col-md-6 col-12 mb-2">

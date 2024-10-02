@@ -161,7 +161,7 @@ function Service() {
 
         const payload = {
           userId: userId,
-          type: shiftType || type,
+          type: shiftType==="HOUSE" ?data.booking.bookingType:shiftType,
           locationDetail: locationValue,
           bookingId: bookingId,
           estKm: parseFloat(distanceValue) || estKm,

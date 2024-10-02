@@ -850,7 +850,7 @@ body {
   font-size: 33px;
   line-height: 65px;
   text-align: center;
-  color: #000000;
+  color: #333;
 }
 
 .LoginTitle {
@@ -859,7 +859,7 @@ body {
   font-weight: 700;
   font-size: 28px;
   line-height: 49px;
-  color: #0e2063;
+  color: #333 !important;
 }
 
 .LoginSubHead {
@@ -868,8 +868,7 @@ body {
   font-weight: 700;
   font-size: 18px;
   line-height: 33px;
-  /* identical to box height */
-  color: #0e2063;
+  color: #333 !important;
 }
 
 .LoginContent {
@@ -1135,6 +1134,11 @@ body {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* ===Croper image=== */
+.cropper-container {
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 /* Rides  */

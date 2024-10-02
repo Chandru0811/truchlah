@@ -75,19 +75,8 @@ const roles =sessionStorage.getItem("roles")
  const deleteFunc =(id)=>{
   return userApi.delete(`deleteUserDetails/${id}`)
  }
- const handleStatusChange=async()=>{
-  destroyDataTable();
-     setLoading(true);
-      try {
-        const resposnse = await userApi.get("staffs");
-        setDatas(resposnse.data.responseBody);
-        initializeDataTable(); 
-      } catch (error) {
-        toast.error("Error fetching data: ", error?.response?.data?.message);
-      } finally {
-        setLoading(false);
-      }
- }
+
+
   return (
     <div>
      {loading ? (
@@ -156,7 +145,14 @@ const roles =sessionStorage.getItem("roles")
                   <td className="text-center">{`${data.firstName} ${data.lastName}`}</td>
                   <td className="text-center">{data.email}</td>
                   <td className="text-center">{`${data.countryCode} ${data.mobileNo}`}</td>
-                  <td className="text-center">{<button className={``} onClick={handleStatusChange}>{data.roles[0].status}</button>}</td>
+                  {/* <td className="text-center">{<button className={``} >{data.staffActiveStatus ?"Active":"Inactive"}</button>}</td> */}
+                  <td className="text-center">
+                  {data.staffActiveStatus ? (
+                    <span className="badge active">Active</span>
+                  ) : (
+                    <span className="badge badges-Red inactive">Inactive</span>
+                  )}
+                </td>
                   {roles !== "ROLE_STAFF" &&(<>
                   <td className="text-center">
                     <div className="gap-2">

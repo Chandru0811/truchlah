@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { userApi } from "../../config/URL";
+import Cropper from "react-easy-crop";
+import { getCroppedImg } from "../common_pages/cropImageHelper";
 
 function BannerAndOfferAdd() {
   const [loading, setLoading] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -26,8 +34,9 @@ function BannerAndOfferAdd() {
       setLoading(true);
       const formData = new FormData();
       formData.append("status", values.status);
-      formData.append("attachment", values.attachment);
+      formData.append("attachment", croppedImage);
       formData.append("description", values.description);
+
       try {
         const response = await userApi.post("createOfferFiles", formData);
         if (response.status === 200) {
@@ -45,8 +54,31 @@ function BannerAndOfferAdd() {
   });
 
   const handleFileChange = (event) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result); // Show image in cropper
+        setShowCropper(true); // Open cropper modal
+      };
+      reader.readAsDataURL(file);
+    }
     formik.setFieldValue("attachment", event.currentTarget.files[0]);
   };
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCrop = useCallback(async () => {
+    try {
+      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); // Get cropped image
+      setCroppedImage(croppedImageData); // Set the cropped image to submit
+      setShowCropper(false); // Close cropper modal
+    } catch (e) {
+      console.error(e);
+    }
+  }, [croppedAreaPixels, imageSrc]);
 
   return (
     <div className="container-fluid p-2 minHeight m-0">
@@ -56,7 +88,9 @@ function BannerAndOfferAdd() {
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex align-items-center gap-4">
-                  <h1 className="h4 ls-tight headingColor">Add Banner And Offer</h1>
+                  <h1 className="h4 ls-tight headingColor">
+                    Add Banner And Offer
+                  </h1>
                 </div>
               </div>
               <div className="col-auto">
@@ -137,6 +171,14 @@ function BannerAndOfferAdd() {
                     </div>
                   )}
                 </div>
+                {croppedImage && (
+                  <img
+                    src={URL.createObjectURL(croppedImage)}
+                    alt="Attachment"
+                    className="img-fluid"
+                    style={{ maxWidth: "50%", height: "auto" }}
+                  />
+                )}
               </div>
 
               <div className="col-md-6 col-12 mb-2">
@@ -160,11 +202,34 @@ function BannerAndOfferAdd() {
                     </div>
                   )}
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
+
       </form>
+        {showCropper && (
+          <div className="row">
+            <div className="col-12">
+              <div className="cropper-container">
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={4 / 2}
+                  onCropChange={setCrop}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                />
+              </div>
+              <div className="text-center mt-3 position-absolute" style={{top:"70%",left:"34%"}}>
+                <button className="btn btn-sm btn-primary " onClick={handleCrop}>
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
   );
 }

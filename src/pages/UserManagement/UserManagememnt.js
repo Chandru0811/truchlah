@@ -124,9 +124,9 @@ const UserManagement = () => {
                   <th scope="col" className="text-center">
                     Mobile Number
                   </th>
-                  {/* <th scope="col" className="text-center">
-                  Unit
-                </th> */}
+                  <th scope="col" className="text-center">
+                  Role
+                </th>
                   <th scope="col" className="text-center"  aria-disabled="true" style={{ pointerEvents: "none" }}>
                     ACTION
                   </th>
@@ -139,6 +139,7 @@ const UserManagement = () => {
                     <td className="text-center">{data.firstName} {data.laststName}</td>
                     <td className="text-center">{data.email}</td>
                     <td className="text-center">{data.countryCode} {data.mobileNo}</td>
+                    <td className="text-center">{data.roles[0]?.description}</td>
                     <td className="text-center">
                       <div className="gap-2">
                         <Link to={`/usermanagement/view/${data.userId}`}>
