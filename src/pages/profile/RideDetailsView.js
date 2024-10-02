@@ -377,7 +377,7 @@ function RideDetailsView() {
                               </div>
                             </div>
                             <div className="col-md-6 col-12 ps-1" id="drop">
-                              <p>
+                              <p className="line">
                                 <span style={{ color: "#00316B" }}>
                                   <b>Location: </b>
                                 </span>
@@ -385,7 +385,7 @@ function RideDetailsView() {
                                   {stop.dropoff || "--"}
                                 </span>
                               </p>
-                              <p className="line">
+                              <p>
                                 <span style={{ color: "#00316B" }}>
                                   <b>Name :</b>{" "}
                                 </span>

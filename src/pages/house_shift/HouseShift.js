@@ -19,6 +19,7 @@ import HouseShiftModel from "../HouseShiftModel";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
+import fetchAllCategorysWithIds from "../../pages/Lists/CategoryList";
 
 // const center = { lat: 13.05, lng: 80.2824 };
 
@@ -35,7 +36,7 @@ function HouseShift() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
   });
-
+  const [categorys, setCategoryData] = useState(null);
   const [center, setCenter] = useState("");
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
@@ -64,12 +65,13 @@ function HouseShift() {
     initialValues: {
       pickupLocation: "",
       dropLocation: "",
+      type:""
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const payload = {
         userId: userId,
-        type: "",
+        type: values.type,
         estKm: distance,
         locationDetail: locationDetail,
       };
@@ -212,6 +214,18 @@ function HouseShift() {
   const handleCloseModal = () => {
     setModalShow(false);
   };
+
+  const fetchData = async () => {
+    try {
+      const categorys = await fetchAllCategorysWithIds();
+      setCategoryData(categorys);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -417,7 +431,7 @@ function HouseShift() {
                     <option selected disabled>
                       Category
                     </option>
-                    <option value="Easy Shift">Easy Shift</option>
+                    {/* <option value="Easy Shift">Easy Shift</option>
                     <option value="Studio">Studio</option>
                     <option value="Kitchen">Kitchen</option>
                     <option value="room">Single room</option>
@@ -425,7 +439,13 @@ function HouseShift() {
                     <option value="1 BHK">1 BHK</option>
                     <option value="2 BHK">2 BHK</option>
                     <option value="3 BHK">3 BHK</option>
-                    <option value="4 BHK">4 BHK</option>
+                    <option value="4 BHK">4 BHK</option> */}
+                    {categorys &&
+                      categorys.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.houseCategoryName}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div className="text-center mt-2">
@@ -451,7 +471,7 @@ function HouseShift() {
       <HouseShiftModel
         show={modalShow}
         title={modalTitle}
-        shiftType={shiftType}
+        shiftType={formik.values.type}
         onHide={handleCloseModal}
         pickupLocation={formik.values.pickupLocation}
         dropLocation={formik.values.dropLocation}

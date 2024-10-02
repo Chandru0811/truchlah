@@ -338,7 +338,15 @@ function Summary() {
                               </div>
                             </div>
                             <div className="col-md-6 col-12 ps-1" id="drop">
-                              <p className="line">
+                            <p className="line">
+                                <span style={{ color: "#00316B" }}>
+                                  <b>Location: </b>
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {stop.dropoff || "N/A"}
+                                </span>
+                              </p>
+                              <p>
                                 <span style={{ color: "#00316B" }}>
                                   <b>Name :</b>{" "}
                                 </span>
@@ -362,14 +370,7 @@ function Summary() {
                                   {stop.dropoffMobile || "N/A"}
                                 </span>
                               </p>
-                              <p>
-                                <span style={{ color: "#00316B" }}>
-                                  <b>Location: </b>
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {stop.dropoff || "N/A"}
-                                </span>
-                              </p>
+                              
                             </div>
                           </div>
                         ))}

@@ -55,13 +55,13 @@ function Shift() {
             <div className="col-6 justify-content-center card shadow-sm card-hover2"
               style={{ width: '70%' }}
             >
-              {/* <Link
+              <Link
                 to={{
                   pathname: "/houseshift",
-                  state: { logType: logType("HOUSE") },
+                  // state: { logType: logType("HOUSE") },
                 }}
                 style={{ textDecoration: 'none', color: 'inherit' }}
-              > */}
+              >
               <div className="row">
                 <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
                   <span className="fw-medium text-muted">
@@ -87,7 +87,7 @@ function Shift() {
                   />
                 </div>
               </div>
-              {/* </Link> */}
+              </Link>
             </div>
           </div>
         </div>
