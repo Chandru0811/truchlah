@@ -98,7 +98,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 <li className="nav-item menus px-2">
                                   <Link
                                     className="Links fs-5 fw-bold"
-                                    to="https://trucklah.com/business.html"
+                                    to="https://uat.trucklah.com/business"
                                   >
                                     Business
                                   </Link>
@@ -106,7 +106,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 <li className="nav-item menus px-2">
                                   <Link
                                     className="Links fs-5 fw-bold"
-                                    to="https://trucklah.com/individuals.html"
+                                    to="https://uat.trucklah.com/individuals"
                                   >
                                     Individuals
                                   </Link>
@@ -114,7 +114,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 <li className="nav-item menus px-2">
                                   <Link
                                     className="Links fs-5 fw-bold"
-                                    to="https://trucklah.com/driver_partner_jobs.html"
+                                    to="https://uat.trucklah.com/driver_partner_jobs"
                                   >
                                     Drivers
                                   </Link>

@@ -87,7 +87,7 @@ function foot({ isAuthenticate }) {
                   </li>
                   <li>
                     <Link
-                      to="https://uat.trucklah.com/contact_us.html"
+                      to="https://uat.trucklah.com/contact_us"
                       className="h text-decoration-none"
                       style={{ color: "#acff3b" }}
                     >
@@ -98,7 +98,7 @@ function foot({ isAuthenticate }) {
               )}
               <li>
                 <a
-                  href="https://trucklah.com/termsandconditions/index.html"
+                  href="https://trucklah.com/termsandconditions"
                   target="_blank"
                   style={{ textDecoration: "none", color: "#acff3b" }}
                   rel="noreferrer"
@@ -108,7 +108,7 @@ function foot({ isAuthenticate }) {
               </li>
               <li>
                 <a
-                  href="https://trucklah.com/privacypolicy/index.html"
+                  href="https://trucklah.com/privacypolicy"
                   target="_blank"
                   style={{ textDecoration: "none", color: "#acff3b" }}
                   rel="noreferrer"
