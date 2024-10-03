@@ -357,14 +357,14 @@ const VehicleInfoEdit = forwardRef(
                     }
                   />
                 </div>
-                {(formData?.vehicleDetails?.vehicleFrontImg ||
+                {(formData?.vehicleDetails?.vehicleFrontImgUrl ||
                   formik.values.vehicleFrontImg) && (
                   <div>
                     <img
                       src={
                         formik.values?.vehicleFrontImg instanceof File
                           ? URL.createObjectURL(formik.values.vehicleFrontImg)
-                          : formData?.vehicleDetails?.vehicleFrontImg
+                          : formData?.vehicleDetails?.vehicleFrontImgUrl
                       }
                       alt="Vehicle"
                       className="img-fluid"
@@ -399,14 +399,14 @@ const VehicleInfoEdit = forwardRef(
                       </div>
                     )}
                 </div>
-                {(formData?.vehicleDetails?.vehicleBackImg ||
+                {(formData?.vehicleDetails?.vehicleBackImgUrl ||
                   formik.values.vehicleBackImg) && (
                   <div>
                     <img
                       src={
                         formik.values?.vehicleBackImg instanceof File
                           ? URL.createObjectURL(formik.values.vehicleBackImg)
-                          : formData?.vehicleDetails?.vehicleBackImg
+                          : formData?.vehicleDetails?.vehicleBackImgUrl
                       }
                       alt="Vehicle"
                       className="img-fluid"
