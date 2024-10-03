@@ -372,9 +372,9 @@ function DriverManagementView() {
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
-                                  {data?.vehicleDetails?.licenseFrontUrl ? (
+                                  {data?.vehicleDetails?.vehicleFrontImgUrl ? (
                                 <img
-                                  src={data?.vehicleDetails?.licenseFrontUrl}
+                                  src={data?.vehicleDetails?.vehicleFrontImgUrl}
                                   alt="License Front"
                                   style={{ width: "100px" }}
                                 />
@@ -394,9 +394,9 @@ function DriverManagementView() {
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
-                                  {data?.vehicleDetails?.licenseFrontUrl ? (
+                                  {data?.vehicleDetails?.vehicleBackImgUrl ? (
                                 <img
-                                  src={data?.vehicleDetails?.licenseFrontUrl}
+                                  src={data?.vehicleDetails?.vehicleBackImgUrl}
                                   alt="License Front"
                                   style={{ width: "100px" }}
                                 />

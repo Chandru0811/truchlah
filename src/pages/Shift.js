@@ -22,7 +22,7 @@ function Shift() {
             <div
               className="col-6 justify-content-center card shadow-sm mb-5 mt-5 card-hover1"
               style={{ width: '70%' }}
-              onClick={()=>logType("HOUSE")}
+              onClick={()=>logType("ITEM")}
             >
               <Link
                 to={{
