@@ -73,11 +73,11 @@ function Shift() {
                   <h3 style={{ color: "#525252" }}>
                     HOUSE SHIFTING
                   </h3>
-                  <div>
+                  {/* <div>
                     <button type="button" class="px-2 btn-custom">
                       Coming Soon
                     </button>
-                  </div>
+                  </div> */}
                   <span className="fw-medium text-muted">
                     House Move Made Easy
                   </span>
