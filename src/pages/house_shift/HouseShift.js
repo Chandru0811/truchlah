@@ -419,6 +419,7 @@ function HouseShift() {
                   </div>
                 )}
                 <div className="row my-2">
+                <div className="">
                   <select
                     className="form-select form-select-lg rounded-5"
                     // name="type"
@@ -429,8 +430,8 @@ function HouseShift() {
                       borderRadius: "8px",
                     }}
                   >
-                    <option selected disabled>
-                      Category
+                    <option value={""} selected >
+                     Select Category 
                     </option>
                     {/* <option value="Easy Shift">Easy Shift</option>
                     <option value="Studio">Studio</option>
@@ -448,11 +449,12 @@ function HouseShift() {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.firstName && formik.errors.firstName && (
-                    <small className="text-danger">
-                      {formik.errors.firstName}
-                    </small>
+                  {formik.touched.type && formik.errors.type && (
+                    <span className="text-danger">
+                      {formik.errors.type}
+                    </span>
                   )}
+                  </div>
                 </div>
                 <div className="text-center mt-2">
                   {/* <Link to="/service">
