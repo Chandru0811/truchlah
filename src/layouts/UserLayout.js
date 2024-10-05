@@ -64,8 +64,21 @@ function UserLayout({
             path="/home"
             element={<Home isAuthenticate={isAuthenticate} />}
           />
+          {isAuthenticate ? (
+            <Route path="/" element={<Shift />} />
+          ) : (
+            <Route
+              path="/"
+              element={
+                <Login
+                  handleLogin={handleLogin}
+                  handleAdminLogin={handleAdminLogin}
+                />
+              }
+            />
+          )}
           <Route
-            path="/"
+            path="/login"
             element={
               <Login
                 handleLogin={handleLogin}
@@ -86,8 +99,15 @@ function UserLayout({
           <Route path="/ShiftPack" element={<ShiftPack />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/forgetpassword" element={<ForgotPassword />} />
-          <Route path="/otp" element={<OTP handleLogin={handleLogin}
-                handleAdminLogin={handleAdminLogin}/>} />
+          <Route
+            path="/otp"
+            element={
+              <OTP
+                handleLogin={handleLogin}
+                handleAdminLogin={handleAdminLogin}
+              />
+            }
+          />
           <Route path="/termsandcondition" element={<TermsCondition />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/pricing" element={<Priceing />} />
@@ -124,15 +144,7 @@ function UserLayout({
               <Route path="/changepassword" element={<ChangePassword />} />
             </>
           )}
-          <Route
-            path="*"
-            element={
-              <Login
-                handleLogin={handleLogin}
-                handleAdminLogin={handleAdminLogin}
-              />
-            }
-          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       <BackToTopButton />
