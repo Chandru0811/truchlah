@@ -115,6 +115,13 @@ function BannerAndOfferEdit() {
       console.error(e);
     }
   }, [croppedAreaPixels, imageSrc]);
+
+  const handleCropCancel = () => {
+    setShowCropper(false);
+    setImageSrc(null);
+    formik.setFieldValue("image", ""); 
+    document.querySelector("input[type='file']").value = ""; 
+  };
   return (
     <div>
       {loading ? (
@@ -228,6 +235,50 @@ function BannerAndOfferEdit() {
                       />
                     ) : (
                       <p className="text-muted text-sm">No attachment</p>
+                    )} {showCropper && (
+                      <div
+                        className="crop-container"
+                        style={{
+                          width: "300px",
+                          height: "200px",
+                          position: "relative",
+                        }}
+                      >
+                        <Cropper
+                          image={imageSrc}
+                          crop={crop}
+                          zoom={zoom}
+                          aspect={4 / 2} 
+                          onCropChange={setCrop}
+                          onZoomChange={setZoom}
+                          onCropComplete={onCropComplete}
+                          cropShape="box" 
+                          showGrid={false}
+                          style={{
+                            containerStyle: { width: "100%", height: "100%" },
+                          }} 
+                        />
+                      </div>
+                    )}
+    
+                    {showCropper && (
+                      <div className="d-flex justify-content-start mt-3 gap-2 ">
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-primary mt-3"
+                          onClick={handleCrop}
+                        >
+                          Save
+                        </button>
+    
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-secondary mt-3"
+                          onClick={handleCropCancel}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     )}
                   </div>
 
@@ -258,28 +309,6 @@ function BannerAndOfferEdit() {
                 </div>
               </div>
             </div>
-            {showCropper && (
-          <div className="row">
-            <div className="col-12">
-              <div className="cropper-container">
-                <Cropper
-                  image={imageSrc}
-                  crop={crop}
-                  zoom={zoom}
-                  aspect={4 / 2}
-                  onCropChange={setCrop}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                />
-              </div>
-              <div className="text-center mt-3 position-absolute" style={{top:"70%",left:"34%"}}>
-                <button className="btn btn-sm btn-primary " type="button" onClick={handleCrop}>
-                  Save
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
           </form>
         </div>
       )}

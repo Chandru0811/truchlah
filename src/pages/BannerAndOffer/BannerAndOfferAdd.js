@@ -79,7 +79,13 @@ function BannerAndOfferAdd() {
       console.error(e);
     }
   }, [croppedAreaPixels, imageSrc]);
-
+  
+  const handleCropCancel = () => {
+    setShowCropper(false);
+    setImageSrc(null);
+    formik.setFieldValue("image", ""); 
+    document.querySelector("input[type='file']").value = ""; 
+  };
   return (
     <div className="container-fluid p-2 minHeight m-0">
       <form onSubmit={formik.handleSubmit}>
@@ -179,6 +185,51 @@ function BannerAndOfferAdd() {
                     style={{ maxWidth: "50%", height: "auto" }}
                   />
                 )}
+                {showCropper && (
+                  <div
+                    className="crop-container"
+                    style={{
+                      width: "300px",
+                      height: "200px",
+                      position: "relative",
+                    }}
+                  >
+                    <Cropper
+                      image={imageSrc}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={4 / 2} 
+                      onCropChange={setCrop}
+                      onZoomChange={setZoom}
+                      onCropComplete={onCropComplete}
+                      cropShape="box" 
+                      showGrid={false}
+                      style={{
+                        containerStyle: { width: "100%", height: "100%" },
+                      }} 
+                    />
+                  </div>
+                )}
+
+                {showCropper && (
+                  <div className="d-flex justify-content-start mt-3 gap-2 ">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary mt-3"
+                      onClick={handleCrop}
+                    >
+                      Save
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-secondary mt-3"
+                      onClick={handleCropCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="col-md-6 col-12 mb-2">
@@ -206,9 +257,8 @@ function BannerAndOfferAdd() {
             </div>
           </div>
         </div>
-
       </form>
-        {showCropper && (
+      {/* {showCropper && (
           <div className="row">
             <div className="col-12">
               <div className="cropper-container">
@@ -229,7 +279,7 @@ function BannerAndOfferAdd() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
     </div>
   );
 }
