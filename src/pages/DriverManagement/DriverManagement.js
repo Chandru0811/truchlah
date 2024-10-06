@@ -141,7 +141,7 @@ const DriverManagement = () => {
               {datas.map((data, index) => (
                 <tr>
                   <td className="text-center">{index +1}</td>
-                  <td className="text-center">{`${data.firstName} ${data.lastName}`}</td>
+                  <td className="text-center">{`${data.firstName} ${data.lastName===undefined ?"":data.lastName}`}</td>
                   <td className="text-center">{data.email}</td>
                   <td className="text-center">{data.mobileNo}</td>
                   {/* <td className="text-center">unit</td> */}

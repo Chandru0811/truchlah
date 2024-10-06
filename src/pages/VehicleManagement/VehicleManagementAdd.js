@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState,useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { driverApi } from "../../config/URL";
 import toast from "react-hot-toast";
+import Cropper from "react-easy-crop";
+import { getCroppedImg } from "../common_pages/cropImageHelper";
 
 function VehicleManagementAdd() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [imageSrc, setImageSrc] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
 
   const validationSchema = Yup.object({
     // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
@@ -66,10 +74,11 @@ function VehicleManagementAdd() {
     onSubmit: async (values) => {
       setLoading(true);
       const formData = new FormData();
+
       Object.entries(values).forEach(([key, value]) => {
         if (key === "imageUrl") {
           if (value) {
-            formData.append(key, value);
+            formData.append(key, croppedImage);
           }
         } else {
           formData.append(key, value);
@@ -99,7 +108,39 @@ function VehicleManagementAdd() {
       }
     },
   });
+  const handleFileChange = (event) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result); 
+        setShowCropper(true); 
+      };
+      reader.readAsDataURL(file);
+    }
+    formik.setFieldValue("imageUrl", event.currentTarget.files[0]);
+  };
 
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCrop = useCallback(async () => {
+    try {
+      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); 
+      setCroppedImage(croppedImageData); 
+      setShowCropper(false); 
+    } catch (e) {
+      console.error(e);
+    }
+  }, [croppedAreaPixels, imageSrc]);
+
+  const handleCropCancel = () => {
+    setShowCropper(false);
+    setImageSrc(null);
+    formik.setFieldValue("imageUrl", ""); 
+    document.querySelector("input[type='file']").value = ""; 
+  };
   return (
     <div className="container-fluid px-2 pb-2 minHeight m-0">
       <form onSubmit={formik.handleSubmit}>
@@ -249,15 +290,58 @@ function VehicleManagementAdd() {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e) =>
-                      formik.setFieldValue("imageUrl", e.target.files[0])
-                    }
+                    onChange={handleFileChange}
                   />
                   {formik.touched.imageUrl && formik.errors.imageUrl && (
                     <div className="invalid-feedback">
                       {formik.errors.imageUrl}
                     </div>
                   )}
+                   {showCropper && (
+                  <div
+                    className="crop-container"
+                    style={{
+                      width: "300px",
+                      height: "200px",
+                      position: "relative",
+                    }}
+                  >
+                    <Cropper
+                      image={imageSrc}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={4 / 2} 
+                      onCropChange={setCrop}
+                      onZoomChange={setZoom}
+                      onCropComplete={onCropComplete}
+                      cropShape="box" 
+                      showGrid={false}
+                      style={{
+                        containerStyle: { width: "100%", height: "100%" },
+                      }} 
+                    />
+                  </div>
+                )}
+
+                {showCropper && (
+                  <div className="d-flex justify-content-start mt-3 gap-2 ">
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary mt-3"
+                      onClick={handleCrop}
+                    >
+                      Save
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-secondary mt-3"
+                      onClick={handleCropCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">

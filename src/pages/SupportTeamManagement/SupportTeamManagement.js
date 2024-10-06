@@ -142,7 +142,7 @@ const roles =sessionStorage.getItem("roles")
               {datas.map((data, index) => (
                 <tr>
                   <td className="text-center">{index+1}</td>
-                  <td className="text-center">{`${data.firstName} ${data.lastName}`}</td>
+                  <td className="text-center">{`${data.firstName} ${data.lastName===undefined ?"":data.lastName}`}</td>
                   <td className="text-center">{data.email}</td>
                   <td className="text-center">{`${data.countryCode} ${data.mobileNo}`}</td>
                   {/* <td className="text-center">{<button className={``} >{data.staffActiveStatus ?"Active":"Inactive"}</button>}</td> */}
