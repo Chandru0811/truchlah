@@ -11,16 +11,28 @@ import { Avatar, Badge, Space } from "antd";
 const BookingManagment = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  console.log("Booking Datas:", datas);
-
+  const [activeTab, setActiveTab] = useState("ITEM");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const table = $(tableRef.current).DataTable();
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
-    return () => {
-      table.destroy();
-    };
+  const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await bookingApi.get(activeTab ==="ITEM" ?"booking/getAllBookingDetailsForItemsByAdmin":"booking/getAllHouseBookingDetailsByAdmin");
+        setDatas(response.data);
+        console.log("Response: ", response.data);
+      } catch (error) {
+        toast.error("Error fetching data: ", error?.response?.data?.message);
+      } finally {
+        setLoading(false);
+      }
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -33,53 +45,34 @@ const BookingManagment = () => {
   }, [loading]);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
+    if (!$.fn.DataTable.isDataTable(tableRef.current) && datas.length > 0) {
+      $(tableRef.current).DataTable();
     }
-    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().clear().destroy();
     }
   };
 
-  const refreshData = async () => {
-    setLoading(true);
-    destroyDataTable();
-    try {
-      const response = await bookingApi.get(
-        "/booking/getAllBookingDetailsByAdmin"
-      );
-      setDatas(response.data);
-      initializeDataTable();
-    } catch (error) {
-      toast.error("Error refreshing data:", error?.response?.data?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const getItemData = async () => {
+  const refreshData = async () => {  
       setLoading(true);
+      destroyDataTable();
       try {
-        const response = await bookingApi.get(
-          "/booking/getAllBookingDetailsByAdmin"
-        );
+        const response = await bookingApi.get(activeTab ==="ITEM" ?"booking/getAllBookingDetailsForItemsByAdmin":"booking/getAllHouseBookingDetailsByAdmin");
         setDatas(response.data);
-        console.log("Response :", response.data);
+        initializeDataTable();
       } catch (error) {
-        toast.error("Error fetching data: ", error?.response?.data?.message);
+        toast.error("Error refreshing data:", error?.response?.data?.message);
       } finally {
         setLoading(false);
       }
-    };
-    getItemData();
-  }, []);
+  };
+
+  useEffect(() => {
+    refreshData();
+  }, [activeTab]);
 
   const deleteFun = (bookingId) => {
     return bookingApi.delete(`booking/delete/${bookingId}`);
@@ -87,31 +80,59 @@ const BookingManagment = () => {
 
   return (
     <div>
-      {loading ? (
-        <div className="darksoul-layout">
-          <div className="darksoul-grid">
-            <div className="item1"></div>
-            <div className="item2"></div>
-            <div className="item3"></div>
-            <div className="item4"></div>
-          </div>
-          <h3 className="darksoul-loader-h">Trucklah</h3>
-        </div>
-      ) : (
-        <div className="container-fluid px-2 minHeight">
-          <div className="card shadow border-0 my-2">
-            <div className="container-fluid pt-4 pb-3">
-              <div className="row align-items-center justify-content-between ">
-                <div className="col">
-                  <div className="d-flex align-items-center gap-4">
-                    <h1 className="h4 ls-tight headingColor ">
-                      Booking Management
-                    </h1>
-                  </div>
+      <div className="container-fluid px-2 minHeight">
+        <div className="card shadow border-0 my-2">
+          <div className="container-fluid pt-4 pb-3">
+            <div className="row align-items-center justify-content-between ">
+              <div className="col">
+                <div className="d-flex align-items-center gap-4">
+                  <h1 className="h4 ls-tight headingColor ">
+                    Booking Management
+                  </h1>
                 </div>
               </div>
             </div>
-            <hr className="removeHrMargin mt-0"></hr>
+          </div>
+          <hr className="removeHrMargin mt-0"></hr>
+          <ul className="nav nav-tabs mb-3" id="myTab" role="tablist">
+            <li className="nav-item me-0" role="presentation">
+              <button
+                className={`nav-link tabNav px-4 py-2 fw-bold ${
+                  activeTab === "HOUSE" ? "active" : ""
+                }`}
+                id="home-tab"
+                onClick={() => handleTabClick("HOUSE")}
+                type="button"
+                role="tab"
+              >
+                HOUSE
+              </button>
+            </li>
+            <li className="nav-item ms-0 " role="presentation">
+              <button
+                className={`nav-link tabNav px-4 py-2 fw-bold ${
+                  activeTab === "ITEM" ? "active" : ""
+                }`}
+                id="profile-tab"
+                onClick={() => handleTabClick("ITEM")}
+                type="button"
+                role="tab"
+              >
+                ITEM
+              </button>
+            </li>
+          </ul>
+          {loading ? (
+            <div className="darksoul-layout">
+              <div className="darksoul-grid">
+                <div className="item1"></div>
+                <div className="item2"></div>
+                <div className="item3"></div>
+                <div className="item4"></div>
+              </div>
+              <h3 className="darksoul-loader-h">Trucklah</h3>
+            </div>
+          ) : (
             <div className="table-responsive p-2 minHeight">
               <table ref={tableRef} className="display">
                 <thead className="thead-light">
@@ -145,56 +166,90 @@ const BookingManagment = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {datas?.map((data, index) => (
-                    <tr>
-                      <td className="text-center">{index + 1}</td>
-                      <td className="text-center">{data.bookingId || ""}</td>
-                      <td className="text-center">
-                        {data.bookingTime ? (
-                          <>
-                            {data.bookingTime.substring(0, 10)} <b>&</b>{" "}
-                            {new Date(data.bookingTime).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: true,
-                            })}
-                          </>
-                        ) : (
-                          " "
-                        )}
-                      </td>
-                      <td className="text-center">{data.estKm || ""}</td>
-                      <td className="text-center">
-                        {data.totalAmount || "0.0"}
-                      </td>
-                      <td className="text-center">
-                        {data.status === "DRAFT_BOOKING" ? (
-                          <span className="badge" style={{background:"#fcd162"}}>Draft Booking</span>
-                        ) : data.status === "CANCELLED" ? (
-                          <span className="badge" style={{background:"#f04545"}}>Cancelled</span>
-                        ) : data.status === "BOOKED" ? (
-                          <span className="badge" style={{background:"#2593fb"}}>Booked</span>
-                        ) : data.status === "COMPLETED" ? (
-                          <span className="badge" style={{background:"#17e540"}}>Completed</span>
-                        ) : data.status === "ASSIGNED" ? (
-                          <span className="badge" style={{background:"#28d8b7"}}>Assigned</span>
-                        ) : (
-                          <span className="badge" style={{background:"#6d736e"}}>Unknown</span>
-                        )}
-                      </td>
+                  {datas &&
+                    datas?.map((data, index) => (
+                      <tr>
+                        <td className="text-center">{index + 1}</td>
+                        <td className="text-center">{data.bookingId || ""}</td>
+                        <td className="text-center">
+                          {data.bookingTime ? (
+                            <>
+                              {data.bookingTime.substring(0, 10)} <b>&</b>{" "}
+                              {new Date(data.bookingTime).toLocaleTimeString(
+                                [],
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                }
+                              )}
+                            </>
+                          ) : (
+                            " "
+                          )}
+                        </td>
+                        <td className="text-center">{data.estKm || ""}</td>
+                        <td className="text-center">
+                          {data.totalAmount || "0.0"}
+                        </td>
+                        <td className="text-center">
+                          {data.status === "DRAFT_BOOKING" ? (
+                            <span
+                              className="badge"
+                              style={{ background: "#fcd162" }}
+                            >
+                              Draft Booking
+                            </span>
+                          ) : data.status === "CANCELLED" ? (
+                            <span
+                              className="badge"
+                              style={{ background: "#f04545" }}
+                            >
+                              Cancelled
+                            </span>
+                          ) : data.status === "BOOKED" ? (
+                            <span
+                              className="badge"
+                              style={{ background: "#2593fb" }}
+                            >
+                              Booked
+                            </span>
+                          ) : data.status === "COMPLETED" ? (
+                            <span
+                              className="badge"
+                              style={{ background: "#17e540" }}
+                            >
+                              Completed
+                            </span>
+                          ) : data.status === "ASSIGNED" ? (
+                            <span
+                              className="badge"
+                              style={{ background: "#28d8b7" }}
+                            >
+                              Assigned
+                            </span>
+                          ) : (
+                            <span
+                              className="badge"
+                              style={{ background: "#6d736e" }}
+                            >
+                              Unknown
+                            </span>
+                          )}
+                        </td>
 
-                      <td className="text-center">
-                        <div className="gap-2">
-                          <Link
-                            to={`/bookingManagement/view/${data.bookingId}`}
-                          >
-                            <Space size="small">
-                              {/* {data.status === "ASSIGNED" ? ( */}
-                               
+                        <td className="text-center">
+                          <div className="gap-2">
+                            <Link
+                              to={`/bookingManagement/view/${data.bookingId}`}
+                            >
+                              <Space size="small">
+                                {/* {data.status === "ASSIGNED" ? ( */}
+
                                 <button className="btn btn-light btn-sm shadow-none border-none me-2">
-                                View
-                              </button>
-                              {/* ) : (
+                                  View
+                                </button>
+                                {/* ) : (
                                 <Badge
                                   size="small"
                                   color="#acff3b"
@@ -208,25 +263,25 @@ const BookingManagment = () => {
                                   </button>
                                 </Badge>
                               )} */}
-                            </Space>
-                          </Link>
+                              </Space>
+                            </Link>
 
-                          <DeleteModel
-                            onSuccess={refreshData}
-                            onDelete={() => deleteFun(data.bookingId)}
-                            // path={`deleteMstrItem/${data.id}`}
-                            style={{ display: "inline-block" }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            <DeleteModel
+                              onSuccess={refreshData}
+                              onDelete={() => deleteFun(data.bookingId)}
+                              // path={`deleteMstrItem/${data.id}`}
+                              style={{ display: "inline-block" }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

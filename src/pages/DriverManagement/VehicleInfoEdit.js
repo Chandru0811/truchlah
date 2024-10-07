@@ -83,8 +83,8 @@ const VehicleInfoEdit = forwardRef(
             );
           } else {
             formDatas.append("driverId", formData.driverId);
-            response = await driverApi.put(
-              `vehicle/VehicleDetailsByAdmin`,
+            response = await driverApi.post(
+              `vehicle/createVehicleDetailsByAdmin`,
               formDatas
             );
           }
