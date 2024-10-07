@@ -89,7 +89,7 @@ function ForgotPassword() {
         >
           <div className="row">
             <div className="text-center"></div>
-            <h5 className="LoginTitle pb-4">Forget Password</h5>
+            <h5 className="LoginTitle pb-4">Forgot Password</h5>
             <h6 className="LoginSubHead">
               Your new password must be different from previously used Password
             </h6>
