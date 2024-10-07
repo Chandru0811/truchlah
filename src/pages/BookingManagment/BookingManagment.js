@@ -95,20 +95,7 @@ const BookingManagment = () => {
           </div>
           <hr className="removeHrMargin mt-0"></hr>
           <ul className="nav nav-tabs mb-3" id="myTab" role="tablist">
-            <li className="nav-item me-0" role="presentation">
-              <button
-                className={`nav-link tabNav px-4 py-2 fw-bold ${
-                  activeTab === "HOUSE" ? "active" : ""
-                }`}
-                id="home-tab"
-                onClick={() => handleTabClick("HOUSE")}
-                type="button"
-                role="tab"
-              >
-                HOUSE
-              </button>
-            </li>
-            <li className="nav-item ms-0 " role="presentation">
+          <li className="nav-item me-0 " role="presentation">
               <button
                 className={`nav-link tabNav px-4 py-2 fw-bold ${
                   activeTab === "ITEM" ? "active" : ""
@@ -121,6 +108,20 @@ const BookingManagment = () => {
                 ITEM
               </button>
             </li>
+            <li className="nav-item ms-0" role="presentation">
+              <button
+                className={`nav-link tabNav px-4 py-2 fw-bold ${
+                  activeTab === "HOUSE" ? "active" : ""
+                }`}
+                id="home-tab"
+                onClick={() => handleTabClick("HOUSE")}
+                type="button"
+                role="tab"
+              >
+                HOUSE
+              </button>
+            </li>
+           
           </ul>
           {loading ? (
             <div className="darksoul-layout">
