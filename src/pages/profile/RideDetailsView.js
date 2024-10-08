@@ -199,6 +199,11 @@ function RideDetailsView() {
           text: "Completed",
           backgroundColor: "#17e540", // Success color (example)
         };
+        case "ASSIGNED":
+        return {
+          text: "Assigned",
+          backgroundColor: "#28d8b7", // Success color (example)
+        };
       default:
         return {
           text: "Unknown",
@@ -631,7 +636,7 @@ function RideDetailsView() {
                         </div>
                         <div className="col-md-6 col-12 ps-1" id="drop">
                           <p className="line" style={{ color: "#494949" }}>
-                            {data?.transactionDetails?.txnAmount || "0.0"}
+                            $ {data?.transactionDetails?.txnAmount || "0.0"}
                           </p>
                         </div>
                       </div>

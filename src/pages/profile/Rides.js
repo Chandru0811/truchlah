@@ -311,26 +311,28 @@ function Order() {
                             </p>
                           )} */}
                             <p>
-                              {vehicleNameMap[item.booking.vehicletypeId] ||
+                              {item.booking.type ||
                                 "Unknown Vehicle"}
                             </p>
-                            <p
+                            <p className="fw-bold"
                               style={{
+                                letterSpacing:"1px",
                                 color: showDraftSection ? "orange" :
                                   showInprogressSection
                                     ? "orange" // Yellow color for INPROGRESS
                                     : showCompletedSection
                                       ? "green" // Green color for COMPLETED
-                                      : "red", // Red color for CANCELLED
+                                      :showCanceledSection? "red":"#28d8b7", // Red color for CANCELLED
                               }}
                             >
-                              {showDraftSection
+                              {/* {showDraftSection
                                 ? "DRAFT_BOOKING"
                                 : showInprogressSection
                                   ? "BOOKED"
                                   : showCompletedSection
                                     ? "COMPLETED"
-                                    : "CANCELLED"}
+                                    : "CANCELLED"} */}
+                                    {item.bookingStatus.status}
                             </p>
 
                             <p style={{ marginTop: "0", marginBottom: "0" }}>
