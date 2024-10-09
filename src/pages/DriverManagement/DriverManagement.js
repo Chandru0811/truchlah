@@ -129,9 +129,9 @@ const DriverManagement = () => {
                 <th scope="col" className="text-center">
                   Mobile Number
                 </th>
-                {/* <th scope="col" className="text-center">
-                  Unit
-                </th> */}
+                <th scope="col" className="text-center">
+                  Status
+                </th>
                 <th scope="col" className="text-center" aria-disabled="true" style={{ pointerEvents: "none" }}>
                   ACTION
                 </th>
@@ -144,7 +144,13 @@ const DriverManagement = () => {
                   <td className="text-center">{`${data.firstName} ${data.lastName===undefined ?"":data.lastName}`}</td>
                   <td className="text-center">{data.email}</td>
                   <td className="text-center">{data.mobileNo}</td>
-                  {/* <td className="text-center">unit</td> */}
+                  <td className="text-center">
+                  {data.driverStatus ? (
+                    <span className="badge active">Active</span>
+                  ) : (
+                    <span className="badge badges-Red inactive">Inactive</span>
+                  )}
+                </td>
                   <td className="text-center">
                     <div className="gap-2">
                       <Link to={`/drivermanagement/view/${data.driverId}`}>

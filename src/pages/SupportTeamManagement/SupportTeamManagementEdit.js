@@ -59,20 +59,11 @@ function SupportTeamManagementEdit() {
       try {
         const response = await userApi.put(`user/UserDetails/${id}`, value);
         if (response.status === 200) {
-          try {
-            const responses = await userApi.put(`staff/staffStatusUpdate/${id}?status=${staffActiveStatus}`);
-            if (responses.status === 200) {
-              toast.success(response.data.message);
-              navigate("/supportteammanagement");
-            } else {
-              toast.error(responses?.data?.message);
-            }
-          } catch (error) {
-            toast.error("Error: ", error?.response?.data?.message);
-          }
+          toast.success(response.data.message);
+          navigate("/supportteammanagement");
         } else {
           toast.error(response?.data?.message);
-        }
+        } 
       } catch (error) {
         toast.error("Error: ", error?.response?.data?.message);
       } finally {
@@ -285,7 +276,7 @@ function SupportTeamManagementEdit() {
               </div>
 
               {/* Reference Code */}
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">Active Status</label><span className="text-danger">*</span>
                 <div className="mb-3">
                   <select
@@ -308,7 +299,7 @@ function SupportTeamManagementEdit() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               {/* Login Type */}
               {/* <div className="col-md-6 col-12 mb-2">

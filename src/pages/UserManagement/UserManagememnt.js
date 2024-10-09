@@ -125,7 +125,7 @@ const UserManagement = () => {
                     Mobile Number
                   </th>
                   <th scope="col" className="text-center">
-                  Role
+                  Status
                 </th>
                   <th scope="col" className="text-center"  aria-disabled="true" style={{ pointerEvents: "none" }}>
                     ACTION
@@ -139,7 +139,11 @@ const UserManagement = () => {
                     <td className="text-center">{`${data.firstName} ${data.lastName===undefined ?"":data.lastName}`}</td>
                     <td className="text-center">{data.email}</td>
                     <td className="text-center">{data.countryCode} {data.mobileNo}</td>
-                    <td className="text-center">{data.roles[0]?.description}</td>
+                    <td className="text-center">{data.userActiveStatus ? (
+                    <span className="badge active">Active</span>
+                  ) : (
+                    <span className="badge badges-Red inactive">Inactive</span>
+                  )}</td>
                     <td className="text-center">
                       <div className="gap-2">
                         <Link to={`/usermanagement/view/${data.userId}`}>
@@ -152,12 +156,12 @@ const UserManagement = () => {
                             Edit
                           </button>
                         </Link> */}
-                        <DeleteModel
+                        {/* <DeleteModel
                           onSuccess={refreshData}
                           onDelete={() => funDelete(data.userId)}
                           // path={`deleteMstrItem/${data.id}`}
                           style={{ display: "inline-block" }}
-                        />
+                        /> */}
                       </div>
                     </td>
                   </tr>

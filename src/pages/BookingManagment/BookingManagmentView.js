@@ -508,7 +508,7 @@ function BookingManagmentView() {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6 col-12">
+                        {/* <div className="col-md-6 col-12">
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
@@ -539,7 +539,7 @@ function BookingManagmentView() {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-md-6 col-12">
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
@@ -572,12 +572,12 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Vehicle Type ID</b>
+                                <b>Vehicle Type Name</b>
                               </p>
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.booking?.vehicletypeId || ""}{" "}
+                                : {data?.booking?.vehicleName || ""}{" "}
                               </p>
                             </div>
                           </div>
@@ -1022,20 +1022,162 @@ function BookingManagmentView() {
                               </Link>
                             </div>
 
-                            {/* <div className="col-md-6 col-12">
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {data?.bookingStatus?.status&& (
+                    <>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseSix"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseSix"
+                          >
+                            Cancel Details
+                          </button>
+                        </h2>
+                        <div
+                          id="panelsStayOpen-collapseSix"
+                          class="accordion-collapse collapse"
+                        >
+                          <div class="accordion-body row mt-2 p-3">
+                            <div className="col-md-6 col-12">
                               <div className="row mb-3">
                                 <div className="col-6 d-flex justify-content-start align-items-center">
                                   <p className="text-sm">
-                                    <b>User Notified</b>
+                                    <b>Cancel By</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <Link to={`/usermanagement/view/${data?.user?.userId}`} style={{textDecoration:"none"}}>
+                                  <p className="text-muted text-sm">
+                                    : {`${data?.user?.firstName} ${data?.user?.lastName}`|| ""}
+                                  </p>
+                                  </Link>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12 position-relative">
+                              
+                            </div>
+                            <div className="col-md-6 col-12 position-relative">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Cancel Date</b>
                                   </p>
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
-                                    :{data?.bookingStatus?.userNotified || ""}
+                                    :{" "}
+                                    {data?.review?.cancelledDate ? (
+                                  <>
+                                    {data?.review?.cancelledDate?.substring(0, 10)}{" "}
+                                    <b>&</b>{" "}
+                                    {new Date(
+                                      data?.review?.cancelledDate
+                                    ).toLocaleTimeString([], {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: true,
+                                    })}
+                                  </>
+                                ) : (
+                                  " "
+                                )}
                                   </p>
                                 </div>
                               </div>
-                            </div> */}
+                            </div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {data.review.ratingByUser !=="User rating not yet available."&& (
+                    <>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseSeven"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseSeven"
+                          >
+                            Review
+                          </button>
+                        </h2>
+                        <div
+                          id="panelsStayOpen-collapseSeven"
+                          class="accordion-collapse collapse"
+                        >
+                          <div class="accordion-body row mt-2 p-3">
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Rating By User</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    : {data?.review?.ratingByUser || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12 position-relative">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Rating By Driver</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {data?.review.ratingByDriver}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Review By User</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{data?.review?.reviewByUser || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Review By Driver</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{data?.review?.reviewByDriver || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

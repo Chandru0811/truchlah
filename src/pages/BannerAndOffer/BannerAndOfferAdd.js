@@ -63,7 +63,6 @@ function BannerAndOfferAdd() {
       };
       reader.readAsDataURL(file);
     }
-    formik.setFieldValue("attachment", event.currentTarget.files[0]);
   };
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -73,7 +72,8 @@ function BannerAndOfferAdd() {
   const handleCrop = useCallback(async () => {
     try {
       const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); // Get cropped image
-      setCroppedImage(croppedImageData); // Set the cropped image to submit
+      setCroppedImage(croppedImageData); 
+      formik.setFieldValue("attachment", croppedImageData);
       setShowCropper(false); // Close cropper modal
     } catch (e) {
       console.error(e);
@@ -144,8 +144,8 @@ function BannerAndOfferAdd() {
                     aria-label="Default select example"
                   >
                     <option value="" label="Select status" />
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">

@@ -139,7 +139,7 @@ const BannerAndOffer = () => {
                   <td className="text-center">{data.description}</td>
                   {/* <td className="text-center">itemName</td> */}
                   <td className="text-center">
-                  {data.status === "Active" ? (
+                  {data.offerStatus === "ACTIVE" ? (
                     <span className="badge active">Active</span>
                   ) : (
                     <span className="badge inactive">Inactive</span>

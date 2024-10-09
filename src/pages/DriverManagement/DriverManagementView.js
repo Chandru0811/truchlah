@@ -10,22 +10,42 @@ function DriverManagementView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeLoader, setActiveLoader] = useState(false);
 
+  const getItemData = async () => {
+    setLoading(true);
+    try {
+      const response = await driverApi.get(`driver/getVehicleDetailsByDriverId/${id}`);
+      setData(response.data.responseBody);
+    } catch (error) {
+      toast.error("Error fetching data: ", error?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const getItemData = async () => {
-      setLoading(true);
-      try {
-        const response = await driverApi.get(`driver/getVehicleDetailsByDriverId/${id}`);
-        setData(response.data.responseBody);
-      } catch (error) {
-        toast.error("Error fetching data: ", error?.response?.data?.message);
-      } finally {
-        setLoading(false);
-      }
-    };
     getItemData();
     console.log("data?.vehicleDetails?.vehicleType?.type",data)
   }, [id]);
+
+  const handleActivate = async () => {
+    setActiveLoader(true);
+    const newStatus = !data.driverStatus;
+    try {
+      const response = await driverApi.put(`user/userStatusUpdate/${id}?status=${newStatus}`);
+      if (response.status === 200) {
+        getItemData();
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while activating the product.");
+      console.error("Activation Error:", error);
+    } finally {
+      setActiveLoader(false);
+    }
+  };
 
   return (
     <div>
@@ -53,10 +73,38 @@ function DriverManagementView() {
                 </div>
                 <div className="col-auto">
                   <Link to="/drivermanagement">
-                    <button type="submit" className="btn btn-sm btn-light">
+                    <button type="submit" className="btn btn-sm btn-light me-2">
                       <span>Back</span>
                     </button>
                   </Link>
+                  {data.driverStatus ? (
+                    <button
+                      type="button"
+                      onClick={handleActivate}
+                      className="btn btn-success btn-sm me-2"
+                      disabled={activeLoader}
+                    >
+                      {activeLoader && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
+                      Activate
+                    </button>
+                  ) : (
+                    <button
+                     onClick={handleActivate}
+                      className="btn btn-danger btn-sm me-2"
+                    >{activeLoader && (
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                      Deactivate
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

@@ -73,7 +73,7 @@ function HouseShift() {
       const payload = {
         userId: userId,
         type: values.type,
-        estKm: distance,
+        estKm: distance?.split(" ")[0],
         locationDetail: locationDetail,
       };
       console.log("Form values:", values);
@@ -196,7 +196,7 @@ function HouseShift() {
 
               // Extract distance and duration
               const route = result.routes[0].legs[0];
-              setDistance(route.distance.text?.split(" ")[0]);
+              setDistance(route.distance.text);
               setDuration(route.duration.text);
             } else {
               console.error(`Error fetching directions ${result}`);

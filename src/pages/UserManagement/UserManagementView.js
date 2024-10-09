@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { userApi } from "../../config/URL";
 import toast from "react-hot-toast";
+import Modal from "react-bootstrap/Modal";
 // import api from "../../config/URL";
 // import toast from "react-hot-toast";
 
@@ -9,22 +10,46 @@ function UserManagementView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeLoader, setActiveLoader] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const handleOpenModal = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
 
+  const getData = async () => {
+    setLoading(true)
+    try {
+      const response = await userApi.get(`/user/byId/${id}`,
+      );
+      setData(response.data.responseBody);
+    } catch (error) {
+      toast.error("Error Fetching Data ", error)
+    }finally{
+    setLoading(false)
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      setLoading(true)
-      try {
-        const response = await userApi.get(`/user/byId/${id}`,
-        );
-        setData(response.data.responseBody);
-      } catch (error) {
-        toast.error("Error Fetching Data ", error)
-      }finally{
-      setLoading(false)
-      }
-    };
     getData();
   }, [id]);
+
+  const handleActivate = async () => {
+    setActiveLoader(true);
+    const newStatus = !data.userActiveStatus;
+    try {
+      const response = await userApi.put(`user/userStatusUpdate/${id}?status=${newStatus}`);
+      if (response.status === 200) {
+        getData();
+      handleClose()
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while activating the product.");
+      console.error("Activation Error:", error);
+    } finally {
+      setActiveLoader(false);
+    }
+  };
 
   return (
     <div>
@@ -57,6 +82,30 @@ function UserManagementView() {
                         <span>Back</span>
                       </button>
                     </Link>
+
+                    {data.userActiveStatus ? (
+                    <button
+                    onClick={handleOpenModal}
+                     className="btn btn-danger btn-sm me-2"
+                   >
+                     Deactivate
+                   </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleActivate}
+                      className="btn btn-success btn-sm me-2"
+                      disabled={activeLoader}
+                    >
+                      {activeLoader && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
+                      Activate
+                    </button>
+                  )}
                   </div>
                 </div>
               </div>
@@ -152,6 +201,36 @@ function UserManagementView() {
         </div>
       </div>
      )} 
+           <Modal
+        show={showModal}
+        backdrop="static"
+        keyboard={false}
+        onHide={handleClose}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Deactivate User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to deactivate this User?</Modal.Body>
+        <Modal.Footer className="py-1">
+          <button className="btn btn-sm btn-secondary" onClick={handleClose}>
+            Close
+          </button>
+          <button
+            className="btn btn-sm btn-danger"
+            type="submit"
+            onClick={handleActivate}
+            disabled={activeLoader}
+          >
+            {activeLoader && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Deactivate
+          </button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

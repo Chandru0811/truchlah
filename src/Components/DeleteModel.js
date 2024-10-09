@@ -19,7 +19,11 @@ const DeleteModel = ({ onSuccess, onDelete }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Error deleting data:", error.message);
+      if(error.response.status ===409 ){
+toast.error(error.response.data.message)
+      }else{
+        toast.error("Error deleting data:", error.message);
+      }
     }
   };
 

@@ -68,7 +68,7 @@ function BannerAndOfferView() {
                       </p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {data.status || ""}</p>
+                      <p className="text-muted text-sm">: {data.offerStatus || ""}</p>
                     </div>
                   </div>
                 </div>

@@ -136,7 +136,6 @@ function VehicleManagementEdit() {
       };
       reader.readAsDataURL(file);
     }
-    formik.setFieldValue("imageUrl", event.currentTarget.files[0]);
   };
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
@@ -145,9 +144,10 @@ function VehicleManagementEdit() {
 
   const handleCrop = useCallback(async () => {
     try {
-      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); // Get cropped image
-      setCroppedImage(croppedImageData); // Set the cropped image to submit
-      setShowCropper(false); // Close cropper modal
+      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
+      setCroppedImage(croppedImageData);
+      formik.setFieldValue("imageUrl", croppedImageData);
+      setShowCropper(false);
     } catch (e) {
       console.error(e);
     }
