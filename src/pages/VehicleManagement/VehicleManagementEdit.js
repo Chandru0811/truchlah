@@ -24,9 +24,9 @@ function VehicleManagementEdit() {
 
   const validationSchema = Yup.object({
     // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
-    type: Yup.string().required("*Type is required"),
+    type: Yup.string().matches(/^\S*$/, '*No spaces are allowed. You can use underscores instead.').required("*Vehicle Type is required"),
     vehicleCapacity: Yup.string().required("*Capacity is required"),
-    vehicleStatus: Yup.string().required("*Type is required"),
+    vehicleStatus: Yup.string().required("*Status is required"),
     description: Yup.string().required("*Description is required"),
     baseFare: Yup.number().required("*Base fare is required"),
     perKm: Yup.number().required("*Per KM charge is required"),
@@ -83,7 +83,7 @@ function VehicleManagementEdit() {
       const {vehicleImage,...valuess} =values
       Object.entries(valuess).forEach(([key, value]) => {
         if (key === "imageUrl" && value) {
-          formData.append(key, croppedImage);
+          formData.append(key, value);
         } else if (key !== "imageUrl") {
           formData.append(key, value);
         }
@@ -128,6 +128,7 @@ function VehicleManagementEdit() {
 
   const handleFileChange = (event) => {
     const file = event.currentTarget.files[0];
+    console.log("object",file)
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -142,16 +143,30 @@ function VehicleManagementEdit() {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
+  const blobToFile = (blob, fileName) => {
+    return new File([blob], fileName, { type: blob.type, lastModified: Date.now() });
+  };
+  
   const handleCrop = useCallback(async () => {
     try {
       const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
-      setCroppedImage(croppedImageData);
-      formik.setFieldValue("imageUrl", croppedImageData);
+  
+      // Convert Blob to File format
+      // console.log("object1",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
+      const croppedImageFile = blobToFile(croppedImageData, `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`);
+  
+      setCroppedImage(croppedImageFile);
+      // console.log("file",croppedImageFile);
+      
+      formik.setFieldValue("imageUrl", croppedImageFile); // Store the file in Formik values
+      // console.log("formikfile",formik.values.imageUrl);
+      // console.log("CroppedImage",croppedImage);
       setShowCropper(false);
     } catch (e) {
       console.error(e);
     }
   }, [croppedAreaPixels, imageSrc]);
+  
 
   const handleCropCancel = () => {
     setShowCropper(false);
@@ -180,7 +195,7 @@ function VehicleManagementEdit() {
                 <div className="row align-items-center">
                   <div className="col">
                     <div className="d-flex align-items-center gap-4">
-                      <h1 className="h4 ls-tight headingColor">Add Vehicle</h1>
+                      <h1 className="h4 ls-tight headingColor">Edit Vehicle</h1>
                     </div>
                   </div>
                   <div className="col-auto">

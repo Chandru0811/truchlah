@@ -45,8 +45,8 @@ const UserManagement = () => {
   }
 
   const refreshData = async () => {
-    destroyDataTable();
     setLoading(true);
+    destroyDataTable();
     try {
       const response = await userApi.get("/user");
       setDatas(response.data.responseBody);
@@ -61,8 +61,7 @@ const UserManagement = () => {
   useEffect(() => {
     const getItemData = async () => {
       try {
-        const response = await userApi.get("/user",
-        );
+        const response = await userApi.get("/user");
         setDatas(response.data.responseBody);
       } catch (error) {
         toast.error("Error fetching data: ", error?.response?.data?.message);
@@ -156,12 +155,12 @@ const UserManagement = () => {
                             Edit
                           </button>
                         </Link> */}
-                        {/* <DeleteModel
+                        <DeleteModel
                           onSuccess={refreshData}
                           onDelete={() => funDelete(data.userId)}
                           // path={`deleteMstrItem/${data.id}`}
                           style={{ display: "inline-block" }}
-                        /> */}
+                        />
                       </div>
                     </td>
                   </tr>

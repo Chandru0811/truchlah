@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import DriverManagement from "./DriverManagement";
 import { driverApi } from "../../config/URL";
 import toast from "react-hot-toast";
+import Modal from "react-bootstrap/Modal";
 // import api from "../../config/URL";
 // import toast from "react-hot-toast";
 
@@ -11,11 +12,16 @@ function DriverManagementView() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeLoader, setActiveLoader] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const handleOpenModal = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
 
   const getItemData = async () => {
     setLoading(true);
     try {
-      const response = await driverApi.get(`driver/getVehicleDetailsByDriverId/${id}`);
+      const response = await driverApi.get(
+        `driver/getVehicleDetailsByDriverId/${id}`
+      );
       setData(response.data.responseBody);
     } catch (error) {
       toast.error("Error fetching data: ", error?.response?.data?.message);
@@ -25,16 +31,19 @@ function DriverManagementView() {
   };
   useEffect(() => {
     getItemData();
-    console.log("data?.vehicleDetails?.vehicleType?.type",data)
+    console.log("data?.vehicleDetails?.vehicleType?.type", data);
   }, [id]);
 
   const handleActivate = async () => {
     setActiveLoader(true);
     const newStatus = !data.driverStatus;
     try {
-      const response = await driverApi.put(`user/userStatusUpdate/${id}?status=${newStatus}`);
+      const response = await driverApi.put(
+        `driver/driverUpdateStatus/${id}?status=${newStatus}`
+      );
       if (response.status === 200) {
         getItemData();
+        handleClose();
         toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
@@ -79,6 +88,19 @@ function DriverManagementView() {
                   </Link>
                   {data.driverStatus ? (
                     <button
+                      onClick={handleOpenModal}
+                      className="btn btn-danger btn-sm me-2"
+                    >
+                      {activeLoader && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
+                      Deactivate
+                    </button>
+                  ) : (
+                    <button
                       type="button"
                       onClick={handleActivate}
                       className="btn btn-success btn-sm me-2"
@@ -91,18 +113,6 @@ function DriverManagementView() {
                         ></span>
                       )}
                       Activate
-                    </button>
-                  ) : (
-                    <button
-                     onClick={handleActivate}
-                      className="btn btn-danger btn-sm me-2"
-                    >{activeLoader && (
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        aria-hidden="true"
-                      ></span>
-                    )}
-                      Deactivate
                     </button>
                   )}
                 </div>
@@ -284,192 +294,196 @@ function DriverManagementView() {
                       class="accordion-collapse collapse"
                     >
                       {data?.vehicleDetails ? (
-                          <div class="accordion-body row mt-2 p-3">
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Type</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleType?.type}
-                                  </p>
-                                </div>
+                        <div class="accordion-body row mt-2 p-3">
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Type</b>
+                                </p>
                               </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Brand</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleBrand}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Registration Number</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.registrationNo}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Registration Year</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.registrationYear}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Model</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleModel}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Name</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleName}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Size</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleSize}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Weight</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.vehicleWeight}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Owned By</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.ownedBy}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Front Img</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                  {data?.vehicleDetails?.vehicleFrontImgUrl ? (
-                                <img
-                                  src={data?.vehicleDetails?.vehicleFrontImgUrl}
-                                  alt="License Front"
-                                  style={{ width: "100px" }}
-                                />
-                              ) : (
-                                "N/A"
-                              )}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Vehicle Back Img</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                  {data?.vehicleDetails?.vehicleBackImgUrl ? (
-                                <img
-                                  src={data?.vehicleDetails?.vehicleBackImgUrl}
-                                  alt="License Front"
-                                  style={{ width: "100px" }}
-                                />
-                              ) : (
-                                "N/A"
-                              )}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Description</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.vehicleDetails?.description}
-                                  </p>
-                                </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.vehicleType?.type}
+                                </p>
                               </div>
                             </div>
                           </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Brand</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.vehicleBrand}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Registration Number</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.registrationNo}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Registration Year</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.registrationYear}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Model</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.vehicleModel}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Name</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.vehicleName}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Size</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.vehicleSize}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Weight</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.vehicleWeight}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Owned By</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.ownedBy}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Front Img</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  {data?.vehicleDetails?.vehicleFrontImgUrl ? (
+                                    <img
+                                      src={
+                                        data?.vehicleDetails?.vehicleFrontImgUrl
+                                      }
+                                      alt="License Front"
+                                      style={{ width: "100px" }}
+                                    />
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Vehicle Back Img</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  {data?.vehicleDetails?.vehicleBackImgUrl ? (
+                                    <img
+                                      src={
+                                        data?.vehicleDetails?.vehicleBackImgUrl
+                                      }
+                                      alt="License Front"
+                                      style={{ width: "100px" }}
+                                    />
+                                  ) : (
+                                    "N/A"
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row mb-3">
+                              <div className="col-6 d-flex justify-content-start align-items-center">
+                                <p className="text-sm">
+                                  <b>Description</b>
+                                </p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  : {data?.vehicleDetails?.description}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       ) : (
                         <p className="text-center fs-6 my-3">
                           No Vehicle Details available.
@@ -483,6 +497,36 @@ function DriverManagementView() {
           </div>
         </div>
       )}
+      <Modal
+        show={showModal}
+        backdrop="static"
+        keyboard={false}
+        onHide={handleClose}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Deactivate User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to deactivate this User?</Modal.Body>
+        <Modal.Footer className="py-1">
+          <button className="btn btn-sm btn-secondary" onClick={handleClose}>
+            Close
+          </button>
+          <button
+            className="btn btn-sm btn-danger"
+            type="submit"
+            onClick={handleActivate}
+            disabled={activeLoader}
+          >
+            {activeLoader && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Deactivate
+          </button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

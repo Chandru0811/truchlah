@@ -12,6 +12,7 @@ function BannerAndOfferEdit() {
   const [data, setData] = useState({});
   const { id } = useParams();
   const [imageSrc, setImageSrc] = useState(null);
+  const [imageName,setImageName]=useState(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [croppedImage, setCroppedImage] = useState(null);
@@ -67,7 +68,7 @@ function BannerAndOfferEdit() {
       try {
         const response = await userApi.get(`/offer/byOfferId/${id}`);
         formik.setValues({
-          status: response.data.responseBody.status || "",
+          status: response.data.responseBody.offerStatus || "",
           attachment: null,
           description: response.data.responseBody.description || "",
         });
@@ -87,11 +88,12 @@ function BannerAndOfferEdit() {
 
   const handleFileChange = (event) => {
     const file = event.currentTarget.files[0];
+    setImageName(file.name)
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc(reader.result); // Show image in cropper
-        setShowCropper(true); // Open cropper modal
+        setImageSrc(reader.result);
+        setShowCropper(true);
       };
       reader.readAsDataURL(file);
     }
@@ -101,12 +103,20 @@ function BannerAndOfferEdit() {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
+  const blobToFile = (blob, fileName) => {
+    return new File([blob], fileName, { type: blob.type, lastModified: Date.now() });
+  };
+  
   const handleCrop = useCallback(async () => {
     try {
-      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); // Get cropped image
-      setCroppedImage(croppedImageData); 
-      formik.setFieldValue("attachment", croppedImageData);
-      setShowCropper(false); // Close cropper modal
+      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
+      const croppedImageFile = blobToFile(croppedImageData, imageName);
+  
+      setCroppedImage(croppedImageFile);
+      // console.log("object",croppedImageFile);
+  
+      formik.setFieldValue("attachment", croppedImageFile);
+      setShowCropper(false);
     } catch (e) {
       console.error(e);
     }
@@ -115,6 +125,7 @@ function BannerAndOfferEdit() {
   const handleCropCancel = () => {
     setShowCropper(false);
     setImageSrc(null);
+    setImageName(null)
     formik.setFieldValue("image", ""); 
     document.querySelector("input[type='file']").value = ""; 
   };
@@ -222,9 +233,9 @@ function BannerAndOfferEdit() {
                           </div>
                         )}
                     </div>
-                    {(data.attachment ||croppedImage) ? (
+                    {(data.attachment || formik.values?.attachment) ? (
                       <img
-                        src={croppedImage?URL.createObjectURL(croppedImage):data.attachment}
+                        src={formik.values?.attachment? URL.createObjectURL(formik.values?.attachment):data.attachment}
                         alt="Attachment"
                         className="img-fluid"
                         style={{ maxWidth: "40%", height: "auto" }}

@@ -42,6 +42,7 @@ import ChangePassword from "../pages/authorization/ChangePassword";
 import ScrollToTop from "../pages/ScroolToTop";
 import PaymentUnsuccessful from "../pages/common_pages/UnSuccessFul";
 import MobileNumVerify from "../pages/authorization/MobileNumVerify";
+import ResetPassword from "../pages/authorization/ResetPassword";
 
 function UserLayout({
   handleAdminLogin,
@@ -112,6 +113,7 @@ function UserLayout({
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/pricing" element={<Priceing />} />
           <Route path="/mobile/verify" element={<MobileNumVerify />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
           {isAuthenticate && (
             <>
               <Route path="/map" element={<Map />} />

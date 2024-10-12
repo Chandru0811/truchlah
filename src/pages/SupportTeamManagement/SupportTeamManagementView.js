@@ -34,7 +34,7 @@ function SupportTeamManagementView() {
     setActiveLoader(true);
     const newStatus = !data.staffActiveStatus;
     try {
-      const response = await userApi.put(`user/userStatusUpdate/${id}?status=${newStatus}`);
+      const response = await userApi.put(`staff/staffStatusUpdate/${id}?status=${newStatus}`);
       if (response.status === 200) {
         getItemData();
       handleClose()

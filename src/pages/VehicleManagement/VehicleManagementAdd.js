@@ -19,10 +19,10 @@ function VehicleManagementAdd() {
 
   const validationSchema = Yup.object({
     // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
-    type: Yup.string().required("*Type is required"),
-    imageUrl: Yup.string().required("*Type is required"),
-    vehicleCapacity: Yup.mixed().required("*Type is required"),
-    vehicleStatus: Yup.string().required("*Type is required"),
+    type: Yup.string().matches(/^\S*$/, '*No spaces are allowed. You can use underscores instead.').required("*Vehicle Type is required"),
+    imageUrl: Yup.string().required("*Image is required"),
+    vehicleCapacity: Yup.mixed().required("*Vehicle Capacity is required"),
+    vehicleStatus: Yup.string().required("*vehicle Status is required"),
     description: Yup.string().required("*Description is required"),
     baseFare: Yup.number().required("*Base fare is required"),
     perKm: Yup.number().required("*Per KM charge is required"),
@@ -124,16 +124,26 @@ function VehicleManagementAdd() {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
+  const blobToFile = (blob, fileName) => {
+    return new File([blob], fileName, { type: blob.type, lastModified: Date.now() });
+  };
+  
   const handleCrop = useCallback(async () => {
     try {
-      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); 
-      setCroppedImage(croppedImageData); 
-      formik.setFieldValue("imageUrl", croppedImage);
-      setShowCropper(false); 
+      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
+    //  console.log("filename",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
+      const croppedImageFile = blobToFile(croppedImageData, `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`);
+  
+      setCroppedImage(croppedImageFile);
+      // console.log("object",croppedImageFile);
+  
+      formik.setFieldValue("imageUrl", croppedImageFile);
+      setShowCropper(false);
     } catch (e) {
       console.error(e);
     }
   }, [croppedAreaPixels, imageSrc]);
+  
 
   const handleCropCancel = () => {
     setShowCropper(false);
@@ -285,6 +295,7 @@ function VehicleManagementAdd() {
                   <input
                     type="file"
                     name="imageUrl"
+                    accept="image/jpeg, image/png"
                     className={`form-control ${
                       formik.touched.imageUrl && formik.errors.imageUrl
                         ? "is-invalid"

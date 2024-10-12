@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logins from "../../asset/Login.png";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
@@ -9,8 +9,8 @@ import { userApi } from "../../config/URL";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-function ForgotPassword() {
-  const [showPassword, setShowPassword] = useState(false);
+const ResetPassword = () => {
+    const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -28,19 +28,19 @@ function ForgotPassword() {
         "*Enter a valid email address"
       )
       .required("*Email is required"),
-    // password: Yup.string()
-    //   .required("Password is required")
-    //   .min(6, "Password must be at least 6 characters"),
-    // confirmPassword: Yup.string()
-    //   .required("Confirm Password is required")
-    //   .oneOf([Yup.ref("password")], "Passwords must match"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters"),
+    confirmPassword: Yup.string()
+      .required("Confirm Password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
   const formik = useFormik({
     initialValues: {
       email: "",
-      // password: "",
-      // confirmPassword: "",
+      password: "",
+      confirmPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -58,7 +58,9 @@ function ForgotPassword() {
       }
     },
   });
-
+  useEffect(()=>{
+      formik.setFieldValue("email","text@gmail.com")
+  },[])
   return (
     <div className="container-fluid">
       <div
@@ -71,7 +73,7 @@ function ForgotPassword() {
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
           style={{
             backgroundColor: "#e6ffe4",
-            height: "100%",
+            height: "100%", // Set height to 100% to fill the container
           }}
         >
           <div className="d-flex flex-column align-items-center h-100">
@@ -82,7 +84,7 @@ function ForgotPassword() {
           </div>
         </div>
         <div
-          className="col-lg-8 col-md-8 col-12 p-5 "
+          className="col-lg-8 col-md-8 col-12 p-5"
           style={{
             backgroundColor: "#fff",
           }}
@@ -91,7 +93,7 @@ function ForgotPassword() {
             <div className="text-center"></div>
             <h5 className="LoginTitle pb-4">Forgot Password</h5>
             <h6 className="LoginSubHead">
-            Enter the Email and The Reset Link is Sent to the given mail.
+            Your new password must be different from previously used Password
             </h6>
 
             <hr></hr>
@@ -100,7 +102,7 @@ function ForgotPassword() {
               <div className="col-lg-6 col-md-8 col-12">
                 <div className="text-center">
                   <form onSubmit={formik.handleSubmit}>
-                    <div className="form my-3 ">
+                    <div className="form mb-3 ">
                       <div className="form d-flex justify-content-center">
                         <FloatingLabel
                           controlId="floatingInput"
@@ -110,6 +112,7 @@ function ForgotPassword() {
                         >
                           <Form.Control
                             type="email"
+                            readOnly
                             className={`form-control  ${
                               formik.touched.email && formik.errors.email
                                 ? ""
@@ -125,7 +128,7 @@ function ForgotPassword() {
                           )}
                         </FloatingLabel>
                       </div>
-                      {/* <div className="">
+                      <div className="">
                         <FloatingLabel
                           controlId="floatingPassword"
                           label="New Password"
@@ -217,7 +220,7 @@ function ForgotPassword() {
                               </div>
                             )}
                         </FloatingLabel>
-                      </div> */}
+                      </div>
                     </div>
                     <div className="text-center">
                       <button
@@ -226,7 +229,7 @@ function ForgotPassword() {
                         style={{ width: "100%" }}
                         id="registerButton"
                       >
-                        Submit
+                        Reset Password
                       </button>
                     </div>
                   </form>
@@ -238,7 +241,7 @@ function ForgotPassword() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default ForgotPassword;
+export default ResetPassword

@@ -9,6 +9,7 @@ import { getCroppedImg } from "../common_pages/cropImageHelper";
 
 function BannerAndOfferAdd() {
   const [loading, setLoading] = useState(false);
+  const [imageName,setImageName]=useState(null)
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
@@ -55,6 +56,7 @@ function BannerAndOfferAdd() {
 
   const handleFileChange = (event) => {
     const file = event.currentTarget.files[0];
+    setImageName(file.name)
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -69,12 +71,20 @@ function BannerAndOfferAdd() {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
+  const blobToFile = (blob, fileName) => {
+    return new File([blob], fileName, { type: blob.type, lastModified: Date.now() });
+  };
+  
   const handleCrop = useCallback(async () => {
     try {
-      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels); // Get cropped image
-      setCroppedImage(croppedImageData); 
-      formik.setFieldValue("attachment", croppedImageData);
-      setShowCropper(false); // Close cropper modal
+      const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
+      const croppedImageFile = blobToFile(croppedImageData, imageName);
+  
+      setCroppedImage(croppedImageFile);
+      // console.log("object",croppedImageFile);
+  
+      formik.setFieldValue("attachment", croppedImageFile);
+      setShowCropper(false);
     } catch (e) {
       console.error(e);
     }
@@ -83,7 +93,8 @@ function BannerAndOfferAdd() {
   const handleCropCancel = () => {
     setShowCropper(false);
     setImageSrc(null);
-    formik.setFieldValue("image", ""); 
+    setImageName(null)
+    formik.setFieldValue("attachment", ""); 
     document.querySelector("input[type='file']").value = ""; 
   };
   return (

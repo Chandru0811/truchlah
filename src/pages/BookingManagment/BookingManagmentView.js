@@ -25,7 +25,9 @@ function BookingManagmentView() {
   const getBookingById = async () => {
     setLoading(true);
     try {
-      const response = await bookingApi.get(`/booking/getBookingByIdAdmin/${id}`);
+      const response = await bookingApi.get(
+        `/booking/getBookingByIdAdmin/${id}`
+      );
       setData(response.data.responseBody);
       console.log("Booking By ID :", response.data.responseBody);
     } catch (error) {
@@ -58,7 +60,7 @@ function BookingManagmentView() {
       };
 
       console.log("Selected Driver Id:", selectedDriver); // Debugging
-      console.log("Accepted By (Driver Name):", acceptedBy); 
+      console.log("Accepted By (Driver Name):", acceptedBy);
       setSpinner(true);
       try {
         const response = await driverApi.post(
@@ -1011,7 +1013,7 @@ function BookingManagmentView() {
                               </div>
                               <Link
                                 to={`/drivermanagement/view/${data?.bookingStatus?.driverId}`}
-                                title="View Driver Details" 
+                                title="View Driver Details"
                               >
                                 <span
                                   className="position-absolute"
@@ -1021,13 +1023,12 @@ function BookingManagmentView() {
                                 </span>
                               </Link>
                             </div>
-
                           </div>
                         </div>
                       </div>
                     </>
                   )}
-                  {data?.bookingStatus?.status&& (
+                  {data?.bookingStatus?.status === "CANCELLED" && (
                     <>
                       <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -1055,17 +1056,20 @@ function BookingManagmentView() {
                                   </p>
                                 </div>
                                 <div className="col-6">
-                                  <Link to={`/usermanagement/view/${data?.user?.userId}`} style={{textDecoration:"none"}}>
-                                  <p className="text-muted text-sm">
-                                    : {`${data?.user?.firstName} ${data?.user?.lastName}`|| ""}
-                                  </p>
+                                  <Link
+                                    to={`/usermanagement/view/${data?.user?.userId}`}
+                                    style={{ textDecoration: "none" }}
+                                  >
+                                    <p className="text-muted text-sm">
+                                      :{" "}
+                                      {`${data?.user?.firstName} ${data?.user?.lastName}` ||
+                                        ""}
+                                    </p>
                                   </Link>
                                 </div>
                               </div>
                             </div>
-                            <div className="col-md-6 col-12 position-relative">
-                              
-                            </div>
+                            <div className="col-md-6 col-12 position-relative"></div>
                             <div className="col-md-6 col-12 position-relative">
                               <div className="row mb-3">
                                 <div className="col-6 d-flex justify-content-start align-items-center">
@@ -1077,31 +1081,34 @@ function BookingManagmentView() {
                                   <p className="text-muted text-sm">
                                     :{" "}
                                     {data?.review?.cancelledDate ? (
-                                  <>
-                                    {data?.review?.cancelledDate?.substring(0, 10)}{" "}
-                                    <b>&</b>{" "}
-                                    {new Date(
-                                      data?.review?.cancelledDate
-                                    ).toLocaleTimeString([], {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                      hour12: true,
-                                    })}
-                                  </>
-                                ) : (
-                                  " "
-                                )}
+                                      <>
+                                        {data?.review?.cancelledDate?.substring(
+                                          0,
+                                          10
+                                        )}{" "}
+                                        <b>&</b>{" "}
+                                        {new Date(
+                                          data?.review?.cancelledDate
+                                        ).toLocaleTimeString([], {
+                                          hour: "2-digit",
+                                          minute: "2-digit",
+                                          hour12: true,
+                                        })}
+                                      </>
+                                    ) : (
+                                      " "
+                                    )}
                                   </p>
                                 </div>
                               </div>
                             </div>
-                            
                           </div>
                         </div>
                       </div>
                     </>
                   )}
-                  {data.review.ratingByUser !=="User rating not yet available."&& (
+                  {data.review.ratingByUser !==
+                    "User rating not yet available." && (
                     <>
                       <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -1136,19 +1143,21 @@ function BookingManagmentView() {
                               </div>
                             </div>
                             <div className="col-md-6 col-12 position-relative">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Rating By Driver</b>
-                                  </p>
+                              {data.review.ratingByDriver !==
+                                "Driver rating not yet available." && (
+                                <div className="row mb-3">
+                                  <div className="col-6 d-flex justify-content-start align-items-center">
+                                    <p className="text-sm">
+                                      <b>Rating By Driver</b>
+                                    </p>
+                                  </div>
+                                  <div className="col-6">
+                                    <p className="text-muted text-sm">
+                                      : {data?.review.ratingByDriver}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    :{" "}
-                                    {data?.review.ratingByDriver}
-                                  </p>
-                                </div>
-                              </div>
+                              )}
                             </div>
                             <div className="col-md-6 col-12">
                               <div className="row mb-3">
@@ -1165,18 +1174,21 @@ function BookingManagmentView() {
                               </div>
                             </div>
                             <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Review By Driver</b>
-                                  </p>
+                              {data.review.ratingByDriver !==
+                                "Driver rating not yet available." && (
+                                <div className="row mb-3">
+                                  <div className="col-6 d-flex justify-content-start align-items-center">
+                                    <p className="text-sm">
+                                      <b>Review By Driver</b>
+                                    </p>
+                                  </div>
+                                  <div className="col-6">
+                                    <p className="text-muted text-sm">
+                                      :{data?.review?.reviewByDriver || ""}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    :{data?.review?.reviewByDriver || ""}
-                                  </p>
-                                </div>
-                              </div>
+                              )}
                             </div>
                           </div>
                         </div>

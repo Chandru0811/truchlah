@@ -156,11 +156,11 @@ const roles =sessionStorage.getItem("roles")
                   {roles !== "ROLE_STAFF" &&(<>
                   <td className="text-center">
                     <div className="gap-2">
-                      {/* <Link to={`/supportteammanagement/view/${data.userId}`}>
+                      <Link to={`/supportteammanagement/view/${data.userId}`}>
                         <button className="btn btn-light btn-sm  shadow-none border-none">
                           View
                         </button>
-                      </Link> */}
+                      </Link>
                       
                       <Link to={`/supportteammanagement/edit/${data.userId}`} className="px-2">
                         <button className="btn btn-light  btn-sm shadow-none border-none">
