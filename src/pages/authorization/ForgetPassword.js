@@ -10,16 +10,16 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [confirmPassword, setConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
-  const PasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  const ConfirmPasswordVisibility = () => {
-    setConfirmPassword(!confirmPassword);
-  };
+  // const PasswordVisibility = () => {
+  //   setShowPassword(!showPassword);
+  // };
+  // const ConfirmPasswordVisibility = () => {
+  //   setConfirmPassword(!confirmPassword);
+  // };
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -119,7 +119,7 @@ function ForgotPassword() {
                             placeholder="Enter your name"
                           />
                           {formik.touched.email && formik.errors.email && (
-                            <div className="text-danger">
+                            <div className="text-danger text-start">
                               {formik.errors.email}
                             </div>
                           )}

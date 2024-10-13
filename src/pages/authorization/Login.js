@@ -234,7 +234,7 @@ function Login({ handleLogin, handleAdminLogin }) {
         }}
       >
         <div
-          className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
+          className="col-lg-4 col-md-4 col-12 py-4 text-center mx-auto"
           style={{
             backgroundColor: "#e6ffe4",
             height: "100%",
@@ -254,7 +254,7 @@ function Login({ handleLogin, handleAdminLogin }) {
           }}
         >
           <div className="row">
-            <h5 className="LoginTitle pb-4">Login</h5>
+            <h5 className="LoginTitle pb-2">Login</h5>
             <h6 className="LoginSubHead">
               Explore Our Lightning-Fast Truck Delivery Services
             </h6>
@@ -331,7 +331,7 @@ function Login({ handleLogin, handleAdminLogin }) {
                           placeholder="Enter your email"
                         />
                         {formik.touched.username && formik.errors.username && (
-                          <div className="text-danger">
+                          <div className="text-danger text-start">
                             {formik.errors.username}
                           </div>
                         )}
@@ -376,7 +376,7 @@ function Login({ handleLogin, handleAdminLogin }) {
                           />
                         )}
                         {formik.touched.password && formik.errors.password && (
-                          <div className="text-danger">
+                          <div className="text-danger text-start">
                             {formik.errors.password}
                           </div>
                         )}

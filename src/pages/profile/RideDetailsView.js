@@ -265,12 +265,13 @@ function RideDetailsView() {
                   color: "#fff", // Text color for better contrast
                 }}
               />
-              {vehicleImages[data.booking?.vehicletypeId] ||
-                vehicleImages.default}
+              <img src={data?.booking?.vehicleImage || UnknownVehicle} alt="Ace" className="img-fluid mt-3" />
+              {/* { ||
+                vehicleImages.default} */}
             </div>
 
             <p className="mt-3">
-              {vehicleNameMap[data.booking?.vehicletypeId]}
+              {data.booking?.vehicleName}
             </p>
             {vechicle &&
               vechicle.map((vechicles) =>

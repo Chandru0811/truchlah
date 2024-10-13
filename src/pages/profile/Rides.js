@@ -139,13 +139,13 @@ function Order() {
 
   const colors = ["red", "orange", "blue", "purple", "grey"];
 
-  const vehicleNameMap = {
-    1: "1.7M_VAN",
-    2: "2.4M_VAN",
-    3: "10FT_LORRY",
-    4: "14FT_LORRY",
-    5: "24FT_LORRY",
-  };
+  // const vehicleNameMap = {
+  //   1: "1.7M_VAN",
+  //   2: "2.4M_VAN",
+  //   3: "10FT_LORRY",
+  //   4: "14FT_LORRY",
+  //   5: "24FT_LORRY",
+  // };
   useEffect(() => {
     if (type === "ITEM") {
       setShowItemShift(true);

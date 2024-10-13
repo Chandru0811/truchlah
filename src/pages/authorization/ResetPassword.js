@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -29,11 +29,11 @@ const ResetPassword = () => {
       )
       .required("*Email is required"),
     password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
+      .required("*Password is required")
+      .min(6, "*Password must be at least 6 characters"),
     confirmPassword: Yup.string()
-      .required("Confirm Password is required")
-      .oneOf([Yup.ref("password")], "Passwords must match"),
+      .required("*Confirm Password is required")
+      .oneOf([Yup.ref("password")], "*Passwords must match"),
   });
 
   const formik = useFormik({
@@ -58,9 +58,9 @@ const ResetPassword = () => {
       }
     },
   });
-  useEffect(()=>{
-      formik.setFieldValue("email","text@gmail.com")
-  },[])
+  useEffect(() => {
+    formik.setFieldValue("email", "text@gmail.com");
+  }, []);
   return (
     <div className="container-fluid">
       <div
@@ -73,7 +73,7 @@ const ResetPassword = () => {
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
           style={{
             backgroundColor: "#e6ffe4",
-            height: "100%", // Set height to 100% to fill the container
+            height: "100%", 
           }}
         >
           <div className="d-flex flex-column align-items-center h-100">
@@ -93,7 +93,7 @@ const ResetPassword = () => {
             <div className="text-center"></div>
             <h5 className="LoginTitle pb-4">Forgot Password</h5>
             <h6 className="LoginSubHead">
-            Your new password must be different from previously used Password
+              Your new password must be different from previously used Password
             </h6>
 
             <hr></hr>
@@ -122,7 +122,7 @@ const ResetPassword = () => {
                             placeholder="Enter your name"
                           />
                           {formik.touched.email && formik.errors.email && (
-                            <div className="text-danger">
+                            <div className="text-danger text-start">
                               {formik.errors.email}
                             </div>
                           )}
@@ -168,7 +168,7 @@ const ResetPassword = () => {
                           )}
                           {formik.touched.password &&
                             formik.errors.password && (
-                              <div className="text-danger">
+                              <div className="text-danger text-start">
                                 {formik.errors.password}
                               </div>
                             )}
@@ -215,7 +215,7 @@ const ResetPassword = () => {
                           )}
                           {formik.touched.confirmPassword &&
                             formik.errors.confirmPassword && (
-                              <div className="text-danger">
+                              <div className="text-danger text-start">
                                 {formik.errors.confirmPassword}
                               </div>
                             )}
@@ -235,13 +235,13 @@ const ResetPassword = () => {
                   </form>
                 </div>
               </div>
-             <div className="col-lg-3 col-md-2 col-12"></div>
+              <div className="col-lg-3 col-md-2 col-12"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ResetPassword
+export default ResetPassword;

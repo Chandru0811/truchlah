@@ -168,8 +168,8 @@ function Summary() {
             </div>
           </div>
           <center>
-            {vehicleImages[data.booking?.vehicletypeId] || null}
-            {/* <img  src={vechicle?.vehicleImage?.[0] || 'defaultImageURL'}  alt="vechicle" className="img-fluid mt-3" /> */}
+            {/* {vehicleImages[data.booking?.vehicletypeId] || null} */}
+            <img  src={data?.booking?.vehicleImage}  alt="vechicle" className="img-fluid mt-3" style={{maxWidth:"50%"}} />
             <p className="mt-3">
               {vehicleNameMap[data.booking?.vehicletypeId]}
             </p>
