@@ -63,7 +63,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
             >
               <Container fluid>
                 <Navbar.Brand>
-                  <Link to="https://uat.trucklah.com/auth">
+                  <Link to="https://trucklah.com/auth">
                     <img src={logo} alt="Trucklah" className="img-fluid" />
                   </Link>
                 </Navbar.Brand>
@@ -98,7 +98,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 <li className="nav-item menus px-2">
                                   <Link
                                     className="Links fs-5 fw-bold"
-                                    to="https://uat.trucklah.com/business"
+                                    to="https://trucklah.com/business"
                                   >
                                     Business
                                   </Link>
@@ -106,7 +106,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 <li className="nav-item menus px-2">
                                   <Link
                                     className="Links fs-5 fw-bold"
-                                    to="https://uat.trucklah.com/individuals"
+                                    to="https://trucklah.com/individuals"
                                   >
                                     Individuals
                                   </Link>
@@ -114,7 +114,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 <li className="nav-item menus px-2">
                                   <Link
                                     className="Links fs-5 fw-bold"
-                                    to="https://uat.trucklah.com/driver_partner_jobs"
+                                    to="https://trucklah.com/driver_partner_jobs"
                                   >
                                     Drivers
                                   </Link>

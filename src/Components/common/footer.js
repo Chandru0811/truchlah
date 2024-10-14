@@ -87,7 +87,7 @@ function foot({ isAuthenticate }) {
                   </li>
                   <li>
                     <Link
-                      to="https://uat.trucklah.com/contact_us"
+                      to="https://trucklah.com/contact_us"
                       className="h text-decoration-none"
                       style={{ color: "#acff3b" }}
                     >
