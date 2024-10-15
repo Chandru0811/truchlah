@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import { FaTiktok } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-
 function foot({ isAuthenticate }) {
   return (
     <footer
@@ -18,7 +17,7 @@ function foot({ isAuthenticate }) {
     >
       <div className="container p-4">
         <div className="row">
-          <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
+          {/* <div className="col-lg-3 col-md-6 md-text-center mb-4 mb-md-0">
             <h5 className="">Trucklah Pte Ltd</h5>
             <p className="py-2" style={{ color: "#acff3b" }}>
               <a
@@ -56,7 +55,59 @@ function foot({ isAuthenticate }) {
                 <b> Email </b>: info@trucklah.com
               </a>
             </p>
+          </div> */}
+          <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
+            <h5 className="text-uppercase mb-0 help">Trucklah Pte Ltd</h5>
+            <ul
+              className="list-unstyled mb-0 py-3"
+              style={{ color: "#acff3b" }}
+            >
+              <>
+                <li>
+                  <a
+                    href="https://www.google.com/maps/place/The+Alexcier/@1.2916847,103.8111868,17z/data=!3m2!4b1!5s0x31da1a2cf1b2be13:0x7b0f9d88a36fdfbb!4m6!3m5!1s0x31da1bb95520771b:0xf2b9dfa378aa9a6e!8m2!3d1.2916793!4d103.8137617!16s%2Fg%2F11gyxjfkjk?entry=ttu&g_ep=EgoyMDI0MDkxOC4xIKXMDSoASAFQAw%3D%3D"
+                    className="text-decoration-none center-address"
+                    style={{ fontSize: "16px", color: "#acff3b" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span style={{ color: "#acff3b" }}>
+                      The Alexcier,
+                      <br />
+                      237 Alexandra Road, #04-10,
+                      <br />
+                      Singapore-159929.
+                    </span>
+                  </a>
+                </li>
+                <br/>
+                <li>
+                  <a
+                    href="tel:+6588941306"
+                    className="text-decoration-none center-address"
+                    style={{ fontSize: "16px", color: "#acff3b" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <b>Phone : </b> +65 8894 1306
+                    <br />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="mailto:info@trucklah.com"
+                    className="text-decoration-none center-address"
+                    style={{ fontSize: "16px", color: "#acff3b" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                     <b>Email : </b> info@trucklah.com
+                  </a>
+                </li>
+              </>
+            </ul>
           </div>
+
           <div className="col-lg-2 col-md-6 mb-4 mb-md-0">
             <h5 className="text-uppercase mb-0 help">Help</h5>
             <ul

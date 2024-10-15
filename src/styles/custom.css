@@ -446,6 +446,16 @@ footer hr {
   border: px solid #ff2e2e;
 }
 
+.center-address{
+  color: #acff3b;
+}
+
+@media (max-width: 756px) {
+  .center-address {
+    text-align: center !important;
+  }
+}
+
 .help a {
   text-decoration: none;
 }
@@ -1721,6 +1731,62 @@ body {
 
 /* ===success=== */
 
+/* General Card Styling */
+.cardStyle {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  background-color: #fff;
+  max-width: 350px;
+  border: none !important;
+  margin: 0 auto; /* Center the card */
+}
+
+.successBtn {
+  width: 100% !important;
+  background-color: #1bc24a !important;
+  border: none !important;
+  padding: 10px !important;
+  border-radius: 8px !important;
+  color: #fff;
+  font-size: 16px !important;
+}
+
+/* Adjustments for smaller devices */
+@media (max-width: 768px) {
+  .cardStyle {
+    max-width: 100%; /* Ensure card is responsive */
+    padding: 1.5rem;
+  }
+
+  .success-img,
+  .error-img {
+    max-width: 100%; /* Ensure the image scales on mobile */
+    height: auto;
+  }
+
+  .titleStyle {
+    font-size: 18px; /* Adjust font size for mobile */
+  }
+
+  .smallTextStyle {
+    font-size: 14px; /* Adjust smaller text */
+  }
+
+  .Success {
+    padding: 20px; /* Add padding for smaller screens */
+  }
+}
+
+/* Larger devices */
+@media (min-width: 769px) {
+  .success-img,
+  .error-img {
+    max-width: 110%; /* Adjust the scaling of images on larger screens */
+  }
+}
+
+/* 
 .cardStyle {
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -1747,7 +1813,8 @@ body {
   font-size: 14px;
   color: #666;
   margin-bottom: 10px;
-}
+} */
+ 
 .icon-container {
   position:absolute;
   top: -6px;
@@ -1996,4 +2063,53 @@ body {
 
 [aria-label="ACTION: Activate to sort: Activate to sort"] .dt-column-order {
   display: none;
+}
+
+/* select-location */
+.select-location {
+  width: 500px !important;
+  height: 50px !important;
+  border-radius: 8px;
+}
+@media (max-width: 550px) {
+  .select-location {
+    width: 270px !important;
+    height: 50px !important;
+    border-radius: 8px;
+  }
+}
+
+/* Style the carousel item */
+.vechicle-label{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* cash-pay */
+.cash-pay{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cash-pay button{
+  margin-right: 10px !important;
+}
+
+@media (max-width: 425px) {
+  .cash-pay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  .cash-pay button {
+    margin-right: 0;
+    margin-top: 10px;
+  }
+
 }

@@ -547,10 +547,10 @@ function Summary() {
               </div>
             </div>
           </div>
-          <div className="text-center py-5">
+          <div className="text-center py-5 cash-pay">
             <button
               onClick={confirmCashPayment}
-              className="btn btn-primary px-5 py-2 me-4"
+              className="btn btn-primary px-5 py-2"
               id="NextMove"
             >
               {loadIndicator1 && (

@@ -29,6 +29,16 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
     setShow(false);
   };
 
+  const handleBookRide = () => {
+    if (showMain) {
+      // Close the Offcanvas if it's open
+      handleCloseMain();
+    }
+    // Navigate to the ride booking page
+    navigate("/shift");
+  };
+
+
   return (
     <section className="header">
       <Modal show={show} onHide={handleClose}>
@@ -136,6 +146,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                       <button
                                         type="button"
                                         className="login-btn py-2 px-3"
+                                        onClick={handleBookRide}
                                       >
                                         Book Ride
                                       </button>

@@ -359,12 +359,7 @@ function HouseShift() {
                       placeholder="Pick Up Location"
                       name="pickupLocation"
                       {...formik.getFieldProps("pickupLocation")}
-                      className="form-control form-control-lg rounded-5"
-                      style={{
-                        width: "500px",
-                        height: "50px",
-                        borderRadius: "8px",
-                      }}
+                      className="form-control form-control-lg rounded-5 select-location"
                     />
                   </FloatingLabel>
                 </Autocomplete>
@@ -402,14 +397,9 @@ function HouseShift() {
                     <Form.Control
                       type="text"
                       placeholder="Drop Location"
-                      className="form-control form-control-lg rounded-5"
+                      className="form-control form-control-lg rounded-5 select-location"
                       name="dropLocation"
                       {...formik.getFieldProps("dropLocation")}
-                      style={{
-                        width: "500px",
-                        height: "50px",
-                        borderRadius: "8px",
-                      }}
                     />
                   </FloatingLabel>
                 </Autocomplete>
@@ -421,27 +411,12 @@ function HouseShift() {
                 <div className="row my-2">
                 <div className="">
                   <select
-                    className="form-select form-select-lg rounded-5"
-                    // name="type"
+                    className="form-select form-select-lg rounded-5 select-location"
                     {...formik.getFieldProps("type")}
-                    style={{
-                      width: "500px",
-                      height: "50px",
-                      borderRadius: "8px",
-                    }}
                   >
                     <option value={""} selected >
                      Select Category 
                     </option>
-                    {/* <option value="Easy Shift">Easy Shift</option>
-                    <option value="Studio">Studio</option>
-                    <option value="Kitchen">Kitchen</option>
-                    <option value="room">Single room</option>
-                    <option value="Cabin">Cabin</option>
-                    <option value="1 BHK">1 BHK</option>
-                    <option value="2 BHK">2 BHK</option>
-                    <option value="3 BHK">3 BHK</option>
-                    <option value="4 BHK">4 BHK</option> */}
                     {categorys &&
                       categorys.map((category) => (
                         <option key={category.id} value={category.houseCategoryName}>
@@ -457,11 +432,6 @@ function HouseShift() {
                   </div>
                 </div>
                 <div className="text-center mt-2">
-                  {/* <Link to="/service">
-                    <button type="submit" className="btn btn-primary px-5 py-2" id="NextMove">
-                      Next
-                    </button>
-                  </Link> */}
                   <button
                     type="submit"
                     className="btn btn-primary px-5 py-2"

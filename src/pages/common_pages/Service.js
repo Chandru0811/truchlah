@@ -366,136 +366,6 @@ function Service() {
             </div>
           </div>
 
-          {/* <Carousel
-            additionalTransfrom={0}
-            arrows
-            autoPlaySpeed={3000}
-            autoPlay={false}
-            centerMode={false}
-            className="carousel-container"
-            containerClass="container-with-dots"
-            dotListClass=""
-            draggable
-            focusOnSelect={false}
-            infinite
-            itemClass=""
-            keyBoardControl
-            minimumTouchDrag={80}
-            renderButtonGroupOutside={false}
-            renderDotsOutside={false}
-            responsive={{
-              desktop: {
-                breakpoint: { max: 3000, min: 1024 },
-                items: 4,
-                slidesToSlide: 1, // Number of slides to slide when using arrows
-              },
-              tablet: {
-                breakpoint: { max: 1024, min: 464 },
-                items: 2,
-                slidesToSlide: 1,
-              },
-              mobile: {
-                breakpoint: { max: 464, min: 0 },
-                items: 1,
-                slidesToSlide: 1,
-              },
-            }}
-            showDots={false}
-            sliderClass=""
-            slidesToSlide={1}
-            swipeable
-          >
-            {vechicle &&
-              vechicle.map((item, index) => (
-                <label
-                  className="container my-5"
-                  key={index}
-                  id={`Vehicle-${item.vechicleTypeId}`}
-                  onClick={() =>
-                    formik.setFieldValue("vechicleTypeId", item.vehicletypeId)
-                  }
-                  style={{
-                    cursor: "pointer",
-                    display: "block",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <div
-                    className="card d-flex flex-column"
-                    style={{
-                      borderRadius: "6px",
-                      position: "relative",
-                      border:
-                        formik.values.vechicleTypeId === item.vehicletypeId
-                          ? "2px solid #1C6DD0"
-                          : "1px solid #B2C8BA",
-                    }}
-                  >
-                    {formik.values.vechicleTypeId === item.vehicletypeId && (
-                      <FaCheckCircle
-                        style={{
-                          position: "absolute",
-                          top: "-10px",
-                          right: "-8px",
-                          color: "#00A9FF",
-                          fontSize: "24px",
-                          zIndex: 5,
-                        }}
-                      />
-                    )}
-                    <img
-                      src={item.vehicleImage || Unknown }
-                      className="img-fluid card-img-top w-100 min-vh-50"
-                      alt="Card"
-                    />
-                    <div className="card-body h-100">
-                      <div className="card-text">
-                        <div className="d-flex justify-content-center">
-                          <span
-                            className="p-1"
-                            style={{
-                              background: "#D2E0FB",
-                              borderRadius: "5px",
-                            }}
-                          >
-                            <FaWeightHanging />{" "}
-                            {`${item.baseFare} kg`}
-                          </span>
-                        </div>
-                        <div className="d-flex justify-content-center pt-3">
-                          <span style={{ fontSize: "20px" }}>
-                            <b>{item.type}</b>
-                          </span>
-                        </div>
-                        <div className="d-flex justify-content-center">
-                          <span>
-                            Base Fare{" "}
-                            <b style={{ fontSize: "18px" }}>
-                              $ {item.baseFare}
-                            </b>
-                          </span>
-                        </div>
-                        <center>
-                          <div className="form-check">
-                            <input
-                              className={`form-check-input border-info ${formik.touched.vechicleTypeId &&
-                                formik.errors.vechicleTypeId
-                                ? "is-invalid"
-                                : ""
-                                }`}
-                              type="radio"
-                              name="vechicleTypeId"
-                              value={item.vechicleTypeId}
-                              id={`flexRadioDefault${index}`}
-                            />
-                          </div>
-                        </center>
-                      </div>
-                    </div>
-                  </div>
-                </label>
-              ))}
-          </Carousel> */}
           <Carousel
             additionalTransfrom={0}
             arrows
@@ -508,7 +378,7 @@ function Service() {
             draggable
             focusOnSelect={false}
             infinite
-            itemClass=""
+            itemClass="carousel-item-custom"
             keyBoardControl
             minimumTouchDrag={80}
             renderButtonGroupOutside={false}
@@ -538,17 +408,12 @@ function Service() {
             {vechicle &&
               vechicle.map((item, index) => (
                 <label
-                  className="container my-5"
+                  className="container my-5 vechicle-label"
                   key={index}
                   id={`Vehicle-${item.vechicleTypeId}`}
                   onClick={() =>
                     formik.setFieldValue("vechicleTypeId", item.vehicletypeId)
                   }
-                  style={{
-                    cursor: "pointer",
-                    display: "block",
-                    borderRadius: "8px",
-                  }}
                 >
                   <div
                     className="card d-flex flex-column"
@@ -634,6 +499,7 @@ function Service() {
               {formik.errors.vechicleTypeId}
             </div>
           )}
+
           <div className="row py-3">
             <div className="col-md-6 col-12 mb-3">
               <div

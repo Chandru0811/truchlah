@@ -549,12 +549,7 @@ function Map() {
                       placeholder="Pick Up Location"
                       name="pickupLocation"
                       {...formik.getFieldProps("pickupLocation")}
-                      className="form-control form-control-lg rounded-5"
-                      style={{
-                        width: "500px",
-                        height: "50px",
-                        borderRadius: "8px",
-                      }}
+                      className="form-control text-center form-control-lg rounded-5 select-location"
                     />
                     {/* {showEditIcon.pickupLocation && (
                       <FaEdit
@@ -604,12 +599,7 @@ function Map() {
                         onChange={(e) =>
                           handleStopChange(index, e.target.value)
                         }
-                        className="form-control rounded-5 mx-2"
-                        style={{
-                          width: "500px",
-                          height: "50px",
-                          borderRadius: "8px",
-                        }}
+                        className="form-control rounded-5 mx-2 select-location"
                         disabled={!formik.values.pickupLocation}
                       />
                       <FaMinus
@@ -674,14 +664,9 @@ function Map() {
                     <Form.Control
                       type="text"
                       placeholder="Drop Location"
-                      className="form-control form-control-lg rounded-5"
+                      className="form-control form-control-lg rounded-5 select-location"
                       name="dropLocation"
                       {...formik.getFieldProps("dropLocation")}
-                      style={{
-                        width: "500px",
-                        height: "50px",
-                        borderRadius: "8px",
-                      }}
                     />
                     {/* {showEditIcon.dropLocation && (
                           <FaEdit
