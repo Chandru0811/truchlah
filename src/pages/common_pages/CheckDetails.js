@@ -67,14 +67,20 @@ function Summary() {
       );
       if (response.status === 200) {
         // navigate(`/successful?type=${data?.booking?.bookingType}`);
-        navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=success`);
+        navigate(
+          `/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=success`
+        );
         sessionStorage.removeItem("shiftType");
-      } else{
-        navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
+      } else {
+        navigate(
+          `/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`
+        );
       }
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
-      navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
+      navigate(
+        `/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`
+      );
     } finally {
       setLoadIndicator1(false);
     }
@@ -88,18 +94,22 @@ function Summary() {
         `booking/generateCardTransactionPaymentLink?bookingId=${bookingId}`
       );
       if (response.status === (201 || 200)) {
-        const paymentLink = response.data.paymentLink.replace('?', '&');
-        window.open(paymentLink,"_self")
+        const paymentLink = response.data.paymentLink.replace("?", "&");
+        window.open(paymentLink, "_self");
         // toast.success("Payment successful!");
         // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
         sessionStorage.removeItem("shiftType");
       } else {
         toast.error("Payment failed, please try again.");
-        navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
+        navigate(
+          `/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`
+        );
       }
     } catch (error) {
       console.error("Payment error: " + error.message);
-      navigate(`/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`);
+      navigate(
+        `/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`
+      );
     } finally {
       setLoadIndicator2(false);
     }
@@ -152,7 +162,7 @@ function Summary() {
             data-placement="bottom"
             title="Back"
             className="me-3"
-            style={{ cursor: 'pointer', color: "rgb(16, 110, 234)" }}
+            style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
           >
             <IoArrowBackCircleOutline size={30} />
           </div>
@@ -168,19 +178,26 @@ function Summary() {
             </div>
           </div>
           <center>
-            {/* {vehicleImages[data.booking?.vehicletypeId] || null} */}
-            <img  src={data?.booking?.vehicleImage}  alt="vechicle" className="img-fluid mt-3" style={{maxWidth:"50%"}} />
-            <p className="mt-3">
-              {vehicleNameMap[data.booking?.vehicletypeId]}
-            </p>
-            {vechicle &&
-              vechicle.map((vechicles) =>
-                parseInt(data.centerId) === vechicles.vehicletypeId
-                  ? vechicles.types || "--"
-                  : ""
-              )}
-            <p>{data?.transactionDetails?.txnRef}</p>
+            <div className="vehicleImages-card">
+              <img
+                src={data?.booking?.vehicleImage}
+                alt="vechicle"
+                className="img-fluid mt-3"
+                // style={{ maxWidth: "50%" }}
+              />
+              <p className="mt-3">
+                {vehicleNameMap[data.booking?.vehicletypeId]}
+              </p>
+              {vechicle &&
+                vechicle.map((vechicles) =>
+                  parseInt(data.centerId) === vechicles.vehicletypeId
+                    ? vechicles.types || "--"
+                    : ""
+                )}
+              <p>{data?.transactionDetails?.txnRef}</p>
+            </div>
           </center>
+
           <div className="row">
             <div className="col-lg-3"></div>
             <div className="col-lg-9">
@@ -191,7 +208,7 @@ function Summary() {
           </div>
           <div className="row">
             <div className="d-flex justify-content-center">
-              <div className="card w-50">
+              <div className="card w-md-50">
                 <div className="card-body">
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
@@ -268,59 +285,6 @@ function Summary() {
                   </div>
 
                   <>
-                    {/* {data?.bookingTripLocations &&
-                      data?.bookingTripLocations.length > 1 &&
-                      data.bookingTripLocations
-                        .filter((_, index) => index !== 0) // Exclude the first index
-                        .map((stop, index) => (
-                          <div className="row" key={index}>
-                            <div className="col-md-6 col-12 ps-1">
-                              <div>
-                                <p
-                                  className="line"
-                                  style={{ color: "#00316B" }}
-                                >
-                                  <b>Stop {index + 1}</b>
-                                </p>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12 ps-1" id="drop">
-                              <p className="line">
-                                <span style={{ color: "#00316B" }}>
-                                  <b>Name :</b>{" "}
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {stop.dropoffContactName || "--"}
-                                </span>
-                              </p>
-                              <p>
-                                <span style={{ color: "#00316B" }}>
-                                  <b>Address :</b>{" "}
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {stop.dropoffAddress || "N/A"}
-                                </span>
-                              </p>
-                              <p>
-                                <span style={{ color: "#00316B" }}>
-                                  <b>Contact: </b>
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {stop.dropoffMobile || "N/A"}
-                                </span>
-                              </p>
-                              <p>
-                                <span style={{ color: "#00316B" }}>
-                                  <b>Location: </b>
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {stop.dropoff || "N/A"}
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-                        ))} */}
-
                     {/* Other Stops */}
                     {bookingTripLocations.length > 1 &&
                       bookingTripLocations
@@ -338,7 +302,7 @@ function Summary() {
                               </div>
                             </div>
                             <div className="col-md-6 col-12 ps-1" id="drop">
-                            <p className="line">
+                              <p className="line">
                                 <span style={{ color: "#00316B" }}>
                                   <b>Location: </b>
                                 </span>
@@ -370,7 +334,6 @@ function Summary() {
                                   {stop.dropoffMobile || "N/A"}
                                 </span>
                               </p>
-                              
                             </div>
                           </div>
                         ))}
@@ -378,7 +341,7 @@ function Summary() {
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
                         <div>
-                          <p className="line" style={{ color: "#00316B" }}>
+                          <p className="lineh" style={{ color: "#00316B" }}>
                             <b>Category</b>
                           </p>
                         </div>
@@ -393,7 +356,7 @@ function Summary() {
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
                         <div>
-                          <p className="line" style={{ color: "#00316B" }}>
+                          <p className="lineh" style={{ color: "#00316B" }}>
                             <b>Date & Time</b>
                           </p>
                         </div>
@@ -422,7 +385,7 @@ function Summary() {
 
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Manpower</b>
                       </p>
                     </div>
@@ -435,7 +398,7 @@ function Summary() {
                   </div>
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Extra ManPower</b>
                       </p>
                     </div>
@@ -448,7 +411,7 @@ function Summary() {
                   </div>
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Extra ManPower Quantity</b>
                       </p>
                     </div>
@@ -461,7 +424,7 @@ function Summary() {
                   </div>
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Trolly Required</b>
                       </p>
                     </div>
@@ -475,7 +438,7 @@ function Summary() {
 
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Round Trip</b>
                       </p>
                     </div>
@@ -502,7 +465,7 @@ function Summary() {
                   </div> */}
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Estimate KM</b>
                       </p>
                     </div>
@@ -516,7 +479,7 @@ function Summary() {
 
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Total amount</b>
                       </p>
                     </div>
@@ -532,7 +495,7 @@ function Summary() {
                   </div>
                   <div className="row">
                     <div className="col-md-6 col-12 ps-1">
-                      <p className="line" style={{ color: "#00316B" }}>
+                      <p className="lineh" style={{ color: "#00316B" }}>
                         <b>Message To Driver</b>
                       </p>
                     </div>
@@ -554,12 +517,12 @@ function Summary() {
               id="NextMove"
             >
               {loadIndicator1 && (
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          aria-hidden="true"
-                        ></span>
-                      )}
-            Cash On Delivery
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Cash On Delivery
             </button>
 
             <button
@@ -568,11 +531,11 @@ function Summary() {
               id="NextMove"
             >
               {loadIndicator2 && (
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          aria-hidden="true"
-                        ></span>
-                      )}
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
               Pay Now
             </button>
           </div>

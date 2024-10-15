@@ -160,7 +160,7 @@ function Order() {
     <section className="order">
       <div className="container-fluid mt-3">
         <div className="row align-items-center">
-          <div className="col d-flex align-items-center ms-3 mt-5">
+          <div className="col d-flex align-items-center orderMargin">
             <div
               onClick={() => navigate(-1)}
               data-toggle="tooltip"
@@ -288,7 +288,6 @@ function Order() {
               </button>
             </div>
 
-
             <div className="container-fluid">
               {data.length > 0 ? (
                 data.map((item, index) => (
@@ -301,15 +300,16 @@ function Order() {
                       <div className="container py-4">
                         <div className="row" id="on">
                           <div className="col-lg-10 col-md-6 col-12 p-3">
-                            <p className=" fw-medium">
+                            <p className="fw-medium">
                               Booking Id : {item.booking.bookingId ||
                                 ""}
                             </p>
-                            {/* {!showCanceledSection && (
-                            <p className="fw-normal">
-                              Delivery Date : {item?.booking?.deliveryDate?.substring(0, 10) || ""}
-                            </p>
-                          )} */}
+                            {/* <p className="fw-medium">
+                              Amount : 
+                              $ {item.transactionDetails?.txnAmount.toFixed(2) ||
+                                "0.00"}
+                              <br />
+                            </p> */}
                             <p>
                               {item.booking.type ||
                                 "Unknown Vehicle"}
@@ -366,7 +366,7 @@ function Order() {
                             ))}
                           </div>
                           <div className="col-lg-2 col-md-6 col-12 p-3">
-                            <p className="ps-5 pt-2">
+                            <p className="pt-2">
                               <FaDollarSign />{" "}
                               {item.transactionDetails?.txnAmount.toFixed(2) ||
                                 "0.00"}
