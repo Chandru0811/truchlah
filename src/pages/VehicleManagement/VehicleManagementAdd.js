@@ -1,4 +1,4 @@
-import React, { useState,useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -19,7 +19,12 @@ function VehicleManagementAdd() {
 
   const validationSchema = Yup.object({
     // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
-    type: Yup.string().matches(/^\S*$/, '*No spaces are allowed. You can use underscores instead.').required("*Vehicle Type is required"),
+    type: Yup.string()
+      .matches(
+        /^\S*$/,
+        "*No spaces are allowed. You can use underscores instead."
+      )
+      .required("*Vehicle Type is required"),
     imageUrl: Yup.string().required("*Image is required"),
     vehicleCapacity: Yup.mixed().required("*Vehicle Capacity is required"),
     vehicleStatus: Yup.string().required("*vehicle Status is required"),
@@ -98,11 +103,15 @@ function VehicleManagementAdd() {
           toast.error(response?.data?.message);
         }
       } catch (error) {
-        toast.error(
-          `Error fetching data: ${
-            error?.response?.data?.message || error.message
-          }`
-        );
+        if (error.response.status === 409) {
+          toast.error(error.response.data.detail);
+        } else {
+          toast.error(
+            `${
+              error?.response?.data?.message || error.message
+            }`
+          );
+        }
       } finally {
         setLoading(false);
       }
@@ -113,8 +122,8 @@ function VehicleManagementAdd() {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc(reader.result); 
-        setShowCropper(true); 
+        setImageSrc(reader.result);
+        setShowCropper(true);
       };
       reader.readAsDataURL(file);
     }
@@ -125,32 +134,38 @@ function VehicleManagementAdd() {
   }, []);
 
   const blobToFile = (blob, fileName) => {
-    return new File([blob], fileName, { type: blob.type, lastModified: Date.now() });
+    return new File([blob], fileName, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
   };
-  
+
   const handleCrop = useCallback(async () => {
     try {
       const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
-    //  console.log("filename",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
-      const croppedImageFile = blobToFile(croppedImageData, `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`);
-  
+      //  console.log("filename",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
+      const croppedImageFile = blobToFile(
+        croppedImageData,
+        `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`
+      );
+
       setCroppedImage(croppedImageFile);
       // console.log("object",croppedImageFile);
-  
+
       formik.setFieldValue("imageUrl", croppedImageFile);
       setShowCropper(false);
     } catch (e) {
       console.error(e);
     }
   }, [croppedAreaPixels, imageSrc]);
-  
 
   const handleCropCancel = () => {
     setShowCropper(false);
     setImageSrc(null);
-    formik.setFieldValue("imageUrl", ""); 
-    document.querySelector("input[type='file']").value = ""; 
+    formik.setFieldValue("imageUrl", "");
+    document.querySelector("input[type='file']").value = "";
   };
+
   return (
     <div className="container-fluid px-2 pb-2 minHeight m-0">
       <form onSubmit={formik.handleSubmit}>
@@ -240,7 +255,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="vehicleCapacity"
                     className={`form-control ${
@@ -308,51 +328,51 @@ function VehicleManagementAdd() {
                       {formik.errors.imageUrl}
                     </div>
                   )}
-                   {showCropper && (
-                  <div
-                    className="crop-container"
-                    style={{
-                      width: "300px",
-                      height: "200px",
-                      position: "relative",
-                    }}
-                  >
-                    <Cropper
-                      image={imageSrc}
-                      crop={crop}
-                      zoom={zoom}
-                      aspect={4 / 2} 
-                      onCropChange={setCrop}
-                      onZoomChange={setZoom}
-                      onCropComplete={onCropComplete}
-                      cropShape="box" 
-                      showGrid={false}
+                  {showCropper && (
+                    <div
+                      className="crop-container"
                       style={{
-                        containerStyle: { width: "100%", height: "100%" },
-                      }} 
-                    />
-                  </div>
-                )}
-
-                {showCropper && (
-                  <div className="d-flex justify-content-start mt-3 gap-2 ">
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-primary mt-3"
-                      onClick={handleCrop}
+                        width: "300px",
+                        height: "200px",
+                        position: "relative",
+                      }}
                     >
-                      Save
-                    </button>
+                      <Cropper
+                        image={imageSrc}
+                        crop={crop}
+                        zoom={zoom}
+                        aspect={4 / 2}
+                        onCropChange={setCrop}
+                        onZoomChange={setZoom}
+                        onCropComplete={onCropComplete}
+                        cropShape="box"
+                        showGrid={false}
+                        style={{
+                          containerStyle: { width: "100%", height: "100%" },
+                        }}
+                      />
+                    </div>
+                  )}
 
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-secondary mt-3"
-                      onClick={handleCropCancel}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                )}
+                  {showCropper && (
+                    <div className="d-flex justify-content-start mt-3 gap-2 ">
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-primary mt-3"
+                        onClick={handleCrop}
+                      >
+                        Save
+                      </button>
+
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-secondary mt-3"
+                        onClick={handleCropCancel}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
@@ -361,7 +381,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="baseFare"
                     className={`form-control ${
@@ -384,7 +409,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="perKm"
                     className={`form-control ${
@@ -407,7 +437,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="helper"
                     className={`form-control ${
@@ -430,7 +465,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="extraHelper"
                     className={`form-control ${
@@ -453,7 +493,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="tailGateCharge"
                     className={`form-control ${
@@ -478,7 +523,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="overtimeCharge"
                     className={`form-control ${
@@ -503,7 +553,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="nonLiftAccess"
                     className={`form-control ${
@@ -528,7 +583,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="erpCharge"
                     className={`form-control ${
@@ -551,7 +611,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="cbdCharge"
                     className={`form-control ${
@@ -574,7 +639,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="securedZoneCharge"
                     className={`form-control ${
@@ -599,7 +669,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="gst"
                     className={`form-control ${
@@ -620,7 +695,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="roundTrip"
                     className={`form-control ${
@@ -643,7 +723,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="wrappingCharge"
                     className={`form-control ${
@@ -668,7 +753,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="addStopCharge"
                     className={`form-control ${
@@ -693,7 +783,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="tenToTwelveCharge"
                     className={`form-control ${
@@ -718,7 +813,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="twelveToSevenCharge"
                     className={`form-control ${
@@ -743,7 +843,12 @@ function VehicleManagementAdd() {
                 </label>
                 <div className="mb-3">
                   <input
-                    onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="peakHourCharge"
                     className={`form-control ${

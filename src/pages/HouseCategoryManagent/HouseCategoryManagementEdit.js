@@ -45,7 +45,7 @@ function HouseCategoryManagementEdit() {
           toast.error(response?.data?.message);
         }
       } catch (error) {
-        toast.error("Error fetching data: ", error?.response?.data?.message);
+        toast.error( error?.response?.data?.message);
       } finally {
         setLoading(false);
       }

@@ -40,7 +40,15 @@ function HouseCategoryManagementAdd() {
           toast.error(response?.data?.message);
         }
       } catch (error) {
-        toast.error("Error fetching data: ", error?.response?.data?.message);
+        if (error.response.status === 400) {
+          toast.error(error.response.data.errorList[0].errorMessage);
+        } else {
+          toast.error(
+            `Error fetching data: ${
+              error?.response?.data?.message || error.message
+            }`
+          );
+        }
       } finally {
         setLoading(false);
       }

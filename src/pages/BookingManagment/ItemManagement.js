@@ -7,10 +7,12 @@ import DeleteModel from "../../Components/DeleteModel";
 import toast from "react-hot-toast";
 import { bookingApi } from "../../config/URL";
 import { Avatar, Badge, Space } from "antd";
+import WebSocketService from "../../config/WebSocketService";
 
 const ItemManagement = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
+  const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
@@ -29,7 +31,7 @@ const ItemManagement = () => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [count]);
 
   useEffect(() => {
     if (!loading) {
@@ -68,6 +70,19 @@ const ItemManagement = () => {
     }
   };
 
+  useEffect(() => {
+    const subscription = WebSocketService.subscribeToBookingUpdates(
+      (data) => {
+        if (data === true) {
+          setCount((prevCount) => prevCount + 1);
+        }
+      }
+    );
+
+    // return () => {
+    //   subscription.unsubscribe();
+    // };
+  }, []);
   const deleteFun = (bookingId) => {
     return bookingApi.delete(`booking/delete/${bookingId}`);
   };

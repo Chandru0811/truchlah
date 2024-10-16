@@ -49,7 +49,7 @@ import ScrollToTop from "../pages/admin/ScrollToTop";
 
 function AdminLayout({ handleLogout }) {
   return (
-    <BrowserRouter basename="/auth">
+    <BrowserRouter >
       <ScrollToTop />
       <div
         className="d-flex flex-column flex-lg-row  "

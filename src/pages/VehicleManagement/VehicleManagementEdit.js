@@ -100,7 +100,15 @@ function VehicleManagementEdit() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error.response.data.message);
+        if (error.response.status === 409) {
+          toast.error(error.response.data.detail);
+        } else {
+          toast.error(
+            `${
+              error?.response?.data?.message || error.message
+            }`
+          );
+        }
       } finally {
         setLoading(false);
       }
@@ -150,17 +158,10 @@ function VehicleManagementEdit() {
   const handleCrop = useCallback(async () => {
     try {
       const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
-  
-      // Convert Blob to File format
-      // console.log("object1",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
       const croppedImageFile = blobToFile(croppedImageData, `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`);
   
       setCroppedImage(croppedImageFile);
-      // console.log("file",croppedImageFile);
-      
-      formik.setFieldValue("imageUrl", croppedImageFile); // Store the file in Formik values
-      // console.log("formikfile",formik.values.imageUrl);
-      // console.log("CroppedImage",croppedImage);
+      formik.setFieldValue("imageUrl", croppedImageFile);
       setShowCropper(false);
     } catch (e) {
       console.error(e);
@@ -335,7 +336,7 @@ function VehicleManagementEdit() {
                       Vehicle Image<span className="text-danger">*</span>
                     </label>
                     <div className="mb-3">
-                      <input
+                      <input 
                         type="file"
                         name="imageUrl"
                         className={`form-control ${

@@ -7,20 +7,20 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
-
+  const { mailId,token } = location.state || {};
   const PasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
   const ConfirmPasswordVisibility = () => {
     setConfirmPassword(!confirmPassword);
   };
-
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .matches(
@@ -45,8 +45,13 @@ const ResetPassword = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
+      const formData = new FormData();
+      formData.append("token",token)
+      formData.append("email",mailId)
+      formData.append("password",values.password)
+      formData.append("confirmPassword",values.confirmPassword)
       try {
-        const response = await userApi.post(`user/forgotPassword`, values);
+        const response = await userApi.post(`user/forgotPasswordForEmailOTP`, formData);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/login");
@@ -59,7 +64,7 @@ const ResetPassword = () => {
     },
   });
   useEffect(() => {
-    formik.setFieldValue("email", "text@gmail.com");
+    formik.setFieldValue("email", mailId);
   }, []);
   return (
     <div className="container-fluid">
@@ -225,8 +230,8 @@ const ResetPassword = () => {
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn btn-primary py-2"
-                        style={{ width: "100%" }}
+                        className="btn btn-primary py-2 border-0"
+                        style={{ width: "100%",backgroundColor:"#333" }}
                         id="registerButton"
                       >
                         Reset Password

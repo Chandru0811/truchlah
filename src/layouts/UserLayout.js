@@ -43,6 +43,7 @@ import ScrollToTop from "../pages/ScroolToTop";
 import PaymentUnsuccessful from "../pages/common_pages/UnSuccessFul";
 import MobileNumVerify from "../pages/authorization/MobileNumVerify";
 import ResetPassword from "../pages/authorization/ResetPassword";
+import MailOTP from "../pages/authorization/MailOTP";
 
 function UserLayout({
   handleAdminLogin,
@@ -56,7 +57,7 @@ function UserLayout({
   });
 
   return (
-    <Router basename="/auth">
+    <Router >
       <Head isAuthenticate={isAuthenticate} handleLogout={handleLogout} />
       <ScrollToTop />
       <div style={{ marginTop: "66px" }}>
@@ -109,6 +110,7 @@ function UserLayout({
               />
             }
           />
+          <Route path="/mailotp" element={<MailOTP />} />
           <Route path="/termsandcondition" element={<TermsCondition />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/pricing" element={<Priceing />} />

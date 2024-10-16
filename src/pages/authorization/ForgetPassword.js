@@ -45,16 +45,21 @@ function ForgotPassword() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
+      // For test
+      // const mailId="premvp24@gmail.com"
+      // navigate("/mailotp",{state:{mailId}})
       try {
-        const response = await userApi.post(`user/forgotPassword`, values);
+        const response = await userApi.post(`user/sendEmailOTP?email=${values.email}`);
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/login");
+          const mailId=values.email
+          navigate("/mailotp",{state:{mailId}});
+          
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Error Submitting Data, ", error);
+        toast.error("Error Submitting Data, ", error.response.data.message);
       }
     },
   });
@@ -222,8 +227,8 @@ function ForgotPassword() {
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn btn-primary py-2"
-                        style={{ width: "100%" }}
+                        className="btn btn-primary py-2 border-0"
+                        style={{ width: "100%",backgroundColor:"#333" }}
                         id="registerButton"
                       >
                         Submit
