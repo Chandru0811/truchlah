@@ -110,7 +110,8 @@ function HouseShiftModel({
       onHide();
     }}
       backdrop={isModified ? "static" : true}
-      keyboard={isModified ? false : true} >
+      keyboard={isModified ? false : true}
+      dialogClassName="modal-dialog-centered" >
       <Modal.Header >
         <Modal.Title>
           {title !== "Pick Up Location" && title !== "Drop Location"

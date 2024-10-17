@@ -4,6 +4,12 @@
   box-sizing: border-box;
   font-family: "Afacad", system-ui !important;
 }
+/* ====truckLogo==== */
+@media (min-width: 230px) and (max-width: 991px) {
+  .truckLogo {
+    max-width: 60% !important;
+  }
+}
 
 /* common */
 .errmsg {
@@ -2059,6 +2065,8 @@ body {
   .login-btn {
     width: 100%;
     text-align: center;
+    font-size: 12px;
+    margin-top: 1rem;
   }
   .header-menu {
     text-align: center;

@@ -31,7 +31,7 @@ const ItemManagement = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [count]);
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -83,6 +83,9 @@ const ItemManagement = () => {
     //   subscription.unsubscribe();
     // };
   }, []);
+  useEffect(() => {
+    refreshData();
+  }, [count]);
   const deleteFun = (bookingId) => {
     return bookingApi.delete(`booking/delete/${bookingId}`);
   };

@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
-  // const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   // const [confirmPassword, setConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -45,6 +45,7 @@ function ForgotPassword() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
+      setLoading(true)
       // For test
       // const mailId="premvp24@gmail.com"
       // navigate("/mailotp",{state:{mailId}})
@@ -60,6 +61,8 @@ function ForgotPassword() {
         }
       } catch (error) {
         toast.error("Error Submitting Data, ", error.response.data.message);
+      }finally{
+        setLoading(false)
       }
     },
   });
@@ -230,7 +233,7 @@ function ForgotPassword() {
                         className="btn btn-primary py-2 border-0"
                         style={{ width: "100%",backgroundColor:"#333" }}
                         id="registerButton"
-                      >
+                      >{loading && <span className="spinner-border spinner-border-sm me-2"></span>}
                         Submit
                       </button>
                     </div>

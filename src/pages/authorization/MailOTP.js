@@ -8,6 +8,7 @@ import { userApi } from "../../config/URL";
 import handleLoginMethod from "./handleLoginMethod";
 
 function MailOTP({ handleLogin, handleAdminLogin }) {
+    const[loading,setLoading]=useState(false)
   const location = useLocation();
   const navigate = useNavigate();
   const { mailId } = location.state || {};
@@ -43,19 +44,22 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
     }
   };
 
-//   const Resendotp = async () => {
-//     try {
-//       const response = await userApi.post(`user/resendOTP?phone=${mobileNo}`);
-//       if (response.status === 200) {
-//         toast.success(response.data.message);
-//       }
-//     } catch (error) {
-//       toast.error(error.message || "An error occurred");
-//     }
-//   };
+  const ResendOtp = async () => {
+    try {
+        const response = await userApi.post(`user/sendEmailOTP?email=${mailId}`);
+        if (response.status === 200) {
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Error Submitting Data, ", error.response.data.message);
+      }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const otpValue = otp.join("");
     const formData = new FormData();
     formData.append("email", mailId);
@@ -76,6 +80,8 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
     } catch (error) {
       toast.error(error.response.data.message);
       // console.log("object",error)
+    }finally{
+        setLoading(false)
     }
   };
 
@@ -153,7 +159,7 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
                       <button
                         className="btn text-primary"
                         type="button"
-                        // onClick={Resendotp}
+                        onClick={ResendOtp}
                         style={{ textDecoration: "underline" }}
                       >
                         Resend OTP
@@ -164,7 +170,7 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
                       type="submit"
                       variant="primary"
                       className="my-4 border-0"
-                    >
+                    >{loading && <span className="spinner-border spinner-border-sm me-2"></span> }
                       Submit
                     </Button>
                   </div>

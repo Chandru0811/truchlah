@@ -34,7 +34,6 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
       // Close the Offcanvas if it's open
       handleCloseMain();
     }
-    // Navigate to the ride booking page
     navigate("/shift");
   };
 
@@ -74,7 +73,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
               <Container fluid>
                 <Navbar.Brand>
                   <Link to="https://trucklah.com/auth">
-                    <img src={logo} alt="Trucklah" className="img-fluid" />
+                    <img src={logo} alt="Trucklah" className="img-fluid truckLogo" />
                   </Link>
                 </Navbar.Brand>
                 <Navbar.Toggle
@@ -136,7 +135,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                             <div className="d-lg-flex justify-content-end">
                               <div className="me-2">
                                 {isAuthenticate && (
-                                  <User handleLogout={handleLogout} />
+                                  <User handleLogout={handleLogout} handleCloseMain={handleCloseMain}/>
                                 )}
                               </div>
                               <div className="ride ">

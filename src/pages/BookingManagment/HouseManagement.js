@@ -31,7 +31,7 @@ const HouseManagement = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [count]);
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -69,7 +69,9 @@ const HouseManagement = () => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    refreshData();
+  }, [count]);
   const deleteFun = (bookingId) => {
     return bookingApi.delete(`booking/delete/${bookingId}`);
   };
@@ -87,7 +89,7 @@ const HouseManagement = () => {
     //   subscription.unsubscribe();
     // };
   }, []);
-  
+
   return (
     <div>
       {loading ? (

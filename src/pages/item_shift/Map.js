@@ -549,7 +549,7 @@ function Map() {
                       placeholder="Pick Up Location"
                       name="pickupLocation"
                       {...formik.getFieldProps("pickupLocation")}
-                      className="form-control text-center form-control-lg rounded-5 select-location"
+                      className="form-control form-control-lg rounded-5 select-location"
                     />
                     {/* {showEditIcon.pickupLocation && (
                       <FaEdit

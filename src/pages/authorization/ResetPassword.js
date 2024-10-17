@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { mailId,token } = location.state || {};
@@ -45,6 +46,7 @@ const ResetPassword = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
+      setLoading(true)
       const formData = new FormData();
       formData.append("token",token)
       formData.append("email",mailId)
@@ -60,6 +62,8 @@ const ResetPassword = () => {
         }
       } catch (error) {
         toast.error("Error Submitting Data, ", error);
+      }finally{
+        setLoading(false)
       }
     },
   });
@@ -233,7 +237,7 @@ const ResetPassword = () => {
                         className="btn btn-primary py-2 border-0"
                         style={{ width: "100%",backgroundColor:"#333" }}
                         id="registerButton"
-                      >
+                      >{loading && <span className="spinner-border spinner-border-sm me-2"></span>}
                         Reset Password
                       </button>
                     </div>

@@ -17,7 +17,7 @@ import { TbLogout } from "react-icons/tb";
 import { toast } from "react-toastify";
 import { bookingApi, userApi } from "../../config/URL";
 
-function User({ handleLogout }) {
+function User({ handleLogout,handleCloseMain }) {
   const [, setShow] = useState(false);
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
@@ -29,16 +29,17 @@ function User({ handleLogout }) {
       Profile
     </Tooltip>
   );
-  const handleCloseMain = () => setShow(false);
+  const handleClose = () => setShow(false);
 
   const handleCloseProfile = () => {
     setShowProfile(false);
+    handleCloseMain();
     setShow(false);
   };
 
   const handleShowProfile = () => {
     setShowProfile(true);
-    handleCloseMain();
+    handleClose();
   };
 
   const onLogout = () => {
