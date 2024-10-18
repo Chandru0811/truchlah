@@ -311,13 +311,19 @@ function foot({ isAuthenticate }) {
             </button>
             <br></br>
             <br></br>
-
+            <a
+                href="https://apps.apple.com/sg/app/trucklah/id6503450933"
+                target="_blank"
+                style={{ textDecoration: "none", color: "black" }}
+                rel="noreferrer"
+              >
             <img
               src={app}
               alt="app"
               className="img-fluid p-0"
               style={{ border: "2px solid #acff3b", borderRadius: "8px" }}
             />
+            </a>
           </div>
         </div>
       </div>

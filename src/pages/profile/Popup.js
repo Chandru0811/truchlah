@@ -79,7 +79,7 @@ function Popup({ bookingId, onSuccess }) {
         Review
       </button>
 
-      <Modal show={show} onHide={handleClose} size="lg">
+      <Modal show={show} onHide={handleClose} size="lg" dialogClassName="modal-dialog-centered">
         <Modal.Header closeButton>
           <Modal.Title>Submit Review</Modal.Title>
         </Modal.Header>

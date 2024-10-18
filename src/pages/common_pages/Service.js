@@ -305,7 +305,7 @@ function Service() {
 
   return (
     <div
-      className="container-fluid"
+      className="container-fluid pt-sm-4 pt-md-1 pt-lg-1"
       id="ServicePage"
       style={{ backgroundColor: "#faf5f6" }}
     >

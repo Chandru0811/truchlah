@@ -627,8 +627,8 @@ function RideDetailsView() {
                     </p>
                   </div>
                 </div>
-                <div className="d-flex justify-content-center my-2 ">
-                  <div className="card w-50">
+                <div className=" my-2 ">
+                  <div className="card  ">
                     <div className="card-body py-0">
                       <div className="row">
                         <div className="col-md-6 col-12 ps-1">
@@ -702,8 +702,8 @@ function RideDetailsView() {
                     </p>
                   </div>
                 </div>
-                <div className="d-flex justify-content-center my-2 ">
-                  <div className="card w-50">
+                <div className=" my-2 ">
+                  <div className="card">
                     <div className="card-body py-0">
                       <div className="row">
                         <div className="col-md-6 col-12 ps-1">
@@ -800,8 +800,8 @@ function RideDetailsView() {
                     </p>
                   </div>
                 </div>
-                <div className="d-flex justify-content-center my-2 ">
-                  <div className="card w-50">
+                <div className=" my-2 ">
+                  <div className="card">
                     <div className="card-body py-0">
                       <div className="row">
                         <div className="col-md-6 col-12 ps-1">
@@ -868,8 +868,8 @@ function RideDetailsView() {
                       </p>
                     </div>
                   </div>
-                  <div className="d-flex justify-content-center my-2 ">
-                    <div className="card w-50">
+                  <div className=" my-2 ">
+                    <div className="card">
                       <div className="card-body py-0">
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
@@ -984,7 +984,7 @@ function RideDetailsView() {
               </div>
             )}
 
-          <Modal show={show} onHide={handleClose} size="lg">
+          <Modal show={show} onHide={handleClose} size="lg" dialogClassName="modal-dialog-centered">
             <Modal.Header closeButton>
               <Modal.Title>Want to cancel your order?</Modal.Title>
             </Modal.Header>
