@@ -5,12 +5,16 @@
   font-family: "Afacad", system-ui !important;
 }
 /* ====truckLogo==== */
-@media (min-width: 230px) and (max-width: 991px) {
+@media (min-width: 341px) and (max-width: 991px) {
   .truckLogo {
     max-width: 60% !important;
   }
 }
-
+@media (max-width:340px){
+  .truckLogo {
+    max-width: 9rem !important;
+  }
+}
 /* common */
 .errmsg {
   color: red;
@@ -1429,6 +1433,11 @@ body {
 }
 
 /* Trucklah Vechicle  */
+@media (max-width: 576px) {
+  #ServicePage {
+      padding-top: 1.5rem !important;
+  }
+}
 
 #AvaHeading {
   font-family: "Raleway";

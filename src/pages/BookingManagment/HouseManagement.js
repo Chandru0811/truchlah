@@ -136,7 +136,7 @@ const HouseManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {datas &&
+              {
                 datas?.map((data, index) => (
                   <tr>
                     <td className="text-center">{index + 1}</td>
