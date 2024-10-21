@@ -218,7 +218,10 @@ function RideDetailsView() {
   );
 
   return (
-    <section className="summary container-fluid" style={{background:"#faf5f6"}}>
+    <section
+      className="summary container-fluid"
+      style={{ background: "#faf5f6" }}
+    >
       {isLoading ? (
         <div className="darksoul-layout">
           <div className="darksoul-grid">
@@ -628,13 +631,13 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="lineh" style={{ color: "#00316B" }}>
+                              <p className="" style={{ color: "#00316B" }}>
                                 <b>Transaction Amount</b>
                               </p>
                             </div>
                           </div>
                           <div className="col-md-6 col-12 ps-1" id="drop">
-                            <p className="line" style={{ color: "#494949" }}>
+                            <p className="mb-0" style={{ color: "#494949" }}>
                               $ {data?.transactionDetails?.txnAmount || "0.0"}
                             </p>
                           </div>
@@ -736,7 +739,7 @@ function RideDetailsView() {
                             </div>
                           </div>
                           <div
-                            className="col-md-6 col-12 ps-1 line"
+                            className="col-md-6 col-12 ps-1 "
                             id="drop"
                             style={{ borderBottom: "1px solid #e4e2e2" }}
                           >
@@ -759,7 +762,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="lineh" style={{ color: "#00316B" }}>
+                              <p className="line" style={{ color: "#00316B" }}>
                                 <b>Comments</b>
                               </p>
                             </div>
@@ -789,89 +792,18 @@ function RideDetailsView() {
               data?.bookingStatus?.ratingByUser) && (
               <>
                 <div className="row">
-                  <div className="col-lg-3"></div>
-                  <div className="col-lg-9">
+                  <div className="col-lg-3 col-md-3 col-12"></div>
+                  <div className="col-lg-6 col-md-6 col-12">
                     <p className="mt-5 ps-2">
                       <b>Review By User:</b>
                     </p>
-                  </div>
-                </div>
-                <div className=" my-2 ">
-                  <div className="card ms-2">
-                    <div className="card-body py-0">
-                      <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div>
-                            <p className="mt-2" style={{ color: "#00316B" }}>
-                              <b>Rating By User</b>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          className="col-md-6 col-12 ps-1"
-                          id="drop"
-                          style={{ borderBottom: "1px solid #e4e2e2" }}
-                        >
-                          <p className="mt-2" style={{ color: "#494949" }}>
-                            {data?.bookingStatus?.ratingByUser !== undefined
-                              ? Array.from({ length: 5 }).map((_, index) =>
-                                  index < data.bookingStatus.ratingByUser ? (
-                                    <GoStarFill
-                                      key={index}
-                                      className="text-warning"
-                                    />
-                                  ) : (
-                                    <FaRegStar
-                                      key={index}
-                                      className="text-warning"
-                                    />
-                                  )
-                                )
-                              : "--"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div style={{ borderTop: "1px solid #e4e2e2" }}>
-                            <p className="mt-2" style={{ color: "#00316B" }}>
-                              <b>Comments</b>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-md-12 col-12 ps-1">
-                          <p style={{ color: "#4949491" }}>
-                            {data?.bookingStatus?.reviewByUser
-                              ? data.bookingStatus.reviewByUser
-                              : " "}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {data.bookingStatus?.reviewByDriver &&
-              data.bookingStatus?.ratingByDriver && (
-                <>
-                  <div className="row">
-                    <div className="col-lg-3"></div>
-                    <div className="col-lg-9">
-                      <p className="mt-5 ps-2">
-                        <b>Review By Driver:</b>
-                      </p>
-                    </div>
-                  </div>
-                  <div className=" my-2 ">
                     <div className="card ms-2">
                       <div className="card-body py-0">
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
                               <p className="mt-2" style={{ color: "#00316B" }}>
-                                <b>Rating By Driver</b>
+                                <b>Rating By User</b>
                               </p>
                             </div>
                           </div>
@@ -881,10 +813,9 @@ function RideDetailsView() {
                             style={{ borderBottom: "1px solid #e4e2e2" }}
                           >
                             <p className="mt-2" style={{ color: "#494949" }}>
-                              {data?.bookingStatus?.ratingByDriver !== undefined
+                              {data?.bookingStatus?.ratingByUser !== undefined
                                 ? Array.from({ length: 5 }).map((_, index) =>
-                                    index <
-                                    data.bookingStatus.ratingByDriver ? (
+                                    index < data.bookingStatus.ratingByUser ? (
                                       <GoStarFill
                                         key={index}
                                         className="text-warning"
@@ -910,10 +841,86 @@ function RideDetailsView() {
                           </div>
                           <div className="col-md-12 col-12 ps-1">
                             <p style={{ color: "#4949491" }}>
-                              {data?.bookingStatus?.reviewByDriver
-                                ? data.bookingStatus.reviewByDriver
+                              {data?.bookingStatus?.reviewByUser
+                                ? data.bookingStatus.reviewByUser
                                 : " "}
                             </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-3 col-md-3 col-12"></div>
+                </div>
+              </>
+            )}
+
+            {data.bookingStatus?.reviewByDriver &&
+              data.bookingStatus?.ratingByDriver && (
+                <>
+                  <div className="row">
+                    <div className="col-lg-3 col-md-3 col-12"></div>
+                    <div className="col-lg-6 col-md-6 col-12">
+                      <p className="mt-5 ps-2">
+                        <b>Review By Driver:</b>
+                      </p>
+                      <div className="card ms-2">
+                        <div className="card-body py-0">
+                          <div className="row">
+                            <div className="col-md-6 col-12 ps-1">
+                              <div>
+                                <p
+                                  className="mt-2"
+                                  style={{ color: "#00316B" }}
+                                >
+                                  <b>Rating By Driver</b>
+                                </p>
+                              </div>
+                            </div>
+                            <div
+                              className="col-md-6 col-12 ps-1"
+                              id="drop"
+                              style={{ borderBottom: "1px solid #e4e2e2" }}
+                            >
+                              <p className="mt-2" style={{ color: "#494949" }}>
+                                {data?.bookingStatus?.ratingByDriver !==
+                                undefined
+                                  ? Array.from({ length: 5 }).map((_, index) =>
+                                      index <
+                                      data.bookingStatus.ratingByDriver ? (
+                                        <GoStarFill
+                                          key={index}
+                                          className="text-warning"
+                                        />
+                                      ) : (
+                                        <FaRegStar
+                                          key={index}
+                                          className="text-warning"
+                                        />
+                                      )
+                                    )
+                                  : "--"}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="row">
+                            <div className="col-md-6 col-12 ps-1">
+                              <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                                <p
+                                  className="mt-2"
+                                  style={{ color: "#00316B" }}
+                                >
+                                  <b>Comments</b>
+                                </p>
+                              </div>
+                            </div>
+                            <div className="col-md-12 col-12 ps-1">
+                              <p style={{ color: "#4949491" }}>
+                                {data?.bookingStatus?.reviewByDriver
+                                  ? data.bookingStatus.reviewByDriver
+                                  : " "}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>

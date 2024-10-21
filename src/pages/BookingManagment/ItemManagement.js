@@ -43,14 +43,17 @@ const ItemManagement = () => {
   }, [loading]);
 
   const initializeDataTable = () => {
-    if (!$.fn.DataTable.isDataTable(tableRef.current) && datas.length > 0) {
-      $(tableRef.current).DataTable();
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
     }
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().clear().destroy();
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
     }
   };
 
@@ -83,9 +86,11 @@ const ItemManagement = () => {
     //   subscription.unsubscribe();
     // };
   }, []);
+  
   useEffect(() => {
     refreshData();
   }, [count]);
+
   const deleteFun = (bookingId) => {
     return bookingApi.delete(`booking/delete/${bookingId}`);
   };
@@ -135,8 +140,7 @@ const ItemManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {
-                datas?.map((data, index) => (
+              {(datas? datas:[]).map((data, index) => (
                   <tr>
                     <td className="text-center">{index + 1}</td>
                     <td className="text-center">{data.bookingId || ""}</td>

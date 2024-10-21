@@ -44,7 +44,7 @@ import PaymentUnsuccessful from "../pages/common_pages/UnSuccessFul";
 import MobileNumVerify from "../pages/authorization/MobileNumVerify";
 import ResetPassword from "../pages/authorization/ResetPassword";
 import MailOTP from "../pages/authorization/MailOTP";
-import BookingSSE from "../pages/BookingSSE";
+// import BookingSSE from "../pages/BookingSSE";
 
 function UserLayout({
   handleAdminLogin,
@@ -102,7 +102,7 @@ function UserLayout({
           <Route path="/ShiftPack" element={<ShiftPack />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/forgetpassword" element={<ForgotPassword />} />
-          <Route path="/bookingsse" element={<BookingSSE />} />
+          {/* <Route path="/bookingsse" element={<BookingSSE />} /> */}
           <Route
             path="/otp"
             element={

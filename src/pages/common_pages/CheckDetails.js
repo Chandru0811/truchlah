@@ -207,7 +207,7 @@ function Summary() {
             </div>
           </div>
           <div className="row">
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center px-1">
               <div className="card w-md-50">
                 <div className="card-body">
                   <div className="row">
