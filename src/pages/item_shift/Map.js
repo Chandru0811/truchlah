@@ -504,7 +504,7 @@ function Map() {
                 {distance && duration && (
                   <div className="distance-time d-flex justify-content-center align-items-center">
                     <p className="me-5">
-                      Distance : <b>{distance}</b>
+                      Distance : <b>{distance} KM</b>
                     </p>
                     {/* <p>
                       Duration : <b>{duration}</b>

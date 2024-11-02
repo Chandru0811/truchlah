@@ -199,18 +199,14 @@ function Summary() {
           </center>
 
           <div className="row">
-            <div className="col-lg-3"></div>
-            <div className="col-lg-9">
-              <p className="mt-5 ps-2">
-                <b>Shifting Informations :</b>
-              </p>
-            </div>
-          </div>
-          <div className="row">
-            <div className="d-flex justify-content-center px-1">
-              <div className="card w-md-50">
-                <div className="card-body">
-                  <div className="row">
+              <div className="col-lg-3 col-md-3 col-12"></div>
+              <div className="col-lg-6 col-md-6 col-12">
+                <p className="mt-5 ps-2">
+                  <b>Shifting Informations :</b>
+                </p>
+                <div className="card mx-1">
+                  <div className="card-body">
+                    <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <div>
                         <p style={{ color: "#00316B" }}>
@@ -382,78 +378,98 @@ function Summary() {
                       </div>
                     </div>
                   </>
-
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Manpower</b>
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Status</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p
+                          className="line"
+                          style={{
+                            color:
+                              data.bookingStatus?.status === "CANCELLED"
+                                ? "red" // Red color for CANCELLED
+                                : data.bookingStatus?.status === "COMPLETED"
+                                ? "green" // Green color for COMPLETED
+                                : "orange", // Orange color for other statuses
+                          }}
+                        >
+                          {data.bookingStatus?.status || "--"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.helper === "Y" ? "Yes" : "No"}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Manpower</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data.booking?.helper === "Y" ? "Yes" : "No"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Extra ManPower</b>
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Extra ManPower</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data.booking?.extraHelper === "Y" ? "Yes" : "No"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.extraHelper === "Y" ? "Yes" : "No"}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Extra ManPower Quantity</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data.booking?.quantity || 0}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Extra ManPower Quantity</b>
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Trolly Required</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data.booking?.trollyRequired === "Y" ? "Yes" : "No"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.quantity || 0}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Round Trip</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data.booking?.roundTrip === "Y" ? "Yes" : "No"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Trolly Required</b>
-                      </p>
-                    </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.trollyRequired === "Y" ? "Yes" : "No"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Round Trip</b>
-                      </p>
-                    </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.roundTrip === "Y" ? "Yes" : "No"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* <div className="row">
+                    {/* <div className="row">
                     <div className="col-md-6 col-12 ps-1">
                       <p className="line" style={{ color: "#00316B" }}>
-                        <b>No Of Pieces</b>
+                        <b>No of Pieces</b>
                       </p>
                     </div>
                     <div className="col-md-6 col-12 ps-1" id="drop">
@@ -463,53 +479,55 @@ function Summary() {
                       </p>
                     </div>
                   </div> */}
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Estimate KM</b>
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Estimate km</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data.booking?.estKm || 0}
+                        </p>
+                      </div>
                     </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking?.estKm}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Total amount</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          <b>$</b>
+                          {data.transactionDetails
+                            ? `${data.transactionDetails.txnAmount.toFixed(2)}`
+                            : "0.00"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Total amount</b>
-                      </p>
-                    </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        <b>$</b>
-                        {data.transactionDetails
-                          ? ` ${data.transactionDetails.txnAmount.toFixed(2)} `
-                          : "0.00"}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 col-12 ps-1">
-                      <p className="lineh" style={{ color: "#00316B" }}>
-                        <b>Message To Driver</b>
-                      </p>
-                    </div>
-                    <div className="col-md-6 col-12 ps-1" id="drop">
-                      {" "}
-                      <p className="line" style={{ color: "#494949" }}>
-                        {data.booking ? ` ${data.booking.msgToDriver}` : " "}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12 ps-1">
+                        <p className="lineh" style={{ color: "#00316B" }}>
+                          <b>Message To Driver</b>
+                        </p>
+                      </div>
+                      <div className="col-md-6 col-12 ps-1" id="drop">
+                        {" "}
+                        <p className="line" style={{ color: "#494949" }}>
+                          {data.booking
+                            ? ` ${data.booking.msgToDriver || " "}`
+                            : " "}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="col-lg-3 col-md-3 col-12"></div>
             </div>
-          </div>
           <div className="text-center py-5 cash-pay">
             <button
               onClick={confirmCashPayment}

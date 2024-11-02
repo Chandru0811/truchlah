@@ -52,7 +52,8 @@ function HouseShift() {
   const userId = sessionStorage.getItem("userId");
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
-
+  const [userLocation, setUserLocation] = useState(null);
+  
   const navigate = useNavigate();
   //   const location = useLocation();
   // const params = new URLSearchParams(location.search);
@@ -234,6 +235,7 @@ function HouseShift() {
         (position) => {
           const { latitude, longitude } = position.coords;
           setCenter({ lat: latitude, lng: longitude });
+          setUserLocation({ lat: latitude, lng: longitude });
         },
         (error) => {
           console.error("Error fetching location: ", error);
@@ -334,8 +336,12 @@ function HouseShift() {
                   onLoad={onOriginLoad}
                   onPlaceChanged={() => onPlaceChanged("origin")}
                   options={{
-                    types: ["(regions)"],
-                    componentRestrictions: { country: ["sg", "in"] },
+                    bounds: new window.google.maps.LatLngBounds(
+                      new window.google.maps.LatLng(userLocation?.lat - 0.1, userLocation?.lng - 0.1),
+                      new window.google.maps.LatLng(userLocation?.lat + 0.1, userLocation?.lng + 0.1)
+                    ),
+                    types: ["geocode"], // Use geocode for all locations
+                    componentRestrictions: { country: ["sg", "in"] }, // Restrict to Singapore and India
                   }}
                 >
                   <FloatingLabel
@@ -374,8 +380,12 @@ function HouseShift() {
                   onLoad={onDestinationLoad}
                   onPlaceChanged={() => onPlaceChanged("destination")}
                   options={{
-                    types: ["(regions)"],
-                    componentRestrictions: { country: ["sg", "in"] },
+                    bounds: new window.google.maps.LatLngBounds(
+                      new window.google.maps.LatLng(userLocation?.lat - 0.1, userLocation?.lng - 0.1),
+                      new window.google.maps.LatLng(userLocation?.lat + 0.1, userLocation?.lng + 0.1)
+                    ),
+                    types: ["geocode"], // Use geocode for all locations
+                    componentRestrictions: { country: ["sg", "in"] }, // Restrict to Singapore and India
                   }}
                 >
                   <FloatingLabel
