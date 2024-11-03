@@ -174,7 +174,7 @@ function BannerAndOfferAdd() {
                   <input
                     type="file"
                     name="attachment"
-                    accept="image/jpeg, image/png"
+                    accept="image/*"
                     className={`form-control ${
                       formik.touched.attachment && formik.errors.attachment
                         ? "is-invalid"
@@ -209,15 +209,15 @@ function BannerAndOfferAdd() {
                       image={imageSrc}
                       crop={crop}
                       zoom={zoom}
-                      aspect={4 / 2} 
+                      aspect={900 / 400}
                       onCropChange={setCrop}
                       onZoomChange={setZoom}
                       onCropComplete={onCropComplete}
-                      cropShape="box" 
+                      cropShape="box"
                       showGrid={false}
                       style={{
                         containerStyle: { width: "100%", height: "100%" },
-                      }} 
+                      }}
                     />
                   </div>
                 )}
