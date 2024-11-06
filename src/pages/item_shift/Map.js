@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback,forwardRef, useImperativeHandle, } from "react";
 import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
@@ -25,7 +25,8 @@ const validationSchema = Yup.object().shape({
   dropLocation: Yup.string().required("!Drop Location is required"),
 });
 
-function Map() {
+const Map = forwardRef(
+  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
   const shiftType = sessionStorage.getItem("shiftType");
   console.log("Type:", shiftType);
 
@@ -143,17 +144,16 @@ function Map() {
         toast.success("Location has been successfully added!");
         const bookingId = response.data.responseBody.booking.bookingId;
         const locations = encodeURIComponent(JSON.stringify(locationDetail));
-        navigate(
-          `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-        );
+        setFormData({bookingId:bookingId,location:locations,distance:distance})
+        handleNext()
+        // navigate(
+        //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+        // );
       } else {
         toast.error(response.data.message);
         // toast.warning("Pleas Enter the Locations");
       }
     } catch (error) {
-      // toast.error(
-      //   error.message || "An error occurred while submitting the form."
-      // );
       toast.warning("Please Enter the Locations");
     } finally {
       setLoadIndicator(false);
@@ -423,8 +423,6 @@ function Map() {
           const lat = position?.coords?.latitude;
           const lng = position?.coords?.longitude;
           setUserLocation({ lat, lng });
-          console.log("lat", lat)
-          console.log("lng", lng)
         },
         (error) => {
           console.error("Error getting user location:", error);
@@ -435,6 +433,10 @@ function Map() {
       console.error("Geolocation is not supported by this browser.");
     }
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    map: formik.handleSubmit,
+  }));
 
   if (!isLoaded) {
     return (
@@ -696,7 +698,7 @@ function Map() {
               <div className="row d-flex flex-column align-items-center justify-content-center">
                 <div className="col-md-4 col-12"></div>
                 <div className="col-md-5 col-12">
-                  <div className="text-center mt-4">
+                  {/* <div className="text-center mt-4">
                     <button
                       type="button"
                       onClick={SubmitLocation}
@@ -712,7 +714,7 @@ function Map() {
                       )}
                       Next
                     </button>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="col-md-3 col-12"></div>
               </div>
@@ -734,6 +736,6 @@ function Map() {
       />
     </div>
   );
-}
+})
 
 export default Map;

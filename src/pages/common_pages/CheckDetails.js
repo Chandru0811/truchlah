@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback,forwardRef, useImperativeHandle, } from "react";
 // import Ace from "../../asset/Rectangle 42.png";
 import "../../styles/custom.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -11,13 +11,14 @@ import Lorry14 from "../../asset/14FT_LORRY.png";
 import Lorry24 from "../../asset/24FT_LORRY.png";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-function Summary() {
+const Summary = forwardRef(
+  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
   const [data, setData] = useState({});
   const [loadIndicator1, setLoadIndicator1] = useState(false);
   const [loadIndicator2, setLoadIndicator2] = useState(false);
 
-  const { bookingId } = useParams();
-  // console.log("bookingId", bookingId);
+  const { bookingId } = formData;
+  console.log("bookingId", bookingId);
   const [vechicle, setVechicle] = useState([]);
   // console.log("Api Data", data.booking);
   const [isLoading, setIsLoading] = useState(true);
@@ -561,6 +562,6 @@ function Summary() {
       )}
     </section>
   );
-}
+})
 
 export default Summary;

@@ -44,6 +44,9 @@ import PaymentUnsuccessful from "../pages/common_pages/UnSuccessFul";
 import MobileNumVerify from "../pages/authorization/MobileNumVerify";
 import ResetPassword from "../pages/authorization/ResetPassword";
 import MailOTP from "../pages/authorization/MailOTP";
+// import SseComponent from "../pages/SseComponent";
+import ItemShift from "../pages/item_shift/ItemShift";
+import HouseShiftSteps from "../pages/house_shift/HouseShiftSteps";
 // import BookingSSE from "../pages/BookingSSE";
 
 function UserLayout({
@@ -103,6 +106,7 @@ function UserLayout({
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/forgetpassword" element={<ForgotPassword />} />
           {/* <Route path="/bookingsse" element={<BookingSSE />} /> */}
+          {/* <Route path="/sse" element={<SseComponent />} /> */}
           <Route
             path="/otp"
             element={
@@ -121,14 +125,15 @@ function UserLayout({
           {isAuthenticate && (
             <>
               <Route path="/map" element={<Map />} />
-              {/* <Route path="/mapcopy" element={<MapCopy />} /> */}
+              <Route path="/Itemshift" element={<ItemShift />} />
+              <Route path="/houseshift" element={<HouseShiftSteps />} />
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/notification" element={<Notification />} />
               <Route path="/support" element={<Support />} />
               <Route path="/referearn" element={<Refer />} />
               <Route path="/invoice" element={<Invoice />} />
               <Route path="/shift" element={<Shift />} />
-              <Route path="/houseshift" element={<HouseShift />} />
+              {/* <Route path="/houseshift" element={<HouseShift />} /> */}
               <Route path="/confirmlocation" element={<ConfirmLocation />} />
               <Route path="/service" element={<Service />} />
               <Route path="/paymentstatus" element={<SuccessFul />} />

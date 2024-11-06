@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useCallback,forwardRef, useImperativeHandle, } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "../../styles/custom.css";
@@ -19,22 +19,24 @@ import Unknown from "../../asset/Unknown Vehicle.png";
 
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-function Service() {
+const Service=forwardRef(
+  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
   // const {location , bookingId} = useParams();
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const distanceValue = params.get("distance");
+  const distanceValue = formData.distance
   console.log("est km", distanceValue);
-  const locationValueString = params.get("location");
+  // const locationValueString = params.get("location");
+  const locationValueString = formData.location;
   const estKm = params.get("estKm");
   const type = params.get("type");
 
   console.log("locationValueString:", locationValueString);
   console.log("EST KM:", estKm);
 
-  const bookingId = params.get("bookingId");
-  console.log("bookingId", bookingId);
+  // const bookingId = params.get("bookingId");
+  // console.log("bookingId", bookingId);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   let locationValue = [];
@@ -163,7 +165,7 @@ function Service() {
           userId: userId,
           type: shiftType==="HOUSE" ? data.booking.bookingType:shiftType,
           locationDetail: locationValue,
-          bookingId: bookingId,
+          bookingId: formData.bookingId,
           estKm: parseFloat(distanceValue) || estKm,
           scheduledDate: `${values.date}T${values.time}:00.000Z`,
           // deliveryDate: deliveryDate,
@@ -184,7 +186,8 @@ function Service() {
           console.log("Response:", response);
           if (response.status === 200) {
             toast.success("Vehicle selected successfully!");
-            navigate(`/summary/${bookingId}`);
+            handleNext()
+            // navigate(`/summary/${bookingId}`);
           } else {
             toast.error(response.data.message);
           }
@@ -203,7 +206,7 @@ function Service() {
     const fetchData = async () => {
       try {
         const response = await bookingApi.get(
-          `booking/getBookingById/${bookingId}`
+          `booking/getBookingById/${formData.bookingId}`
         );
         if (response.status === 200) {
           setData(response.data.responseBody);
@@ -302,6 +305,10 @@ function Service() {
     formik.setFieldValue("date", formattedDate);
     // formik.setFieldValue("time", formattedTime);
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    service: formik.handleSubmit,
+  }));
 
   return (
     <div
@@ -733,7 +740,7 @@ function Service() {
             </div>
           </div>
           <div className="text-center py-5">
-            <button
+            {/* <button
               className="btn btn-primary px-5 py-2"
               type="submit"
               id="NextMove"
@@ -745,12 +752,12 @@ function Service() {
                 ></span>
               )}
               Next
-            </button>
+            </button> */}
           </div>
         </div>
       </form>
     </div>
   );
-}
+})
 
 export default Service;

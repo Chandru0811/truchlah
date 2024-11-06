@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,forwardRef,useImperativeHandle } from "react";
 import "../../styles/custom.css";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
@@ -29,7 +29,8 @@ const validationSchema = Yup.object().shape({
   type:Yup.string().required("!Catagories is required"),
 });
 
-function HouseShift() {
+const HouseShift =forwardRef(
+  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
   const shiftType = sessionStorage.getItem("shiftType");
   // console.log("Type:", shiftType);
 
@@ -70,7 +71,6 @@ function HouseShift() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-
       const payload = {
         userId: userId,
         type: values.type,
@@ -86,9 +86,11 @@ function HouseShift() {
           toast.success(response.data.message);
           const bookingId = response.data.responseBody.booking.bookingId;
           const locations = encodeURIComponent(JSON.stringify(locationDetail));
-          navigate(
-            `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-          );
+          setFormData({bookingId:bookingId,location:locations,distance:distance})
+          handleNext()
+          // navigate(
+          //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
+          // );
         } else {
           toast.error(response.data.message);
         }
@@ -250,6 +252,10 @@ function HouseShift() {
       console.error("Geolocation not supported");
     }
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    map: formik.handleSubmit,
+  }));
 
   if (!isLoaded) {
     return (
@@ -442,13 +448,13 @@ function HouseShift() {
                   </div>
                 </div>
                 <div className="text-center mt-2">
-                  <button
+                  {/* <button
                     type="submit"
                     className="btn btn-primary px-5 py-2"
                     id="NextMove"
                   >
                     Next
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -467,6 +473,6 @@ function HouseShift() {
       />
     </div>
   );
-}
+})
 
 export default HouseShift;

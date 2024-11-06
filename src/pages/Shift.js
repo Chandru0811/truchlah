@@ -26,7 +26,7 @@ function Shift() {
             >
               <Link
                 to={{
-                  pathname: "/map",
+                  pathname: "/itemshift",
                   // state: { logType: logType("ITEM") },
                 }}
                 style={{ textDecoration: 'none', color: 'inherit' }}
