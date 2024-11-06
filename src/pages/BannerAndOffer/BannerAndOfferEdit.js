@@ -218,7 +218,7 @@ function BannerAndOfferEdit() {
                       <input
                         type="file"
                         name="attachment"
-                        accept="image/jpeg, image/png"
+                        accept="image/*"
                         className={`form-control ${
                           formik.touched.attachment && formik.errors.attachment
                             ? "is-invalid"
@@ -233,16 +233,21 @@ function BannerAndOfferEdit() {
                           </div>
                         )}
                     </div>
-                    {(data.attachment || formik.values?.attachment) ? (
+                    {data.attachment || formik.values?.attachment ? (
                       <img
-                        src={formik.values?.attachment? URL.createObjectURL(formik.values?.attachment):data.attachment}
+                        src={
+                          formik.values?.attachment
+                            ? URL.createObjectURL(formik.values?.attachment)
+                            : data.attachment
+                        }
                         alt="Attachment"
                         className="img-fluid"
                         style={{ maxWidth: "40%", height: "auto" }}
                       />
                     ) : (
                       <p className="text-muted text-sm">No attachment</p>
-                    )} {showCropper && (
+                    )}{" "}
+                    {showCropper && (
                       <div
                         className="crop-container"
                         style={{
@@ -255,19 +260,18 @@ function BannerAndOfferEdit() {
                           image={imageSrc}
                           crop={crop}
                           zoom={zoom}
-                          aspect={4 / 2} 
+                          aspect={900 / 400}
                           onCropChange={setCrop}
                           onZoomChange={setZoom}
                           onCropComplete={onCropComplete}
-                          cropShape="box" 
+                          cropShape="box"
                           showGrid={false}
                           style={{
                             containerStyle: { width: "100%", height: "100%" },
-                          }} 
+                          }}
                         />
                       </div>
                     )}
-    
                     {showCropper && (
                       <div className="d-flex justify-content-start mt-3 gap-2 ">
                         <button
@@ -277,7 +281,7 @@ function BannerAndOfferEdit() {
                         >
                           Save
                         </button>
-    
+
                         <button
                           type="button"
                           className="btn btn-sm btn-secondary mt-3"
