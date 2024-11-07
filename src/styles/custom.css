@@ -4,17 +4,20 @@
   box-sizing: border-box;
   font-family: "Afacad", system-ui !important;
 }
+
 /* ====truckLogo==== */
 @media (min-width: 341px) and (max-width: 991px) {
   .truckLogo {
     max-width: 60% !important;
   }
 }
-@media (max-width:340px){
+
+@media (max-width:340px) {
   .truckLogo {
     max-width: 9rem !important;
   }
 }
+
 /* common */
 .errmsg {
   color: red;
@@ -247,6 +250,7 @@
 .summary .lineh {
   border-top: 1px solid #e4e2e2;
 }
+
 .summary .line {
   border-top: 1px solid #e4e2e2;
 }
@@ -255,16 +259,18 @@
   .summary .line {
     border-top: 0px solid #e4e2e2;
   }
-  .lineh{
+
+  .lineh {
     margin-bottom: 0 !important;
   }
+
   .line {
     margin-bottom: 1rem !important;
     margin-top: 0rem !important;
   }
 }
 
-.summary .row > * {
+.summary .row>* {
   padding-left: 0;
   padding-right: 0;
 }
@@ -373,12 +379,10 @@
 }
 
 .rewards .coupon {
-  background: linear-gradient(
-    180deg,
-    #9189c0 0%,
-    rgba(156, 84, 170, 0.447917) 99.99%,
-    rgba(165, 41, 152, 0) 100%
-  );
+  background: linear-gradient(180deg,
+      #9189c0 0%,
+      rgba(156, 84, 170, 0.447917) 99.99%,
+      rgba(165, 41, 152, 0) 100%);
   border: 0.1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
   border-radius: 2px;
@@ -438,12 +442,10 @@
 /* Footer  */
 
 footer {
-  background: linear-gradient(
-    89.87deg,
-    rgba(116, 0, 255, 0.211156) 0.11%,
-    rgba(97, 0, 255, 0.211156) 49.6%,
-    rgba(0, 41, 255, 0.211156) 99.89%
-  );
+  background: linear-gradient(89.87deg,
+      rgba(116, 0, 255, 0.211156) 0.11%,
+      rgba(97, 0, 255, 0.211156) 49.6%,
+      rgba(0, 41, 255, 0.211156) 99.89%);
 }
 
 footer p {
@@ -472,7 +474,7 @@ footer hr {
   border: px solid #ff2e2e;
 }
 
-.center-address{
+.center-address {
   color: #acff3b;
 }
 
@@ -632,6 +634,7 @@ body {
   color: #0077ff !important;
   /* background-color: #00387a !important; */
 }
+
 /* 
 .Links {
   display: block;
@@ -1048,7 +1051,7 @@ body {
   border: none;
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
   padding: 0;
 }
 
@@ -1171,18 +1174,21 @@ body {
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 /* ===Croper image=== */
 .cropper-container {
   max-width: 100%;
   margin: 0 auto;
 }
+
 /* ===tabs==== */
 
 .nav-tabs .nav-link.active {
-  background-color: #007bff !important; 
-  color: white !important; 
+  background-color: #007bff !important;
+  color: white !important;
 }
-.nav-tabs .nav-link{
+
+.nav-tabs .nav-link {
   color: #000 !important;
 }
 
@@ -1435,7 +1441,7 @@ body {
 /* Trucklah Vechicle  */
 @media (max-width: 576px) {
   #ServicePage {
-      padding-top: 1.5rem !important;
+    padding-top: 1.5rem !important;
   }
 }
 
@@ -1516,13 +1522,11 @@ body {
 #vehicleForm {
   padding-left: 5%;
   padding-right: 5%;
-  background: linear-gradient(
-    180deg,
-    #8f6cf9 0%,
-    rgba(194, 49, 240, 0.211156) 99.42%,
-    rgba(200, 33, 234, 0.0414754) 99.74%,
-    rgba(179, 62, 198, 0) 100%
-  );
+  background: linear-gradient(180deg,
+      #8f6cf9 0%,
+      rgba(194, 49, 240, 0.211156) 99.42%,
+      rgba(200, 33, 234, 0.0414754) 99.74%,
+      rgba(179, 62, 198, 0) 100%);
 }
 
 #vehicleForm form {
@@ -1624,15 +1628,22 @@ body {
 
 @media (max-width: 576px) {
   #shift-btn {
-    font-size: 10px; /* Smaller font size for mobile */
-    padding: 0.2em 0.5em; /* Adjust padding for mobile */
+    font-size: 10px;
+    /* Smaller font size for mobile */
+    padding: 0.2em 0.5em;
+    /* Adjust padding for mobile */
   }
+
   .badge {
-    font-size: 8px; /* Smaller badge size */
+    font-size: 8px;
+    /* Smaller badge size */
   }
+
   .order .col-12.d-flex.justify-content-center.mt-5.py-3.flex-wrap {
-    flex-wrap: nowrap; /* Disable wrapping */
-    overflow-x: auto; /* Allow horizontal scroll if buttons overflow */
+    flex-wrap: nowrap;
+    /* Disable wrapping */
+    overflow-x: auto;
+    /* Allow horizontal scroll if buttons overflow */
   }
 }
 
@@ -1785,7 +1796,8 @@ body {
   background-color: #fff;
   max-width: 350px;
   border: none !important;
-  margin: 0 auto; /* Center the card */
+  margin: 0 auto;
+  /* Center the card */
 }
 
 .successBtn {
@@ -1801,34 +1813,41 @@ body {
 /* Adjustments for smaller devices */
 @media (max-width: 768px) {
   .cardStyle {
-    max-width: 100%; /* Ensure card is responsive */
+    max-width: 100%;
+    /* Ensure card is responsive */
     padding: 1.5rem;
   }
 
   .success-img,
   .error-img {
-    max-width: 100%; /* Ensure the image scales on mobile */
+    max-width: 100%;
+    /* Ensure the image scales on mobile */
     height: auto;
   }
 
   .titleStyle {
-    font-size: 18px; /* Adjust font size for mobile */
+    font-size: 18px;
+    /* Adjust font size for mobile */
   }
 
   .smallTextStyle {
-    font-size: 14px; /* Adjust smaller text */
+    font-size: 14px;
+    /* Adjust smaller text */
   }
 
   .Success {
-    padding: 20px; /* Add padding for smaller screens */
+    padding: 20px;
+    /* Add padding for smaller screens */
   }
 }
 
 /* Larger devices */
 @media (min-width: 769px) {
+
   .success-img,
   .error-img {
-    max-width: 110%; /* Adjust the scaling of images on larger screens */
+    max-width: 110%;
+    /* Adjust the scaling of images on larger screens */
   }
 }
 
@@ -1860,20 +1879,23 @@ body {
   color: #666;
   margin-bottom: 10px;
 } */
- 
+
 .icon-container {
-  position:absolute;
+  position: absolute;
   top: -6px;
   z-index: -999px;
   right: 140px;
-  width: 70px; /* Adjust based on the size you want */
+  width: 70px;
+  /* Adjust based on the size you want */
   height: 70px;
   background-color: white;
-  border-radius: 50%; /* Makes it circular */
+  border-radius: 50%;
+  /* Makes it circular */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -30px; /* Adjust this value if needed to move the icon upwards */
+  margin-top: -30px;
+  /* Adjust this value if needed to move the icon upwards */
   /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  */
 }
 
@@ -1951,14 +1973,17 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
+
 .card-hover1:hover {
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
+
 .card-hover2 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
+
 .card-hover2:hover {
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -1981,6 +2006,7 @@ body {
     /* Cover the container while preserving aspect ratio */
   }
 }
+
 .btn-button {
   color: #fff !important;
   padding: 0.5rem 0.9rem;
@@ -2008,6 +2034,7 @@ body {
   vertical-align: baseline;
   border-radius: 0.3rem;
 }
+
 /* Styles for the login button */
 .login-btn {
   background: #333333;
@@ -2077,6 +2104,7 @@ body {
     font-size: 12px;
     margin-top: 1rem;
   }
+
   .header-menu {
     text-align: center;
     flex-direction: column;
@@ -2101,10 +2129,12 @@ body {
     margin-left: 0px;
   }
 }
+
 /* data table search end position */
 .dt-search {
   text-align: end;
 }
+
 .dt-paging {
   text-align: end;
 }
@@ -2119,6 +2149,7 @@ body {
   height: 50px !important;
   border-radius: 8px;
 }
+
 @media (max-width: 550px) {
   .select-location {
     width: 270px !important;
@@ -2128,7 +2159,7 @@ body {
 }
 
 /* Style the carousel item */
-.vechicle-label{
+.vechicle-label {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2137,13 +2168,13 @@ body {
 }
 
 /* cash-pay */
-.cash-pay{
+.cash-pay {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.cash-pay button{
+.cash-pay button {
   margin-right: 10px !important;
 }
 
@@ -2153,8 +2184,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
+
   }
+
   .cash-pay button {
     margin-right: 0;
     margin-top: 10px;
@@ -2163,7 +2195,7 @@ body {
 }
 
 /* orderMargin */
-.orderMargin{
+.orderMargin {
   margin-top: 2rem !important;
 }
 
@@ -2175,7 +2207,7 @@ body {
 
 /* vehicleImages-card */
 
-.vehicleImages-card{
+.vehicleImages-card {
   width: 25%;
 }
 
@@ -2185,3 +2217,19 @@ body {
   }
 }
 
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+  color: #acff3b !important;
+}
+
+.css-117w1su-MuiStepIcon-text {
+  fill: #000 !important;
+  font-size: 0.95rem !important;
+}
+
+.map_section {
+  min-height: "80vh";
+  border-radius: 15px;
+}
+.date-field::placeholder{
+  color:#00000040 !important
+}
