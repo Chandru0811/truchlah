@@ -3,16 +3,18 @@ import { Step, StepLabel, Stepper } from "@mui/material";
 import Map from "./Map";
 import Service from "../common_pages/Service";
 import Summary from "../common_pages/CheckDetails";
+import MapNew from "./MapNew";
+import DateandTime from "./dateandtime";
 
-const steps = ["Map", "Service","Details"];
+const steps = ["Pickup / Dropoff", "Date and Time", "Service", "Details"];
 
 const ItemShift = () => {
-const [activeStep, setActiveStep] = useState(0);
-const [loadIndicator, setLoadIndicator] = useState(false);
-const [formData, setFormData] = useState({});
-const childRef = React.useRef();
+  const [activeStep, setActiveStep] = useState(0);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [formData, setFormData] = useState({});
+  const childRef = React.useRef();
 
-const handleNext = () => {
+  const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
   const handleBack = () => {
@@ -40,49 +42,79 @@ const handleNext = () => {
         break;
     }
   };
-  
+
   return (
     <section className="summary">
-        <Stepper className="mt-5" activeStep={activeStep} alternativeLabel>
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepLabel>{step}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <div
-          className="container-fluid card shadow-lg border-0 mb-4 d-flex justify-content-center align-items-center"
-        //   style={{ minHeight: "70vh", }}
-        >
-          <React.Fragment>
-            {activeStep === 0 && (
-              <Map
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )}
-            {activeStep === 1 && (
-              <Service
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )}
-            {activeStep === 2 && (
-              <Summary
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )}
-            {/* {activeStep === 1 && (
+      <Stepper className="mt-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <StepLabel>{step}</StepLabel>
+            {/* <StepLabel
+              sx={{
+                "& .MuiStepIcon-root": {
+                  color: index === activeStep ? "#ADFF3B" : "rgba(0, 0, 0, 0.38)",
+                  "&:hover": {
+                    color: "#ADFF3B",
+                  },
+                },
+
+                "& .Mui-completed .MuiStepIcon-root": {
+                  color: "#ADFF3B",
+                },
+
+                "& .MuiStepLabel-label": {
+                  color: index === activeStep ? "black" : "#333",
+                },
+              }}
+            >
+              {step}
+            </StepLabel> */}
+          </Step>
+        ))}
+      </Stepper>
+      <div
+        className="container-fluid card shadow-lg border-0 mb-4 d-flex justify-content-center align-items-center"
+      //   style={{ minHeight: "70vh", }}
+      >
+        <React.Fragment>
+          {activeStep === 0 && (
+            <MapNew
+              // <Map
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+          {activeStep === 1 && (
+            <DateandTime
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+          {activeStep === 2 && (
+            <Service
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+          {activeStep === 3 && (
+            <Summary
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+          {/* {activeStep === 1 && (
               <Form3
                 formData={formData}
                 ref={childRef}
@@ -91,39 +123,39 @@ const handleNext = () => {
                 setLoadIndicators={setLoadIndicator}
               />
             )} */}
-            <div className="container-fluid p-1 d-flex align-items-center justify-content-center gap-2">
-              {activeStep !== 0 && activeStep !== 1 && (
-                <button
-                  className="btn btn-secondary mb-3" style={{width:"100%"}}
-                  onClick={handleBack}
-                >
-                  Back
-                </button>
-              )}
+          <div className="container-fluid p-1 d-flex align-items-center justify-content-center gap-2">
+            {activeStep !== 0 && activeStep !== 1 && (
+              <button
+                className="btn btn-secondary mb-3" style={{ width: "100%" }}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
 
-              {activeStep !== steps.length - 1 && (
-                <>
-                  <button
-                    type="submit"
-                    onClick={handleButtonClick}
-                    className="btn btn-primary mb-3 px-5"
-                    id="NextMove"
-                    disabled={loadIndicator}
-                  >
-                    {loadIndicator && (
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        aria-hidden="true"
-                      ></span>
-                    )}
-                    {activeStep === steps.length - 1 ? "Submit" : "Next"}
-                  </button>
-                </>
-              )}
-            </div>
-          </React.Fragment>
-        </div>
-      </section>
+            {activeStep !== steps.length - 1 && (
+              <>
+                <button
+                  type="submit"
+                  onClick={handleButtonClick}
+                  className="btn btn-primary mb-3 px-5"
+                  id="NextMove"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  {activeStep === steps.length - 1 ? "Submit" : "Next"}
+                </button>
+              </>
+            )}
+          </div>
+        </React.Fragment>
+      </div>
+    </section>
   )
 }
 
