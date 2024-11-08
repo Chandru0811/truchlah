@@ -1801,11 +1801,11 @@ body {
 }
 
 .successBtn {
-  width: 100% !important;
+  width: 50% !important;
   background-color: #1bc24a !important;
   border: none !important;
   padding: 10px !important;
-  border-radius: 8px !important;
+  border-radius: 50px !important;
   color: #fff;
   font-size: 16px !important;
 }
@@ -2226,10 +2226,6 @@ body {
   font-size: 0.95rem !important;
 }
 
-.map_section {
-  min-height: "80vh";
-  border-radius: 15px;
-}
-.date-field::placeholder{
-  color:#00000040 !important
+.date-field::placeholder {
+  color: #00000040 !important
 }

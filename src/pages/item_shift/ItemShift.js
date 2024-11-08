@@ -5,6 +5,9 @@ import Service from "../common_pages/Service";
 import Summary from "../common_pages/CheckDetails";
 import MapNew from "./MapNew";
 import DateandTime from "./dateandtime";
+import ServiceNew from "../common_pages/ServiceNew";
+import SuccessFulNew from "../common_pages/SuccessFulNew";
+import BookingSummary from "./BookingSummary";
 
 const steps = ["Pickup / Dropoff", "Date and Time", "Service", "Details"];
 
@@ -79,7 +82,6 @@ const ItemShift = () => {
         <React.Fragment>
           {activeStep === 0 && (
             <MapNew
-              // <Map
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
@@ -97,7 +99,7 @@ const ItemShift = () => {
             />
           )}
           {activeStep === 2 && (
-            <Service
+            <ServiceNew
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
@@ -106,7 +108,7 @@ const ItemShift = () => {
             />
           )}
           {activeStep === 3 && (
-            <Summary
+            <BookingSummary
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
@@ -123,35 +125,34 @@ const ItemShift = () => {
                 setLoadIndicators={setLoadIndicator}
               />
             )} */}
-          <div className="container-fluid p-1 d-flex align-items-center justify-content-center gap-2">
-            {activeStep !== 0 && activeStep !== 1 && (
-              <button
-                className="btn btn-secondary mb-3" style={{ width: "100%" }}
-                onClick={handleBack}
-              >
-                Back
-              </button>
-            )}
 
-            {activeStep !== steps.length - 1 && (
-              <>
-                <button
-                  type="submit"
-                  onClick={handleButtonClick}
-                  className="btn btn-primary mb-3 px-5"
-                  id="NextMove"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  {activeStep === steps.length - 1 ? "Submit" : "Next"}
-                </button>
-              </>
-            )}
+          <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
+            {/* {activeStep !== 0 && activeStep !== 1 && ( */}
+            <button
+              className="btn btn-secondary btn-sm"
+              style={{ padding: "7px", color: "black", width: "7%" }}
+              disabled={activeStep === 0}
+              onClick={handleBack}
+            >
+              Back
+            </button>
+            {/* )} */}
+            <div style={{ flex: "1 1 auto" }}></div>
+            <button
+              type="submit"
+              onClick={handleButtonClick}
+              style={{ padding: "7px", background: "#acff3b", width: "7%" }}
+              className="btn btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              {activeStep !== steps.length - 1 ? "Next" : "Next"}
+            </button>
           </div>
         </React.Fragment>
       </div>

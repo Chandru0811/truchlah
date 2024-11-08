@@ -8,10 +8,9 @@ import {
 } from "@react-google-maps/api";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
-import { Form, InputGroup } from "react-bootstrap";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaAddressCard, FaPlusCircle, FaTrash } from "react-icons/fa";
-import { IoMdContact } from "react-icons/io";
+import { IoMdContact, IoMdCloseCircle } from "react-icons/io";
 
 const center = { lat: 50.0755, lng: 14.4378 };
 
@@ -35,7 +34,7 @@ const MapNew = () => {
   };
 
   const handleDeleteDropoff = (index) => {
-    setDropoffSections(dropoffSections.filter((_, i) => i !== index));
+    setDropoffSections((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handlePlaceChanged = () => {
@@ -91,14 +90,14 @@ const MapNew = () => {
             <div className="col-md-10 col-12">
               <Autocomplete onLoad={(ref) => (pickupRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
                 <div className="input-group mb-5"
-                  style={{ borderRadius: "50px", overflow: "hidden" }}>
+                  style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                   <span
                     className="input-group-text"
                     id="basic-addon1"
                     style={{
                       borderRight: "none",
                       backgroundColor: "#fff",
-                      borderRadius: "50px 0 0 50px",
+                      borderRadius: "10px 0 0 10px",
                     }}
                   >
                     <IoLocationSharp />
@@ -107,11 +106,10 @@ const MapNew = () => {
                     type="text"
                     className="form-control"
                     aria-describedby="basic-addon1"
-                    min="2024-11-07"
                     placeholder="Enter a pickup location"
                     style={{
                       borderLeft: "none",
-                      borderRadius: "0 50px 50px 0",
+                      borderRadius: "0 10px 10px 0",
                     }}
                   />
                 </div>
@@ -120,14 +118,14 @@ const MapNew = () => {
 
             <div className="col-md-10 col-12">
               <div className="input-group mb-5"
-                style={{ borderRadius: "50px", overflow: "hidden" }}>
+                style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                 <span
                   className="input-group-text"
                   id="basic-addon1"
                   style={{
                     borderRight: "none",
                     backgroundColor: "#fff",
-                    borderRadius: "50px 0 0 50px",
+                    borderRadius: "10px 0 0 10px",
                   }}
                 >
                   <FaAddressCard />
@@ -136,11 +134,10 @@ const MapNew = () => {
                   type="text"
                   className="form-control"
                   aria-describedby="basic-addon1"
-                  min="2024-11-07"
                   placeholder="Enter a pickup address"
                   style={{
                     borderLeft: "none",
-                    borderRadius: "0 50px 50px 0",
+                    borderRadius: "0 10px 10px 0",
                   }}
                 />
               </div>
@@ -150,14 +147,14 @@ const MapNew = () => {
               <div className="row">
                 <div className="col-md-6 col-12 p-2">
                   <div className="input-group mb-5"
-                    style={{ borderRadius: "50px", overflow: "hidden" }}>
+                    style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                     <span
                       className="input-group-text"
                       id="basic-addon1"
                       style={{
                         borderRight: "none",
                         backgroundColor: "#fff",
-                        borderRadius: "50px 0 0 50px",
+                        borderRadius: "10px 0 0 10px",
                       }}
                     >
                       <IoMdContact />
@@ -166,25 +163,24 @@ const MapNew = () => {
                       type="text"
                       className="form-control"
                       aria-describedby="basic-addon1"
-                      min="2024-11-07"
                       placeholder="Enter a contact name"
                       style={{
                         borderLeft: "none",
-                        borderRadius: "0 50px 50px 0",
+                        borderRadius: "0 10px 10px 0",
                       }}
                     />
                   </div>
                 </div>
                 <div className="col-md-6 col-12 p-2">
                   <div className="input-group mb-5"
-                    style={{ borderRadius: "50px", overflow: "hidden" }}>
+                    style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                     <span
                       className="input-group-text"
                       id="basic-addon1"
                       style={{
                         borderRight: "none",
                         backgroundColor: "#fff",
-                        borderRadius: "50px 0 0 50px",
+                        borderRadius: "10px 0 0 10px",
                       }}
                     >
                       <select className="">
@@ -196,11 +192,10 @@ const MapNew = () => {
                       type="text"
                       className="form-control"
                       aria-describedby="basic-addon1"
-                      min="2024-11-07"
                       placeholder="Enter a contact number"
                       style={{
                         borderLeft: "none",
-                        borderRadius: "0 50px 50px 0",
+                        borderRadius: "0 10px 10px 0",
                       }}
                     />
                   </div>
@@ -222,14 +217,14 @@ const MapNew = () => {
             <div className="col-md-10 col-12">
               <Autocomplete onLoad={(ref) => (dropoffRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
                 <div className="input-group mb-5"
-                  style={{ borderRadius: "50px", overflow: "hidden" }}>
+                  style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                   <span
                     className="input-group-text"
                     id="basic-addon1"
                     style={{
                       borderRight: "none",
                       backgroundColor: "#fff",
-                      borderRadius: "50px 0 0 50px",
+                      borderRadius: "10px 0 0 10px",
                     }}
                   >
                     <IoLocationSharp />
@@ -238,11 +233,10 @@ const MapNew = () => {
                     type="text"
                     className="form-control"
                     aria-describedby="basic-addon1"
-                    min="2024-11-07"
                     placeholder="Enter a pickup location"
                     style={{
                       borderLeft: "none",
-                      borderRadius: "0 50px 50px 0",
+                      borderRadius: "0 10px 10px 0",
                     }}
                   />
                 </div>
@@ -251,14 +245,14 @@ const MapNew = () => {
 
             <div className="col-md-10 col-12">
               <div className="input-group mb-5"
-                style={{ borderRadius: "50px", overflow: "hidden" }}>
+                style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                 <span
                   className="input-group-text"
                   id="basic-addon1"
                   style={{
                     borderRight: "none",
                     backgroundColor: "#fff",
-                    borderRadius: "50px 0 0 50px",
+                    borderRadius: "10px 0 0 10px",
                   }}
                 >
                   <FaAddressCard />
@@ -267,21 +261,81 @@ const MapNew = () => {
                   type="text"
                   className="form-control"
                   aria-describedby="basic-addon1"
-                  min="2024-11-07"
                   placeholder="Enter a pickup address"
                   style={{
                     borderLeft: "none",
-                    borderRadius: "0 50px 50px 0",
+                    borderRadius: "0 10px 10px 0",
                   }}
                 />
               </div>
             </div>
 
+            <div className="col-md-10 col-12">
+              <div className="row">
+                <div className="col-md-6 col-12 p-2">
+                  <div className="input-group mb-5"
+                    style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
+                    <span
+                      className="input-group-text"
+                      id="basic-addon1"
+                      style={{
+                        borderRight: "none",
+                        backgroundColor: "#fff",
+                        borderRadius: "10px 0 0 10px",
+                      }}
+                    >
+                      <IoMdContact />
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      aria-describedby="basic-addon1"
+                      placeholder="Enter a contact name"
+                      style={{
+                        borderLeft: "none",
+                        borderRadius: "0 10px 10px 0",
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6 col-12 p-2">
+                  <div className="input-group mb-5"
+                    style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
+                    <span
+                      className="input-group-text"
+                      id="basic-addon1"
+                      style={{
+                        borderRight: "none",
+                        backgroundColor: "#fff",
+                        borderRadius: "10px 0 0 10px",
+                      }}
+                    >
+                      <select className="">
+                        <option value="+65">+65</option>
+                        <option value="+91">+91</option>
+                      </select>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      aria-describedby="basic-addon1"
+                      placeholder="Enter a contact number"
+                      style={{
+                        borderLeft: "none",
+                        borderRadius: "0 10px 10px 0",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/*Add Another Dropoff location */}
-            <div className="rounded-pill py-3">
+            <div className="rounded-pill py-3 d-flex align-items-center">
+              {/* Add Intermediate Stop Button */}
               <button
                 type="button"
-                className="btn btn-primary mb-3 shadow-none"
+                className="btn btn-primary shadow-none d-flex align-items-center"
                 style={{
                   backgroundColor: "transparent",
                   color: "red",
@@ -290,134 +344,164 @@ const MapNew = () => {
                 onClick={handleAddDropoff}
               >
                 <FaPlusCircle />
-                <span className="fw-bold text-black mx-2">Add another dropoff</span>
+                <span className="fw-bold text-black mx-2">Add Intermediate Stop</span>
               </button>
             </div>
 
-            {dropoffSections.map((_, index) => (
-              <div key={index}>
-                <div className="col-md-10 col-12">
-                  <Autocomplete onLoad={(ref) => (addDropOffRef.current[index] = ref)} onPlaceChanged={handlePlaceChanged}>
-                    <div className="input-group mb-5" style={{ borderRadius: "50px", overflow: "hidden" }}>
-                      <span
-                        className="input-group-text"
-                        id="basic-addon1"
-                        style={{
-                          borderRight: "none",
-                          backgroundColor: "#fff",
-                          borderRadius: "50px 0 0 50px",
-                        }}
+            {/* Render Dropoff Sections */}
+            {dropoffSections.length > 0 &&
+              dropoffSections.map((_, index) => (
+                <>
+                  <div key={index} className="mb-4">
+                    <div className="col-md-10 col-12">
+                      <div className="d-flex align-items-end justify-content-end py-3">
+                        {/* Delete Button */}
+                        <button
+                          type="button"
+                          className="btn btn-danger shadow-none"
+                          style={{
+                            backgroundColor: "transparent",
+                            color: "red",
+                            border: "none",
+                            marginTop: "-10rem",
+                            fontSize: "1.3rem"
+                          }}
+                          onClick={() => handleDeleteDropoff(index)}
+                        >
+                          <IoMdCloseCircle />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-start">
+                      <div className="col-md-10 col-12">
+                        {/* Autocomplete Location Input */}
+                        <Autocomplete
+                          onLoad={(ref) => (addDropOffRef.current[index] = ref)}
+                          onPlaceChanged={handlePlaceChanged}
+                        >
+                          <div
+                            className="input-group mb-3"
+                            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}
+                          >
+                            <span
+                              className="input-group-text"
+                              id="basic-addon1"
+                              style={{
+                                borderRight: "none",
+                                backgroundColor: "#fff",
+                                borderRadius: "10px 0 0 10px",
+                              }}
+                            >
+                              <IoLocationSharp />
+                            </span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Enter a pickup location"
+                              style={{
+                                borderLeft: "none",
+                                borderRadius: "0 10px 10px 0",
+                              }}
+                            />
+                          </div>
+                        </Autocomplete>
+                      </div>
+                    </div>
+
+                    {/* Pickup Address Input */}
+                    <div className="col-md-10 col-12">
+                      <div
+                        className="input-group mb-3"
+                        style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}
                       >
-                        <IoLocationSharp />
-                      </span>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter a pickup location"
-                        style={{
-                          borderLeft: "none",
-                          borderRadius: "0 50px 50px 0",
-                        }}
-                      />
-                    </div>
-                  </Autocomplete>
-                </div>
-
-                <div className="col-md-10 col-12">
-                  <div className="input-group mb-5" style={{ borderRadius: "50px", overflow: "hidden" }}>
-                    <span
-                      className="input-group-text"
-                      id="basic-addon1"
-                      style={{
-                        borderRight: "none",
-                        backgroundColor: "#fff",
-                        borderRadius: "50px 0 0 50px",
-                      }}
-                    >
-                      <FaAddressCard />
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter a pickup address"
-                      style={{
-                        borderLeft: "none",
-                        borderRadius: "0 50px 50px 0",
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-md-10 col-12">
-                  <div className="row">
-                    <div className="col-md-6 col-12 p-2">
-                      <div className="input-group" style={{ borderRadius: "50px", overflow: "hidden" }}>
                         <span
                           className="input-group-text"
                           id="basic-addon1"
                           style={{
                             borderRight: "none",
                             backgroundColor: "#fff",
-                            borderRadius: "50px 0 0 50px",
+                            borderRadius: "10px 0 0 10px",
                           }}
                         >
-                          <IoMdContact />
+                          <FaAddressCard />
                         </span>
                         <input
                           type="text"
                           className="form-control"
-                          placeholder="Enter a contact name"
+                          placeholder="Enter a pickup address"
                           style={{
                             borderLeft: "none",
-                            borderRadius: "0 50px 50px 0",
+                            borderRadius: "0 10px 10px 0",
                           }}
                         />
                       </div>
                     </div>
-                    <div className="col-md-6 col-12 p-2">
-                      <div className="input-group" style={{ borderRadius: "50px", overflow: "hidden" }}>
-                        <span
-                          className="input-group-text"
-                          id="basic-addon1"
-                          style={{
-                            borderRight: "none",
-                            backgroundColor: "#fff",
-                            borderRadius: "50px 0 0 50px",
-                          }}
-                        >
-                          <select className="">
-                            <option value="+65">+65</option>
-                            <option value="+91">+91</option>
-                          </select>
-                        </span>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter a contact number"
-                          style={{
-                            borderLeft: "none",
-                            borderRadius: "0 50px 50px 0",
-                          }}
-                        />
+
+                    {/* Contact Name and Number Inputs */}
+                    <div className="col-md-10 col-12">
+                      <div className="row">
+                        <div className="col-md-6 col-12 p-2">
+                          <div
+                            className="input-group"
+                            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}
+                          >
+                            <span
+                              className="input-group-text"
+                              id="basic-addon1"
+                              style={{
+                                borderRight: "none",
+                                backgroundColor: "#fff",
+                                borderRadius: "10px 0 0 10px",
+                              }}
+                            >
+                              <IoMdContact />
+                            </span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Enter a contact name"
+                              style={{
+                                borderLeft: "none",
+                                borderRadius: "0 10px 10px 0",
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 p-2">
+                          <div
+                            className="input-group"
+                            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}
+                          >
+                            <span
+                              className="input-group-text"
+                              id="basic-addon1"
+                              style={{
+                                borderRight: "none",
+                                backgroundColor: "#fff",
+                                borderRadius: "10px 0 0 10px",
+                              }}
+                            >
+                              <select>
+                                <option value="+65">+65</option>
+                                <option value="+91">+91</option>
+                              </select>
+                            </span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Enter a contact number"
+                              style={{
+                                borderLeft: "none",
+                                borderRadius: "0 10px 10px 0",
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-danger mt-2 shadow-none mb-3"
-                  onClick={() => handleDeleteDropoff(index)}
-                  style={{
-                    backgroundColor: "transparent",
-                    color: "red",
-                    border: "none",
-                  }}
-                >
-                  <FaTrash />
-                  <span className="fw-bold text-black mx-2">Delete dropoff</span>
-                </button>
-              </div>
-            ))}
+                  </div >
+                </>
+              ))}
           </div>
         </div>
 
@@ -425,18 +509,15 @@ const MapNew = () => {
           <span className="d-flex justify-content-center align-items-center py-3">
             {totalDistance && <span className="fw-bold">Total Distance: {totalDistance}</span>}
           </span>
-          <div className="card shadow-none mb-2 map_section">
-            <GoogleMap
-              center={center}
-              zoom={12}
-              mapContainerStyle={{ width: "100%", height: "400px", minHeight: "90vh" }}
-            >
-              {directionsResponse && (
-                <DirectionsRenderer directions={directionsResponse} />
-              )}
-            </GoogleMap>
-
-          </div>
+          <GoogleMap
+            center={center}
+            zoom={12}
+            mapContainerStyle={{ width: "100%", height: "400px", minHeight: "90vh", borderRadius: "20px" }}
+          >
+            {directionsResponse && (
+              <DirectionsRenderer directions={directionsResponse} />
+            )}
+          </GoogleMap>
         </div>
       </div >
     </div >
