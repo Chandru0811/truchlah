@@ -44,16 +44,15 @@ function DateAndTime() {
       <div className="row">
         <div className="col-md-6 col-12">
           <div
-            className="input-group mb-5"
-            style={{ borderRadius: "50px", overflow: "hidden" }}
-          >
+            className="input-group mb-4"
+            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
             <span
               className="input-group-text"
               id="basic-addon1"
               style={{
                 borderRight: "none",
                 backgroundColor: "#fff",
-                borderRadius: "50px 0 0 50px",
+                borderRadius: "10px 0 0 10px",
               }}
             >
               <FaCalendarDays />
@@ -67,22 +66,21 @@ function DateAndTime() {
               placeholder="Select date"
               style={{
                 borderLeft: "none",
-                borderRadius: "0 50px 50px 0",
+                borderRadius: "0 10px 10px 0",
               }}
             />
           </div>
 
           <div
             className="input-group mb-3"
-            style={{ borderRadius: "50px", overflow: "hidden" }}
-          >
+            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
             <span
               className="input-group-text"
               id="basic-addon1"
               style={{
                 borderRight: "none",
                 backgroundColor: "#fff",
-                borderRadius: "50px 0 0 50px",
+                borderRadius: "10px 0 0 10px",
               }}
             >
               <IoIosTime />
@@ -92,8 +90,8 @@ function DateAndTime() {
               aria-label="Default select example"
               style={{
                 borderLeft: "none",
-                borderRadius: "0 50px 50px 0",
-                color: "#00000040",
+                borderRadius: "0 10px 10px 0",
+                color: "black",
               }}
             >
               <option selected>Select Time</option>
@@ -123,7 +121,7 @@ function DateAndTime() {
             </select>
           </div>
 
-          <div className="d-flex justify-content-between align-items-center my-3">
+          <div className="d-flex justify-content-between align-items-center mt-5">
             <Button
               variant="link"
               onClick={handlePrev}

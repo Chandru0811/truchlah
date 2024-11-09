@@ -28,7 +28,7 @@ function ServiceNew() {
               backgroundColor: '#fff',
               borderRadius: '5px',
               alignItems: 'center',
-              border: "1px solid #e0dfdf"
+              border: '1px solid #e0dfdf'
             }}
           >
             <span>
@@ -38,7 +38,7 @@ function ServiceNew() {
               <input
                 type="checkbox"
                 name="driverAsManpower"
-                className="form-check-input border-info"
+                className="form-check-input custom-checkbox"
                 value={true}
                 id="driverAsManpower"
               />
@@ -47,25 +47,62 @@ function ServiceNew() {
         </div>
 
         {/* Extra Manpower Checkbox */}
-        <div className="col-md-6 col-12 mb-3 p-3">
-          <div
-            className="d-flex justify-content-between p-3"
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '5px',
-              alignItems: 'center',
-              border: "1px solid #e0dfdf"
-            }}
-          >
-            <span>
-              <b>Extra Manpower</b>
-            </span>
-            <div className="form-check">
+
+        {showQuantity ?
+          (
+            <>
+            </>
+          ) : (
+            <>
+              <div className='col-md-6 col-12 mb-3 p-3'>
+                <div
+                  className="d-flex align-items-center justify-content-between p-3"
+                  style={{
+                    backgroundColor: "#fff",
+                    borderRadius: "5px",
+                    border: "1px solid #e0dfdf",
+                    width: "100%",
+                  }}
+                >
+                  <span>
+                    <b>Extra Manpower</b>
+                  </span>
+                  <input
+                    className="form-check-input custom-checkbox"
+                    style={{ cursor: "pointer" }}
+                    type="checkbox"
+                    id="extraManpower"
+                    value={true}
+                    name="extraManpower"
+                    onClick={() => setShowQuantity(!showQuantity)}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+        <div
+          className={`${showQuantity ? "col-md-6" : "col-md-6"
+            } col-12 mb-3 p-3`}
+        >
+          <div className="d-flex justify-content-between">
+            {/* Checkbox section */}
+            {showQuantity && (
+            <div
+              className="d-flex align-items-center justify-content-between p-3"
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "5px",
+                border: "1px solid #e0dfdf",
+                width: "40%",
+              }}
+            >
+              <span>
+                <b>Extra Manpower</b>
+              </span>
               <input
-                className="form-check-input border-info"
-                style={{
-                  borderColor: "#e0dfdf"
-                }}
+                className="form-check-input custom-checkbox"
+                style={{ cursor: "pointer" }}
                 type="checkbox"
                 id="extraManpower"
                 value={true}
@@ -73,63 +110,62 @@ function ServiceNew() {
                 onClick={() => setShowQuantity(!showQuantity)}
               />
             </div>
+            )}
+            {/* Quantity input section */}
+            {showQuantity && (
+              <div
+                className="d-flex align-items-center justify-content-between p-2 ms-3"
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                  border: "1px solid #e0dfdf",
+                  width: "50%",
+                }}
+              >
+                <span>
+                  <b>Quantity</b>
+                </span>
+                <div className="quantity-input d-flex align-items-center ms-2">
+                  <button
+                    className="quantity-btn btn border-white shadow-none"
+                    type="button"
+                    style={{ borderRadius: "50%", cursor: "pointer" }}
+                    onClick={decreaseManpowerQuantity}
+                    disabled={manpowerQuantity === 1}
+                  >
+                    <FaMinus style={{ fontSize: "8px" }} />
+                  </button>
+                  <input
+                    type="number"
+                    className="quantity-value"
+                    value={manpowerQuantity}
+                    min={1}
+                    max={99}
+                    readOnly
+                    style={{
+                      width: "50px",
+                      padding: "5px",
+                      textAlign: "center",
+                      border: "1px solid #ccc",
+                      borderRadius: "5px",
+                      margin: "0 10px",
+                    }}
+                  />
+                  <button
+                    className="quantity-btn btn border-white shadow-none"
+                    onClick={increaseManpowerQuantity}
+                    type="button"
+                    disabled={manpowerQuantity === 99}
+                    style={{ borderRadius: "50%", cursor: "pointer" }}
+                  >
+                    <FaPlus style={{ fontSize: "8px" }} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Quantity Input (Visible only when Extra Manpower is checked) */}
-        {showQuantity && (
-          <div className="col-md-6 col-12 mb-3 p-3">
-            <div
-              className="d-flex justify-content-between p-3"
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: '5px',
-                alignItems: 'center',
-                border: "1px solid #e0dfdf"
-              }}
-            >
-              <span>
-                <b>Quantity</b>
-              </span>
-              <div className="quantity-input d-flex align-items-center">
-                <button
-                  className="quantity-btn btn border-white shadow-none"
-                  type="button"
-                  style={{ borderRadius: '50%' }}
-                  onClick={decreaseManpowerQuantity}
-                  disabled={manpowerQuantity === 1}
-                >
-                  <FaMinus style={{ fontSize: '8px' }} />
-                </button>
-                <input
-                  type="number"
-                  className="quantity-value"
-                  value={manpowerQuantity}
-                  min={1}
-                  max={99}
-                  readOnly
-                  style={{
-                    width: '50px',
-                    padding: '5px',
-                    textAlign: 'center',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    margin: '0 10px'
-                  }}
-                />
-                <button
-                  className="quantity-btn btn border-white shadow-none"
-                  onClick={increaseManpowerQuantity}
-                  type="button"
-                  disabled={manpowerQuantity === 99}
-                  style={{ borderRadius: '50%' }}
-                >
-                  <FaPlus style={{ fontSize: '8px' }} />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Trolly Required Checkbox */}
         <div className="col-md-6 col-12 mb-3 p-3">
@@ -147,7 +183,7 @@ function ServiceNew() {
             </span>
             <div className="form-check">
               <input
-                className="form-check-input border-info"
+                className="form-check-input custom-checkbox"
                 type="checkbox"
                 value={true}
                 id="trollyRequired"
@@ -172,7 +208,7 @@ function ServiceNew() {
             </span>
             <div className="form-check">
               <input
-                className="form-check-input border-info"
+                className="form-check-input custom-checkbox"
                 type="checkbox"
                 value={true}
                 id="roundTripRequired"
@@ -190,7 +226,7 @@ function ServiceNew() {
           <textarea
             id="exampleTextarea"
             rows="4"
-            placeholder="write your message here........  "
+            placeholder="write your message here........"
             className="form-control form-control-lg "
           ></textarea>
         </div>
