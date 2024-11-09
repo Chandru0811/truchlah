@@ -7,14 +7,17 @@ import Image2 from "../../asset/24FT_LORRY.png";
 import Image3 from "../../asset/10FT_LORRY.png";
 import Image4 from "../../asset/14FT_LORRY.png";
 import Image5 from "../../asset/2.4M_VAN.png";
+import { MdNavigateNext } from "react-icons/md";
+import { GrFormPrevious } from "react-icons/gr";
+import { GiShoppingBag } from "react-icons/gi";
 
 function DateAndTime() {
   const images = [
-    { src: Image1, name: "24FT LORRY" },
-    { src: Image2, name: "24FT LORRY" },
-    { src: Image3, name: "10FT LORRY" },
-    { src: Image4, name: "14FT LORRY" },
-    { src: Image5, name: "2.4M VAN" },
+    { src: Image1, name: "24FT LORRY", kg: "50", baseFare: "$26" },
+    { src: Image2, name: "24FT LORRY", kg: "60", baseFare: "$36" },
+    { src: Image3, name: "10FT LORRY", kg: "70", baseFare: "$46" },
+    { src: Image4, name: "14FT LORRY", kg: "40", baseFare: "$36" },
+    { src: Image5, name: "2.4M VAN", kg: "80", baseFare: "$66" },
   ];
 
   const [selectedImage, setSelectedImage] = useState(images[0]);
@@ -42,14 +45,15 @@ function DateAndTime() {
         <div className="col-md-6 col-12">
           <div
             className="input-group mb-5"
-            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
+            style={{ borderRadius: "50px", overflow: "hidden" }}
+          >
             <span
               className="input-group-text"
               id="basic-addon1"
               style={{
                 borderRight: "none",
                 backgroundColor: "#fff",
-                borderRadius: "10px 0 0 10px",
+                borderRadius: "50px 0 0 50px",
               }}
             >
               <FaCalendarDays />
@@ -63,21 +67,22 @@ function DateAndTime() {
               placeholder="Select date"
               style={{
                 borderLeft: "none",
-                borderRadius: "0 10px 10px 0",
+                borderRadius: "0 50px 50px 0",
               }}
             />
           </div>
 
           <div
             className="input-group mb-3"
-            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
+            style={{ borderRadius: "50px", overflow: "hidden" }}
+          >
             <span
               className="input-group-text"
               id="basic-addon1"
               style={{
                 borderRight: "none",
                 backgroundColor: "#fff",
-                borderRadius: "10px 0 0 10px",
+                borderRadius: "50px 0 0 50px",
               }}
             >
               <IoIosTime />
@@ -87,7 +92,7 @@ function DateAndTime() {
               aria-label="Default select example"
               style={{
                 borderLeft: "none",
-                borderRadius: "0 10px 10px 0",
+                borderRadius: "0 50px 50px 0",
                 color: "#00000040",
               }}
             >
@@ -122,12 +127,18 @@ function DateAndTime() {
             <Button
               variant="link"
               onClick={handlePrev}
-              style={{ color: "black" }}
+              style={{
+                color: "black",
+                backgroundColor: "rgb(172, 255, 59)",
+                padding: "5px",
+              }}
             >
-              <span
+              <GrFormPrevious
+                style={{
+                  fontSize: "1.5em",
+                  color: "black",
+                }}
                 aria-hidden="true"
-                className="carousel-control-prev-icon"
-                style={{ filter: "invert(100%)" }}
               />
             </Button>
             <div className="d-flex justify-content-around w-75">
@@ -137,7 +148,7 @@ function DateAndTime() {
                   <div
                     key={index}
                     onClick={() => handleCarouselClick(image)}
-                    className="card p-2 border-0"
+                    className="card p-2 border-0 hover-card"
                     style={{
                       cursor: "pointer",
                       maxWidth: "30%",
@@ -148,8 +159,11 @@ function DateAndTime() {
                     <img
                       src={image.src}
                       alt={image.name}
-                      className="img-fluid shadow "
-                      style={{ maxHeight: "150px", borderRadius: "20px" }}
+                      className="img-fluid shadow hover-card"
+                      style={{
+                        maxHeight: "150px",
+                        borderRadius: "20px",
+                      }}
                     />
                     <div className="text-center mt-2">
                       <h6 className="card-title text-dark">{image.name}</h6>
@@ -161,25 +175,35 @@ function DateAndTime() {
             <Button
               variant="link"
               onClick={handleNext}
-              style={{ color: "black" }}
+              style={{
+                color: "black",
+                backgroundColor: "rgb(172, 255, 59)",
+                padding: "5px",
+              }}
             >
-              <span
+              <MdNavigateNext
+                style={{
+                  fontSize: "1.5em",
+                  color: "black",
+                }}
                 aria-hidden="true"
-                className="carousel-control-next-icon"
-                style={{ filter: "invert(100%)" }}
               />
             </Button>
           </div>
         </div>
 
-        <div className="col-md-6 col-12 align-items-center">
+        <div className="col-md-6 col-12 text-center">
           <img
             src={selectedImage.src}
             alt="Selected"
-            className="w-75 img-fluid"
+            className="w-50 img-fluid"
           />
-          <div className="d-flex justify-content-center">
-            <h5 className="mt-2">{selectedImage.name}</h5>
+          <div className="text-center">
+            <h5 className="mt-2">
+              <GiShoppingBag style={{ padding: "1px" }} />
+              {selectedImage.kg}kg
+            </h5>
+            <h5 className="mt-2">Base fare{selectedImage.baseFare}</h5>
           </div>
         </div>
       </div>

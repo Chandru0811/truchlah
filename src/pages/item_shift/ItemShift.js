@@ -8,17 +8,14 @@ import DateandTime from "./dateandtime";
 import ServiceNew from "../common_pages/ServiceNew";
 import SuccessFulNew from "../common_pages/SuccessFulNew";
 import BookingSummary from "./BookingSummary";
-import { FaChevronRight } from "react-icons/fa";
 
-
-const steps = ["Pickup / Dropoff", "Vechicle Selection", "Service", "Booking Summary", "Complete"];
+const steps = ["Pickup / Dropoff", "Date and Time", "Service", "Details"];
 
 const ItemShift = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [formData, setFormData] = useState({});
   const childRef = React.useRef();
-  const shiftType = sessionStorage.getItem("shiftType");
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
@@ -50,16 +47,8 @@ const ItemShift = () => {
   };
 
   return (
-    <section className="container">
-      <span className="d-flex fw-bold py-4">
-        <p style={{ fontSize: "20px" }}>Booking Type <FaChevronRight size={"15"} /></p>
-        <p style={{ fontSize: "20px", color: "#acff3b" }}>
-          Item Shisting
-          {/* {shiftType} Sfifting */}
-        </p>
-      </span>
-
-      <Stepper className="" activeStep={activeStep} alternativeLabel>
+    <section className="summary">
+      <Stepper className="mt-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index}>
             <StepLabel>{step}</StepLabel>
@@ -87,7 +76,7 @@ const ItemShift = () => {
         ))}
       </Stepper>
       <div
-        className="text-centerborder-0 mb-4"
+        className="container-fluid card shadow-lg border-0 mb-4 d-flex justify-content-center align-items-center"
       //   style={{ minHeight: "70vh", }}
       >
         <React.Fragment>
@@ -138,16 +127,16 @@ const ItemShift = () => {
             )} */}
 
           <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
-            {activeStep !== 0 && activeStep !== 1 && (
-              <button
-                className="btn btn-secondary btn-sm"
-                style={{ padding: "7px", color: "black", width: "7%" }}
-                disabled={activeStep === 0}
-                onClick={handleBack}
-              >
-                Back
-              </button>
-            )}
+            {/* {activeStep !== 0 && activeStep !== 1 && ( */}
+            <button
+              className="btn btn-secondary btn-sm"
+              style={{ padding: "7px", color: "black", width: "7%" }}
+              disabled={activeStep === 0}
+              onClick={handleBack}
+            >
+              Back
+            </button>
+            {/* )} */}
             <div style={{ flex: "1 1 auto" }}></div>
             <button
               type="submit"
