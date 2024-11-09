@@ -42,15 +42,14 @@ function DateAndTime() {
         <div className="col-md-6 col-12">
           <div
             className="input-group mb-5"
-            style={{ borderRadius: "50px", overflow: "hidden" }}
-          >
+            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
             <span
               className="input-group-text"
               id="basic-addon1"
               style={{
                 borderRight: "none",
                 backgroundColor: "#fff",
-                borderRadius: "50px 0 0 50px",
+                borderRadius: "10px 0 0 10px",
               }}
             >
               <FaCalendarDays />
@@ -64,22 +63,21 @@ function DateAndTime() {
               placeholder="Select date"
               style={{
                 borderLeft: "none",
-                borderRadius: "0 50px 50px 0",
+                borderRadius: "0 10px 10px 0",
               }}
             />
           </div>
 
           <div
             className="input-group mb-3"
-            style={{ borderRadius: "50px", overflow: "hidden" }}
-          >
+            style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
             <span
               className="input-group-text"
               id="basic-addon1"
               style={{
                 borderRight: "none",
                 backgroundColor: "#fff",
-                borderRadius: "50px 0 0 50px",
+                borderRadius: "10px 0 0 10px",
               }}
             >
               <IoIosTime />
@@ -89,7 +87,7 @@ function DateAndTime() {
               aria-label="Default select example"
               style={{
                 borderLeft: "none",
-                borderRadius: "0 50px 50px 0",
+                borderRadius: "0 10px 10px 0",
                 color: "#00000040",
               }}
             >

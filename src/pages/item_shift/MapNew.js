@@ -72,8 +72,9 @@ const MapNew = () => {
 
   return (
     <div className="container">
-      <div className="row mt-5">
-        <div className=" col-md-6 col-12">
+      <div className="row mt-5 m-0">
+        <div className="col-md-6 col-12"
+          style={{ minHeight: "70vh" }}>
           <div className="row">
 
             {/* Pickup location */}
@@ -89,7 +90,7 @@ const MapNew = () => {
 
             <div className="col-md-10 col-12">
               <Autocomplete onLoad={(ref) => (pickupRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
-                <div className="input-group mb-5"
+                <div className="input-group mb-4"
                   style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                   <span
                     className="input-group-text"
@@ -117,7 +118,7 @@ const MapNew = () => {
             </div>
 
             <div className="col-md-10 col-12">
-              <div className="input-group mb-5"
+              <div className="input-group mb-4"
                 style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                 <span
                   className="input-group-text"
@@ -146,7 +147,7 @@ const MapNew = () => {
             <div className="col-md-10 col-12">
               <div className="row">
                 <div className="col-md-6 col-12 p-2">
-                  <div className="input-group mb-5"
+                  <div className="input-group"
                     style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                     <span
                       className="input-group-text"
@@ -172,7 +173,7 @@ const MapNew = () => {
                   </div>
                 </div>
                 <div className="col-md-6 col-12 p-2">
-                  <div className="input-group mb-5"
+                  <div className="input-group"
                     style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                     <span
                       className="input-group-text"
@@ -216,7 +217,7 @@ const MapNew = () => {
 
             <div className="col-md-10 col-12">
               <Autocomplete onLoad={(ref) => (dropoffRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
-                <div className="input-group mb-5"
+                <div className="input-group mb-4"
                   style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                   <span
                     className="input-group-text"
@@ -244,7 +245,7 @@ const MapNew = () => {
             </div>
 
             <div className="col-md-10 col-12">
-              <div className="input-group mb-5"
+              <div className="input-group mb-4"
                 style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                 <span
                   className="input-group-text"
@@ -273,7 +274,7 @@ const MapNew = () => {
             <div className="col-md-10 col-12">
               <div className="row">
                 <div className="col-md-6 col-12 p-2">
-                  <div className="input-group mb-5"
+                  <div className="input-group"
                     style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                     <span
                       className="input-group-text"
@@ -299,7 +300,7 @@ const MapNew = () => {
                   </div>
                 </div>
                 <div className="col-md-6 col-12 p-2">
-                  <div className="input-group mb-5"
+                  <div className="input-group"
                     style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                     <span
                       className="input-group-text"
@@ -505,19 +506,22 @@ const MapNew = () => {
           </div>
         </div>
 
-        <div className="col-md-6 col-12">
+        <div className="col-md-6 col-12 mb-4">
           <span className="d-flex justify-content-center align-items-center py-3">
             {totalDistance && <span className="fw-bold">Total Distance: {totalDistance}</span>}
           </span>
-          <GoogleMap
-            center={center}
-            zoom={12}
-            mapContainerStyle={{ width: "100%", height: "400px", minHeight: "90vh", borderRadius: "20px" }}
-          >
-            {directionsResponse && (
-              <DirectionsRenderer directions={directionsResponse} />
-            )}
-          </GoogleMap>
+          <div className="sticky-top d-flex justify-content-center align-items-center"
+            style={{ top: "6rem" }}>
+            <GoogleMap
+              center={center}
+              zoom={12}
+              mapContainerStyle={{ width: "100%", height: "400px", minHeight: "80vh", borderRadius: "20px" }}
+            >
+              {directionsResponse && (
+                <DirectionsRenderer directions={directionsResponse} />
+              )}
+            </GoogleMap>
+          </div>
         </div>
       </div >
     </div >
