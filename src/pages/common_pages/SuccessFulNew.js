@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "../../styles/custom.css";
 import { Link, useSearchParams } from "react-router-dom";
-import success from "../../asset/successimg-removebg-preview.png";
+import success from "../../asset/success logo.webp";
 import errorimg from "../../asset/cancelimg-removebg-preview.png";
 import toast from "react-hot-toast";
 import { GiCancel } from "react-icons/gi";
@@ -22,7 +22,7 @@ function SuccessfullNew() {
     console.log("result", secondParams);
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5 py-2">
             <div className="row justify-content-center mt-5">
                 <div className="col-lg-4 col-md-6 col-12">
                     <div className={`card p-4 text-center cardStyle position-relative ${result === "error" && "pt-5 pb-4"
@@ -45,20 +45,20 @@ function SuccessfullNew() {
                         </div>
                         {result === "success" ? (
                             <>
-                                <h3 className="mt-4 p-1" style={{ color: "#1bc24a" }}>
+                                <h3 className="mt-4 p-1" style={{ color: "#1bc24a",fontSize:"24px" }}>
                                     Order Placed Successfully!
                                 </h3>
                             </>
                         ) : (
                             <>
-                                <h3 className="mt-4" style={{ color: "#e74c3c" }}>
+                                <h3 className="mt-4" style={{ color: "#e74c3c",fontSize:"24px" }}>
                                     Payment Unsuccessfully!
                                 </h3>
                             </>
                         )}
                         {result === "success" ? (
                             <span className="mt-4 fw-bold">
-                                Booking ID: {bookingId?.split("?")[0]}
+                                Booking ID: {bookingId?.split("?")[0] || 55}
                             </span>
                         ) : (
                             <>
@@ -66,14 +66,14 @@ function SuccessfullNew() {
                         )}
                         {result === "success" ? (
                             <span className="mt-4 fw-bold">
-                                Vehicle Id: {bookingId?.split("?")[0]}
+                               {bookingId?.split("?")[0] || "1.7M_VAN" }
                             </span>
                         ) : (
                             <></>
                         )}
                         {result === "success" ? (
-                            <span className="mt-4 fw-bold">
-                                Transaction Id: {bookingId?.split("?")[0]}
+                            <span className="mt-4 mb-4 fw-bold">
+                                {bookingId?.split("?")[0] || "TR_TXN20241107000049"}
                             </span>
                         ) : (
                             <p className="mt-4 mx-3">
