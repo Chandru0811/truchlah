@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FaTruck, FaWeightHanging } from "react-icons/fa";
 import Image1 from "../../asset/24FT_LORRY.png";
+import Cash from "../../asset/Cash.png";
+import OnlinePayment from "../../asset/OnlinePayment.png";
 
 const BookingSummary = () => {
   const [selectedPayment, setSelectedPayment] = useState("cash");
@@ -25,32 +27,82 @@ const BookingSummary = () => {
                 <span>09 November 2024 @ 7:30 AM</span>
               </div>
 
-              <ul className="list-group-flush mt-3">
+              <ul className="list-group-flush mt-3 ">
                 <li className="list-group-item">
-                  <div className="d-flex align-items-center mb-2">
+                  <div className="d-flex align-items-center mb-2 ">
                     <span className="text-danger">&#9679;</span>
                     <strong className="ms-2">Pickup Location</strong>
                   </div>
-                  <p>
-                    Holiday Inn, PTK nagar, Thiruvanmiyur, Chennai, TamilNadu
-                    600096
-                  </p>
-                  <div className="bg-light p-3 rounded">
-                    <div className="row">
-                      <div className="col-6">
-                        <p>Address Info:</p>
-                      </div>
-                      <div className="col-6">
-                        <p>
+                  <div
+                    class="accordion "
+                    id="accordionExample"
+                    className="bg-light accordion"
+                  >
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button
+                          class="accordion-button"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseOne"
+                          aria-expanded="true"
+                          aria-controls="collapseOne"
+                        >
                           Holiday Inn, PTK nagar, Thiruvanmiyur, Chennai,
                           TamilNadu 600096
-                        </p>
+                        </button>
+                      </h2>
+                      <div
+                        id="collapseOne"
+                        class="accordion-collapse collapse show"
+                        aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div class="accordion-body">
+                          <div className="row">
+                            <div className="col-6">
+                              <p>Address Info:</p>
+                            </div>
+                            <div className="col-6">
+                              <p>
+                                Holiday Inn, PTK nagar, Thiruvanmiyur, Chennai,
+                                TamilNadu 600096
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p>Contact Details:</p>
+                            </div>
+                            <div className="col-6">
+                              <p>Manoj | +91 9876543210</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="col-6">
-                        <p>Contact Details:</p>
-                      </div>
-                      <div className="col-6">
-                        <p>Manoj | +91 9876543210</p>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button
+                          class="accordion-button collapsed"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseTwo"
+                          aria-expanded="false"
+                          aria-controls="collapseTwo"
+                        >
+                          Contact Details
+                        </button>
+                      </h2>
+                      <div
+                        id="collapseTwo"
+                        class="accordion-collapse collapse"
+                        aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div class="accordion-body">
+                          <div className="">
+                            <p>Manoj | +91 9876543210</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -78,10 +130,11 @@ const BookingSummary = () => {
                 <input
                   type="text"
                   className="form-control"
+                  style={{ minHeight: "50px" }}
                   placeholder="Enter a Coupon Code"
                 />
                 <button
-                  className="btn"
+                  className="btn w-25"
                   style={{ background: "rgb(172, 255, 59)" }}
                 >
                   Apply Coupon
@@ -108,7 +161,6 @@ const BookingSummary = () => {
           <div className="card p-4">
             <h3>Package details</h3>
             <div className="text-center">
-              {/* <FaTruck size={80} className="my-2" /> */}
               <img src={Image1} alt="" className="img-fluid w-25" />
               <h4>1.7M_VAN</h4>
               <p>
@@ -161,9 +213,8 @@ const BookingSummary = () => {
             <div className="d-flex justify-content-between">
               <div className="">
                 <div
-                  className={`payment-option text-center p-4 ${
-                    selectedPayment === "cash" ? "active" : ""
-                  }`}
+                  className={`payment-option text-center p-4 ${selectedPayment === "cash" ? "active" : ""
+                    }`}
                   onClick={() => handlePaymentSelection("cash")}
                   style={{
                     border:
@@ -175,7 +226,7 @@ const BookingSummary = () => {
                   }}
                 >
                   <img
-                    src="path/to/cash_icon.png"
+                    src={Cash}
                     alt="Cash on Delivery"
                     style={{ width: "30px", marginBottom: "5px" }}
                   />
@@ -184,9 +235,8 @@ const BookingSummary = () => {
               </div>
               <div className="">
                 <div
-                  className={`payment-option text-center p-4 ${
-                    selectedPayment === "online" ? "active" : ""
-                  }`}
+                  className={`payment-option text-center p-4 ${selectedPayment === "online" ? "active" : ""
+                    }`}
                   onClick={() => handlePaymentSelection("online")}
                   style={{
                     border:
@@ -198,7 +248,7 @@ const BookingSummary = () => {
                   }}
                 >
                   <img
-                    src="path/to/online_icon.png"
+                    src={OnlinePayment}
                     alt="Online Payment"
                     style={{ width: "30px", marginBottom: "5px" }}
                   />
