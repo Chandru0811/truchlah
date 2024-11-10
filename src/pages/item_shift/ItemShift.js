@@ -95,7 +95,7 @@ const ItemShift = () => {
         <React.Fragment>
           {activeStep === 0 && (
 
-            <BookingSummary
+            <MapNew
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
