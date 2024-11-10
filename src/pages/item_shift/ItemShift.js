@@ -33,17 +33,27 @@ const ItemShift = () => {
     switch (activeStep.toString()) {
       case "0":
         if (childRef.current) {
-          childRef.current.map();
+          childRef.current.mapnew();
         }
         break;
       case "1":
         if (childRef.current) {
-          childRef.current.service();
+          childRef.current.dateandtime();
         }
         break;
       case "2":
         if (childRef.current) {
-          childRef.current.checkDetails();
+          childRef.current.servicenew();
+        }
+        break;
+      case "3":
+        if (childRef.current) {
+          childRef.current.bookingsummary();
+        }
+        break;
+      case "4":
+        if (childRef.current) {
+          childRef.current.complete();
         }
         break;
       default:
@@ -94,7 +104,6 @@ const ItemShift = () => {
       >
         <React.Fragment>
           {activeStep === 0 && (
-
             <MapNew
               formData={formData}
               ref={childRef}
