@@ -89,7 +89,7 @@ const MapNew = () => {
 
             <div className="col-md-10 col-12">
               <Autocomplete onLoad={(ref) => (pickupRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
-                <div className="input-group mb-5"
+                <div className="input-group mb-4"
                   style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                   <span
                     className="input-group-text"
@@ -117,7 +117,7 @@ const MapNew = () => {
             </div>
 
             <div className="col-md-10 col-12">
-              <div className="input-group mb-5"
+              <div className="input-group mt-3 mb-3"
                 style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                 <span
                   className="input-group-text"
@@ -143,7 +143,7 @@ const MapNew = () => {
               </div>
             </div>
 
-            <div className="col-md-10 col-12">
+            <div className="col-md-10 col-12 mt-3">
               <div className="row">
                 <div className="col-md-6 col-12 p-2">
                   <div className="input-group mb-5"
@@ -216,7 +216,7 @@ const MapNew = () => {
 
             <div className="col-md-10 col-12">
               <Autocomplete onLoad={(ref) => (dropoffRef.current = ref)} onPlaceChanged={handlePlaceChanged}>
-                <div className="input-group mb-5"
+                <div className="input-group mb-4"
                   style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                   <span
                     className="input-group-text"
@@ -244,7 +244,7 @@ const MapNew = () => {
             </div>
 
             <div className="col-md-10 col-12">
-              <div className="input-group mb-5"
+              <div className="input-group mt-3 mb-3"
                 style={{ borderRadius: "10px", overflow: "hidden", height: "50px" }}>
                 <span
                   className="input-group-text"
@@ -270,7 +270,7 @@ const MapNew = () => {
               </div>
             </div>
 
-            <div className="col-md-10 col-12">
+            <div className="col-md-10 col-12 mt-3">
               <div className="row">
                 <div className="col-md-6 col-12 p-2">
                   <div className="input-group mb-5"
@@ -509,15 +509,17 @@ const MapNew = () => {
           <span className="d-flex justify-content-center align-items-center py-3">
             {totalDistance && <span className="fw-bold">Total Distance: {totalDistance}</span>}
           </span>
-          <GoogleMap
-            center={center}
-            zoom={12}
-            mapContainerStyle={{ width: "100%", height: "400px", minHeight: "90vh", borderRadius: "20px" }}
-          >
-            {directionsResponse && (
-              <DirectionsRenderer directions={directionsResponse} />
-            )}
-          </GoogleMap>
+          <div className="sticky-bottom d-flex justify-content-center align-items-center">
+            <GoogleMap
+              center={center}
+              zoom={12}
+              mapContainerStyle={{ width: "100%", height: "400px", height: "90vh", borderRadius: "20px" }}
+            >
+              {directionsResponse && (
+                <DirectionsRenderer directions={directionsResponse} />
+              )}
+            </GoogleMap>
+          </div>
         </div>
       </div >
     </div >

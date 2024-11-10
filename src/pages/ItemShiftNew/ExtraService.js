@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
-import cardImg from "../../../src/asset/Vechicle4.png";
+import cardImg1 from "../../../src/asset/boxes.png";
+import cardImg2 from "../../../src/asset/longPush.png";
+import cardImg3 from "../../../src/asset/Assemble.png";
+import cardImg4 from "../../../src/asset/wraping.png";
+import cardImg5 from "../../../src/asset/stairCarry.png";
 
 const cardData = [
-    { id: 1, name: "Boxes", img: cardImg },
-    { id: 2, name: "Trucks", img: cardImg },
-    { id: 3, name: "Crates", img: cardImg },
-    { id: 4, name: "Ships", img: cardImg },
-    { id: 5, name: "Bales", img: cardImg },
+    { id: 1, name: "Boxes", img: cardImg1 },
+    { id: 2, name: "Long Push", img: cardImg2 },
+    { id: 3, name: "Assembly / Disassembly", img: cardImg3 },
+    { id: 4, name: "Wrapping", img: cardImg4 },
+    { id: 5, name: "Stair Carry", img: cardImg5 },
 ];
 
 const ExtraService = () => {
@@ -36,14 +40,14 @@ const ExtraService = () => {
                             <div className="col" key={card.id}>
                                 <div
                                     className="card rounded-4 shadow card-hover"
-                                    style={{ minHeight: "300px" }}
+                                    style={{ minHeight: "230px" }}
                                 >
                                     <img src={card.img} alt={card.name} className="img-fluid" />
                                     <div
                                         className="card-body rounded-4 m-2"
                                         style={{ background: "#ADFF3B80" }}
                                     >
-                                        <div className="count_content rounded-4 text-center">
+                                        <div className="count_content rounded-4">
                                             <b>{card.name}</b>
 
                                             <div className="count-controls text-center">

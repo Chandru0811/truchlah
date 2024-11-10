@@ -3,16 +3,17 @@ import { Step, StepLabel, Stepper } from "@mui/material";
 import Map from "./Map";
 import Service from "../common_pages/Service";
 import Summary from "../common_pages/CheckDetails";
-import MapNew from "./MapNew";
-import DateandTime from "./dateandtime";
-import ServiceNew from "../common_pages/ServiceNew";
-import SuccessFulNew from "../common_pages/SuccessFulNew";
-import BookingSummary from "./BookingSummary";
 import { FaChevronRight } from "react-icons/fa";
-import ExtraService from "../common_pages/ExtraService";
+import MapNew from "../ItemShiftNew/MapNew";
+import DateandTime from "../ItemShiftNew/dateandtime";
+import ServiceNew from "../ItemShiftNew/ServiceNew";
+import ExtraService from "../ItemShiftNew/ExtraService";
+import BookingSummary from "../ItemShiftNew/BookingSummary";
+import SuccessFulNew from "../ItemShiftNew/SuccessFulNew";
+import SuccessfullNew from "../ItemShiftNew/SuccessFulNew";
 
 
-const steps = ["Pickup / Dropoff", "Vechicle Selection", "Service", "Extra Service", "Booking Summary", "Complete"];
+const steps = ["Pickup / Dropoff", "Vechicle Selection", "Service", "Booking Summary", "Complete"];
 
 const ItemShift = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -93,6 +94,7 @@ const ItemShift = () => {
       >
         <React.Fragment>
           {activeStep === 0 && (
+
             <BookingSummary
               formData={formData}
               ref={childRef}
@@ -119,8 +121,17 @@ const ItemShift = () => {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 3 && (
+          {/* {activeStep === 3 && (
             <ExtraService
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )} */}
+          {activeStep === 3 && (
+            <BookingSummary
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
@@ -129,7 +140,7 @@ const ItemShift = () => {
             />
           )}
           {activeStep === 4 && (
-            <BookingSummary
+            <SuccessfullNew
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
