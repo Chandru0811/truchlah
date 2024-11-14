@@ -1,13 +1,23 @@
-import { useFormik } from 'formik';
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { FaPlus, FaMinus } from 'react-icons/fa';
+import { useFormik } from "formik";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
+import toast from "react-hot-toast";
+import { FaPlus, FaMinus } from "react-icons/fa";
+import { bookingApi } from "../../config/URL";
+import { Data } from "@react-google-maps/api";
 
 const ServiceNew = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-    const [showQuantity, setShowQuantity] = useState(false);
-    const [manpowerQuantity, setManpowerQuantity] = useState(0);
-    const [manpower, setManpower] = useState(false);
+    const shiftType = sessionStorage.getItem("shiftType");
+    const userId = sessionStorage.getItem("userId");
+    const [data, setData] = useState();
 
+    // console.log("data", data);
+    // console.log("formData", formData);
 
     const formik = useFormik({
       initialValues: {
@@ -19,22 +29,136 @@ const ServiceNew = forwardRef(
         messageToDriver: "",
       },
       onSubmit: async (values) => {
-        console.log("Form Submitted", values);
-        handleNext()
+        console.log("val", values);
+
+        // if (selectedDateTime >= eligibleTime) {
+        const selectedOption = formData.vehicle;
+
+        const totalKilometer = parseInt(formData.distance);
+        const km_charge = 0.75 * totalKilometer;
+        const total = selectedOption.baseFare + km_charge;
+
+        let driverAmount = 0;
+        let extraHelper = 0;
+
+        if (values.driverAsManpower) {
+          driverAmount = selectedOption.driverHelper;
+        }
+
+        if (values.extraManpower) {
+          extraHelper = selectedOption.helper * formik.values.quantity;
+        }
+
+        const payload = {
+          userId: userId,
+          type: formData.type,
+          // locationDetail: JSON.parse(decodeURIComponent(formData.location)),
+          bookingId: formData.bookingId,
+          estKm: parseFloat(formData.distance),
+          scheduledDate: data.booking.scheduledDate,
+          // deliveryDate: deliveryDate,
+          quantity: values.extraManpower ? values.quantity : 0,
+          msgToDriver: values.messageToDriver,
+          noOfPieces: values.noOfPieces,
+          helper: values.driverAsManpower ? "Y" : "N",
+          extraHelper: values.extraManpower ? "Y" : "N",
+          trollyRequired: values.trollyRequired ? "Y" : "N",
+          roundTrip: values.roundTripRequired ? "Y" : "N",
+          vehicleType: formData?.vehicle?.type,
+          promoCode: "",
+          actualKm: parseFloat(formData.distance),
+        };
+        setLoadIndicators(true);
+        try {
+          const response = await bookingApi.put(`booking/update`, payload);
+          console.log("Response:", response);
+          if (response.status === 200) {
+            toast.success("Vehicle selected successfully!");
+            setFormData((prv) => ({
+              ...prv,
+              data: data,
+              msgToDriver: values.messageToDriver,
+            }));
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error.response.message);
+          console.log(error);
+        } finally {
+          setLoadIndicators(false);
+        }
+        // } else {
+        //   toast.warning("You must select a time at least 3 hours from now");
+        // }
       },
     });
 
     const increaseManpowerQuantity = () => {
-      if (manpowerQuantity < 99) {
-        setManpowerQuantity(manpowerQuantity + 1);
+      if (formik.values.quantity < 99) {
+        formik.setFieldValue("quantity", formik.values.quantity + 1);
       }
     };
 
     const decreaseManpowerQuantity = () => {
-      if (manpowerQuantity > 1) {
-        setManpowerQuantity(manpowerQuantity - 1);
+      if (formik.values.quantity > 1) {
+        formik.setFieldValue("quantity", formik.values.quantity - 1);
       }
     };
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await bookingApi.get(
+            `booking/getBookingById/${formData.bookingId}`
+          );
+          if (response.status === 200) {
+            setData(response.data.responseBody);
+            if (response.data.responseBody) {
+              const booking = response.data?.responseBody?.booking;
+              if (booking) {
+                // const [scheduledDate, scheduledTime] = booking?.scheduledDate
+                //   ? booking.scheduledDate.split("T")
+                //   : [null, null];
+                // formik.setFieldValue("date", scheduledDate);
+                // formik.setFieldValue(
+                //   "time",
+                //   scheduledTime ? scheduledTime.slice(0, 5) : ""
+                // );
+                formik.setFieldValue(
+                  "driverAsManpower",
+                  booking.helper === "Y" ? true : false
+                );
+                formik.setFieldValue(
+                  "extraManpower",
+                  booking.extraHelper === "Y" ? true : false
+                );
+                formik.setFieldValue(
+                  "trollyRequired",
+                  booking.trollyRequired === "Y" ? true : false
+                );
+                formik.setFieldValue(
+                  "roundTripRequired",
+                  booking.roundTrip === "Y" ? true : false
+                );
+                formik.setFieldValue("quantity", booking.quantity || 0);
+                formik.setFieldValue("noOfPieces", booking.noOfPieces || 0);
+                formik.setFieldValue(
+                  "messageToDriver",
+                  formData.msgToDriver
+                );
+              }
+            }
+          }
+        } catch (error) {
+          toast.error("Error Fetching Data: " + error.message);
+        } finally {
+          // setIsLoading(false);
+        }
+      };
+      fetchData();
+    }, []);
 
     useImperativeHandle(ref, () => ({
       servicenew: formik.handleSubmit,
@@ -49,10 +173,10 @@ const ServiceNew = forwardRef(
               <div
                 className="d-flex justify-content-between p-3"
                 style={{
-                  backgroundColor: '#fff',
-                  borderRadius: '5px',
-                  alignItems: 'center',
-                  border: '1px solid #e0dfdf'
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                  alignItems: "center",
+                  border: "1px solid #e0dfdf",
                 }}
               >
                 <span>
@@ -62,8 +186,8 @@ const ServiceNew = forwardRef(
                   <input
                     type="checkbox"
                     name="driverAsManpower"
+                    checked={formik.values.driverAsManpower}
                     className="form-check-input custom-checkbox"
-                    value={true}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     id="flexCheckChecked"
@@ -73,9 +197,13 @@ const ServiceNew = forwardRef(
             </div>
 
             {/* Extra Manpower Checkbox */}
-            <div className='col-md-6 col-12 mb-3 p-3'>
-              <div className='row'>
-                <div className='col-md-6 col-12 mb-3'>
+            <div className="col-md-6 col-12 mb-3 p-3">
+              <div className="row">
+                <div
+                  className={`${
+                    formik.values.extraManpower ? `col-md-6 col-12` : `col-12`
+                  } mb-3`}
+                >
                   <div
                     className="d-flex align-items-center justify-content-between p-3"
                     style={{
@@ -89,25 +217,28 @@ const ServiceNew = forwardRef(
                       <b>Extra Manpower</b>
                     </span>
                     <input
-                      className="form-check-input custom-checkbox"
+                      className={`form-check-input custom-checkbox `}
                       style={{ cursor: "pointer" }}
                       type="checkbox"
                       id="flexCheckChecked"
-                      value={true}
-                      onClick={() => {
-                        setShowQuantity(!showQuantity)
-                        setManpowerQuantity(1);
-                      }}
                       name="extraManpower"
-                      onChange={formik.handleChange}
+                      checked={formik.values.extraManpower}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        formik.setFieldValue("extraManpower",isChecked);
+                        if (isChecked) {
+                          formik.setFieldValue("quantity", 1);
+                        }
+                      }}
+                      // onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12">
-                  {/* Checkbox section */}
-                  {showQuantity && (
+                {formik.values.extraManpower && (
+                  <div className="col-md-6 col-12">
+                    {/* Checkbox section */}
                     <div
                       className="d-flex align-items-center justify-content-between p-3"
                       style={{
@@ -120,15 +251,19 @@ const ServiceNew = forwardRef(
                       <span>
                         <b>No.Of Workers</b>
                       </span>
-                      <div className="quantity-input d-flex align-items-center"
-                        style={{ backgroundColor: "#84cd1f", borderRadius: "30px" }}
+                      <div
+                        className="quantity-input d-flex align-items-center"
+                        style={{
+                          backgroundColor: "#84cd1f",
+                          borderRadius: "30px",
+                        }}
                       >
                         {/* Decrease button */}
                         <button
                           className="quantity-btn"
                           type="button"
                           onClick={decreaseManpowerQuantity}
-                          disabled={manpowerQuantity === 1}
+                          disabled={formik.values.quantity === 1}
                           style={{
                             backgroundColor: "#84cd1f",
                             color: "#fff",
@@ -149,12 +284,12 @@ const ServiceNew = forwardRef(
                         <input
                           type="number"
                           className="quantity-value"
-                          value={manpowerQuantity}
+                          value={formik.values.quantity}
                           min={0}
                           max={99}
                           readOnly
                           style={{
-                            width: "25px", // Adjusted width for better alignment
+                            width: "25px", 
                             padding: "1px",
                             textAlign: "center",
                             border: "none",
@@ -169,7 +304,7 @@ const ServiceNew = forwardRef(
                           className="quantity-btn"
                           onClick={increaseManpowerQuantity}
                           type="button"
-                          disabled={manpowerQuantity === 99}
+                          disabled={formik.values.quantity === 99}
                           style={{
                             backgroundColor: "#84cd1f",
                             color: "#fff",
@@ -187,21 +322,20 @@ const ServiceNew = forwardRef(
                         </button>
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
-
 
             {/* Trolly Required Checkbox */}
             <div className="col-md-6 col-12 mb-3 p-3">
               <div
                 className="d-flex justify-content-between p-3"
                 style={{
-                  backgroundColor: '#fff',
-                  borderRadius: '5px',
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
                   border: "1px solid #e0dfdf",
-                  alignItems: 'center'
+                  alignItems: "center",
                 }}
               >
                 <span>
@@ -211,7 +345,7 @@ const ServiceNew = forwardRef(
                   <input
                     className="form-check-input custom-checkbox"
                     type="checkbox"
-                    value={true}
+                    checked={formik.values.trollyRequired}
                     id="flexCheckChecked"
                     name="trollyRequired"
                     onChange={formik.handleChange}
@@ -226,9 +360,10 @@ const ServiceNew = forwardRef(
               <div
                 className="d-flex justify-content-between p-3"
                 style={{
-                  backgroundColor: '#fff',
-                  borderRadius: '5px', alignItems: 'center',
-                  border: "1px solid #e0dfdf"
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                  alignItems: "center",
+                  border: "1px solid #e0dfdf",
                 }}
               >
                 <span>
@@ -238,7 +373,7 @@ const ServiceNew = forwardRef(
                   <input
                     className="form-check-input custom-checkbox"
                     type="checkbox"
-                    value={true}
+                    checked={formik.values.roundTripRequired}
                     id="flexCheckChecked"
                     name="roundTripRequired"
                     onChange={formik.handleChange}
@@ -265,6 +400,7 @@ const ServiceNew = forwardRef(
         </form>
       </div>
     );
-  })
+  }
+);
 
 export default ServiceNew;

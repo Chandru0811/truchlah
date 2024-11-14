@@ -1,303 +1,509 @@
-import React, { useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { FaTruck, FaWeightHanging } from "react-icons/fa";
 import Image1 from "../../asset/24FT_LORRY.png";
 import Cash from "../../asset/Cash.png";
 import OnlinePayment from "../../asset/OnlinePayment.png";
+import { bookingApi } from "../../config/URL";
+import toast from "react-hot-toast";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-const BookingSummary = () => {
-  const [selectedPayment, setSelectedPayment] = useState("cash");
-  const [isAgreed, setIsAgreed] = useState(false);
+const validationSchema = Yup.object().shape({
+  paymentType: Yup.string().required("!Payment Type is required"),
+  isAgreed: Yup.bool().oneOf([true], "!Agreement is required"),
+});
 
-  const handlePaymentSelection = (method) => {
-    setSelectedPayment(method);
-  };
+const BookingSummary = forwardRef(
+  ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
+    const [data, setData] = useState({});
+    const formik = useFormik({
+      initialValues: {
+        paymentType: "",
+        isAgreed: false,
+      },
+      validationSchema: validationSchema,
 
-  const handleCheckboxChange = () => {
-    setIsAgreed(!isAgreed);
-  };
+      onSubmit: async (values) => {
+        console.log("values", values);
+        setLoadIndicators(true);
 
-  return (
-    <div className="container my-4">
-      <div className="row">
-        <div className="col-md-5 col-12">
-          <div className="card">
-            <div className="">
-              <div className="d-flex justify-content-between align-items-center border-bottom ms-3 me-3 p-2">
-                <h5>Item Shifting</h5>
-                <span>09 November 2024 @ 7:30 AM</span>
+        if (values.paymentType === "cash") {
+          try {
+            const response = await bookingApi.post(
+              `booking/cashPayment/${formData.bookingId}`
+            );
+            if (response.status === 200) {
+              handleNext();
+              // sessionStorage.removeItem("shiftType");
+            } else {
+              toast.error("Cash payment processing failed.");
+            }
+          } catch (error) {
+            toast.error("Error Fetching Data: " + error.message);
+          } finally {
+            setLoadIndicators(false);
+          }
+        } else {
+          try {
+            const response = await bookingApi.post(
+              `booking/generateCardTransactionPaymentLink?bookingId=${formData.bookingId}`
+            );
+            if ([200, 201].includes(response.status)) {
+              const paymentLink = response.data.paymentLink.replace("?", "&");
+              window.open(paymentLink, "_self");
+              // sessionStorage.removeItem("shiftType");
+              handleNext();
+            } else {
+              toast.error("Payment failed, please try again.");
+            }
+          } catch (error) {
+            console.error("Payment error: " + error.message);
+          } finally {
+            setLoadIndicators(false);
+          }
+        }
+      },
+    });
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await bookingApi.get(
+            `booking/getBookingById/${formData.bookingId}`
+          );
+          if (response.status === 200) {
+            setData(response.data.responseBody);
+          }
+        } catch (error) {
+          toast.error("Error Fetching Data: " + error.message);
+        } finally {
+          // setIsLoading(false);
+        }
+      };
+      fetchData();
+    }, []);
+
+    const bookingTripLocations = data.bookingTripLocations || [];
+    const firstLocation = bookingTripLocations[0] || {};
+    const lastLocation =
+      bookingTripLocations[bookingTripLocations.length - 1] || {};
+
+    // console.log("booking", firstLocation);
+    // console.log("form", lastLocation);
+    // console.log("bookingTripLocations", bookingTripLocations);
+
+    useImperativeHandle(ref, () => ({
+      summary: formik.handleSubmit,
+    }));
+
+    return (
+      <div className="container my-4">
+        <form onSubmit={formik.handleSubmit}>
+          <div className="row">
+            <div className="col-md-5 col-12">
+              <div className="card">
+                <div className="">
+                  <div className="d-flex justify-content-between align-items-center border-bottom ms-3 me-3 p-2">
+                    <h5>Item Shifting</h5>
+                    <span>
+                      {new Date(data?.booking?.scheduledDate).toLocaleString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                        }
+                      )}
+                    </span>
+                  </div>
+
+                  <ul className="list-group-flush mt-3 ps-4 pe-3">
+                    <li className="list-group-item mb-2 ">
+                      <div className="d-flex align-items-center ">
+                        <span className="text-danger">&#9679;</span>
+                        <strong className="ms-1">Pickup Location</strong>
+                      </div>
+                      <div
+                        class="accordion "
+                        id="accordionExample"
+                        className="bg-light accordion"
+                      >
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingOne">
+                            <button
+                              class="accordion-button "
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#collapseOne"
+                              aria-expanded="true"
+                              aria-controls="collapseOne"
+                            >
+                              {firstLocation.pickupAddress} ,{" "}
+                              {firstLocation.pickup}
+                            </button>
+                          </h2>
+                          <div
+                            id="collapseOne"
+                            class="accordion-collapse collapse show"
+                            aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample"
+                          >
+                            <div class="accordion-body">
+                              <div className="row">
+                                <div className="col-6">
+                                  <p>Address Info:</p>
+                                </div>
+                                <div className="col-6">
+                                  <p>
+                                    {firstLocation.pickupAddress} ,{" "}
+                                    {firstLocation.pickup}
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p>Contact Details:</p>
+                                </div>
+                                <div className="col-6">
+                                  <p>
+                                    {firstLocation.pickupContactName} | +
+                                    {firstLocation.pickupCountryCode}{" "}
+                                    {firstLocation.pickupMobile}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    {bookingTripLocations.length > 1 &&
+                      bookingTripLocations.slice(0, -1).map((stop, index) => (
+                        <li className="list-group-item mb-2" key={index}>
+                          <div className="d-flex align-items-center ">
+                            <span className="text-warning">&#9679;</span>
+                            <strong className="ms-1">
+                              Intermediate Location - {index + 1}
+                            </strong>
+                          </div>
+                          <div
+                            className="bg-light accordion"
+                            id={`accordionExample${index}`}
+                          >
+                            <div className="accordion-item">
+                              <h2
+                                className="accordion-header"
+                                id={`heading${index}`}
+                              >
+                                <button
+                                  className="accordion-button collapsed"
+                                  type="button"
+                                  data-bs-toggle="collapse"
+                                  data-bs-target={`#collapse${index}`} // Unique collapse ID
+                                  aria-expanded="false"
+                                  aria-controls={`collapse${index}`} // Matching aria-controls
+                                >
+                                  {stop.dropoffAddress} , {stop.dropoff}
+                                </button>
+                              </h2>
+                              <div
+                                id={`collapse${index}`} // Unique ID for the collapse element
+                                className="accordion-collapse collapse"
+                                aria-labelledby={`heading${index}`}
+                                data-bs-parent={`#accordionExample${index}`}
+                              >
+                                <div className="accordion-body">
+                                  <div className="row">
+                                    <div className="col-6">
+                                      <p>Address Info:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>
+                                        {stop.dropoffAddress} , {stop.dropoff}
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>Contact Details:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>
+                                        {stop.dropoffContactName} | +
+                                        {stop.dropoffCountryCode}{" "}
+                                        {stop.dropoffMobile}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+
+                    <li className="list-group-item mb-2">
+                      <div className="d-flex align-items-center ">
+                        <span className="text-success">&#9679;</span>
+                        <strong className="ms-1">Dropoff Location</strong>
+                      </div>
+                      <div
+                        class="accordion "
+                        id="accordionExample1"
+                        className="bg-light accordion"
+                      >
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingTwo">
+                            <button
+                              class="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#collapseTwo"
+                              aria-expanded="false"
+                              aria-controls="collapseTwo"
+                            >
+                              {lastLocation.dropoffAddress} ,{" "}
+                              {lastLocation.dropoff}
+                            </button>
+                          </h2>
+                          <div
+                            id="collapseTwo"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample1"
+                          >
+                            <div class="accordion-body">
+                              <div className="row">
+                                <div className="col-6">
+                                  <p>Address Info:</p>
+                                </div>
+                                <div className="col-6">
+                                  <p>
+                                    {lastLocation.dropoffAddress} ,{" "}
+                                    {lastLocation.dropoff}
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p>Contact Details:</p>
+                                </div>
+                                <div className="col-6">
+                                  <p>
+                                    {lastLocation.dropoffContactName} | +
+                                    {lastLocation.dropoffCountryCode}{" "}
+                                    {lastLocation.dropoffMobile}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-center mt-2">
+                        <strong>Total Distance:</strong> {data?.booking?.estKm}{" "}
+                        KM
+                      </p>
+                    </li>
+                  </ul>
+                </div>
               </div>
-
-              <ul className="list-group-flush mt-3 ">
-                <li className="list-group-item">
-                  <div className="d-flex align-items-center mb-2 ">
-                    <span className="text-danger">&#9679;</span>
-                    <strong className="ms-2">Pickup Location</strong>
-                  </div>
-                  <div
-                    class="accordion "
-                    id="accordionExample"
-                    className="bg-light accordion"
-                  >
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingOne">
-                        <button
-                          class="accordion-button"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target="#collapseOne"
-                          aria-expanded="true"
-                          aria-controls="collapseOne"
-                        >
-                          Holiday Inn, PTK nagar, Thiruvanmiyur, Chennai,
-                          TamilNadu 600096
-                        </button>
-                      </h2>
-                      <div
-                        id="collapseOne"
-                        class="accordion-collapse collapse show"
-                        aria-labelledby="headingOne"
-                        data-bs-parent="#accordionExample"
-                      >
-                        <div class="accordion-body">
-                          <div className="row">
-                            <div className="col-6">
-                              <p>Address Info:</p>
-                            </div>
-                            <div className="col-6">
-                              <p>
-                                Holiday Inn, PTK nagar, Thiruvanmiyur, Chennai,
-                                TamilNadu 600096
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p>Contact Details:</p>
-                            </div>
-                            <div className="col-6">
-                              <p>Manoj | +91 9876543210</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingTwo">
-                        <button
-                          class="accordion-button collapsed"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target="#collapseTwo"
-                          aria-expanded="false"
-                          aria-controls="collapseTwo"
-                        >
-                          Contact Details
-                        </button>
-                      </h2>
-                      <div
-                        id="collapseTwo"
-                        class="accordion-collapse collapse"
-                        aria-labelledby="headingTwo"
-                        data-bs-parent="#accordionExample"
-                      >
-                        <div class="accordion-body">
-                          <div className="">
-                            <p>Manoj | +91 9876543210</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                <li className="list-group-item">
-                  <div className="d-flex align-items-center mb-2">
-                    <span className="text-success">&#9679;</span>
-                    <strong className="ms-2">Dropoff Location</strong>
-                  </div>
-                  <p className="text-center">
-                    <strong>Total Distance:</strong> 25.45 KM
+              <div className="card p-4 mt-3">
+                <h3>Package details</h3>
+                <div className="text-center">
+                  <img
+                    src={data?.booking?.vehicleImage}
+                    alt={data?.booking?.vehicleName}
+                    className="img-fluid w-25"
+                  />
+                  <h4>{data?.booking?.vehicleName}</h4>
+                  <p>
+                    <FaWeightHanging /> {formData?.vehicle?.vehicleCapacity} Kg
                   </p>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-1 col-12"></div>
-        <div className="col-md-6 col-12">
-          <div className="card border-0">
-            <div className="card-body">
-              <h6 className="fw-bold mb-3">Payment</h6>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  style={{ minHeight: "50px" }}
-                  placeholder="Enter a Coupon Code"
-                />
-                <button
-                  className="btn w-25"
-                  style={{ background: "rgb(172, 255, 59)" }}
-                >
-                  Apply Coupon
-                </button>
-              </div>
-              <div className="d-flex justify-content-between mb-1">
-                <p>Subtotal</p> <p>$66.09</p>
-              </div>
-              <div className="d-flex justify-content-between mb-1 text-danger">
-                <p>Discount</p> <p>$0.00</p>
-              </div>
-              <div className="d-flex justify-content-between fw-bold mb-3">
-                <p>Total Price</p> <p>$66.09</p>
-              </div>
-              <p className="mt-3">
-                Please select your preferred payment method
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row mt-5">
-        <div className="col-md-5 col-12">
-          <div className="card p-4">
-            <h3>Package details</h3>
-            <div className="text-center">
-              <img src={Image1} alt="" className="img-fluid w-25" />
-              <h4>1.7M_VAN</h4>
-              <p>
-                <FaWeightHanging /> 50 Kg
-              </p>
-            </div>
-            <div className="row ps-4">
-              <div className="col-6">
-                <p>Manpower</p>
-              </div>
-              <div className="col-6">
-                <p>:Yes</p>
-              </div>
-              <div className="col-6">
-                <p>Extra ManPower</p>
-              </div>
-              <div className="col-6">
-                <p>:No</p>
-              </div>
-              <div className="col-6">
-                <p>Extra ManPower Quantity</p>
-              </div>
-              <div className="col-6">
-                <p>:0</p>
-              </div>
-              <div className="col-6">
-                <p>Trolley Required</p>
-              </div>
-              <div className="col-6">
-                <p>:Yes</p>
-              </div>
-              <div className="col-6">
-                <p>Round Trip</p>
-              </div>
-              <div className="col-6">
-                <p>:No</p>
-              </div>
-              <div className="col-6">
-                <p>Message To Driver</p>
-              </div>
-              <div className="col-6">
-                <p>:No</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-1 col-12"></div>
-        <div className="col-md-6 col-12">
-          <div className="card p-3 border-0">
-            <div className="d-flex justify-content-between">
-              <div className="">
-                <div
-                  className={`payment-option text-center p-4 ${selectedPayment === "cash" ? "active" : ""
-                    }`}
-                  onClick={() => handlePaymentSelection("cash")}
-                  style={{
-                    border:
-                      selectedPayment === "cash"
-                        ? "2px solid #28a745"
-                        : "1px solid #e0e0e0",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <img
-                    src={Cash}
-                    alt="Cash on Delivery"
-                    style={{ width: "30px", marginBottom: "5px" }}
-                  />
-                  <p>Cash on Delivery</p>
                 </div>
-              </div>
-              <div className="">
-                <div
-                  className={`payment-option text-center p-4 ${selectedPayment === "online" ? "active" : ""
-                    }`}
-                  onClick={() => handlePaymentSelection("online")}
-                  style={{
-                    border:
-                      selectedPayment === "online"
-                        ? "2px solid #28a745"
-                        : "1px solid #e0e0e0",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <img
-                    src={OnlinePayment}
-                    alt="Online Payment"
-                    style={{ width: "30px", marginBottom: "5px" }}
-                  />
-                  <p>Online Payment</p>
+                <div className="row ps-4">
+                  <div className="col-6">
+                    <p>Manpower</p>
+                  </div>
+                  <div className="col-6">
+                    <p>:{data?.booking?.helper === "Y" ? "Yes" : "No"}</p>
+                  </div>
+                  <div className="col-6">
+                    <p>Extra ManPower</p>
+                  </div>
+                  <div className="col-6">
+                    <p>:{data?.booking?.extraHelper === "Y" ? "Yes" : "No"}</p>
+                  </div>
+                  {data?.booking?.extraHelper === "Y" ? (
+                    <>
+                      <div className="col-6">
+                        <p>Extra ManPower Quantity</p>
+                      </div>
+
+                      <div className="col-6">
+                        <p>:{data?.booking?.quantity || 0}</p>
+                      </div>
+                    </>
+                  ) : null}
+
+                  <div className="col-6">
+                    <p>Trolley Required</p>
+                  </div>
+                  <div className="col-6">
+                    <p>
+                      :{data?.booking?.trollyRequired === "Y" ? "Yes" : "No"}
+                    </p>
+                  </div>
+                  <div className="col-6">
+                    <p>Round Trip</p>
+                  </div>
+                  <div className="col-6">
+                    <p>:{data?.booking?.roundTrip === "Y" ? "Yes" : "No"}</p>
+                  </div>
+                  <div className="col-6">
+                    <p>Message To Driver</p>
+                  </div>
+                  <div className="col-6">
+                    <p>:{data?.booking?.msgToDriver || "--"}</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="mt-3">
-              <h5>
-                {selectedPayment === "cash"
-                  ? "Pay by Cash on Delivery"
-                  : "Pay by Online Payment"}
-              </h5>
-              <p>
-                {selectedPayment === "cash"
-                  ? "Pay conveniently at your doorstep with cash on delivery."
-                  : "Pay securely through online payment."}
-              </p>
+            <div className="col-md-1 col-12"></div>
+            <div className="col-md-6 col-12">
+              <div style={{ position: "sticky", top: "67px", zIndex: "1" }}>
+                <div className="card border-0">
+                  <div className="card-body">
+                    <h6 className="fw-bold mb-3">Payment</h6>
+                    <div className="input-group mb-3">
+                      <input
+                        type="text"
+                        className="form-control"
+                        style={{ minHeight: "50px" }}
+                        placeholder="Enter a Coupon Code"
+                      />
+                      <button
+                        className="btn w-25"
+                        style={{ background: "rgb(172, 255, 59)" }}
+                      >
+                        Apply Coupon
+                      </button>
+                    </div>
+                    <div className="d-flex justify-content-between mb-1">
+                      <p>Subtotal</p> <p>$66.09</p>
+                    </div>
+                    <div className="d-flex justify-content-between mb-1 text-danger">
+                      <p>Discount</p> <p>$0.00</p>
+                    </div>
+                    <div className="d-flex justify-content-between fw-bold mb-3">
+                      <p>Total Price</p> <p>$66.09</p>
+                    </div>
+                    <p className="mt-3">
+                      Please select your preferred payment method
+                    </p>
+                  </div>
+                </div>
+                <div className="card p-3 border-0">
+                  <div className="row">
+                    <div className="col-md-6 col-12">
+                      <div
+                        className={`payment-option text-center p-4 ${
+                          formik.values.paymentType === "cash" ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          formik.setFieldValue("paymentType", "cash")
+                        }
+                        style={{
+                          border:
+                            formik.values.paymentType === "cash"
+                              ? "2px solid #28a745"
+                              : "1px solid #e0e0e0",
+                          cursor: "pointer",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        <img
+                          src={Cash}
+                          alt="Cash on Delivery"
+                          style={{ width: "30px", marginBottom: "5px" }}
+                        />
+                        <p>Cash on Delivery</p>
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div
+                        className={`payment-option text-center p-4 ${
+                          formik.values.paymentType === "online" ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          formik.setFieldValue("paymentType", "online")
+                        }
+                        style={{
+                          border:
+                            formik.values.paymentType === "online"
+                              ? "2px solid #28a745"
+                              : "1px solid #e0e0e0",
+                          cursor: "pointer",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        <img
+                          src={OnlinePayment}
+                          alt="Online Payment"
+                          style={{ width: "30px", marginBottom: "5px" }}
+                        />
+                        <p>Online Payment</p>
+                      </div>
+                    </div>
+                    {formik.errors.paymentType &&
+                      formik.touched.paymentType && (
+                        <div>
+                          <small className="text-danger">
+                            {formik.errors.paymentType}
+                          </small>
+                        </div>
+                      )}
+                  </div>
+                  <div className="mt-3">
+                    <h5>
+                      {formik.values.paymentType === "cash"
+                        ? "Pay by Cash on Delivery"
+                        : "Pay by Online Payment"}
+                    </h5>
+                    <p>
+                      {formik.values.paymentType === "cash"
+                        ? "Pay conveniently at your doorstep with cash on delivery."
+                        : "Pay securely through online payment."}
+                    </p>
+                  </div>
+                  <div className="form-check mt-3">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="isAgreed"
+                      {...formik.getFieldProps("isAgreed")}
+                    />
+                    <label className="form-check-label" htmlFor="isAgreed">
+                      I agree to the terms and conditions
+                    </label>
+                    {formik.errors.isAgreed && formik.touched.isAgreed && (
+                      <div>
+                        <small className="text-danger">
+                          {formik.errors.isAgreed}
+                        </small>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="termsCheckbox"
-                checked={isAgreed}
-                onChange={handleCheckboxChange}
-              />
-              <label
-                className="form-check-label text-muted"
-                htmlFor="termsCheckbox"
-              >
-                I agree to the terms and conditions
-              </label>
-            </div>
-            {/* <div className="d-flex justify-content-between">
-              <button className="btn btn-light">Back</button>
-              <button
-                className="btn fw-bold border-0"
-                style={{ background: "rgb(172, 255, 59)" }}
-                disabled={!isAgreed}
-              >
-                Proceed
-              </button>
-            </div> */}
           </div>
-        </div>
+        </form>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default BookingSummary;

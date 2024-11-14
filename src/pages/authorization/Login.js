@@ -255,9 +255,10 @@ function Login({ handleLogin, handleAdminLogin }) {
         >
           <div className="row">
             <h5 className="LoginTitle pb-2">Login</h5>
-            <h6 className="LoginSubHead">
+            {/* <h6 className="LoginSubHead">
               Explore Our Lightning-Fast Truck Delivery Services
-            </h6>
+            </h6> */}
+            <h1 className="LoginSubHead">Trucklah Booking - Move Easy with Trucklah</h1>
             <p className="LoginContent">
               Welcome to our fast and reliable truck delivery platform. Please
               log in to access your account and experience seamless delivery

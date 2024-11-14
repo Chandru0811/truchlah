@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Step, StepLabel, Stepper } from "@mui/material";
-import Service from "../common_pages/Service";
-import Summary from "../common_pages/CheckDetails";
-import HouseShift from "./HouseShift";
+import { FaChevronRight } from "react-icons/fa";
+import DateandTime from "../ItemShiftNew/dateandtime";
+import HouseMap from "./HouseMap";
+import ServiceNew from "../ItemShiftNew/ServiceNew";
+import ExtraService from "../ItemShiftNew/ExtraService";
+import BookingSummary from "../ItemShiftNew/BookingSummary";
+import SuccessfullNew from "../ItemShiftNew/SuccessFulNew";
 
-const steps = ["Map", "Service","Details"];
+const steps = ["Pickup / Dropoff", "Vechicle Selection", "Service","Extra Service", "Booking Summary", "Complete"];
 
 const HouseShiftSteps = () => {
 const [activeStep, setActiveStep] = useState(0);
@@ -23,17 +27,32 @@ const handleNext = () => {
     switch (activeStep.toString()) {
       case "0":
         if (childRef.current) {
-          childRef.current.map();
+          childRef.current.housemap();
         }
         break;
       case "1":
         if (childRef.current) {
-          childRef.current.service();
+          childRef.current.dateandtime();
         }
         break;
       case "2":
         if (childRef.current) {
-          childRef.current.checkDetails();
+          childRef.current.servicenew();
+        }
+        break;
+      case "3":
+        if (childRef.current) {
+          childRef.current.extraservice();
+        }
+        break;
+      case "4":
+        if (childRef.current) {
+          childRef.current.summary();
+        }
+        break;
+      case "5":
+        if (childRef.current) {
+          childRef.current.complete();
         }
         break;
       default:
@@ -42,88 +61,134 @@ const handleNext = () => {
   };
   
   return (
-    <section className="summary">
-        <Stepper className="mt-5" activeStep={activeStep} alternativeLabel>
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepLabel>{step}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <div
-          className="container-fluid card shadow-lg border-0 mb-4 d-flex justify-content-center align-items-center"
-        //   style={{ minHeight: "70vh", }}
-        >
-          <React.Fragment>
-            {activeStep === 0 && (
-              <HouseShift
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )}
-            {activeStep === 1 && (
-              <Service
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )}
-            {activeStep === 2 && (
-              <Summary
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )}
-            {/* {activeStep === 1 && (
-              <Form3
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )} */}
-            <div className="container-fluid p-1 d-flex align-items-center justify-content-center gap-2">
-              {activeStep !== 0 && activeStep !== 1 && (
-                <button
-                  className="btn btn-secondary mb-3" style={{width:"100%"}}
-                  onClick={handleBack}
-                >
-                  Back
-                </button>
-              )}
+    <section className="container">
+      <span className="d-flex fw-bold py-4">
+        <p style={{ fontSize: "20px" }}>Booking Type <FaChevronRight size={"15"} /></p>
+        <p style={{ fontSize: "20px", color: "#acff3b" }}>
+          Item Shifting
+          {/* {shiftType} Sfifting */}
+        </p>
+      </span>
 
-              {activeStep !== steps.length - 1 && (
-                <>
-                  <button
-                    type="submit"
-                    onClick={handleButtonClick}
-                    className="btn btn-primary mb-3 px-5"
-                    id="NextMove"
-                    disabled={loadIndicator}
-                  >
-                    {loadIndicator && (
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        aria-hidden="true"
-                      ></span>
-                    )}
-                    {activeStep === steps.length - 1 ? "Submit" : "Next"}
-                  </button>
-                </>
+      <Stepper className="" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <StepLabel>{step}</StepLabel>
+            {/* <StepLabel
+              sx={{
+                "& .MuiStepIcon-root": {
+                  color: index === activeStep ? "#ADFF3B" : "rgba(0, 0, 0, 0.38)",
+                  "&:hover": {
+                    color: "#ADFF3B",
+                  },
+                },
+
+                "& .Mui-completed .MuiStepIcon-root": {
+                  color: "#ADFF3B",
+                },
+
+                "& .MuiStepLabel-label": {
+                  color: index === activeStep ? "black" : "#333",
+                },
+              }}
+            >
+              {step}
+            </StepLabel> */}
+          </Step>
+        ))}
+      </Stepper>
+      <div
+        className="text-centerborder-0 mb-4"
+      //   style={{ minHeight: "70vh", }}
+      >
+        <React.Fragment>
+          {activeStep === 0 && (
+            <HouseMap
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+          {activeStep === 1 && (
+            <DateandTime
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+          {activeStep === 2 && (
+            <ServiceNew
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+          {activeStep === 3 && (
+            <ExtraService
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+         {activeStep === 4 && (
+            <BookingSummary
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+           {activeStep === 5 && (
+            <SuccessfullNew
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
+            />
+          )}
+
+          <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
+            {activeStep !== 0 &&  (
+              <button
+                className="btn btn-secondary btn-sm border-0"
+                style={{ padding: "7px", color: "black", background:"#f4f4f4", width: "7%" }}
+                disabled={activeStep === 0}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
+            <div style={{ flex: "1 1 auto" }}></div>
+            {activeStep !== 5 &&  (
+            <button
+              type="submit"
+              onClick={handleButtonClick}
+              style={{ padding: "7px", background: "#acff3b", width: "7%" }}
+              className="btn btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
               )}
-            </div>
-          </React.Fragment>
-        </div>
-      </section>
+              {activeStep !== steps.length - 2 ? "Next" : "Proceed"}
+            </button>)}
+          </div>
+        </React.Fragment>
+      </div>
+    </section>
   )
 }
 

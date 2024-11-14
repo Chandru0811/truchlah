@@ -2311,3 +2311,7 @@ body {
   align-items: center !important;
   justify-content: center !important;
 }
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed{
+  color:#acff3b !important;
+}

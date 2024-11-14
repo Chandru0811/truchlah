@@ -77,40 +77,6 @@ const Map = forwardRef(
     validationSchema: validationSchema,
 
     onSubmit: async (values) => {
-      // Find the index of the drop location
-      // const dropIndex = locationDetail.findIndex(location => location.state === "drop");
-
-      // if (dropIndex !== -1) {
-      //   // Remove the drop location from its current position
-      //   const dropLocation = locationDetail.splice(dropIndex, 1)[0];
-
-      //   // Add the drop location to the end of the array
-      //   locationDetail.push(dropLocation);
-      // }
-
-      // const payload = {
-      //   userId: userId,
-      //   type: shiftType,
-      //   locationDetail: locationDetail,
-      // };
-
-      // console.log("Form values:", payload);
-
-      // try {
-      //   const response = await bookingApi.post(`booking/create`, payload);
-      //   if (response.status === 200) {
-      //     toast.success("Location has been successfully added!");
-      //     const bookingId = response.data.responseBody.booking.bookingId;
-      //     const locations = encodeURIComponent(JSON.stringify(locationDetail));
-      //     navigate(
-      //       `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-      //     );
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error.message || "An error occurred while submitting the form.");
-      // }
       SubmitLocation();
     },
   });
@@ -449,7 +415,7 @@ const Map = forwardRef(
   }
   return (
     <div className="container-fluid" style={{ backgroundColor: "#fcf3f6" }}>
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Cancel Order</Modal.Title>
         </Modal.Header>
@@ -458,7 +424,7 @@ const Map = forwardRef(
           <button className="btn btn-danger btn-sm px-3" onClick={handleClose}>No</button>
           <button className="btn btn-info btn-sm px-3" onClick={() => { handleClose(); navigate("/shift") }}>Yes</button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
       <form onSubmit={formik.handleSubmit}>
         <div className="row">
           <div className="col-12" id="MapContainer">
@@ -685,38 +651,6 @@ const Map = forwardRef(
                   </div>
                 )}
 
-                <div className="text-center mt-2">
-                  {/* <Link to="/service">
-                    <button type="submit" className="btn btn-primary px-5 py-2" id="NextMove">
-                      Next
-                    </button>
-                  </Link> */}
-                </div>
-              </div>
-            </div>
-            <div className="container">
-              <div className="row d-flex flex-column align-items-center justify-content-center">
-                <div className="col-md-4 col-12"></div>
-                <div className="col-md-5 col-12">
-                  {/* <div className="text-center mt-4">
-                    <button
-                      type="button"
-                      onClick={SubmitLocation}
-                      className="btn btn-primary px-5 py-2 text-center"
-                      id="NextMove"
-                      disabled={isNextButtonDisabled || loadIndicator}
-                    >
-                      {loadIndicator && (
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          aria-hidden="true"
-                        ></span>
-                      )}
-                      Next
-                    </button>
-                  </div> */}
-                </div>
-                <div className="col-md-3 col-12"></div>
               </div>
             </div>
           </div>

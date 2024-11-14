@@ -21,11 +21,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { bookingApi } from "../../config/URL";
+import fetchAllCategorysWithIds from "../Lists/CategoryList";
 
 const center = { lat: 50.0755, lng: 14.4378 };
 const libraries = ["places"];
 
 const validationSchema = Yup.object().shape({
+  type: Yup.string().required("!Type is required"),
   pickupLocation: Yup.string().required("!Pickup location is required"),
   pickupAddress: Yup.string().required("!Pickup address is required"),
   pickupContactName: Yup.string().required("!Contact name is required"),
@@ -76,64 +78,20 @@ const validationSchema = Yup.object().shape({
       }
       return true;
     }),
-  stops: Yup.array().of(
-    Yup.object({
-      location: Yup.string().required("!Location is required"),
-      address: Yup.string().required("!Address is required"),
-      contactName: Yup.string().required("!Contact name is required"),
-      countryCode: Yup.string().required("!Contact number is required"),
-      contactNumber: Yup.string()
-        .required("!Mobile number is required")
-        .matches(/^\d+$/, "!Mobile number must contain only digits")
-        .test("phone-length", function (value) {
-          const { countryCode } = this.parent;
-          if (countryCode === "65") {
-            return value && value.length === 8
-              ? true
-              : this.createError({
-                  message: "!Phone number must be 8 digits only",
-                });
-          }
-          if (countryCode === "91") {
-            return value && value.length === 10
-              ? true
-              : this.createError({
-                  message: "!Phone number must be 10 digits only",
-                });
-          }
-          return true;
-        }),
-    })
-  ),
 });
 
-const MapNew = forwardRef(
+const HouseMap = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const { isLoaded } = useJsApiLoader({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
       libraries,
     });
-    const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
+    const [categorys, setCategoryData] = useState(null);
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [totalDistance, setTotalDistance] = useState(null);
-    const [dropoffSections, setDropoffSections] = useState([]);
     const pickupRef = useRef(null);
     const dropoffRef = useRef(null);
-    const stops = useRef([]);
-
-    const handleAddDropoff = () => {
-      formik.setFieldValue("stops", [
-        ...formik.values.stops,
-        { location: "", address: "", contactName: "", contactNumber: "" },
-      ]);
-    };
-
-    const handleDeleteDropoff = (index) => {
-      const newDropoffSections = [...formik.values.stops];
-      newDropoffSections.splice(index, 1);
-      formik.setFieldValue("stops", newDropoffSections);
-    };
 
     const formik = useFormik({
       initialValues: {
@@ -149,30 +107,15 @@ const MapNew = forwardRef(
         dropoffContactName: "",
         dropoffContactNumber: "",
         dropoffCountryCode: "",
-        stops: dropoffSections,
       },
-      validationSchema,
+      validationSchema:validationSchema,
       onSubmit: async (values) => {
         console.log("Form Values:", values);
         const payload = {
           userId: userId,
-          type: shiftType,
+          type: values.type,
           estKm: 10,
           locationDetail: [
-            {
-              location: "Madurai, Tamil Nadu, India",
-              address: "4517 Madurai Ave. Road, ",
-              contactName: "sri",
-              countryCode: 91,
-              mobile: 6776543212,
-            },
-            {
-              location: "Tiruchirappalli, Tamil Nadu, India",
-              address: "1234 Tiruchirappalli Ave. ",
-              contactName: "akash",
-              countryCode: 91,
-              mobile: 9900665431,
-            },
             {
               location: "Chengalpattu, Tamil Nadu, India",
               address: "Chengalpattu main street",
@@ -203,7 +146,7 @@ const MapNew = forwardRef(
               bookingId: bookingId,
               location: locations,
               distance: 10,
-              type: shiftType,
+              type: values.type,
             });
             handleNext();
             // navigate(
@@ -233,19 +176,11 @@ const MapNew = forwardRef(
             dropoffPlace.formatted_address
           );
 
-          const waypoints = formik.values.stops
-            .filter((stop) => stop.location)
-            .map((stop) => ({
-              location: stop.location,
-              stopover: true,
-            }));
-
           const directionsService = new window.google.maps.DirectionsService();
           directionsService.route(
             {
               origin: pickupPlace.geometry.location,
               destination: dropoffPlace.geometry.location,
-              waypoints: waypoints,
               travelMode: window.google.maps.TravelMode.DRIVING,
             },
             (result, status) => {
@@ -264,9 +199,22 @@ const MapNew = forwardRef(
         }
       }
     };
-
+    const fetchData = async () => {
+      try {
+        const categorys = await fetchAllCategorysWithIds();
+        setCategoryData(categorys);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+    useEffect(() => {
+      if (formData.type) {
+        formik.setFieldValue("type", formData.type);
+      }
+      fetchData();
+    }, []);
     useImperativeHandle(ref, () => ({
-      map: formik.handleSubmit,
+      housemap: formik.handleSubmit,
     }));
 
     if (!isLoaded) return <div>Loading...</div>;
@@ -316,7 +264,6 @@ const MapNew = forwardRef(
                         name="pickupLocation"
                         className="form-control"
                         placeholder="Enter a pickup location"
-                        value={formik.values.pickupLocation}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         style={{
@@ -358,7 +305,6 @@ const MapNew = forwardRef(
                       name="pickupAddress"
                       className="form-control"
                       placeholder="Enter a pickup address"
-                      value={formik.values.pickupAddress}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       style={{
@@ -401,8 +347,8 @@ const MapNew = forwardRef(
                           name="pickupContactName"
                           className="form-control"
                           placeholder="Enter a contact name"
-                          value={formik.values.pickupContactName}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
                       </div>
                       {formik.touched.pickupContactName &&
@@ -432,8 +378,8 @@ const MapNew = forwardRef(
                         >
                           <select
                             name="pickupCountryCode"
-                            value={formik.values.pickupCountryCode}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             className=""
                           >
                             <option value="65">+65</option>
@@ -445,8 +391,8 @@ const MapNew = forwardRef(
                           name="pickupContactNumber"
                           className="form-control"
                           placeholder="Enter a contact number"
-                          value={formik.values.pickupContactNumber}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
                       </div>
                       {formik.touched.pickupContactNumber &&
@@ -491,8 +437,8 @@ const MapNew = forwardRef(
                         name="dropoffLocation"
                         className="form-control"
                         placeholder="Enter a drop-off location"
-                        value={formik.values.dropoffLocation}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                       />
                     </div>
                   </Autocomplete>
@@ -529,8 +475,8 @@ const MapNew = forwardRef(
                       name="dropoffAddress"
                       className="form-control"
                       placeholder="Enter a drop-off address"
-                      value={formik.values.dropoffAddress}
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
                   </div>
                   {formik.touched.dropoffAddress &&
@@ -568,8 +514,8 @@ const MapNew = forwardRef(
                           name="dropoffContactName"
                           className="form-control"
                           placeholder="Enter a contact name"
-                          value={formik.values.dropoffContactName}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
                       </div>
                       {formik.touched.dropoffContactName &&
@@ -599,8 +545,8 @@ const MapNew = forwardRef(
                         >
                           <select
                             name="dropoffCountryCode"
-                            value={formik.values.dropoffCountryCode}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             className=""
                           >
                             <option value="+65">+65</option>
@@ -612,8 +558,8 @@ const MapNew = forwardRef(
                           name="dropoffContactNumber"
                           className="form-control"
                           placeholder="Enter a contact number"
-                          value={formik.values.dropoffContactNumber}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
                       </div>
                       {formik.touched.dropoffContactNumber &&
@@ -625,225 +571,62 @@ const MapNew = forwardRef(
                     </div>
                   </div>
                 </div>
-
-                {/*Add Another Dropoff location */}
-                <div className="rounded-pill py-3 d-flex align-items-center">
-                  {/* Add Intermediate Stop Button */}
-                  <button
-                    type="button"
-                    className="btn btn-primary shadow-none d-flex align-items-center"
-                    style={{
-                      backgroundColor: "transparent",
-                      color: "red",
-                      border: "none",
-                    }}
-                    onClick={handleAddDropoff}
-                  >
-                    <FaPlusCircle />
-                    <span className="fw-bold text-black mx-2">
-                      Add Intermediate Stop
-                    </span>
-                  </button>
+                <div className="rounded-pill pt-3">
+                  {/* <img
+                    src={Green}
+                    style={{ width: "20px" }}
+                    alt="house"
+                    className="icon-img me-4"
+                  /> */}
+                  <span className="fw-bold">Select Category</span>
                 </div>
-
-                {formik.values.stops?.length > 0 &&
-                  formik.values.stops.map((stop, index) => (
-                    <div key={index} className="mb-4">
-                      <div className="col-md-10 col-12">
-                        <div className="d-flex align-items-end justify-content-end py-3">
-                          <button
-                            type="button"
-                            className="btn btn-danger shadow-none"
-                            style={{
-                              backgroundColor: "transparent",
-                              color: "red",
-                              border: "none",
-                              marginTop: "-10rem",
-                              fontSize: "1.3rem",
-                            }}
-                            onClick={() => handleDeleteDropoff(index)}
+                <div className="col-md-10 col-12 mb-3">
+                  <div
+                    className="input-group mt-3 "
+                    style={{
+                      borderRadius: "10px",
+                      overflow: "hidden",
+                      height: "50px",
+                    }}
+                  >
+                    {/* <span
+                      className="input-group-text"
+                      id="basic-addon1"
+                      style={{
+                        borderRight: "none",
+                        backgroundColor: "#fff",
+                        borderRadius: "10px 0 0 10px",
+                      }}
+                    >
+                      <FaAddressCard />
+                    </span> */}
+                    <select
+                      type="text"
+                      name="type"
+                      className="form-select"
+                      placeholder="Enter a drop-off address"
+                      value={formik.values.type}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    >
+                      <option value={""} className="text-muted">
+                        Select
+                      </option>
+                      {categorys &&
+                        categorys.map((category) => (
+                          <option
+                            key={category.id}
+                            value={category.houseCategoryName}
                           >
-                            <IoMdCloseCircle />
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="d-flex justify-content-between align-items-start">
-                        <div className="col-md-10 col-12 mb-3">
-                          <Autocomplete
-                            onLoad={(ref) => (stops.current = ref)}
-                            onPlaceChanged={handlePlaceChanged}
-                          >
-                            <div
-                              className="input-group "
-                              style={{
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                height: "50px",
-                              }}
-                            >
-                              <span
-                                className="input-group-text"
-                                id="basic-addon1"
-                                style={{
-                                  borderRight: "none",
-                                  backgroundColor: "#fff",
-                                  borderRadius: "10px 0 0 10px",
-                                }}
-                              >
-                                <IoLocationSharp />
-                              </span>
-                              <input
-                                {...formik.getFieldProps(
-                                  `stops[${index}].location`
-                                )}
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter a pickup location"
-                                style={{
-                                  borderLeft: "none",
-                                  borderRadius: "0 10px 10px 0",
-                                }}
-                              />
-                            </div>
-                          </Autocomplete>
-                          {formik.touched.stops?.[index]?.location &&
-                            formik.errors.stops?.[index]?.location && (
-                              <div className="text-danger">
-                                {formik.errors.stops[index].location}
-                              </div>
-                            )}
-                        </div>
-                      </div>
-
-                      {/* Address Input */}
-                      <div className="col-md-10 col-12 mb-3">
-                        <div
-                          className="input-group "
-                          style={{
-                            borderRadius: "10px",
-                            overflow: "hidden",
-                            height: "50px",
-                          }}
-                        >
-                          <span
-                            className="input-group-text"
-                            id="basic-addon1"
-                            style={{
-                              borderRight: "none",
-                              backgroundColor: "#fff",
-                              borderRadius: "10px 0 0 10px",
-                            }}
-                          >
-                            <FaAddressCard />
-                          </span>
-                          <input
-                            {...formik.getFieldProps(`stops[${index}].address`)}
-                            type="text"
-                            className="form-control"
-                            placeholder="Enter a pickup address"
-                            style={{
-                              borderLeft: "none",
-                              borderRadius: "0 10px 10px 0",
-                            }}
-                          />
-                        </div>
-                        {formik.touched.stops?.[index]?.address &&
-                          formik.errors.stops?.[index]?.address && (
-                            <div className="text-danger">
-                              {formik.errors.stops[index].address}
-                            </div>
-                          )}
-                      </div>
-                      <div className="col-md-10 col-12">
-                        <div className="row">
-                          {/* Contact Name */}
-                          <div className="col-md-6 mb-3">
-                            <div
-                              className="input-group "
-                              style={{
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                height: "50px",
-                              }}
-                            >
-                              <span
-                                className="input-group-text"
-                                id="basic-addon1"
-                                style={{
-                                  borderRight: "none",
-                                  backgroundColor: "#fff",
-                                  borderRadius: "10px 0 0 10px",
-                                }}
-                              >
-                                <IoMdContact />
-                              </span>
-                              <input
-                                {...formik.getFieldProps(
-                                  `stops[${index}].contactName`
-                                )}
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter contact name"
-                              />
-                            </div>
-                            {formik.touched.stops?.[index]?.contactName &&
-                              formik.errors.stops?.[index]?.contactName && (
-                                <div className="text-danger">
-                                  {formik.errors.stops[index].contactName}
-                                </div>
-                              )}
-                          </div>
-
-                          {/* Contact Number */}
-                          <div className="col-md-6 mb-3">
-                            <div
-                              className="input-group"
-                              style={{
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                height: "50px",
-                              }}
-                            >
-                              <span
-                                className="input-group-text"
-                                id="basic-addon1"
-                                style={{
-                                  borderRight: "none",
-                                  backgroundColor: "#fff",
-                                  borderRadius: "10px 0 0 10px",
-                                }}
-                              >
-                                <select
-                                  {...formik.getFieldProps(
-                                    `stops[${index}].countryCode`
-                                  )}
-                                  className=""
-                                >
-                                  <option value="+65">+65</option>
-                                  <option value="+91">+91</option>
-                                </select>
-                              </span>
-                              <input
-                                {...formik.getFieldProps(
-                                  `stops[${index}].contactNumber`
-                                )}
-                                type="text"
-                                className="form-control"
-                                placeholder="Enter contact number"
-                              />
-                            </div>
-                            {formik.touched.stops?.[index]?.contactNumber &&
-                              formik.errors.stops?.[index]?.contactNumber && (
-                                <div className="text-danger">
-                                  {formik.errors.stops[index].contactNumber}
-                                </div>
-                              )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                            {category.houseCategoryName}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                  {formik.touched.type && formik.errors.type ? (
+                    <div className="text-danger">{formik.errors.type}</div>
+                  ) : null}
+                </div>
               </div>
             </div>
 
@@ -882,4 +665,4 @@ const MapNew = forwardRef(
   }
 );
 
-export default MapNew;
+export default HouseMap;

@@ -33,7 +33,7 @@ const ItemShift = () => {
     switch (activeStep.toString()) {
       case "0":
         if (childRef.current) {
-          childRef.current.mapnew();
+          childRef.current.map();
         }
         break;
       case "1":
@@ -48,7 +48,7 @@ const ItemShift = () => {
         break;
       case "3":
         if (childRef.current) {
-          childRef.current.bookingsummary();
+          childRef.current.summary();
         }
         break;
       case "4":
@@ -66,7 +66,7 @@ const ItemShift = () => {
       <span className="d-flex fw-bold py-4">
         <p style={{ fontSize: "20px" }}>Booking Type <FaChevronRight size={"15"} /></p>
         <p style={{ fontSize: "20px", color: "#acff3b" }}>
-          Item Shisting
+          Item Shifting
           {/* {shiftType} Sfifting */}
         </p>
       </span>
@@ -168,10 +168,10 @@ const ItemShift = () => {
             )} */}
 
           <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
-            {activeStep !== 0 && activeStep !== 1 && (
+            {activeStep !== 0 &&  (
               <button
-                className="btn btn-secondary btn-sm"
-                style={{ padding: "7px", color: "black", width: "7%" }}
+                className="btn btn-secondary btn-sm border-0"
+                style={{ padding: "7px", color: "black", background:"#f4f4f4", width: "7%" }}
                 disabled={activeStep === 0}
                 onClick={handleBack}
               >

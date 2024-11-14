@@ -1,4 +1,9 @@
-import React, { useEffect } from "react";
+import React, {
+    forwardRef,
+    useEffect,
+    useImperativeHandle,
+    useState,
+  } from "react";
 import "../../styles/custom.css";
 import { Link, useSearchParams } from "react-router-dom";
 import success from "../../asset/success logo.webp";
@@ -6,20 +11,21 @@ import errorimg from "../../asset/cancelimg-removebg-preview.png";
 import toast from "react-hot-toast";
 import { GiCancel } from "react-icons/gi";
 
-function SuccessfullNew() {
+const SuccessfullNew=forwardRef(
+    ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const [searchParams] = useSearchParams();
-    const type = searchParams.get("type");
-    const bookingId = searchParams.get("bookingId");
+    const type = formData.type ==="ITEM" ?"ITEM":"HOUSE";
+    const bookingId = formData.bookingId;
 
-    const bookingIdString = window.location.href.split("bookingId=")[1];
-    const secondQueryPart = bookingIdString?.split("?")[1];
-    const secondParams = new URLSearchParams(secondQueryPart);
+    // const bookingIdString = window.location.href.split("bookingId=")[1];
+    // const secondQueryPart = bookingIdString?.split("?")[1];
+    // const secondParams = new URLSearchParams(secondQueryPart);
 
     // const result = secondParams.get("result");
     const result = "success";
-    const refNo = secondParams.get("refNo");
+    // const refNo = secondParams.get("refNo");
 
-    console.log("result", secondParams);
+    // console.log("result", secondParams);
 
     return (
         <div className="container mt-5 py-2">
@@ -58,7 +64,7 @@ function SuccessfullNew() {
                         )}
                         {result === "success" ? (
                             <span className="mt-4 fw-bold">
-                                Booking ID: {bookingId?.split("?")[0] || 55}
+                                Booking ID: {bookingId}
                             </span>
                         ) : (
                             <>
@@ -66,14 +72,14 @@ function SuccessfullNew() {
                         )}
                         {result === "success" ? (
                             <span className="mt-4 fw-bold">
-                               {bookingId?.split("?")[0] || "1.7M_VAN" }
+                               {formData.vehicle.type|| "1.7M_VAN" }
                             </span>
                         ) : (
                             <></>
                         )}
                         {result === "success" ? (
                             <span className="mt-4 mb-4 fw-bold">
-                                {bookingId?.split("?")[0] || "TR_TXN20241107000049"}
+                                {formData?.data?.transactionDetails?.txnRef || "TR_TXN20241107000049"}
                             </span>
                         ) : (
                             <p className="mt-4 mx-3">
@@ -111,6 +117,6 @@ function SuccessfullNew() {
         </div >
 
     );
-}
+})
 
 export default SuccessfullNew;

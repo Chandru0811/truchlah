@@ -33,9 +33,10 @@ function Shift() {
               >
                 <div className="row">
                   <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
-                    <span className="fw-medium text-muted">
+                    {/* <span className="fw-medium text-muted">
                       PACKERS & MOVERS
-                    </span>
+                    </span> */}
+                    <h1 className="fw-small text-muted m-0" style={{fontSize:"16px"}}>Trucklah Booking - Move Easy with Trucklah</h1>
                     <h3 style={{ color: "#525252" }}>
                       ITEM SHIFTING
                     </h3>

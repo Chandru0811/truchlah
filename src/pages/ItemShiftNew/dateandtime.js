@@ -1,18 +1,20 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { FaCalendarDays } from "react-icons/fa6";
 import { IoIosTime } from "react-icons/io";
 import { Button } from "react-bootstrap";
-import Image1 from "../../asset/24FT_LORRY.png";
-import Image2 from "../../asset/24FT_LORRY.png";
-import Image3 from "../../asset/10FT_LORRY.png";
-import Image4 from "../../asset/14FT_LORRY.png";
-import Image5 from "../../asset/2.4M_VAN.png";
+import { PiCurrencyDollarBold } from "react-icons/pi";
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 import { GiShoppingBag } from "react-icons/gi";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import toast from "react-hot-toast";
+import { bookingApi, userApi } from "../../config/URL";
 
 const validationSchema = Yup.object().shape({
   date: Yup.string().required("!Date is required"),
@@ -21,35 +23,139 @@ const validationSchema = Yup.object().shape({
 
 const DateAndTime = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
+
+    const [availableTimes, setAvailableTimes] = useState([
+      "08:00:00",
+      "08:30:00",
+      "09:00:00",
+      "09:30:00",
+      "10:00:00",
+      "10:30:00",
+      "11:00:00",
+      "11:30:00",
+      "12:00:00",
+      "12:30:00",
+      "13:00:00",
+      "13:30:00",
+      "14:00:00",
+      "14:30:00",
+      "15:00:00",
+      "15:30:00",
+      "16:00:00",
+      "16:30:00",
+      "17:00:00",
+      "17:30:00",
+      "18:00:00",
+      "18:30:00",
+      "19:00:00",
+    ]);
     const shiftType = sessionStorage.getItem("shiftType");
+    const userId = sessionStorage.getItem("userId");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [selectedImage, setSelectedImage] = useState({
-      src: Image1,
-      name: "24FT LORRY",
-      kg: "50",
-      baseFare: "$26",
-    });
-    const images = [
-      { src: Image1, name: "24FT LORRY", kg: "50", baseFare: "$26" },
-      { src: Image2, name: "24FT LORRY", kg: "60", baseFare: "$36" },
-      { src: Image3, name: "10FT LORRY", kg: "70", baseFare: "$46" },
-      { src: Image4, name: "14FT LORRY", kg: "40", baseFare: "$36" },
-      { src: Image5, name: "2.4M VAN", kg: "80", baseFare: "$66" },
-    ];
+    const [vehicle, setVechicle] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const formik = useFormik({
       initialValues: {
-        date: "",
-        time: "",
+        date: formData.date,
+        time: formData.time,
       },
       validationSchema: validationSchema,
 
       onSubmit: async (values) => {
-        console.log("Form Submitted", values);
-        handleNext();
+        console.log("val", values);
+        const selectedDateTime = new Date(`${values.date}T${values.time}`);
+        const eligibleTime = new Date();
+        eligibleTime.setHours(eligibleTime.getHours());
+
+        // if (selectedDateTime >= eligibleTime) {
+        const selectedOption = vehicle.find(
+          (item) => item.vehicletypeId === selectedImage.vehicletypeId
+        );
+        setFormData((prv) => ({ ...prv, vehicle: selectedOption }));
+        const totalKilometer = parseInt(formData.distance);
+        const km_charge = 0.75 * totalKilometer;
+        const total = selectedOption.baseFare + km_charge;
+
+        let driverAmount = 0;
+        let extraHelper = 0;
+
+        if (values.driverAsManpower) {
+          driverAmount = selectedOption.driverHelper;
+        }
+
+        if (values.extraManpower) {
+          extraHelper = selectedOption.helper * values.quantity;
+        }
+
+        const totalCharges = total + driverAmount + extraHelper;
+        console.log(totalCharges);
+
+        const deliveryDate = new Date(`${values.date}T${values.time}`);
+        deliveryDate.setDate(deliveryDate.getDate() + 2);
+
+        setLoadIndicators(true);
+        const payload = {
+          userId: userId,
+          type: shiftType === "HOUSE" ? formData.type : shiftType,
+          locationDetail: JSON.parse(decodeURIComponent(formData.location)),
+          bookingId: formData.bookingId,
+          estKm: parseFloat(formData.distance),
+          scheduledDate: `${values.date}T${values.time}.000Z`,
+          deliveryDate: deliveryDate,
+          quantity: values.extraManpower ? values.quantity : 0,
+          msgToDriver: values.messageToDriver,
+          noOfPieces: values.noOfPieces,
+          helper: values.driverAsManpower ? "Y" : "N",
+          extraHelper: values.extraManpower ? "Y" : "N",
+          trollyRequired: values.trollyRequired ? "Y" : "N",
+          roundTrip: values.roundTripRequired ? "Y" : "N",
+          vehicleType: selectedOption.type,
+          promoCode: "",
+          actualKm: parseFloat(formData.distance),
+        };
+        try {
+          const response = await bookingApi.put(`booking/update`, payload);
+          if (response.status === 200) {
+            toast.success("Vehicle selected successfully!");
+            setFormData((prv)=>({...prv,date:values.date,time:values.time}))
+            handleNext();
+            // navigate(`/summary/${bookingId}`);
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error.response.message);
+          console.log(error);
+        } finally {
+          setLoadIndicators(false);
+        }
+        // } else {
+        //   toast.warning("You must select a time at least 3 hours from now");
+        // }
       },
     });
+
+    useEffect(() => {
+      const getVechicle = async () => {
+        try {
+          const response = await userApi.get("vehicle/vehicleType");
+          if (response.status === 200) {
+            setVechicle(response.data.responseBody);
+          }
+        } catch (e) {
+          toast.error("Error Fetching Data : ", e);
+        }
+      };
+      getVechicle();
+    }, []);
+
+    useEffect(() => {
+      if (vehicle.length > 0 && selectedImage === null) {
+        setSelectedImage(vehicle[0]);
+      }
+    }, [vehicle, selectedImage]);
 
     const handleCarouselClick = (image, index) => {
       setSelectedImage(image);
@@ -58,14 +164,61 @@ const DateAndTime = forwardRef(
 
     const handleNextImg = () => {
       setCurrentIndex((prevIndex) =>
-        prevIndex + 1 < images.length - 2 ? prevIndex + 1 : 0
+        prevIndex + 1 < vehicle.length - 2 ? prevIndex + 1 : 0
       );
     };
 
     const handlePrev = () => {
       setCurrentIndex((prevIndex) =>
-        prevIndex - 1 >= 0 ? prevIndex - 1 : images.length - 1
+        prevIndex - 1 >= 0 ? prevIndex - 1 : vehicle.length - 1
       );
+    };
+    function timeToMinutes(time) {
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    }
+    const handleDateChange = (e) => {
+      const selectedDate = e.target.value;
+      formik.setFieldValue("date", selectedDate);
+
+      const today = new Date().toISOString().split("T")[0];
+      const currentTime = new Date().toTimeString().slice(0, 8);
+      if (selectedDate === today) {
+        console.log("currentTime", currentTime);
+        const timesAfterFilter = availableTimes.reduce((acc, time) => {
+          if (timeToMinutes(time) > timeToMinutes(currentTime)) {
+            acc.push(time);
+          }
+          return acc;
+        }, []);
+        setAvailableTimes(timesAfterFilter);
+      } else {
+        setAvailableTimes([
+          "08:00:00",
+          "08:30:00",
+          "09:00:00",
+          "09:30:00",
+          "10:00:00",
+          "10:30:00",
+          "11:00:00",
+          "11:30:00",
+          "12:00:00",
+          "12:30:00",
+          "13:00:00",
+          "13:30:00",
+          "14:00:00",
+          "14:30:00",
+          "15:00:00",
+          "15:30:00",
+          "16:00:00",
+          "16:30:00",
+          "17:00:00",
+          "17:30:00",
+          "18:00:00",
+          "18:30:00",
+          "19:00:00",
+        ]);
+      }
     };
 
     useImperativeHandle(ref, () => ({
@@ -79,7 +232,7 @@ const DateAndTime = forwardRef(
             <div className="col-md-6 col-12">
               <div
                 className="input-group mt-4"
-              // style={{ borderRadius: "50px", overflow: "hidden" }}
+                // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <span
                   className="input-group-text"
@@ -87,7 +240,6 @@ const DateAndTime = forwardRef(
                   style={{
                     borderRight: "none",
                     backgroundColor: "#fff",
-                    // borderRadius: "50px 0 0 50px",
                   }}
                 >
                   <FaCalendarDays />
@@ -99,26 +251,21 @@ const DateAndTime = forwardRef(
                   aria-describedby="basic-addon1"
                   min="2024-11-07"
                   placeholder="Select date"
-                  style={{
-                    borderLeft: "none",
-                    minHeight: "50px"
-                  }}
-                  name="date"
+                  style={{ borderLeft: "none", minHeight: "50px" }}
                   {...formik.getFieldProps("date")}
+                  name="date"
+                  onChange={handleDateChange}
                 />
               </div>
               <div className="p-1">
-                {formik.touched.date &&
-                  formik.errors.date && (
-                    <div className="mb-2 text-danger">
-                      {formik.errors.date}
-                    </div>
-                  )}
+                {formik.touched.date && formik.errors.date && (
+                  <div className="mb-2 text-danger">{formik.errors.date}</div>
+                )}
               </div>
 
               <div
                 className="input-group mb-3 mt-5"
-              // style={{ borderRadius: "50px", overflow: "hidden" }}
+                // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <span
                   className="input-group-text"
@@ -141,38 +288,24 @@ const DateAndTime = forwardRef(
                   {...formik.getFieldProps("time")}
                 >
                   <option selected>Select Time</option>
-                  <option value="8.00 AM">8.00 AM</option>
-                  <option value="8.30 AM">8.30 AM</option>
-                  <option value="9.00 AM">9.00 AM</option>
-                  <option value="9.30 AM">9.30 AM</option>
-                  <option value="10.00 AM">10.00 AM</option>
-                  <option value="10.30 AM">10.30 AM</option>
-                  <option value="11.00 AM">11.00 AM</option>
-                  <option value="11.30 AM">11.30 AM</option>
-                  <option value="12.00 PM">12.00 PM</option>
-                  <option value="12.30 PM">12.30 PM</option>
-                  <option value="1.00 PM">1.00 PM</option>
-                  <option value="1.30 AM">1.30 AM</option>
-                  <option value="2.00 PM">2.00 PM</option>
-                  <option value="2.30 PM">2.30 PM</option>
-                  <option value="3.00 PM">3.00 PM</option>
-                  <option value="3.30 PM">3.30 PM</option>
-                  <option value="4.00 PM">4.00 PM</option>
-                  <option value="4.30 PM">4.30 PM</option>
-                  <option value="5.00 PM">5.00 PM</option>
-                  <option value="5.30 PM">5.30 PM</option>
-                  <option value="6.00 PM">6.00 PM</option>
-                  <option value="6.30 PM">6.30 PM</option>
-                  <option value="7.00 PM">7.00 PM</option>
+                  {/* {availableTimes.map((time) => (
+                    <option value={time}>{time}</option>
+                  ))} */}
+                  {availableTimes.map((time) => (
+                    <option key={time} value={time}>
+                      {new Date(`1970-01-01T${time}`).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="p-1">
-                {formik.touched.time &&
-                  formik.errors.time && (
-                    <div className="mb-2 text-danger">
-                      {formik.errors.time}
-                    </div>
-                  )}
+                {formik.touched.time && formik.errors.time && (
+                  <div className="mb-2 text-danger">{formik.errors.time}</div>
+                )}
               </div>
 
               <div className="d-flex justify-content-between align-items-center my-3">
@@ -197,14 +330,15 @@ const DateAndTime = forwardRef(
                   />
                 </Button>
                 <div className="d-flex justify-content-around w-75">
-                  {images
+                  {vehicle
                     .slice(currentIndex, currentIndex + 3)
                     .map((image, index) => (
                       <div
                         key={index}
                         onClick={() => handleCarouselClick(image, index)}
-                        className={`card p-2 border-0  ${activeIndex === index ? "active" : ""
-                          }`}
+                        className={`card p-2 border-0  ${
+                          activeIndex === index ? "active" : ""
+                        }`}
                         style={{
                           cursor: "pointer",
                           maxWidth: "30%",
@@ -213,10 +347,11 @@ const DateAndTime = forwardRef(
                         }}
                       >
                         <img
-                          src={image.src}
-                          alt={image.name}
-                          className={`img-fluid shadow hover-card-img hover-card ${activeIndex === index ? "active" : ""
-                            }`}
+                          src={image.vehicleImage}
+                          alt={image.type}
+                          className={`img-fluid shadow hover-card-img hover-card ${
+                            activeIndex === index ? "active" : ""
+                          }`}
                           style={{
                             maxHeight: "150px",
                             borderRadius: "20px",
@@ -224,7 +359,7 @@ const DateAndTime = forwardRef(
                           }}
                         />
                         <div className="text-center mt-2">
-                          <h6 className="card-title text-dark">{image.name}</h6>
+                          <h6 className="card-title text-dark">{image.type}</h6>
                         </div>
                       </div>
                     ))}
@@ -255,22 +390,27 @@ const DateAndTime = forwardRef(
 
             <div className="col-md-6 col-12 text-center">
               <img
-                src={selectedImage.src}
+                src={selectedImage?.vehicleImage}
                 alt="Selected"
                 className="w-50 img-fluid"
               />
               <div className="text-center">
                 <h5 className="mt-2">
                   <GiShoppingBag style={{ padding: "1px" }} />
-                  {selectedImage.kg}kg
+                  {selectedImage?.vehicleCapacity}kg
                 </h5>
-                <h5 className="mt-2">Base fare{selectedImage.baseFare}</h5>
+                <h5 className="mt-2">
+                  <span className="text-muted">Base fare </span>
+                  <PiCurrencyDollarBold size={15} className="mb-1" />
+                  {selectedImage?.baseFare}
+                </h5>
               </div>
             </div>
           </div>
         </form>
       </div>
     );
-  })
+  }
+);
 
 export default DateAndTime;

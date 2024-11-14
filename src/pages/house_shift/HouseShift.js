@@ -49,7 +49,6 @@ const HouseShift =forwardRef(
   const [destinationMarkerPosition, setDestinationMarkerPosition] = useState(null);
   const [directions, setDirections] = useState(null);
   const [locationDetail, setLocationDetail] = useState([]);
-  console.log("Location Details is ", locationDetail);
   const userId = sessionStorage.getItem("userId");
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
