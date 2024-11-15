@@ -269,7 +269,19 @@ const MapNew = forwardRef(
       map: formik.handleSubmit,
     }));
 
-    if (!isLoaded) return <div>Loading...</div>;
+    useEffect(() => {
+      formik.setFieldValue("pickupCountryCode", 65);
+      formik.setFieldValue("dropoffCountryCode", 65);
+    }, []);
+    if (!isLoaded) {
+      return (
+        <div className="darksoul-layout">
+          <div className="loader-container">
+            <div className="spinner"></div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="container">

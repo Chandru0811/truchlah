@@ -56,7 +56,7 @@ const validationSchema = Yup.object().shape({
   dropoffLocation: Yup.string().required("!Drop-off location is required"),
   dropoffAddress: Yup.string().required("!Drop-off address is required"),
   dropoffContactName: Yup.string().required("!Contact name is required"),
-  dropoffCountryCode: Yup.string().required("!Contact number is required"),
+  // dropoffCountryCode: Yup.string().required("!Contact number is required"),
   dropoffContactNumber: Yup.string()
     .required("!Mobile number is required")
     .matches(/^\d+$/, "!Mobile number must contain only digits")
@@ -211,13 +211,24 @@ const HouseMap = forwardRef(
       if (formData.type) {
         formik.setFieldValue("type", formData.type);
       }
+      formik.setFieldValue("pickupCountryCode", 65);
+      formik.setFieldValue("dropoffCountryCode", 65);
       fetchData();
     }, []);
+
     useImperativeHandle(ref, () => ({
       housemap: formik.handleSubmit,
     }));
 
-    if (!isLoaded) return <div>Loading...</div>;
+    if (!isLoaded) {
+      return (
+        <div className="darksoul-layout">
+          <div className="loader-container">
+            <div className="spinner"></div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="container">
@@ -382,7 +393,7 @@ const HouseMap = forwardRef(
                             onBlur={formik.handleBlur}
                             className=""
                           >
-                            <option value="65">+65</option>
+                            <option value="65" selected>+65</option>
                             <option value="91">+91</option>
                           </select>
                         </span>

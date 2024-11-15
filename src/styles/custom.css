@@ -1218,7 +1218,7 @@ body {
 }
 
 .order #shift-bg {
-  background-color: rgba(246, 222, 222, 0.58);
+  background-color: #e6ffe4;
   min-height: 80vh;
 }
 
@@ -2224,7 +2224,7 @@ body {
 }
 
 .css-117w1su-MuiStepIcon-text {
-  fill: #000 !important;
+  fill: #fff !important;
   font-size: 0.95rem !important;
 }
 
@@ -2276,7 +2276,7 @@ body {
 }
 
 .count-controls {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -2286,9 +2286,9 @@ body {
   width: fit-content !important;
 }
 
-.card-hover:hover .count-controls {
+/* .card-hover:hover .count-controls {
   display: flex;
-}
+} */
 
 .count-controls button {
   background-color: transparent !important;

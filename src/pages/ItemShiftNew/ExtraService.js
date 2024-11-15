@@ -17,7 +17,7 @@ const cardData = [
   { id: 2, name: "Long Push", img: cardImg2 },
   { id: 3, name: "Assembly / Disassembly", img: cardImg3 },
   { id: 4, name: "Wrapping", img: cardImg4 },
-  { id: 5, name: "Stair Carry", img: cardImg5 },
+  // { id: 5, name: "Stair Carry", img: cardImg5 },
 ];
 
 const ExtraService = forwardRef(
@@ -38,14 +38,22 @@ const ExtraService = forwardRef(
       }));
     };
 
+    const handleCheckboxChange = (id) => (event) => {
+      const isChecked = event.target.checked;
+      setCounts((prevCounts) => ({
+        ...prevCounts,
+        [id]: isChecked ? "Y" : "N",
+      }));
+    };
+
     useEffect(() => {
-        if (formData.extraService) {
-          setCounts(formData.extraService);
-        }
-      }, [formData.extraService]);
-      
-    const handleService = async() => {
-      console.log("object",counts);
+      if (formData.extraService) {
+        setCounts(formData.extraService);
+      }
+    }, [formData.extraService]);
+
+    const handleService = async () => {
+      console.log("object", counts);
       setLoadIndicators(true);
       const payload = {
         userId: formData?.data?.user?.userId,
@@ -55,12 +63,20 @@ const ExtraService = forwardRef(
         estKm: parseFloat(formData.distance),
         scheduledDate: formData?.data?.booking?.scheduledDate,
         vehicleType: formData?.vehicle?.type,
+        quantity:formData?.data?.booking?.quantity,
+        msgToDriver: formData?.msgToDriver,
+        noOfPieces: formData?.data?.booking?.noOfPieces,
+        helper: formData?.data?.booking?.helper ==="Y" ? "Y" : "N",
+        extraHelper: formData?.data?.booking?.extraHelper ==="Y" ? "Y" : "N",
+        trollyRequired: formData?.data?.booking?.trollyRequired ==="Y" ? "Y" : "N",
+        roundTrip: formData?.data?.booking?.roundTrip ==="Y" ? "Y" : "N",
         actualKm: parseFloat(formData.distance),
-        assemblyDisassemblyCharge:counts[3],
-        bubbleWrappingCharge:counts[4],
-        boxesCharge:counts[1],
-        longPushCharge:counts[2]
+        assemblyDisassemblyCharge: counts[3],
+        bubbleWrappingCharge: counts[4],
+        boxesCharge: counts[1],
+        longPushCharge: counts[2],
       };
+      console.log("payload",payload)
       try {
         const response = await bookingApi.put(`booking/update`, payload);
         if (response.status === 200) {
@@ -79,7 +95,7 @@ const ExtraService = forwardRef(
       } finally {
         setLoadIndicators(false);
       }
-    //   handleNext()
+      //   handleNext()
     };
     useImperativeHandle(ref, () => ({
       extraservice: handleService,
@@ -92,29 +108,43 @@ const ExtraService = forwardRef(
             Would you like to add additional services to your booking?
           </h5>
           <div className="service-cards">
-            <div className="row row-cols-1 row-cols-md-3 row-cols-lg-5">
+            <div className="row row-cols-2 row-cols-md-3 row-cols-lg-5 justify-content-between">
               {cardData.map((card) => (
                 <div className="col" key={card.id}>
                   <div
-                    className="card rounded-4 shadow card-hover"
+                    className="card rounded-4 shadow card-hover h-100"
                     style={{ minHeight: "230px" }}
                   >
                     <img src={card.img} alt={card.name} className="img-fluid" />
                     <div
                       className="card-body rounded-4 m-2"
-                      style={{ background: "#ADFF3B80" }}
+                      style={{ background: "#e6ffe4" }}
                     >
                       <div className="count_content rounded-4">
                         <b>{card.name}</b>
-
-                        <div className="count-controls text-center">
-                          <button onClick={() => handleDecrement(card.id)}>
-                            -
-                          </button>
-                          <span>{counts[card.id]}</span>
-                          <button onClick={() => handleIncrement(card.id)}>
-                            +
-                          </button>
+                        <div
+                          className={`count-controls text-center ${
+                            card.id === 2 && "border-0"
+                          }`}
+                        >
+                          {card.id === 2 ? (
+                            <input
+                              type="checkbox"
+                              checked={counts[card.id] === "Y"}
+                              className="form-check-input custom-checkbox"
+                              onChange={handleCheckboxChange(card.id)}
+                            />
+                          ) : (
+                            <>
+                              <button onClick={() => handleDecrement(card.id)}>
+                                -
+                              </button>
+                              <span>{counts[card.id]}</span>
+                              <button onClick={() => handleIncrement(card.id)}>
+                                +
+                              </button>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -149,9 +149,11 @@ function Order() {
   useEffect(() => {
     if (type === "ITEM") {
       setShowItemShift(true);
+      inprogressSection()
       setShowHouseShift(false);
     } else {
       setShowItemShift(false);
+      inprogressSection()
       setShowHouseShift(true);
     }
   }, [type]);

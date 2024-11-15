@@ -9,101 +9,90 @@ function Shift() {
   // const [type , setType] = useState({});
 
   const logType = (selectedType) => {
-    console.log("Selected Shift Type:", selectedType);
+    // console.log("Selected Shift Type:", selectedType);
     sessionStorage.removeItem("shiftType");
     sessionStorage.setItem("shiftType", selectedType);
   };
+
   return (
     <div className="container-fluid" id="heros">
       <div className="row">
         <div className="col-md-6 col-12">
-
           <div className="row justify-content-center mb-3">
+            <div className="col-6 mt-4 mb-4 ps-1" style={{minWidth:"70%"}}>
+              <h1 className="LoginSubHead text-start" >
+                Trucklah Booking - Move Easy with Trucklah
+              </h1>
+            </div>
             <div
-              className="col-6 justify-content-center card shadow-sm mb-5 mt-5 card-hover1"
-              style={{ width: '70%' }}
-              onClick={()=>logType("ITEM")}
+              className="col-6 justify-content-center card shadow-sm mb-5 card-hover1"
+              style={{ width: "70%" }}
+              onClick={() => logType("ITEM")}
             >
               <Link
                 to={{
                   pathname: "/itemshift",
                   // state: { logType: logType("ITEM") },
                 }}
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
                 <div className="row">
                   <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
-                    {/* <span className="fw-medium text-muted">
+                    <span className="fw-medium text-muted">
                       PACKERS & MOVERS
-                    </span> */}
-                    <h1 className="fw-small text-muted m-0" style={{fontSize:"16px"}}>Trucklah Booking - Move Easy with Trucklah</h1>
-                    <h3 style={{ color: "#525252" }}>
-                      ITEM SHIFTING
-                    </h3>
+                    </span>
+                    {/* <h1 className="fw-small text-muted m-0" style={{fontSize:"16px"}}>Trucklah Booking - Move Easy with Trucklah</h1> */}
+                    <h3 style={{ color: "#525252" }}>ITEM SHIFTING</h3>
                     <span className="fw-medium text-muted">
                       Secure Item Shifting
                     </span>
                   </div>
                   <div className="col-md-6 col-12 pe-0">
-                    <img
-                      src={item}
-                      alt="truck"
-                      className="img-fluid"
-                    />
+                    <img src={item} alt="truck" className="img-fluid" />
                   </div>
                 </div>
               </Link>
             </div>
 
-            <div className="col-6 justify-content-center card shadow-sm card-hover2"
-              style={{ width: '70%' }}
-              onClick={()=>logType("HOUSE")}
+            <div
+              className="col-6 justify-content-center card shadow-sm card-hover2"
+              style={{ width: "70%" }}
+              onClick={() => logType("HOUSE")}
             >
               <Link
                 to={{
                   pathname: "/houseshift",
                   // state: { logType: logType("HOUSE") },
                 }}
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
-              <div className="row">
-                <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
-                  <span className="fw-medium text-muted">
-                    PACKERS & MOVERS
-                  </span>
-                  <h3 style={{ color: "#525252" }}>
-                    HOUSE SHIFTING
-                  </h3>
-                  {/* <div>
+                <div className="row">
+                  <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
+                    <span className="fw-medium text-muted">
+                      PACKERS & MOVERS
+                    </span>
+                    <h3 style={{ color: "#525252" }}>HOUSE SHIFTING</h3>
+                    {/* <div>
                     <button type="button" class="px-2 btn-custom">
                       Coming Soon
                     </button>
                   </div> */}
-                  <span className="fw-medium text-muted">
-                    House Move Made Easy
-                  </span>
+                    <span className="fw-medium text-muted">
+                      House Move Made Easy
+                    </span>
+                  </div>
+                  <div className="col-md-6 col-12 pe-0">
+                    <img src={house} alt="truck" className="img-fluid" />
+                  </div>
                 </div>
-                <div className="col-md-6 col-12 pe-0">
-                  <img
-                    src={house}
-                    alt="truck"
-                    className="img-fluid"
-                  />
-                </div>
-              </div>
               </Link>
             </div>
           </div>
         </div>
 
         <div className="col-md-6 col-12">
-          <img
-            src={truck}
-            alt="truck"
-            className="img-fluid responsive-image"
-          />
+          <img src={truck} alt="truck" className="img-fluid responsive-image" />
         </div>
-
       </div>
 
       {/* <div className="col container-fluid container py-5 ">
@@ -168,7 +157,7 @@ function Shift() {
           <div className="col-lg-3 col-md-3 col-12"></div>
         </div>
       </div> */}
-    </div >
+    </div>
   );
 }
 export default Shift;

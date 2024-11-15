@@ -23,7 +23,6 @@ const validationSchema = Yup.object().shape({
 
 const DateAndTime = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-
     const [availableTimes, setAvailableTimes] = useState([
       "08:00:00",
       "08:30:00",
@@ -52,10 +51,15 @@ const DateAndTime = forwardRef(
     const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(
+      formData?.vehicle?.vehicletypeId ? formData.vehicle.vehicletypeId : 1
+    );
     const [vehicle, setVechicle] = useState([]);
-    const [selectedImage, setSelectedImage] = useState(null);
-
+    const [selectedImage, setSelectedImage] = useState(
+      formData?.vehicle ? formData.vehicle : null
+    );
+    console.log("activeIndex", activeIndex);
+    console.log("currentIndex", currentIndex);
     const formik = useFormik({
       initialValues: {
         date: formData.date,
@@ -90,7 +94,7 @@ const DateAndTime = forwardRef(
         }
 
         const totalCharges = total + driverAmount + extraHelper;
-        console.log(totalCharges);
+        // console.log(totalCharges);
 
         const deliveryDate = new Date(`${values.date}T${values.time}`);
         deliveryDate.setDate(deliveryDate.getDate() + 2);
@@ -104,13 +108,14 @@ const DateAndTime = forwardRef(
           estKm: parseFloat(formData.distance),
           scheduledDate: `${values.date}T${values.time}.000Z`,
           deliveryDate: deliveryDate,
-          quantity: values.extraManpower ? values.quantity : 0,
-          msgToDriver: values.messageToDriver,
-          noOfPieces: values.noOfPieces,
-          helper: values.driverAsManpower ? "Y" : "N",
-          extraHelper: values.extraManpower ? "Y" : "N",
-          trollyRequired: values.trollyRequired ? "Y" : "N",
-          roundTrip: values.roundTripRequired ? "Y" : "N",
+          quantity: formData?.data?.booking?.quantity,
+          msgToDriver: formData?.msgToDriver,
+          noOfPieces: formData?.data?.booking?.noOfPieces,
+          helper: formData?.data?.booking?.helper === "Y" ? "Y" : "N",
+          extraHelper: formData?.data?.booking?.extraHelper === "Y" ? "Y" : "N",
+          trollyRequired:
+            formData?.data?.booking?.trollyRequired === "Y" ? "Y" : "N",
+          roundTrip: formData?.data?.booking?.roundTrip === "Y" ? "Y" : "N",
           vehicleType: selectedOption.type,
           promoCode: "",
           actualKm: parseFloat(formData.distance),
@@ -119,7 +124,11 @@ const DateAndTime = forwardRef(
           const response = await bookingApi.put(`booking/update`, payload);
           if (response.status === 200) {
             toast.success("Vehicle selected successfully!");
-            setFormData((prv)=>({...prv,date:values.date,time:values.time}))
+            setFormData((prv) => ({
+              ...prv,
+              date: values.date,
+              time: values.time,
+            }));
             handleNext();
             // navigate(`/summary/${bookingId}`);
           } else {
@@ -155,11 +164,13 @@ const DateAndTime = forwardRef(
       if (vehicle.length > 0 && selectedImage === null) {
         setSelectedImage(vehicle[0]);
       }
+      // console.log("setSelectedImage",selectedImage);
     }, [vehicle, selectedImage]);
 
     const handleCarouselClick = (image, index) => {
+      const overallIndex = image.vehicletypeId;
       setSelectedImage(image);
-      setActiveIndex(index);
+      setActiveIndex(overallIndex);
     };
 
     const handleNextImg = () => {
@@ -173,6 +184,7 @@ const DateAndTime = forwardRef(
         prevIndex - 1 >= 0 ? prevIndex - 1 : vehicle.length - 1
       );
     };
+
     function timeToMinutes(time) {
       const [hours, minutes] = time.split(":").map(Number);
       return hours * 60 + minutes;
@@ -188,6 +200,7 @@ const DateAndTime = forwardRef(
         const timesAfterFilter = availableTimes.reduce((acc, time) => {
           if (timeToMinutes(time) > timeToMinutes(currentTime)) {
             acc.push(time);
+          } else {
           }
           return acc;
         }, []);
@@ -249,7 +262,7 @@ const DateAndTime = forwardRef(
                   className="date-field form-control"
                   aria-label="Date"
                   aria-describedby="basic-addon1"
-                  min="2024-11-07"
+                  min={new Date().toISOString().split("T")[0]}
                   placeholder="Select date"
                   style={{ borderLeft: "none", minHeight: "50px" }}
                   {...formik.getFieldProps("date")}
@@ -279,7 +292,7 @@ const DateAndTime = forwardRef(
                   <IoIosTime />
                 </span>
                 <select
-                  class="form-select"
+                  className="form-select"
                   aria-label="Default select example"
                   style={{
                     borderLeft: "none",
@@ -288,18 +301,19 @@ const DateAndTime = forwardRef(
                   {...formik.getFieldProps("time")}
                 >
                   <option selected>Select Time</option>
-                  {/* {availableTimes.map((time) => (
-                    <option value={time}>{time}</option>
-                  ))} */}
-                  {availableTimes.map((time) => (
-                    <option key={time} value={time}>
-                      {new Date(`1970-01-01T${time}`).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
-                    </option>
-                  ))}
+                  {availableTimes && availableTimes.length > 0 ? (
+                    availableTimes.map((time) => (
+                      <option key={time} value={time}>
+                        {new Date(`1970-01-01T${time}`).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </option>
+                    ))
+                  ) : (
+                    <option disabled>Service Unavailable</option>
+                  )}
                 </select>
               </div>
               <div className="p-1">
@@ -317,8 +331,9 @@ const DateAndTime = forwardRef(
                     backgroundColor: "rgb(172, 255, 59)",
                     paddingInline: "0px",
                     paddingBlock: "5px",
-                    borderRadius: "0px",
+                    borderRadius: "4px",
                     border: "2px solid #acff3b",
+                    opacity: ".7",
                   }}
                 >
                   <GrFormPrevious
@@ -332,37 +347,42 @@ const DateAndTime = forwardRef(
                 <div className="d-flex justify-content-around w-75">
                   {vehicle
                     .slice(currentIndex, currentIndex + 3)
-                    .map((image, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleCarouselClick(image, index)}
-                        className={`card p-2 border-0  ${
-                          activeIndex === index ? "active" : ""
-                        }`}
-                        style={{
-                          cursor: "pointer",
-                          maxWidth: "30%",
-                          borderRadius: "10px",
-                          transition: "0.3s",
-                        }}
-                      >
-                        <img
-                          src={image.vehicleImage}
-                          alt={image.type}
-                          className={`img-fluid shadow hover-card-img hover-card ${
-                            activeIndex === index ? "active" : ""
+                    .map((image, index) => {
+                      const overallIndex = image.vehicletypeId;
+                      return (
+                        <div
+                          key={overallIndex}
+                          onClick={() => handleCarouselClick(image, index)}
+                          className={`card p-2 border-0 ${
+                            activeIndex === overallIndex ? "active" : ""
                           }`}
                           style={{
-                            maxHeight: "150px",
-                            borderRadius: "20px",
-                            transition: "border-color 0.3s",
+                            cursor: "pointer",
+                            maxWidth: "30%",
+                            borderRadius: "10px",
+                            transition: "0.3s",
                           }}
-                        />
-                        <div className="text-center mt-2">
-                          <h6 className="card-title text-dark">{image.type}</h6>
+                        >
+                          <img
+                            src={image.vehicleImage}
+                            alt={image.type}
+                            className={`img-fluid shadow hover-card-img hover-card ${
+                              activeIndex === overallIndex ? "active" : ""
+                            }`}
+                            style={{
+                              maxHeight: "150px",
+                              borderRadius: "20px",
+                              transition: "border-color 0.3s",
+                            }}
+                          />
+                          <div className="text-center mt-2">
+                            <h6 className="card-title text-dark">
+                              {image.type?.split("_").join("  ")}
+                            </h6>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                 </div>
 
                 <Button
@@ -373,8 +393,9 @@ const DateAndTime = forwardRef(
                     backgroundColor: "rgb(172, 255, 59)",
                     paddingInline: "0px",
                     paddingBlock: "5px",
-                    borderRadius: "0px",
+                    borderRadius: "4px",
                     border: "2px solid #acff3b",
+                    opacity: ".7",
                   }}
                 >
                   <MdNavigateNext
@@ -395,6 +416,9 @@ const DateAndTime = forwardRef(
                 className="w-50 img-fluid"
               />
               <div className="text-center">
+                <h5 className="mt-2">
+                  {selectedImage?.type?.split("_").join(" ")}
+                </h5>
                 <h5 className="mt-2">
                   <GiShoppingBag style={{ padding: "1px" }} />
                   {selectedImage?.vehicleCapacity}kg

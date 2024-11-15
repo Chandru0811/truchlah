@@ -20,7 +20,9 @@ const validationSchema = Yup.object().shape({
 
 const BookingSummary = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
+    const shiftType = sessionStorage.getItem("shiftType");
     const [data, setData] = useState({});
+    console.log("object",data)
     const formik = useFormik({
       initialValues: {
         paymentType: "",
@@ -31,7 +33,7 @@ const BookingSummary = forwardRef(
       onSubmit: async (values) => {
         console.log("values", values);
         setLoadIndicators(true);
-
+        setFormData((prv)=>({...prv,paymentType:values.paymentType,isAgreed:values.isAgreed}))
         if (values.paymentType === "cash") {
           try {
             const response = await bookingApi.post(
@@ -85,6 +87,12 @@ const BookingSummary = forwardRef(
           // setIsLoading(false);
         }
       };
+
+      if(formData.paymentType && formData.isAgreed){
+        formik.setFieldValue("paymentType",formData.paymentType)
+        formik.setFieldValue("isAgreed",formData.isAgreed)
+      }
+
       fetchData();
     }, []);
 
@@ -105,7 +113,7 @@ const BookingSummary = forwardRef(
       <div className="container my-4">
         <form onSubmit={formik.handleSubmit}>
           <div className="row">
-            <div className="col-md-5 col-12">
+            <div className="col-md-5 col-12 mt-4">
               <div className="card">
                 <div className="">
                   <div className="d-flex justify-content-between align-items-center border-bottom ms-3 me-3 p-2">
@@ -318,7 +326,7 @@ const BookingSummary = forwardRef(
                     alt={data?.booking?.vehicleName}
                     className="img-fluid w-25"
                   />
-                  <h4>{data?.booking?.vehicleName}</h4>
+                  <h4>{data?.booking?.vehicleName?.split("_").join(" ")}</h4>
                   <p>
                     <FaWeightHanging /> {formData?.vehicle?.vehicleCapacity} Kg
                   </p>
@@ -362,6 +370,39 @@ const BookingSummary = forwardRef(
                   <div className="col-6">
                     <p>:{data?.booking?.roundTrip === "Y" ? "Yes" : "No"}</p>
                   </div>
+                  {shiftType !=="ITEM" &&(<>
+                    <>
+                      <div className="col-6">
+                        <p>Boxes</p>
+                      </div>
+
+                      <div className="col-6">
+                        <p>:{data?.booking?.boxesCharge || 0}</p>
+                      </div>
+                      <div className="col-6">
+                        <p>Long Push</p>
+                      </div>
+
+                      <div className="col-6">
+                        <p>:{data?.booking?.longPushCharge ==="Y"?"Yes":"NO" }</p>
+                      </div>
+                      <div className="col-6">
+                        <p>Assembly/Disassembly</p>
+                      </div>
+
+                      <div className="col-6">
+                        <p>:{data?.booking?.assemblyDisassemblyCharge || 0}</p>
+                      </div>
+                      <div className="col-6">
+                        <p>Wrapping</p>
+                      </div>
+
+                      <div className="col-6">
+                        <p>:{data?.booking?.bubbleWrappingCharge || 0}</p>
+                      </div>
+                    </>
+                  </>
+                  )}
                   <div className="col-6">
                     <p>Message To Driver</p>
                   </div>
@@ -481,7 +522,8 @@ const BookingSummary = forwardRef(
                   <div className="form-check mt-3">
                     <input
                       type="checkbox"
-                      className="form-check-input"
+                      checked={formik.values.isAgreed}
+                      className="form-check-input custom-checkbox"
                       id="isAgreed"
                       {...formik.getFieldProps("isAgreed")}
                     />

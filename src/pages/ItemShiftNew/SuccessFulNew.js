@@ -72,7 +72,7 @@ const SuccessfullNew=forwardRef(
                         )}
                         {result === "success" ? (
                             <span className="mt-4 fw-bold">
-                               {formData.vehicle.type|| "1.7M_VAN" }
+                               {formData?.vehicle?.type?.split("_").join(" ")|| "1.7M_VAN" }
                             </span>
                         ) : (
                             <></>

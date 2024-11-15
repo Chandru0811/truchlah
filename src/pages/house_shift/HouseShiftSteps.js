@@ -65,7 +65,7 @@ const handleNext = () => {
       <span className="d-flex fw-bold py-4">
         <p style={{ fontSize: "20px" }}>Booking Type <FaChevronRight size={"15"} /></p>
         <p style={{ fontSize: "20px", color: "#acff3b" }}>
-          Item Shifting
+          House Shifting
           {/* {shiftType} Sfifting */}
         </p>
       </span>
@@ -173,7 +173,7 @@ const handleNext = () => {
             <button
               type="submit"
               onClick={handleButtonClick}
-              style={{ padding: "7px", background: "#acff3b", width: "7%" }}
+              style={{ padding: "7px", background: "#acff3b", minWidth: "7%" }}
               className="btn btn-sm"
               disabled={loadIndicator}
             >

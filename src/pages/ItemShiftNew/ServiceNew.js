@@ -14,7 +14,7 @@ const ServiceNew = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
-    const [data, setData] = useState();
+    const [data, setData] = useState({});
 
     // console.log("data", data);
     // console.log("formData", formData);
@@ -76,7 +76,7 @@ const ServiceNew = forwardRef(
             toast.success("Vehicle selected successfully!");
             setFormData((prv) => ({
               ...prv,
-              data: data,
+              data: response.data.responseBody,
               msgToDriver: values.messageToDriver,
             }));
             handleNext();

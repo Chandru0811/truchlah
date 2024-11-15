@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import { Step, StepLabel, Stepper } from "@mui/material";
-import Map from "./Map";
-import Service from "../common_pages/Service";
-import Summary from "../common_pages/CheckDetails";
 import { FaChevronRight } from "react-icons/fa";
 import MapNew from "../ItemShiftNew/MapNew";
 import DateandTime from "../ItemShiftNew/dateandtime";
 import ServiceNew from "../ItemShiftNew/ServiceNew";
-import ExtraService from "../ItemShiftNew/ExtraService";
 import BookingSummary from "../ItemShiftNew/BookingSummary";
-import SuccessFulNew from "../ItemShiftNew/SuccessFulNew";
 import SuccessfullNew from "../ItemShiftNew/SuccessFulNew";
 
 
@@ -20,7 +15,6 @@ const ItemShift = () => {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [formData, setFormData] = useState({});
   const childRef = React.useRef();
-  const shiftType = sessionStorage.getItem("shiftType");
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
@@ -74,7 +68,7 @@ const ItemShift = () => {
       <Stepper className="" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index}>
-            <StepLabel>{step}</StepLabel>
+            <StepLabel >{step}</StepLabel>
             {/* <StepLabel
               sx={{
                 "& .MuiStepIcon-root": {
@@ -83,7 +77,6 @@ const ItemShift = () => {
                     color: "#ADFF3B",
                   },
                 },
-
                 "& .Mui-completed .MuiStepIcon-root": {
                   color: "#ADFF3B",
                 },
@@ -179,10 +172,11 @@ const ItemShift = () => {
               </button>
             )}
             <div style={{ flex: "1 1 auto" }}></div>
+            {activeStep !== 4 &&  (
             <button
               type="submit"
               onClick={handleButtonClick}
-              style={{ padding: "7px", background: "#acff3b", width: "7%" }}
+              style={{ padding: "7px", background: "#acff3b", minWidth: "7%" }}
               className="btn btn-sm"
               disabled={loadIndicator}
             >
@@ -192,8 +186,9 @@ const ItemShift = () => {
                   aria-hidden="true"
                 ></span>
               )}
-              {activeStep !== steps.length - 1 ? "Next" : "Next"}
+              {activeStep !== steps.length - 2 ? "Next" : "Proceed"}
             </button>
+            )}
           </div>
         </React.Fragment>
       </div>
