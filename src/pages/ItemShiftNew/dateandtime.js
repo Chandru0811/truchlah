@@ -185,6 +185,14 @@ const DateAndTime = forwardRef(
       );
     };
 
+    const getVisibleData = () => {
+      const visibleData = [];
+      for (let i = 0; i < 3; i++) {
+        visibleData.push(vehicle[(currentIndex + i) % vehicle.length]);
+      }
+      return visibleData;
+    };
+
     function timeToMinutes(time) {
       const [hours, minutes] = time.split(":").map(Number);
       return hours * 60 + minutes;
@@ -345,10 +353,8 @@ const DateAndTime = forwardRef(
                   />
                 </Button>
                 <div className="d-flex justify-content-around w-75">
-                  {vehicle
-                    .slice(currentIndex, currentIndex + 3)
-                    .map((image, index) => {
-                      const overallIndex = image.vehicletypeId;
+                  {getVisibleData().map((image, index) => {
+                      const overallIndex = image?.vehicletypeId;
                       return (
                         <div
                           key={overallIndex}
@@ -364,8 +370,8 @@ const DateAndTime = forwardRef(
                           }}
                         >
                           <img
-                            src={image.vehicleImage}
-                            alt={image.type}
+                            src={image?.vehicleImage}
+                            alt={image?.type}
                             className={`img-fluid shadow hover-card-img hover-card ${
                               activeIndex === overallIndex ? "active" : ""
                             }`}
@@ -377,7 +383,7 @@ const DateAndTime = forwardRef(
                           />
                           <div className="text-center mt-2">
                             <h6 className="card-title text-dark">
-                              {image.type?.split("_").join("  ")}
+                              {image?.type?.split("_").join("  ")}
                             </h6>
                           </div>
                         </div>

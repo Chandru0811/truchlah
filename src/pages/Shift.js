@@ -20,7 +20,7 @@ function Shift() {
         <div className="col-md-6 col-12">
           <div className="row justify-content-center mb-3">
             <div className="col-6 mt-4 mb-4 ps-1" style={{minWidth:"70%"}}>
-              <h1 className="LoginSubHead text-start" >
+          <h1 className="LoginSubHead text-start text-muted" style={{fontSize:"23px"}} >
                 Trucklah Booking - Move Easy with Trucklah
               </h1>
             </div>
