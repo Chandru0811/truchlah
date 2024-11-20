@@ -68,6 +68,10 @@ function VehicleManagementAdd() {
       gst: "",
       roundTrip: "",
       wrappingCharge: "",
+      boxesCharge: "",
+      longPushCharge: "",
+      assemblyDisassemblyCharge: "",
+
       addStopCharge: "",
       tenToTwelveCharge: "",
       twelveToSevenCharge: "",
@@ -106,11 +110,7 @@ function VehicleManagementAdd() {
         if (error.response.status === 409) {
           toast.error(error.response.data.detail);
         } else {
-          toast.error(
-            `${
-              error?.response?.data?.message || error.message
-            }`
-          );
+          toast.error(`${error?.response?.data?.message || error.message}`);
         }
       } finally {
         setLoading(false);
@@ -715,6 +715,94 @@ function VehicleManagementAdd() {
                       {formik.errors.roundTrip}
                     </div>
                   )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label mb-0">
+                  Boxes <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
+                    type="text"
+                    name="boxesCharge"
+                    className={`form-control ${
+                      formik.touched.boxesCharge && formik.errors.boxesCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("boxesCharge")}
+                  />
+                  {formik.touched.boxesCharge && formik.errors.boxesCharge && (
+                    <div className="invalid-feedback">
+                      {formik.errors.boxesCharge}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label mb-0">
+                  Long Push <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
+                    type="text"
+                    name="longPushCharge"
+                    className={`form-control ${
+                      formik.touched.longPushCharge &&
+                      formik.errors.longPushCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("longPushCharge")}
+                  />
+                  {formik.touched.longPushCharge &&
+                    formik.errors.longPushCharge && (
+                      <div className="invalid-feedback">
+                        {formik.errors.longPushCharge}
+                      </div>
+                    )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label mb-0">
+                  Assembly/Disassembly <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
+                    type="text"
+                    name="assemblyDisassemblyCharge"
+                    className={`form-control ${
+                      formik.touched.assemblyDisassemblyCharge &&
+                      formik.errors.assemblyDisassemblyCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("assemblyDisassemblyCharge")}
+                  />
+                  {formik.touched.assemblyDisassemblyCharge &&
+                    formik.errors.assemblyDisassemblyCharge && (
+                      <div className="invalid-feedback">
+                        {formik.errors.assemblyDisassemblyCharge}
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">

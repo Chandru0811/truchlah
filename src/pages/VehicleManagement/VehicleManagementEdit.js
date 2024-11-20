@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -24,7 +24,12 @@ function VehicleManagementEdit() {
 
   const validationSchema = Yup.object({
     // vehicletypeId: Yup.number().required("*Vehicle type ID is required"),
-    type: Yup.string().matches(/^\S*$/, '*No spaces are allowed. You can use underscores instead.').required("*Vehicle Type is required"),
+    type: Yup.string()
+      .matches(
+        /^\S*$/,
+        "*No spaces are allowed. You can use underscores instead."
+      )
+      .required("*Vehicle Type is required"),
     vehicleCapacity: Yup.string().required("*Capacity is required"),
     vehicleStatus: Yup.string().required("*Status is required"),
     description: Yup.string().required("*Description is required"),
@@ -67,6 +72,9 @@ function VehicleManagementEdit() {
       securedZoneCharge: "",
       gst: "",
       roundTrip: "",
+      boxesCharge: "",
+      longPushCharge: "",
+      assemblyDisassemblyCharge: "",
       wrappingCharge: "",
       addStopCharge: "",
       tenToTwelveCharge: "",
@@ -80,7 +88,7 @@ function VehicleManagementEdit() {
       setLoading(true);
       console.log(values);
       const formData = new FormData();
-      const {vehicleImage,...valuess} =values
+      const { vehicleImage, ...valuess } = values;
       Object.entries(valuess).forEach(([key, value]) => {
         if (key === "imageUrl" && value) {
           formData.append(key, value);
@@ -103,11 +111,7 @@ function VehicleManagementEdit() {
         if (error.response.status === 409) {
           toast.error(error.response.data.detail);
         } else {
-          toast.error(
-            `${
-              error?.response?.data?.message || error.message
-            }`
-          );
+          toast.error(`${error?.response?.data?.message || error.message}`);
         }
       } finally {
         setLoading(false);
@@ -136,12 +140,12 @@ function VehicleManagementEdit() {
 
   const handleFileChange = (event) => {
     const file = event.currentTarget.files[0];
-    console.log("object",file)
+    console.log("object", file);
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc(reader.result); 
-        setShowCropper(true); 
+        setImageSrc(reader.result);
+        setShowCropper(true);
       };
       reader.readAsDataURL(file);
     }
@@ -152,14 +156,20 @@ function VehicleManagementEdit() {
   }, []);
 
   const blobToFile = (blob, fileName) => {
-    return new File([blob], fileName, { type: blob.type, lastModified: Date.now() });
+    return new File([blob], fileName, {
+      type: blob.type,
+      lastModified: Date.now(),
+    });
   };
-  
+
   const handleCrop = useCallback(async () => {
     try {
       const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
-      const croppedImageFile = blobToFile(croppedImageData, `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`);
-  
+      const croppedImageFile = blobToFile(
+        croppedImageData,
+        `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`
+      );
+
       setCroppedImage(croppedImageFile);
       formik.setFieldValue("imageUrl", croppedImageFile);
       setShowCropper(false);
@@ -167,13 +177,12 @@ function VehicleManagementEdit() {
       console.error(e);
     }
   }, [croppedAreaPixels, imageSrc]);
-  
 
   const handleCropCancel = () => {
     setShowCropper(false);
     setImageSrc(null);
-    formik.setFieldValue("imageUrl", ""); 
-    document.querySelector("input[type='file']").value = ""; 
+    formik.setFieldValue("imageUrl", "");
+    document.querySelector("input[type='file']").value = "";
   };
 
   return (
@@ -336,7 +345,7 @@ function VehicleManagementEdit() {
                       Vehicle Image<span className="text-danger">*</span>
                     </label>
                     <div className="mb-3">
-                      <input 
+                      <input
                         type="file"
                         name="imageUrl"
                         className={`form-control ${
@@ -352,7 +361,7 @@ function VehicleManagementEdit() {
                         </div>
                       )}
                     </div>
-                    {(data.vehicleImage ||formik.values.imageUrl) && (
+                    {(data.vehicleImage || formik.values.imageUrl) && (
                       <div>
                         <img
                           src={
@@ -367,41 +376,50 @@ function VehicleManagementEdit() {
                       </div>
                     )}
                     {showCropper && (
-  <div className="crop-container" style={{ width: "300px", height: "200px", position: "relative" }}>
-    <Cropper
-      image={imageSrc}
-      crop={crop}
-      zoom={zoom}
-      aspect={4 / 2}  // Adjust the aspect ratio if needed
-      onCropChange={setCrop}
-      onZoomChange={setZoom}
-      onCropComplete={onCropComplete}
-      cropShape="box" // You can also use 'round' for circular cropping
-      showGrid={false}
-      style={{ containerStyle: { width: "100%", height: "100%" } }} // Make it responsive within the container
-    />
-  </div>
-)}
+                      <div
+                        className="crop-container"
+                        style={{
+                          width: "300px",
+                          height: "200px",
+                          position: "relative",
+                        }}
+                      >
+                        <Cropper
+                          image={imageSrc}
+                          crop={crop}
+                          zoom={zoom}
+                          aspect={4 / 2} // Adjust the aspect ratio if needed
+                          onCropChange={setCrop}
+                          onZoomChange={setZoom}
+                          onCropComplete={onCropComplete}
+                          cropShape="box" // You can also use 'round' for circular cropping
+                          showGrid={false}
+                          style={{
+                            containerStyle: { width: "100%", height: "100%" },
+                          }} // Make it responsive within the container
+                        />
+                      </div>
+                    )}
 
-{showCropper && (
-  <div className="d-flex justify-content-start mt-3 gap-2 ">
-    <button
-      type="button"
-      className="btn btn-sm btn-primary mt-3"
-      onClick={handleCrop}
-    >
-      Save
-    </button>
+                    {showCropper && (
+                      <div className="d-flex justify-content-start mt-3 gap-2 ">
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-primary mt-3"
+                          onClick={handleCrop}
+                        >
+                          Save
+                        </button>
 
-    <button
-      type="button"
-      className="btn btn-sm btn-secondary mt-3"
-      onClick={handleCropCancel}
-    >
-      Cancel
-    </button>
-  </div>
-)}
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-secondary mt-3"
+                          onClick={handleCropCancel}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
                   </div>
                   <div className="col-md-6 col-12 mb-2">
                     <label className="form-label mb-0">
@@ -748,6 +766,97 @@ function VehicleManagementEdit() {
                           {formik.errors.roundTrip}
                         </div>
                       )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label mb-0">
+                      Boxes <span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        onInput={(event) => {
+                          event.target.value = event.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                        }}
+                        type="text"
+                        name="boxesCharge"
+                        className={`form-control ${
+                          formik.touched.boxesCharge &&
+                          formik.errors.boxesCharge
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("boxesCharge")}
+                      />
+                      {formik.touched.boxesCharge &&
+                        formik.errors.boxesCharge && (
+                          <div className="invalid-feedback">
+                            {formik.errors.boxesCharge}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label mb-0">
+                      Long Push <span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        onInput={(event) => {
+                          event.target.value = event.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                        }}
+                        type="text"
+                        name="longPushCharge"
+                        className={`form-control ${
+                          formik.touched.longPushCharge &&
+                          formik.errors.longPushCharge
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("longPushCharge")}
+                      />
+                      {formik.touched.longPushCharge &&
+                        formik.errors.longPushCharge && (
+                          <div className="invalid-feedback">
+                            {formik.errors.longPushCharge}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label mb-0">
+                      Assembly/Disassembly{" "}
+                      <span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        onInput={(event) => {
+                          event.target.value = event.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                        }}
+                        type="text"
+                        name="assemblyDisassemblyCharge"
+                        className={`form-control ${
+                          formik.touched.assemblyDisassemblyCharge &&
+                          formik.errors.assemblyDisassemblyCharge
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("assemblyDisassemblyCharge")}
+                      />
+                      {formik.touched.assemblyDisassemblyCharge &&
+                        formik.errors.assemblyDisassemblyCharge && (
+                          <div className="invalid-feedback">
+                            {formik.errors.assemblyDisassemblyCharge}
+                          </div>
+                        )}
                     </div>
                   </div>
                   <div className="col-md-6 col-12 mb-2">

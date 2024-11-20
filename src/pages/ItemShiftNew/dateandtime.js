@@ -15,6 +15,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { bookingApi, userApi } from "../../config/URL";
+import { Modal } from "react-bootstrap";
+import VehicleOffer from "../../pages/common_pages/VehicleOffer.js";
 
 const validationSchema = Yup.object().shape({
   date: Yup.string().required("!Date is required"),
@@ -54,10 +56,14 @@ const DateAndTime = forwardRef(
     const [activeIndex, setActiveIndex] = useState(
       formData?.vehicle?.vehicletypeId ? formData.vehicle.vehicletypeId : 1
     );
+    const [isModified, setIsModified] = useState(false);
     const [vehicle, setVechicle] = useState([]);
     const [selectedImage, setSelectedImage] = useState(
       formData?.vehicle ? formData.vehicle : null
     );
+    const [showModal, setShowModal] = useState(true);
+    const handleShow = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
     console.log("activeIndex", activeIndex);
     console.log("currentIndex", currentIndex);
     const formik = useFormik({
@@ -352,43 +358,44 @@ const DateAndTime = forwardRef(
                     aria-hidden="true"
                   />
                 </Button>
+
                 <div className="d-flex justify-content-around w-75">
                   {getVisibleData().map((image, index) => {
-                      const overallIndex = image?.vehicletypeId;
-                      return (
-                        <div
-                          key={overallIndex}
-                          onClick={() => handleCarouselClick(image, index)}
-                          className={`card p-2 border-0 ${
+                    const overallIndex = image?.vehicletypeId;
+                    return (
+                      <div
+                        key={overallIndex}
+                        onClick={() => handleCarouselClick(image, index)}
+                        className={`card p-2 border-0 ${
+                          activeIndex === overallIndex ? "active" : ""
+                        }`}
+                        style={{
+                          cursor: "pointer",
+                          maxWidth: "30%",
+                          borderRadius: "10px",
+                          transition: "0.3s",
+                        }}
+                      >
+                        <img
+                          src={image?.vehicleImage}
+                          alt={image?.type}
+                          className={`img-fluid shadow hover-card-img hover-card ${
                             activeIndex === overallIndex ? "active" : ""
                           }`}
                           style={{
-                            cursor: "pointer",
-                            maxWidth: "30%",
-                            borderRadius: "10px",
-                            transition: "0.3s",
+                            maxHeight: "150px",
+                            borderRadius: "20px",
+                            transition: "border-color 0.3s",
                           }}
-                        >
-                          <img
-                            src={image?.vehicleImage}
-                            alt={image?.type}
-                            className={`img-fluid shadow hover-card-img hover-card ${
-                              activeIndex === overallIndex ? "active" : ""
-                            }`}
-                            style={{
-                              maxHeight: "150px",
-                              borderRadius: "20px",
-                              transition: "border-color 0.3s",
-                            }}
-                          />
-                          <div className="text-center mt-2">
-                            <h6 className="card-title text-dark">
-                              {image?.type?.split("_").join("  ")}
-                            </h6>
-                          </div>
+                        />
+                        <div className="text-center mt-2">
+                          <h6 className="card-title text-dark">
+                            {image?.type?.split("_").join("  ")}
+                          </h6>
                         </div>
-                      );
-                    })}
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <Button
@@ -412,6 +419,48 @@ const DateAndTime = forwardRef(
                     aria-hidden="true"
                   />
                 </Button>
+              </div>
+
+              {/* Add the More Details button here */}
+              <div className="text-center mt-3">
+                <div>
+                  <Button
+                    // variant="primary"
+                    onClick={handleShow}
+                    style={{
+                      backgroundColor: "rgb(172, 255, 59)",
+                      borderColor: "rgb(172, 255, 59)",
+                      padding: "10px 20px",
+                      fontSize: "16px",
+                      width: "350px",
+                      color: "#333",
+                    }}
+                  >
+                    Compare
+                  </Button>
+
+                  <Modal
+                    show={showModal}
+                    onHide={handleClose}
+                    size="xl"
+                    backdrop={isModified ? "static" : true}
+                    keyboard={isModified ? false : true}
+                    centered
+                  >
+                    <Modal.Header>
+                      <Modal.Title>Vehicle Offer Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <VehicleOffer
+                        setActiveIndex={setActiveIndex}
+                        setIsModified={setIsModified}
+                        onCardSelect={() => handleClose()}
+                        selectedImage={selectedImage}
+                        setSelectedImage={setSelectedImage}
+                      />
+                    </Modal.Body>
+                  </Modal>
+                </div>
               </div>
             </div>
 

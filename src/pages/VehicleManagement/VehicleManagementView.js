@@ -80,7 +80,9 @@ function VehicleManagementView() {
                       </p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {`${data.vehicleCapacity}Kg` || ""}</p>
+                      <p className="text-muted text-sm">
+                        : {`${data.vehicleCapacity}Kg` || ""}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -92,11 +94,13 @@ function VehicleManagementView() {
                       </p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {data.vehicleStatus || ""}</p>
+                      <p className="text-muted text-sm">
+                        : {data.vehicleStatus || ""}
+                      </p>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="col-md-6 col-12">
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
@@ -265,6 +269,48 @@ function VehicleManagementView() {
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
                       <p className="text-sm">
+                        <b>Boxes</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data.boxesCharge || ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
+                        <b>Long Push</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data.longPushCharge || ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
+                        <b>Assembly/Disassembly</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data.assemblyDisassemblyCharge || ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
                         <b>Wrapping Charge</b>
                       </p>
                     </div>
@@ -338,7 +384,11 @@ function VehicleManagementView() {
                     </div>
                     <div className="col-6 text-muted">
                       {data.vehicleImage ? (
-                        <img src={data.vehicleImage} alt="Driver" style={{ width: "100px" }} />
+                        <img
+                          src={data.vehicleImage}
+                          alt="Driver"
+                          style={{ width: "100px" }}
+                        />
                       ) : (
                         "N/A"
                       )}
