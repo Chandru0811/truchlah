@@ -5,79 +5,55 @@ import React, {
   useImperativeHandle,
   useRef,
 } from "react";
-import {
-  useJsApiLoader,
-  GoogleMap,
-  DirectionsRenderer,
-  Autocomplete,
-  MarkerF,
-} from "@react-google-maps/api";
+import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
 import { IoLocationSharp } from "react-icons/io5";
-import { FaAddressCard, FaPlusCircle, FaTrash } from "react-icons/fa";
-import { IoMdContact, IoMdCloseCircle } from "react-icons/io";
+import { FaAddressCard } from "react-icons/fa";
+import { IoMdContact } from "react-icons/io";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { bookingApi } from "../../config/URL";
 import fetchAllCategorysWithIds from "../Lists/CategoryList";
+import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
 
-const center = { lat: 50.0755, lng: 14.4378 };
 const libraries = ["places"];
 
 const validationSchema = Yup.object().shape({
   type: Yup.string().required("!Type is required"),
-  pickupLocation: Yup.string().required("!Pickup location is required"),
-  pickupAddress: Yup.string().required("!Pickup address is required"),
-  pickupContactName: Yup.string().required("!Contact name is required"),
-  pickupCountryCode: Yup.string().required("!Contact number is required"),
-  pickupContactNumber: Yup.string()
-    .required("!Mobile number is required")
-    .matches(/^\d+$/, "!Mobile number must contain only digits")
-    .test("phone-length", function (value) {
-      const { pickupCountryCode } = this.parent;
-      if (pickupCountryCode === "65") {
-        return value && value.length === 8
-          ? true
-          : this.createError({
-              message: "!Phone number must be 8 digits only",
-            });
-      }
-      if (pickupCountryCode === "91") {
-        return value && value.length === 10
-          ? true
-          : this.createError({
-              message: "!Phone number must be 10 digits only",
-            });
-      }
-      return true;
-    }),
-  dropoffLocation: Yup.string().required("!Drop-off location is required"),
-  dropoffAddress: Yup.string().required("!Drop-off address is required"),
-  dropoffContactName: Yup.string().required("!Contact name is required"),
-  // dropoffCountryCode: Yup.string().required("!Contact number is required"),
-  dropoffContactNumber: Yup.string()
-    .required("!Mobile number is required")
-    .matches(/^\d+$/, "!Mobile number must contain only digits")
-    .test("phone-length", function (value) {
-      const { dropoffCountryCode } = this.parent;
-      if (dropoffCountryCode === "65") {
-        return value && value.length === 8
-          ? true
-          : this.createError({
-              message: "!Phone number must be 8 digits only",
-            });
-      }
-      if (dropoffCountryCode === "91") {
-        return value && value.length === 10
-          ? true
-          : this.createError({
-              message: "!Phone number must be 10 digits only",
-            });
-      }
-      return true;
-    }),
+  estKm: Yup.number().required("!Estimated KM is required"),
+  locationDetail: Yup.array()
+    .of(
+      Yup.object().shape({
+        location: Yup.string().required("!Location is required"),
+        address: Yup.string().required("!Address is required"),
+        contactName: Yup.string().required("!Contact name is required"),
+        countryCode: Yup.string().required("!Country code is required"),
+        mobile: Yup.string()
+          .required("!Mobile number is required")
+          .matches(/^\d+$/, "!Mobile number must contain only digits")
+          .test("phone-length", function (value) {
+            const { countryCode } = this.parent;
+            if (countryCode === "65") {
+              return value && value.length === 8
+                ? true
+                : this.createError({
+                    message: "!Phone number must be 8 digits only",
+                  });
+            }
+            if (countryCode === "91") {
+              return value && value.length === 10
+                ? true
+                : this.createError({
+                    message: "!Phone number must be 10 digits only",
+                  });
+            }
+            return true;
+          }),
+      })
+    )
+    .min(2, "!At least two locations are required"),
 });
 
 const HouseMap = forwardRef(
@@ -86,68 +62,52 @@ const HouseMap = forwardRef(
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
       libraries,
     });
+    const [autocompletePickup, setAutocompletePickup] = useState(null);
+    const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
+
+    const [pickupPlace, setPickupPlace] = useState(null);
+    const [dropoffPlace, setDropoffPlace] = useState(null);
+    const [distance, setDistance] = useState(null);
+
     const userId = sessionStorage.getItem("userId");
     const [categorys, setCategoryData] = useState(null);
-    const [directionsResponse, setDirectionsResponse] = useState(null);
-    const [totalDistance, setTotalDistance] = useState(null);
-    const pickupRef = useRef(null);
-    const dropoffRef = useRef(null);
 
     const formik = useFormik({
       initialValues: {
+        userId: userId,
         type: "",
         estKm: "",
-        pickupLocation: "",
-        pickupAddress: "",
-        pickupContactName: "",
-        pickupCountryCode: "",
-        pickupContactNumber: "",
-        dropoffLocation: "",
-        dropoffAddress: "",
-        dropoffContactName: "",
-        dropoffContactNumber: "",
-        dropoffCountryCode: "",
+        locationDetail: [
+          {
+            type: "pickup",
+            location: "",
+            address: "",
+            contactName: "",
+            countryCode: "",
+            mobile: "",
+          },
+          {
+            type: "dropoff",
+            location: "",
+            address: "",
+            contactName: "",
+            countryCode: "",
+            mobile: "",
+          },
+        ],
       },
-      validationSchema:validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("Form Values:", values);
-        const payload = {
-          userId: userId,
-          type: values.type,
-          estKm: 10,
-          locationDetail: [
-            {
-              location: "Chengalpattu, Tamil Nadu, India",
-              address: "Chengalpattu main street",
-              contactName: "Bala",
-              countryCode: 91,
-              mobile: 6757979079,
-            },
-            {
-              location: "Chennai, Tamil Nadu, India",
-              address: "anna nagar, foot court",
-              contactName: "guru",
-              countryCode: 91,
-              mobile: 6757979079,
-            },
-          ],
-        };
-        console.log("payload:", payload);
         setLoadIndicators(true);
         try {
-          const response = await bookingApi.post(`booking/create`, payload);
+          const response = await bookingApi.post(`booking/create`, values);
           if (response.status === 200) {
             toast.success("Location has been successfully added!");
             const bookingId = response.data.responseBody.booking.bookingId;
-            const locations = encodeURIComponent(
-              JSON.stringify(payload.locationDetail)
-            );
-            setFormData({
-              bookingId: bookingId,
-              location: locations,
-              distance: 10,
-              type: values.type,
-            });
+            // const locations = encodeURIComponent(
+            //   JSON.stringify(values.locationDetail)
+            // );
+            setFormData((prv) => ({ ...prv, ...values, ...bookingId }));
             handleNext();
             // navigate(
             //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
@@ -164,41 +124,82 @@ const HouseMap = forwardRef(
       },
     });
 
-    const handlePlaceChanged = () => {
-      if (pickupRef.current && dropoffRef.current) {
-        const pickupPlace = pickupRef.current.getPlace();
-        const dropoffPlace = dropoffRef.current.getPlace();
-
-        if (pickupPlace && dropoffPlace) {
-          formik.setFieldValue("pickupLocation", pickupPlace.formatted_address);
+    const onPlaceChanged = (type) => {
+      if (type === "pickup" && autocompletePickup) {
+        const place = autocompletePickup.getPlace();
+        if (place.geometry && place.formatted_address) {
+          setPickupPlace({
+            formatted_address: place.formatted_address,
+            geometry: place.geometry,
+          });
           formik.setFieldValue(
-            "dropoffLocation",
-            dropoffPlace.formatted_address
+            "locationDetail[0].location",
+            place.formatted_address
           );
-
-          const directionsService = new window.google.maps.DirectionsService();
-          directionsService.route(
-            {
-              origin: pickupPlace.geometry.location,
-              destination: dropoffPlace.geometry.location,
-              travelMode: window.google.maps.TravelMode.DRIVING,
-            },
-            (result, status) => {
-              if (status === "OK" && result) {
-                setDirectionsResponse(result);
-                const distance = result.routes[0].legs.reduce(
-                  (total, leg) => total + leg.distance.value,
-                  0
-                );
-                setTotalDistance((distance / 1000).toFixed(2) + " km");
-              } else {
-                console.error("Error fetching directions:", status);
-              }
-            }
+        } else {
+          console.error("No sufficient details available for input:", place);
+        }
+      } else if (type === "dropoff" && autocompleteDropoff) {
+        const place = autocompleteDropoff.getPlace();
+        if (place.geometry && place.formatted_address) {
+          setDropoffPlace({
+            formatted_address: place.formatted_address,
+            geometry: place.geometry,
+          });
+          formik.setFieldValue(
+            "locationDetail[1].location",
+            place.formatted_address
           );
+        } else {
+          console.error("No sufficient details available for input:", place);
         }
       }
     };
+
+    const calculateDistance = () => {
+      if (pickupPlace && dropoffPlace) {
+        const service = new window.google.maps.DistanceMatrixService();
+
+        service.getDistanceMatrix(
+          {
+            origins: [pickupPlace.geometry.location],
+            destinations: [dropoffPlace.geometry.location],
+            travelMode: window.google.maps.TravelMode.DRIVING,
+          },
+          (response, status) => {
+            if (status === "OK") {
+              const distanceResult = response.rows[0].elements[0];
+              if (distanceResult.status === "OK") {
+                setDistance(distanceResult.distance.text);
+                const numericDistance = parseFloat(
+                  distanceResult.distance.text
+                );
+                if (!isNaN(numericDistance)) {
+                  formik.setFieldValue("estKm", numericDistance);
+                } else {
+                  console.error("Error parsing distance value");
+                }
+              } else {
+                console.error(
+                  "Error fetching distance:",
+                  distanceResult.status
+                );
+              }
+            } else {
+              console.error("Distance Matrix request failed:", status);
+            }
+          }
+        );
+      }
+    };
+
+    useEffect(() => {
+      if (pickupPlace && dropoffPlace) {
+        calculateDistance();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pickupPlace, dropoffPlace]);
+
     const fetchData = async () => {
       try {
         const categorys = await fetchAllCategorysWithIds();
@@ -207,13 +208,15 @@ const HouseMap = forwardRef(
         toast.error(error);
       }
     };
+
     useEffect(() => {
       if (formData.type) {
         formik.setFieldValue("type", formData.type);
       }
-      formik.setFieldValue("pickupCountryCode", 65);
-      formik.setFieldValue("dropoffCountryCode", 65);
+      formik.setFieldValue("locationDetail[0].countryCode", 65);
+      formik.setFieldValue("locationDetail[1].countryCode", 65);
       fetchData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -236,273 +239,88 @@ const HouseMap = forwardRef(
           <div className="row mt-5">
             <div className=" col-md-6 col-12">
               <div className="row">
-                {/* Pickup location */}
-                <div className="rounded-pill py-3">
-                  <img
-                    src={red}
-                    style={{ width: "20px" }}
-                    alt="house"
-                    className="icon-img me-4"
-                  />
-                  <span className="fw-bold">Pick Up Location</span>
-                </div>
-
-                <div className="col-md-10 col-12 mb-3">
-                  <Autocomplete
-                    onLoad={(ref) => (pickupRef.current = ref)}
-                    onPlaceChanged={handlePlaceChanged}
-                  >
-                    <div
-                      className="input-group "
-                      style={{
-                        borderRadius: "10px",
-                        overflow: "hidden",
-                        height: "50px",
-                      }}
-                    >
-                      <span
-                        className="input-group-text"
-                        style={{
-                          borderRight: "none",
-                          backgroundColor: "#fff",
-                          borderRadius: "10px 0 0 10px",
-                        }}
-                      >
-                        <IoLocationSharp />
-                      </span>
-                      <input
-                        type="text"
-                        name="pickupLocation"
-                        className="form-control"
-                        placeholder="Enter a pickup location"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        style={{
-                          borderLeft: "none",
-                          borderRadius: "0 10px 10px 0",
-                        }}
+                {/* Loop through pickup and dropoff locations */}
+                {formik?.values?.locationDetail?.map((location, index) => (
+                  <div key={index}>
+                    <div className="rounded-pill py-3">
+                      <img
+                        src={location.type === "pickup" ? red : Green}
+                        style={{ width: "20px" }}
+                        alt="house"
+                        className="icon-img me-4"
                       />
+                      <span className="fw-bold">
+                        {location.type === "pickup"
+                          ? "Pick Up Location"
+                          : "Dropoff Location"}
+                      </span>
                     </div>
-                  </Autocomplete>
-                  {formik.touched.pickupLocation &&
-                  formik.errors.pickupLocation ? (
-                    <div className="text-danger">
-                      {formik.errors.pickupLocation}
-                    </div>
-                  ) : null}
-                </div>
 
-                <div className="col-md-10 col-12 mt-3 mb-3">
-                  <div
-                    className="input-group"
-                    style={{
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      height: "50px",
-                    }}
-                  >
-                    <span
-                      className="input-group-text"
-                      style={{
-                        borderRight: "none",
-                        backgroundColor: "#fff",
-                        borderRadius: "10px 0 0 10px",
-                      }}
-                    >
-                      <FaAddressCard />
-                    </span>
-                    <input
-                      type="text"
-                      name="pickupAddress"
-                      className="form-control"
-                      placeholder="Enter a pickup address"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      style={{
-                        borderLeft: "none",
-                        borderRadius: "0 10px 10px 0",
-                      }}
-                    />
-                  </div>
-                  {formik.touched.pickupAddress &&
-                  formik.errors.pickupAddress ? (
-                    <div className="text-danger">
-                      {formik.errors.pickupAddress}
-                    </div>
-                  ) : null}
-                </div>
-
-                <div className="col-md-10 col-12 mt-3">
-                  <div className="row">
-                    <div className="col-md-6 col-12 p-2 mb-4">
-                      <div
-                        className="input-group "
-                        style={{
-                          borderRadius: "10px",
-                          overflow: "hidden",
-                          height: "50px",
+                    {/* Location Input */}
+                    <div className="col-md-10 col-12 mb-3">
+                      <Autocomplete
+                        onLoad={(autoC) => {
+                          location.type === "pickup"
+                            ? setAutocompletePickup(autoC)
+                            : setAutocompleteDropoff(autoC);
+                        }}
+                        onPlaceChanged={() =>
+                          onPlaceChanged(
+                            location.type === "pickup" ? "pickup" : "dropoff"
+                          )
+                        }
+                        options={{
+                          types: ["establishment"],
+                          componentRestrictions: { country: "SG" },
+                          fields: ["formatted_address", "geometry"],
                         }}
                       >
-                        <span
-                          className="input-group-text"
+                        <div
+                          className="input-group"
                           style={{
-                            borderRight: "none",
-                            backgroundColor: "#fff",
-                            borderRadius: "10px 0 0 10px",
+                            borderRadius: "10px",
+                            overflow: "hidden",
+                            height: "50px",
                           }}
                         >
-                          <IoMdContact />
-                        </span>
-                        <input
-                          type="text"
-                          name="pickupContactName"
-                          className="form-control"
-                          placeholder="Enter a contact name"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                      </div>
-                      {formik.touched.pickupContactName &&
-                      formik.errors.pickupContactName ? (
-                        <div className="text-danger">
-                          {formik.errors.pickupContactName}
-                        </div>
-                      ) : null}
-                    </div>
-
-                    <div className="col-md-6 col-12 p-2 mb-4">
-                      <div
-                        className="input-group  "
-                        style={{
-                          borderRadius: "10px",
-                          overflow: "hidden",
-                          height: "50px",
-                        }}
-                      >
-                        <span
-                          className="input-group-text"
-                          style={{
-                            borderRight: "none",
-                            backgroundColor: "#fff",
-                            borderRadius: "10px 0 0 10px",
-                          }}
-                        >
-                          <select
-                            name="pickupCountryCode"
+                          <span
+                            className="input-group-text"
+                            style={{
+                              borderRight: "none",
+                              backgroundColor: "#fff",
+                              borderRadius: "10px 0 0 10px",
+                            }}
+                          >
+                            <IoLocationSharp />
+                          </span>
+                          <input
+                            type="text"
+                            name={`locationDetail[${index}].location`}
+                            placeholder={`Enter ${
+                              location.type === "pickup" ? "Pickup" : "Dropoff"
+                            } Location`}
+                            className="form-control"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            className=""
-                          >
-                            <option value="65" selected>+65</option>
-                            <option value="91">+91</option>
-                          </select>
-                        </span>
-                        <input
-                          type="text"
-                          name="pickupContactNumber"
-                          className="form-control"
-                          placeholder="Enter a contact number"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                      </div>
-                      {formik.touched.pickupContactNumber &&
-                      formik.errors.pickupContactNumber ? (
+                            style={{
+                              borderLeft: "none",
+                              borderRadius: "0 10px 10px 0",
+                            }}
+                          />
+                        </div>
+                      </Autocomplete>
+                      {formik.touched.locationDetail?.[index]?.location &&
+                      formik.errors.locationDetail?.[index]?.location ? (
                         <div className="text-danger">
-                          {formik.errors.pickupContactNumber}
+                          {formik.errors.locationDetail[index].location}
                         </div>
                       ) : null}
                     </div>
-                  </div>
-                </div>
 
-                {/* Dropoff location */}
-                <div className="rounded-pill py-3">
-                  <img
-                    src={Green}
-                    style={{ width: "20px" }}
-                    alt="house"
-                    className="icon-img me-4"
-                  />
-                  <span className="fw-bold">Dropoff Location</span>
-                </div>
-
-                <div className="col-md-10 col-12">
-                  <Autocomplete
-                    onLoad={(ref) => (dropoffRef.current = ref)}
-                    onPlaceChanged={handlePlaceChanged}
-                  >
-                    <div
-                      className="input-group"
-                      style={{
-                        borderRadius: "10px",
-                        overflow: "hidden",
-                        height: "50px",
-                      }}
-                    >
-                      <span className="input-group-text">
-                        <IoLocationSharp />
-                      </span>
-                      <input
-                        type="text"
-                        name="dropoffLocation"
-                        className="form-control"
-                        placeholder="Enter a drop-off location"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                    </div>
-                  </Autocomplete>
-                  {formik.touched.dropoffLocation &&
-                  formik.errors.dropoffLocation ? (
-                    <div className="text-danger">
-                      {formik.errors.dropoffLocation}
-                    </div>
-                  ) : null}
-                </div>
-
-                <div className="col-md-10 col-12 mb-3">
-                  <div
-                    className="input-group mt-3 "
-                    style={{
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      height: "50px",
-                    }}
-                  >
-                    <span
-                      className="input-group-text"
-                      id="basic-addon1"
-                      style={{
-                        borderRight: "none",
-                        backgroundColor: "#fff",
-                        borderRadius: "10px 0 0 10px",
-                      }}
-                    >
-                      <FaAddressCard />
-                    </span>
-                    <input
-                      type="text"
-                      name="dropoffAddress"
-                      className="form-control"
-                      placeholder="Enter a drop-off address"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                  </div>
-                  {formik.touched.dropoffAddress &&
-                  formik.errors.dropoffAddress ? (
-                    <div className="text-danger">
-                      {formik.errors.dropoffAddress}
-                    </div>
-                  ) : null}
-                </div>
-
-                <div className="col-md-10 col-12 mt-3">
-                  <div className="row">
-                    <div className="col-md-6 col-12 p-2 mb-4">
+                    {/* Address Input */}
+                    <div className="col-md-10 col-12 mb-3">
                       <div
-                        className="input-group "
+                        className="input-group"
                         style={{
                           borderRadius: "10px",
                           overflow: "hidden",
@@ -511,106 +329,146 @@ const HouseMap = forwardRef(
                       >
                         <span
                           className="input-group-text"
-                          id="basic-addon1"
                           style={{
                             borderRight: "none",
                             backgroundColor: "#fff",
                             borderRadius: "10px 0 0 10px",
                           }}
                         >
-                          <IoMdContact />
+                          <FaAddressCard />
                         </span>
                         <input
                           type="text"
-                          name="dropoffContactName"
+                          name={`locationDetail[${index}].address`}
+                          placeholder={`Enter ${
+                            location.type === "pickup" ? "Pickup" : "Dropoff"
+                          } Address`}
                           className="form-control"
-                          placeholder="Enter a contact name"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
+                          style={{
+                            borderLeft: "none",
+                            borderRadius: "0 10px 10px 0",
+                          }}
                         />
                       </div>
-                      {formik.touched.dropoffContactName &&
-                      formik.errors.dropoffContactName ? (
+                      {formik.touched.locationDetail?.[index]?.address &&
+                      formik.errors.locationDetail?.[index]?.address ? (
                         <div className="text-danger">
-                          {formik.errors.dropoffContactName}
+                          {formik.errors.locationDetail[index].address}
                         </div>
                       ) : null}
                     </div>
-                    <div className="col-md-6 col-12 p-2 mb-4">
-                      <div
-                        className="input-group "
-                        style={{
-                          borderRadius: "10px",
-                          overflow: "hidden",
-                          height: "50px",
-                        }}
-                      >
-                        <span
-                          className="input-group-text"
-                          id="basic-addon1"
-                          style={{
-                            borderRight: "none",
-                            backgroundColor: "#fff",
-                            borderRadius: "10px 0 0 10px",
-                          }}
-                        >
-                          <select
-                            name="dropoffCountryCode"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className=""
+
+                    {/* Contact Name and Mobile */}
+                    <div className="col-md-10 col-12 mt-3">
+                      <div className="row">
+                        <div className="col-md-6 col-12 p-2 mb-4">
+                          <div
+                            className="input-group"
+                            style={{
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              height: "50px",
+                            }}
                           >
-                            <option value="+65">+65</option>
-                            <option value="+91">+91</option>
-                          </select>
-                        </span>
-                        <input
-                          type="text"
-                          name="dropoffContactNumber"
-                          className="form-control"
-                          placeholder="Enter a contact number"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                      </div>
-                      {formik.touched.dropoffContactNumber &&
-                      formik.errors.dropoffContactNumber ? (
-                        <div className="text-danger">
-                          {formik.errors.dropoffContactNumber}
+                            <span
+                              className="input-group-text"
+                              style={{
+                                borderRight: "none",
+                                backgroundColor: "#fff",
+                                borderRadius: "10px 0 0 10px",
+                              }}
+                            >
+                              <IoMdContact />
+                            </span>
+                            <input
+                              type="text"
+                              name={`locationDetail[${index}].contactName`}
+                              placeholder={`Enter ${
+                                location.type === "pickup"
+                                  ? "Pickup"
+                                  : "Dropoff"
+                              } Contact Name`}
+                              className="form-control"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                            />
+                          </div>
+                          {formik.touched.locationDetail?.[index]
+                            ?.contactName &&
+                          formik.errors.locationDetail?.[index]?.contactName ? (
+                            <div className="text-danger">
+                              {formik.errors.locationDetail[index].contactName}
+                            </div>
+                          ) : null}
                         </div>
-                      ) : null}
+
+                        <div className="col-md-6 col-12 p-2 mb-4">
+                          <div
+                            className="input-group"
+                            style={{
+                              borderRadius: "10px",
+                              overflow: "hidden",
+                              height: "50px",
+                            }}
+                          >
+                            <span
+                              className="input-group-text"
+                              style={{
+                                borderRight: "none",
+                                backgroundColor: "#fff",
+                                borderRadius: "10px 0 0 10px",
+                              }}
+                            >
+                              <select
+                                name={`locationDetail[${index}].countryCode`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className=""
+                              >
+                                <option value="+65">+65</option>
+                                <option value="+91">+91</option>
+                              </select>
+                            </span>
+                            <input
+                              type="text"
+                              name={`locationDetail[${index}].mobile`}
+                              placeholder={`Enter ${
+                                location.type === "pickup"
+                                  ? "Pickup"
+                                  : "Dropoff"
+                              } Contact Number`}
+                              className="form-control"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                            />
+                          </div>
+                          {formik.touched.locationDetail?.[index]?.mobile &&
+                          formik.errors.locationDetail?.[index]?.mobile ? (
+                            <div className="text-danger">
+                              {formik.errors.locationDetail[index].mobile}
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
+
+                {/* Category Selection */}
                 <div className="rounded-pill pt-3">
-                  {/* <img
-                    src={Green}
-                    style={{ width: "20px" }}
-                    alt="house"
-                    className="icon-img me-4"
-                  /> */}
                   <span className="fw-bold">Select Category</span>
                 </div>
                 <div className="col-md-10 col-12 mb-3">
                   <div
-                    className="input-group mt-3 "
+                    className="input-group mt-3"
                     style={{
                       borderRadius: "10px",
                       overflow: "hidden",
                       height: "50px",
                     }}
                   >
-                    {/* <span
-                      className="input-group-text"
-                      id="basic-addon1"
-                      style={{
-                        borderRight: "none",
-                        backgroundColor: "#fff",
-                        borderRadius: "10px 0 0 10px",
-                      }}
-                    >
-                      <FaAddressCard />
-                    </span> */}
                     <select
                       type="text"
                       name="type"
@@ -620,7 +478,7 @@ const HouseMap = forwardRef(
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     >
-                      <option value={""} className="text-muted">
+                      <option value="" className="text-muted">
                         Select
                       </option>
                       {categorys &&
@@ -643,30 +501,21 @@ const HouseMap = forwardRef(
 
             <div className="col-md-6 col-12">
               <span className="d-flex justify-content-center align-items-center py-3">
-                {totalDistance && (
-                  <span className="fw-bold">
-                    Total Distance: {totalDistance}
-                  </span>
+                {distance && (
+                  <div>
+                    <strong>Estimated Distance: </strong> {distance}
+                  </div>
                 )}
               </span>
               <div
                 className=" d-flex justify-content-center align-items-center"
                 style={{ position: "sticky", top: "67px", zIndex: "1" }}
               >
-                <GoogleMap
-                  center={center}
-                  zoom={12}
-                  mapContainerStyle={{
-                    width: "100%",
-                    height: "400px",
-                    height: "90vh",
-                    borderRadius: "20px",
-                  }}
-                >
-                  {directionsResponse && (
-                    <DirectionsRenderer directions={directionsResponse} />
-                  )}
-                </GoogleMap>
+                <img
+                  src={Trucklah_moving}
+                  className="img-fluid"
+                  alt="Trucklah Moving Singapore"
+                />
               </div>
             </div>
           </div>
