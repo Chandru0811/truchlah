@@ -32,29 +32,29 @@ const ServiceNew = forwardRef(
         console.log("val", values);
 
         // if (selectedDateTime >= eligibleTime) {
-        const selectedOption = formData.vehicle;
+        // const selectedOption = formData.vehicle;
 
-        const totalKilometer = parseInt(formData.distance);
-        const km_charge = 0.75 * totalKilometer;
-        const total = selectedOption.baseFare + km_charge;
+        // const totalKilometer = parseInt(formData.distance);
+        // const km_charge = 0.75 * totalKilometer;
+        // const total = selectedOption.baseFare + km_charge;
 
-        let driverAmount = 0;
-        let extraHelper = 0;
+        // let driverAmount = 0;
+        // let extraHelper = 0;
 
-        if (values.driverAsManpower) {
-          driverAmount = selectedOption.driverHelper;
-        }
+        // if (values.driverAsManpower) {
+        //   driverAmount = selectedOption.driverHelper;
+        // }
 
-        if (values.extraManpower) {
-          extraHelper = selectedOption.helper * formik.values.quantity;
-        }
+        // if (values.extraManpower) {
+        //   extraHelper = selectedOption.helper * formik.values.quantity;
+        // }
 
         const payload = {
           userId: userId,
           type: formData.type,
           // locationDetail: JSON.parse(decodeURIComponent(formData.location)),
           bookingId: formData.bookingId,
-          estKm: parseFloat(formData.distance),
+          estKm: formData.estKm,
           scheduledDate: data.booking.scheduledDate,
           // deliveryDate: deliveryDate,
           quantity: values.extraManpower ? values.quantity : 0,
@@ -66,7 +66,7 @@ const ServiceNew = forwardRef(
           roundTrip: values.roundTripRequired ? "Y" : "N",
           vehicleType: formData?.vehicle?.type,
           promoCode: "",
-          actualKm: parseFloat(formData.distance),
+          actualKm: formData.estKm,
         };
         setLoadIndicators(true);
         try {

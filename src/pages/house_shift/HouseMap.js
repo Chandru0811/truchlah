@@ -71,7 +71,8 @@ const HouseMap = forwardRef(
 
     const userId = sessionStorage.getItem("userId");
     const [categorys, setCategoryData] = useState(null);
-
+    
+    console.log("object",formData)
     const formik = useFormik({
       initialValues: {
         userId: userId,
@@ -96,9 +97,11 @@ const HouseMap = forwardRef(
           },
         ],
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        console.log("values",values)
+        // values.type = values.type==="ITEM"?"ITEM":"HOUSE"
         try {
           const response = await bookingApi.post(`booking/create`, values);
           if (response.status === 200) {
@@ -107,7 +110,7 @@ const HouseMap = forwardRef(
             // const locations = encodeURIComponent(
             //   JSON.stringify(values.locationDetail)
             // );
-            setFormData((prv) => ({ ...prv, ...values, ...bookingId }));
+            setFormData((prv) => ({ ...prv, ...values,bookingId:bookingId }));
             handleNext();
             // navigate(
             //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
@@ -150,6 +153,7 @@ const HouseMap = forwardRef(
             "locationDetail[1].location",
             place.formatted_address
           );
+          // console.log("place.formatted_address",place.formatted_address)
         } else {
           console.error("No sufficient details available for input:", place);
         }
@@ -213,15 +217,53 @@ const HouseMap = forwardRef(
       if (formData.type) {
         formik.setFieldValue("type", formData.type);
       }
+      if (formData && Object.keys(formData).length > 0) {
+        formik.setValues({
+          ...formik.initialValues,
+          ...formData, 
+        });
+      } else {
+        formik.setValues({
+          ...formik.initialValues,
+          locationDetail: [
+            {
+              type: "pickup",
+              location: "",
+              address: "",
+              contactName: "",
+              countryCode: 65,
+              mobile: "",
+            },
+            {
+              type: "dropoff",
+              location: "",
+              address: "",
+              contactName: "",
+              countryCode: 65,
+              mobile: "",
+            },
+          ],
+        });
+      }
       formik.setFieldValue("locationDetail[0].countryCode", 65);
       formik.setFieldValue("locationDetail[1].countryCode", 65);
       fetchData();
+      console.log("formik",formik.values)
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useImperativeHandle(ref, () => ({
       housemap: formik.handleSubmit,
     }));
+
+    // useEffect(() => {
+    //   if (formData) {
+    //     Object.keys(formData).forEach((key) => {
+    //       formik.setFieldValue(key, formData[key]);
+    //     });
+    //   }
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [formData]);
 
     if (!isLoaded) {
       return (
@@ -300,6 +342,7 @@ const HouseMap = forwardRef(
                               location.type === "pickup" ? "Pickup" : "Dropoff"
                             } Location`}
                             className="form-control"
+                            value={formik.values.locationDetail?.[index]?.location || ""}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             style={{
@@ -340,6 +383,7 @@ const HouseMap = forwardRef(
                         <input
                           type="text"
                           name={`locationDetail[${index}].address`}
+                          value={formik.values.locationDetail?.[index]?.address || ""}
                           placeholder={`Enter ${
                             location.type === "pickup" ? "Pickup" : "Dropoff"
                           } Address`}
@@ -391,6 +435,7 @@ const HouseMap = forwardRef(
                                   : "Dropoff"
                               } Contact Name`}
                               className="form-control"
+                              value={formik.values.locationDetail?.[index]?.contactName || ""}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                             />
@@ -424,16 +469,18 @@ const HouseMap = forwardRef(
                               <select
                                 name={`locationDetail[${index}].countryCode`}
                                 onChange={formik.handleChange}
+                                value={formik.values.locationDetail?.[index]?.countryCode || ""}
                                 onBlur={formik.handleBlur}
                                 className=""
                               >
-                                <option value="+65">+65</option>
-                                <option value="+91">+91</option>
+                                <option value="65">+65</option>
+                                <option value="91">+91</option>
                               </select>
                             </span>
                             <input
                               type="text"
                               name={`locationDetail[${index}].mobile`}
+                              value={formik.values.locationDetail?.[index]?.mobile || ""}
                               placeholder={`Enter ${
                                 location.type === "pickup"
                                   ? "Pickup"

@@ -64,8 +64,8 @@ const DateAndTime = forwardRef(
     const [showModal, setShowModal] = useState(true);
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
-    console.log("activeIndex", activeIndex);
-    console.log("currentIndex", currentIndex);
+    // console.log("activeIndex", activeIndex);
+    console.log("currentIndex", formData);
     const formik = useFormik({
       initialValues: {
         date: formData.date,
@@ -84,22 +84,22 @@ const DateAndTime = forwardRef(
           (item) => item.vehicletypeId === selectedImage.vehicletypeId
         );
         setFormData((prv) => ({ ...prv, vehicle: selectedOption }));
-        const totalKilometer = parseInt(formData.distance);
-        const km_charge = 0.75 * totalKilometer;
-        const total = selectedOption.baseFare + km_charge;
+        // const totalKilometer = parseInt(formData.distance);
+        // const km_charge = 0.75 * totalKilometer;
+        // const total = selectedOption.baseFare + km_charge;
 
-        let driverAmount = 0;
-        let extraHelper = 0;
+        // let driverAmount = 0;
+        // let extraHelper = 0;
 
-        if (values.driverAsManpower) {
-          driverAmount = selectedOption.driverHelper;
-        }
+        // if (values.driverAsManpower) {
+        //   driverAmount = selectedOption.driverHelper;
+        // }
 
-        if (values.extraManpower) {
-          extraHelper = selectedOption.helper * values.quantity;
-        }
+        // if (values.extraManpower) {
+        //   extraHelper = selectedOption.helper * values.quantity;
+        // }
 
-        const totalCharges = total + driverAmount + extraHelper;
+        // const totalCharges = total + driverAmount + extraHelper;
         // console.log(totalCharges);
 
         const deliveryDate = new Date(`${values.date}T${values.time}`);
@@ -108,10 +108,10 @@ const DateAndTime = forwardRef(
         setLoadIndicators(true);
         const payload = {
           userId: userId,
-          type: shiftType === "HOUSE" ? formData.type : shiftType,
-          locationDetail: JSON.parse(decodeURIComponent(formData.location)),
+          type: formData.type,
+          locationDetail: formData.locationDetail,
           bookingId: formData.bookingId,
-          estKm: parseFloat(formData.distance),
+          estKm: formData.estKm,
           scheduledDate: `${values.date}T${values.time}.000Z`,
           deliveryDate: deliveryDate,
           quantity: formData?.data?.booking?.quantity,
@@ -124,7 +124,7 @@ const DateAndTime = forwardRef(
           roundTrip: formData?.data?.booking?.roundTrip === "Y" ? "Y" : "N",
           vehicleType: selectedOption.type,
           promoCode: "",
-          actualKm: parseFloat(formData.distance),
+          actualKm: formData.estKm,
         };
         try {
           const response = await bookingApi.put(`booking/update`, payload);

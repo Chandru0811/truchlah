@@ -60,7 +60,7 @@ const ExtraService = forwardRef(
         type: formData.type,
         // locationDetail: JSON.parse(decodeURIComponent(formData.location)),
         bookingId: formData.bookingId,
-        estKm: parseFloat(formData.distance),
+        estKm: formData.estKm,
         scheduledDate: formData?.data?.booking?.scheduledDate,
         vehicleType: formData?.vehicle?.type,
         quantity:formData?.data?.booking?.quantity,
@@ -70,13 +70,13 @@ const ExtraService = forwardRef(
         extraHelper: formData?.data?.booking?.extraHelper ==="Y" ? "Y" : "N",
         trollyRequired: formData?.data?.booking?.trollyRequired ==="Y" ? "Y" : "N",
         roundTrip: formData?.data?.booking?.roundTrip ==="Y" ? "Y" : "N",
-        actualKm: parseFloat(formData.distance),
+        actualKm: formData.estKm,
         assemblyDisassemblyCharge: counts[3],
         bubbleWrappingCharge: counts[4],
         boxesCharge: counts[1],
         longPushCharge: counts[2],
       };
-      console.log("payload",payload)
+      // console.log("payload",payload)
       try {
         const response = await bookingApi.put(`booking/update`, payload);
         if (response.status === 200) {

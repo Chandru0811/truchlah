@@ -66,6 +66,7 @@ const VehicleOffer = (
     for (let i = 0; i < 3; i++) {
       visibleData.push(vehicle[(currentIndex + i) % vehicle.length]);
     }
+console.log("clg",visibleData)
     return visibleData;
   };
 
@@ -153,7 +154,7 @@ const VehicleOffer = (
                   <h5 className="card-title">
                     house 1BHK {/* {data?.bookingType?.split("_").join(" ")} */}
                   </h5>
-                  <h4 className="text-danger mb-0">SGD {data?.amount}.00</h4>
+                  <h4 className="text-danger mb-0">SGD {data?.baseFare}.00</h4>
                   <p className="card-text text-muted">
                     *inclusive {data?.gst}% GST
                   </p>
@@ -161,7 +162,7 @@ const VehicleOffer = (
               </div>
               <div className="mt-3 px-3">
                 <h5 className="card-title my-1">
-                  14FT LORRY {/* {data?.vehicleType?.split("_").join(" ")} */}
+                   {data?.type?.split("_").join(" ")}
                 </h5>
                 <p className="card-text text-muted my-3">{data?.description}</p>
                 <h5 className="card-title text-start">Package Includes :</h5>

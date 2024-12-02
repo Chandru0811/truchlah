@@ -21,6 +21,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { bookingApi } from "../../config/URL";
+import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
 
 const center = { lat: 50.0755, lng: 14.4378 };
 const libraries = ["places"];
@@ -125,7 +126,13 @@ const MapNew = forwardRef(
     const handleAddDropoff = () => {
       formik.setFieldValue("stops", [
         ...formik.values.stops,
-        { location: "", address: "", contactName: "", contactNumber: "" },
+        {
+          location: "",
+          address: "",
+          contactName: "",
+          contactNumber: "",
+          countryCode: 65,
+        },
       ]);
     };
 
@@ -154,40 +161,35 @@ const MapNew = forwardRef(
       validationSchema,
       onSubmit: async (values) => {
         console.log("Form Values:", values);
+        const locationDetail = [
+          {
+            location: values.pickupLocation,
+            address: values.pickupAddress,
+            contactName: values.pickupContactName,
+            countryCode: values.pickupCountryCode,
+            mobile: values.pickupContactNumber,
+          },
+          ...values.stops.map((stop) => ({
+            location: stop.location,
+            address: stop.address,
+            contactName: stop.contactName,
+            countryCode: stop.countryCode,
+            mobile: stop.contactNumber,
+          })),
+          {
+            location: values.dropoffLocation,
+            address: values.dropoffAddress,
+            contactName: values.dropoffContactName,
+            countryCode: values.dropoffCountryCode,
+            mobile: values.dropoffContactNumber,
+          },
+        ];
+
         const payload = {
           userId: userId,
           type: shiftType,
-          estKm: 10,
-          locationDetail: [
-            {
-              location: "Madurai, Tamil Nadu, India",
-              address: "4517 Madurai Ave. Road, ",
-              contactName: "sri",
-              countryCode: 91,
-              mobile: 6776543212,
-            },
-            {
-              location: "Tiruchirappalli, Tamil Nadu, India",
-              address: "1234 Tiruchirappalli Ave. ",
-              contactName: "akash",
-              countryCode: 91,
-              mobile: 9900665431,
-            },
-            {
-              location: "Chengalpattu, Tamil Nadu, India",
-              address: "Chengalpattu main street",
-              contactName: "Bala",
-              countryCode: 91,
-              mobile: 6757979079,
-            },
-            {
-              location: "Chennai, Tamil Nadu, India",
-              address: "anna nagar, foot court",
-              contactName: "guru",
-              countryCode: 91,
-              mobile: 6757979079,
-            },
-          ],
+          estKm: formData.estKm,
+          locationDetail: locationDetail,
         };
         console.log("payload:", payload);
         setLoadIndicators(true);
@@ -196,15 +198,10 @@ const MapNew = forwardRef(
           if (response.status === 200) {
             toast.success("Location has been successfully added!");
             const bookingId = response.data.responseBody.booking.bookingId;
-            const locations = encodeURIComponent(
-              JSON.stringify(payload.locationDetail)
-            );
-            setFormData({
-              bookingId: bookingId,
-              location: locations,
-              distance: 10,
-              type: shiftType,
-            });
+            // const locations = encodeURIComponent(
+            //   JSON.stringify(payload.locationDetail)
+            // );
+            setFormData((prv) => ({ ...prv, ...payload,bookingId:bookingId }));
             handleNext();
             // navigate(
             //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
@@ -221,31 +218,58 @@ const MapNew = forwardRef(
       },
     });
 
-    const handlePlaceChanged = () => {
-      if (pickupRef.current && dropoffRef.current) {
+    const handlePlaceChanged = (type, index = null) => {
+      if (type === "pickup" && pickupRef.current) {
         const pickupPlace = pickupRef.current.getPlace();
-        const dropoffPlace = dropoffRef.current.getPlace();
-
-        if (pickupPlace && dropoffPlace) {
+        if (pickupPlace && pickupPlace.formatted_address) {
           formik.setFieldValue("pickupLocation", pickupPlace.formatted_address);
+        }
+      } else if (type === "dropoff" && dropoffRef.current) {
+        const dropoffPlace = dropoffRef.current.getPlace();
+        if (dropoffPlace && dropoffPlace.formatted_address) {
           formik.setFieldValue(
             "dropoffLocation",
             dropoffPlace.formatted_address
           );
-
+        }
+      } else if (type === "stop" && stops.current[index]) {
+        const stopPlace = stops.current[index].getPlace();
+        if (stopPlace && stopPlace.formatted_address) {
+          formik.setFieldValue(
+            `stops[${index}].location`,
+            stopPlace.formatted_address
+          );
+          recalculateRoute();
+        }
+      }
+      if (pickupRef.current && dropoffRef.current) {
+        const pickupPlace = pickupRef.current.getPlace();
+        const dropoffPlace = dropoffRef.current.getPlace();
+        if (pickupPlace && dropoffPlace) {
+          recalculateRoute(); 
+        }
+      }
+    };
+    
+    const recalculateRoute = () => {
+      if (pickupRef.current && dropoffRef.current) {
+        const pickupPlace = pickupRef.current.getPlace();
+        const dropoffPlace = dropoffRef.current.getPlace();
+    
+        if (pickupPlace && dropoffPlace) {
           const waypoints = formik.values.stops
             .filter((stop) => stop.location)
             .map((stop) => ({
               location: stop.location,
               stopover: true,
             }));
-
+    
           const directionsService = new window.google.maps.DirectionsService();
           directionsService.route(
             {
               origin: pickupPlace.geometry.location,
               destination: dropoffPlace.geometry.location,
-              waypoints: waypoints,
+              waypoints: waypoints, 
               travelMode: window.google.maps.TravelMode.DRIVING,
             },
             (result, status) => {
@@ -255,7 +279,9 @@ const MapNew = forwardRef(
                   (total, leg) => total + leg.distance.value,
                   0
                 );
-                setTotalDistance((distance / 1000).toFixed(2) + " km");
+                const estimate = (distance / 1000).toFixed(2);
+                setTotalDistance(estimate);
+                formik.setFieldValue("estKm", estimate); 
               } else {
                 console.error("Error fetching directions:", status);
               }
@@ -264,7 +290,7 @@ const MapNew = forwardRef(
         }
       }
     };
-
+    
     useImperativeHandle(ref, () => ({
       map: formik.handleSubmit,
     }));
@@ -272,6 +298,34 @@ const MapNew = forwardRef(
     useEffect(() => {
       formik.setFieldValue("pickupCountryCode", 65);
       formik.setFieldValue("dropoffCountryCode", 65);
+      if (formData?.locationDetail?.length > 0) {
+        // Set pickup details
+        const pickup = formData?.locationDetail[0];
+        formik.setFieldValue("pickupLocation", pickup.location);
+        formik.setFieldValue("pickupAddress", pickup.address);
+        formik.setFieldValue("pickupContactName", pickup.contactName);
+        formik.setFieldValue("pickupCountryCode", pickup.countryCode);
+        formik.setFieldValue("pickupContactNumber", pickup.mobile);
+    
+        // Set dropoff details
+        const dropoff = formData?.locationDetail[formData.locationDetail?.length - 1];
+        formik.setFieldValue("dropoffLocation", dropoff.location);
+        formik.setFieldValue("dropoffAddress", dropoff.address);
+        formik.setFieldValue("dropoffContactName", dropoff.contactName);
+        formik.setFieldValue("dropoffCountryCode", dropoff.countryCode);
+        formik.setFieldValue("dropoffContactNumber", dropoff.mobile);
+    
+        // Set stops details
+        const stops = formData.locationDetail?.slice(1, formData.locationDetail?.length - 1).map((stop) => ({
+          location: stop.location,
+          address: stop.address,
+          contactName: stop.contactName,
+          contactNumber: stop.mobile,
+          countryCode: stop.countryCode,
+        }));
+        formik.setFieldValue("stops", stops);
+      }
+    
     }, []);
     if (!isLoaded) {
       return (
@@ -303,7 +357,12 @@ const MapNew = forwardRef(
                 <div className="col-md-10 col-12 mb-3">
                   <Autocomplete
                     onLoad={(ref) => (pickupRef.current = ref)}
-                    onPlaceChanged={handlePlaceChanged}
+                    onPlaceChanged={() => handlePlaceChanged("pickup")}
+                    options={{
+                      types: ["establishment"],
+                      componentRestrictions: { country: "SG" },
+                      fields: ["formatted_address", "geometry"],
+                    }}
                   >
                     <div
                       className="input-group "
@@ -485,7 +544,12 @@ const MapNew = forwardRef(
                 <div className="col-md-10 col-12">
                   <Autocomplete
                     onLoad={(ref) => (dropoffRef.current = ref)}
-                    onPlaceChanged={handlePlaceChanged}
+                    onPlaceChanged={() => handlePlaceChanged("dropoff")}
+                    options={{
+                      types: ["establishment"],
+                      componentRestrictions: { country: "SG" },
+                      fields: ["formatted_address", "geometry"],
+                    }}
                   >
                     <div
                       className="input-group"
@@ -683,8 +747,16 @@ const MapNew = forwardRef(
                       <div className="d-flex justify-content-between align-items-start">
                         <div className="col-md-10 col-12 mb-3">
                           <Autocomplete
-                            onLoad={(ref) => (stops.current = ref)}
-                            onPlaceChanged={handlePlaceChanged}
+                            key={index}
+                            onLoad={(ref) => (stops.current[index] = ref)}
+                            onPlaceChanged={() =>
+                              handlePlaceChanged("stop", index)
+                            }
+                            options={{
+                              types: ["establishment"],
+                              componentRestrictions: { country: "SG" },
+                              fields: ["formatted_address", "geometry"],
+                            }}
                           >
                             <div
                               className="input-group "
@@ -861,9 +933,9 @@ const MapNew = forwardRef(
 
             <div className="col-md-6 col-12">
               <span className="d-flex justify-content-center align-items-center py-3">
-                {totalDistance && (
+                {formik.values.estKm && (
                   <span className="fw-bold">
-                    Total Distance: {totalDistance}
+                    Total Distance: {formik.values.estKm} Km
                   </span>
                 )}
               </span>
@@ -871,7 +943,12 @@ const MapNew = forwardRef(
                 className=" d-flex justify-content-center align-items-center"
                 style={{ position: "sticky", top: "67px", zIndex: "1" }}
               >
-                <GoogleMap
+                <img
+                  src={Trucklah_moving}
+                  className="img-fluid"
+                  alt="Trucklah Moving Singapore"
+                />
+                {/* <GoogleMap
                   center={center}
                   zoom={12}
                   mapContainerStyle={{
@@ -884,7 +961,7 @@ const MapNew = forwardRef(
                   {directionsResponse && (
                     <DirectionsRenderer directions={directionsResponse} />
                   )}
-                </GoogleMap>
+                </GoogleMap> */}
               </div>
             </div>
           </div>
