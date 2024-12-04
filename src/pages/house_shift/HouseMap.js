@@ -3,7 +3,6 @@ import React, {
   useState,
   forwardRef,
   useImperativeHandle,
-  useRef,
 } from "react";
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 import Green from "../../asset/Ellipse 2.png";
@@ -72,7 +71,6 @@ const HouseMap = forwardRef(
     const userId = sessionStorage.getItem("userId");
     const [categorys, setCategoryData] = useState(null);
     
-    console.log("object",formData)
     const formik = useFormik({
       initialValues: {
         userId: userId,

@@ -8,15 +8,22 @@ import ExtraService from "../ItemShiftNew/ExtraService";
 import BookingSummary from "../ItemShiftNew/BookingSummary";
 import SuccessfullNew from "../ItemShiftNew/SuccessFulNew";
 
-const steps = ["Pickup / Dropoff", "Vechicle Selection", "Service","Extra Service", "Booking Summary", "Complete"];
+const steps = [
+  "Pickup / Dropoff",
+  "Vechicle Selection",
+  "Service",
+  "Extra Service",
+  "Booking Summary",
+  "Complete",
+];
 
 const HouseShiftSteps = () => {
-const [activeStep, setActiveStep] = useState(0);
-const [loadIndicator, setLoadIndicator] = useState(false);
-const [formData, setFormData] = useState({});
-const childRef = React.useRef();
+  const [activeStep, setActiveStep] = useState(0);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [formData, setFormData] = useState({});
+  const childRef = React.useRef();
 
-const handleNext = () => {
+  const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
   const handleBack = () => {
@@ -59,11 +66,13 @@ const handleNext = () => {
         break;
     }
   };
-  
+
   return (
     <section className="container">
       <span className="d-flex fw-bold py-4">
-        <p style={{ fontSize: "20px" }}>Booking Type <FaChevronRight size={"15"} /></p>
+        <p style={{ fontSize: "20px" }}>
+          Booking Type <FaChevronRight size={"15"} />
+        </p>
         <p style={{ fontSize: "20px", color: "#acff3b" }}>
           House Shifting
           {/* {shiftType} Sfifting */}
@@ -99,7 +108,7 @@ const handleNext = () => {
       </Stepper>
       <div
         className="text-centerborder-0 mb-4"
-      //   style={{ minHeight: "70vh", }}
+        //   style={{ minHeight: "70vh", }}
       >
         <React.Fragment>
           {activeStep === 0 && (
@@ -138,7 +147,7 @@ const handleNext = () => {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-         {activeStep === 4 && (
+          {activeStep === 4 && (
             <BookingSummary
               formData={formData}
               ref={childRef}
@@ -147,7 +156,7 @@ const handleNext = () => {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-           {activeStep === 5 && (
+          {activeStep === 5 && (
             <SuccessfullNew
               formData={formData}
               ref={childRef}
@@ -158,10 +167,15 @@ const handleNext = () => {
           )}
 
           <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
-            {activeStep !== 0 &&  (
+            {activeStep !== 0 && (
               <button
                 className="btn btn-secondary btn-sm border-0"
-                style={{ padding: "7px", color: "black", background:"#f4f4f4", width: "7%" }}
+                style={{
+                  padding: "7px",
+                  color: "black",
+                  background: "#f4f4f4",
+                  width: "7%",
+                }}
                 disabled={activeStep === 0}
                 onClick={handleBack}
               >
@@ -169,27 +183,32 @@ const handleNext = () => {
               </button>
             )}
             <div style={{ flex: "1 1 auto" }}></div>
-            {activeStep !== 5 &&  (
-            <button
-              type="submit"
-              onClick={handleButtonClick}
-              style={{ padding: "7px", background: "#acff3b", minWidth: "7%" }}
-              className="btn btn-sm"
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              {activeStep !== steps.length - 2 ? "Next" : "Proceed"}
-            </button>)}
+            {activeStep !== 5 && (
+              <button
+                type="submit"
+                onClick={handleButtonClick}
+                style={{
+                  padding: "7px",
+                  background: "#acff3b",
+                  minWidth: "7%",
+                }}
+                className="btn btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                {activeStep !== steps.length - 2 ? "Next" : "Proceed"}
+              </button>
+            )}
           </div>
         </React.Fragment>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HouseShiftSteps
+export default HouseShiftSteps;
