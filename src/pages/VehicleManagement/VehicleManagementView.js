@@ -399,6 +399,62 @@ function VehicleManagementView() {
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
                       <p className="text-sm">
+                        <b>Suitable House Type</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data.suitableHouseType || ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
+                        <b>Suitable for House Shifting</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data.houseShiftingStatus || ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
+                        <b>Package Includes (Boxes)</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data.packageBoxes || ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
+                        <b>Package Includes (Man Power)</b>
+                      </p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data.packageManpower || ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">
                         <b>Description</b>
                       </p>
                     </div>

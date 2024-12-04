@@ -47,6 +47,11 @@ function VehicleManagementEdit() {
     ),
     gst: Yup.number().required("*GST is required"),
     roundTrip: Yup.number().required("*Round trip charge is required"),
+    boxesCharge: Yup.number().required("*Box charge is required"),
+    longPushCharge: Yup.number().required("*Long push charge is required"),
+    assemblyDisassemblyCharge: Yup.number().required(
+      "*Assembly and Disassembly charge is required"
+    ),
     wrappingCharge: Yup.number().required("*Wrapping charge is required"),
     addStopCharge: Yup.number().required("*Add stop charge is required"),
     tenToTwelveCharge: Yup.number().required("*10 to 12 charge is required"),
@@ -75,6 +80,10 @@ function VehicleManagementEdit() {
       boxesCharge: "",
       longPushCharge: "",
       assemblyDisassemblyCharge: "",
+      suitableHouseType: "",
+      packageBoxes: "",
+      packageManpower: "",
+      houseShiftingStatus: false,
       wrappingCharge: "",
       addStopCharge: "",
       tenToTwelveCharge: "",
@@ -1005,6 +1014,127 @@ function VehicleManagementEdit() {
                         formik.errors.peakHourCharge && (
                           <div className="invalid-feedback">
                             {formik.errors.peakHourCharge}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label mb-0">
+                      Suitable House Type
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        onInput={(event) => {
+                          event.target.value = event.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                        }}
+                        type="text"
+                        name="suitableHouseType"
+                        className={`form-control ${
+                          formik.touched.suitableHouseType &&
+                          formik.errors.suitableHouseType
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("suitableHouseType")}
+                      />
+                      {formik.touched.suitableHouseType &&
+                        formik.errors.suitableHouseType && (
+                          <div className="invalid-feedback">
+                            {formik.errors.suitableHouseType}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 col-12 mb-2  d-flex align-items-center">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        name="houseShiftingStatus"
+                        className={`form-check-input ${
+                          formik.touched.houseShiftingStatus &&
+                          formik.errors.houseShiftingStatus
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        checked={formik.values.houseShiftingStatus}
+                        onChange={(event) =>
+                          formik.setFieldValue(
+                            "houseShiftingStatus",
+                            event.target.checked
+                          )
+                        }
+                      />
+                      <label className="form-label mb-0">
+                        Suitable for House Shifting
+                      </label>
+                      {formik.touched.houseShiftingStatus &&
+                        formik.errors.houseShiftingStatus && (
+                          <div className="invalid-feedback">
+                            {formik.errors.houseShiftingStatus}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label mb-0">
+                      Package Includes (Boxes)
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        onInput={(event) => {
+                          event.target.value = event.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                        }}
+                        type="text"
+                        name="packageBoxes"
+                        className={`form-control ${
+                          formik.touched.packageBoxes &&
+                          formik.errors.packageBoxes
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("packageBoxes")}
+                      />
+                      {formik.touched.packageBoxes &&
+                        formik.errors.packageBoxes && (
+                          <div className="invalid-feedback">
+                            {formik.errors.packageBoxes}
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label mb-0">
+                      Package Includes (Man Power)
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        onInput={(event) => {
+                          event.target.value = event.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                        }}
+                        type="text"
+                        name="packageManpower"
+                        className={`form-control ${
+                          formik.touched.packageManpower &&
+                          formik.errors.packageManpower
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("packageManpower")}
+                      />
+                      {formik.touched.packageManpower &&
+                        formik.errors.packageManpower && (
+                          <div className="invalid-feedback">
+                            {formik.errors.packageManpower}
                           </div>
                         )}
                     </div>
