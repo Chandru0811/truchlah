@@ -14,7 +14,6 @@ const steps = [
   "Service",
   "Extra Service",
   "Booking Summary",
-  "Complete",
 ];
 
 const HouseShiftSteps = () => {
@@ -156,7 +155,7 @@ const HouseShiftSteps = () => {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 5 && (
+          {/* {activeStep === 5 && (
             <SuccessfullNew
               formData={formData}
               ref={childRef}
@@ -164,7 +163,7 @@ const HouseShiftSteps = () => {
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
             />
-          )}
+          )} */}
 
           <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
             {activeStep !== 0 && (

@@ -12,6 +12,7 @@ import { bookingApi } from "../../config/URL";
 import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   paymentType: Yup.string().required("!Payment Type is required"),
@@ -22,7 +23,13 @@ const BookingSummary = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const shiftType = sessionStorage.getItem("shiftType");
     const [data, setData] = useState({});
-    console.log("object",data)
+    const [expandedAccordion, setExpandedAccordion] = useState(null);
+    const navigate=useNavigate();
+    const handleAccordionToggle = (accordionKey) => {
+      setExpandedAccordion((prev) => (prev === accordionKey ? null : accordionKey));
+    };
+    
+    console.log("object", data);
     const formik = useFormik({
       initialValues: {
         paymentType: "",
@@ -33,20 +40,32 @@ const BookingSummary = forwardRef(
       onSubmit: async (values) => {
         console.log("values", values);
         setLoadIndicators(true);
-        setFormData((prv)=>({...prv,paymentType:values.paymentType,isAgreed:values.isAgreed}))
+        setFormData((prv) => ({
+          ...prv,
+          paymentType: values.paymentType,
+          isAgreed: values.isAgreed,
+        }));
         if (values.paymentType === "cash") {
           try {
             const response = await bookingApi.post(
               `booking/cashPayment/${formData.bookingId}`
             );
             if (response.status === 200) {
-              handleNext();
-              // sessionStorage.removeItem("shiftType");
+              // navigate(`/successful?type=${data?.booking?.bookingType}`);
+              navigate(
+                `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=success`
+              );
+              sessionStorage.removeItem("shiftType");
             } else {
-              toast.error("Cash payment processing failed.");
+              navigate(
+                `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+              );
             }
           } catch (error) {
             toast.error("Error Fetching Data: " + error.message);
+            navigate(
+              `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+            );
           } finally {
             setLoadIndicators(false);
           }
@@ -55,16 +74,23 @@ const BookingSummary = forwardRef(
             const response = await bookingApi.post(
               `booking/generateCardTransactionPaymentLink?bookingId=${formData.bookingId}`
             );
-            if ([200, 201].includes(response.status)) {
+            if (response.status === (201 || 200)) {
               const paymentLink = response.data.paymentLink.replace("?", "&");
               window.open(paymentLink, "_self");
-              // sessionStorage.removeItem("shiftType");
-              handleNext();
+              // toast.success("Payment successful!");
+              // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
+              sessionStorage.removeItem("shiftType");
             } else {
               toast.error("Payment failed, please try again.");
+              navigate(
+                `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+              );
             }
           } catch (error) {
             console.error("Payment error: " + error.message);
+            navigate(
+              `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+            );
           } finally {
             setLoadIndicators(false);
           }
@@ -88,9 +114,9 @@ const BookingSummary = forwardRef(
         }
       };
 
-      if(formData.paymentType && formData.isAgreed){
-        formik.setFieldValue("paymentType",formData.paymentType)
-        formik.setFieldValue("isAgreed",formData.isAgreed)
+      if (formData.paymentType && formData.isAgreed) {
+        formik.setFieldValue("paymentType", formData.paymentType);
+        formik.setFieldValue("isAgreed", formData.isAgreed);
       }
 
       fetchData();
@@ -139,41 +165,38 @@ const BookingSummary = forwardRef(
                         <span className="text-danger">&#9679;</span>
                         <strong className="ms-1">Pickup Location</strong>
                       </div>
-                      <div
-                        class="accordion "
-                        id="accordionExample"
-                        className="bg-light accordion"
-                      >
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="headingOne">
+                      <div className="accordion bg-light" id="accordionExample">
+                        <div className="accordion-item">
+                          <h2 className="accordion-header" id="headingOne">
                             <button
-                              class="accordion-button "
+                              className={`accordion-button ${
+                                expandedAccordion === "Pickup" ? "" : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseOne"
-                              aria-expanded="true"
+                              aria-expanded={expandedAccordion === "Pickup"}
                               aria-controls="collapseOne"
+                              onClick={() => handleAccordionToggle("Pickup")}
                             >
-                              {firstLocation.pickupAddress} ,{" "}
                               {firstLocation.pickup}
                             </button>
                           </h2>
                           <div
                             id="collapseOne"
-                            class="accordion-collapse collapse show"
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Pickup" ? "show" : ""
+                            }`}
                             aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample"
                           >
-                            <div class="accordion-body">
+                            <div className="accordion-body">
                               <div className="row">
                                 <div className="col-6">
                                   <p>Address Info:</p>
                                 </div>
                                 <div className="col-6">
-                                  <p>
-                                    {firstLocation.pickupAddress} ,{" "}
-                                    {firstLocation.pickup}
-                                  </p>
+                                  <p>{firstLocation.pickupAddress}</p>
                                 </div>
                                 <div className="col-6">
                                   <p>Contact Details:</p>
@@ -201,7 +224,7 @@ const BookingSummary = forwardRef(
                             </strong>
                           </div>
                           <div
-                            className="bg-light accordion"
+                            className="accordion bg-light"
                             id={`accordionExample${index}`}
                           >
                             <div className="accordion-item">
@@ -210,19 +233,30 @@ const BookingSummary = forwardRef(
                                 id={`heading${index}`}
                               >
                                 <button
-                                  className="accordion-button collapsed"
+                                  className={`accordion-button ${
+                                    expandedAccordion === `stop${index}` ? "" : "collapsed"
+                                  }`}
                                   type="button"
                                   data-bs-toggle="collapse"
-                                  data-bs-target={`#collapse${index}`} // Unique collapse ID
-                                  aria-expanded="false"
-                                  aria-controls={`collapse${index}`} // Matching aria-controls
+                                  data-bs-target={`#collapse${index}`}
+                                  aria-expanded={
+                                    expandedAccordion === `stop${index}`
+                                  }
+                                  aria-controls={`collapse${index}`}
+                                  onClick={() =>
+                                    handleAccordionToggle(`stop${index}`)
+                                  }
                                 >
-                                  {stop.dropoffAddress} , {stop.dropoff}
+                                  {stop.dropoff}
                                 </button>
                               </h2>
                               <div
-                                id={`collapse${index}`} // Unique ID for the collapse element
-                                className="accordion-collapse collapse"
+                                id={`collapse${index}`}
+                                className={`accordion-collapse collapse ${
+                                  expandedAccordion === `stop${index}`
+                                    ? "show"
+                                    : ""
+                                }`}
                                 aria-labelledby={`heading${index}`}
                                 data-bs-parent={`#accordionExample${index}`}
                               >
@@ -232,9 +266,7 @@ const BookingSummary = forwardRef(
                                       <p>Address Info:</p>
                                     </div>
                                     <div className="col-6">
-                                      <p>
-                                        {stop.dropoffAddress} , {stop.dropoff}
-                                      </p>
+                                      <p>{stop.dropoffAddress}</p>
                                     </div>
                                     <div className="col-6">
                                       <p>Contact Details:</p>
@@ -253,47 +285,46 @@ const BookingSummary = forwardRef(
                           </div>
                         </li>
                       ))}
-
                     <li className="list-group-item mb-2">
                       <div className="d-flex align-items-center ">
                         <span className="text-success">&#9679;</span>
                         <strong className="ms-1">Dropoff Location</strong>
                       </div>
                       <div
-                        class="accordion "
+                        className="accordion bg-light"
                         id="accordionExample1"
-                        className="bg-light accordion"
                       >
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="headingTwo">
+                        <div className="accordion-item">
+                          <h2 className="accordion-header" id="headingTwo">
                             <button
-                              class="accordion-button collapsed"
+                              className={`accordion-button ${
+                                expandedAccordion === "Drop" ? "" : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseTwo"
-                              aria-expanded="false"
+                              aria-expanded={expandedAccordion === "Drop"}
                               aria-controls="collapseTwo"
+                              onClick={() => handleAccordionToggle("Drop")}
                             >
-                              {lastLocation.dropoffAddress} ,{" "}
                               {lastLocation.dropoff}
                             </button>
                           </h2>
                           <div
                             id="collapseTwo"
-                            class="accordion-collapse collapse"
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Drop" ? "show" : ""
+                            }`}
                             aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample1"
                           >
-                            <div class="accordion-body">
+                            <div className="accordion-body">
                               <div className="row">
                                 <div className="col-6">
                                   <p>Address Info:</p>
                                 </div>
                                 <div className="col-6">
-                                  <p>
-                                    {lastLocation.dropoffAddress} ,{" "}
-                                    {lastLocation.dropoff}
-                                  </p>
+                                  <p>{lastLocation.dropoffAddress}</p>
                                 </div>
                                 <div className="col-6">
                                   <p>Contact Details:</p>
@@ -370,38 +401,46 @@ const BookingSummary = forwardRef(
                   <div className="col-6">
                     <p>:{data?.booking?.roundTrip === "Y" ? "Yes" : "No"}</p>
                   </div>
-                  {shiftType !=="ITEM" &&(<>
+                  {shiftType !== "ITEM" && (
                     <>
-                      <div className="col-6">
-                        <p>Boxes</p>
-                      </div>
+                      <>
+                        <div className="col-6">
+                          <p>Boxes</p>
+                        </div>
 
-                      <div className="col-6">
-                        <p>:{data?.booking?.boxesCharge || 0}</p>
-                      </div>
-                      <div className="col-6">
-                        <p>Long Push</p>
-                      </div>
+                        <div className="col-6">
+                          <p>:{data?.booking?.boxesCharge || 0}</p>
+                        </div>
+                        <div className="col-6">
+                          <p>Long Push</p>
+                        </div>
 
-                      <div className="col-6">
-                        <p>:{data?.booking?.longPushCharge ==="Y"?"Yes":"NO" }</p>
-                      </div>
-                      <div className="col-6">
-                        <p>Assembly/Disassembly</p>
-                      </div>
+                        <div className="col-6">
+                          <p>
+                            :
+                            {data?.booking?.longPushCharge === "Y"
+                              ? "Yes"
+                              : "NO"}
+                          </p>
+                        </div>
+                        <div className="col-6">
+                          <p>Assembly/Disassembly</p>
+                        </div>
 
-                      <div className="col-6">
-                        <p>:{data?.booking?.assemblyDisassemblyCharge || 0}</p>
-                      </div>
-                      <div className="col-6">
-                        <p>Wrapping</p>
-                      </div>
+                        <div className="col-6">
+                          <p>
+                            :{data?.booking?.assemblyDisassemblyCharge || 0}
+                          </p>
+                        </div>
+                        <div className="col-6">
+                          <p>Wrapping</p>
+                        </div>
 
-                      <div className="col-6">
-                        <p>:{data?.booking?.bubbleWrappingCharge || 0}</p>
-                      </div>
+                        <div className="col-6">
+                          <p>:{data?.booking?.bubbleWrappingCharge || 0}</p>
+                        </div>
+                      </>
                     </>
-                  </>
                   )}
                   <div className="col-6">
                     <p>Message To Driver</p>

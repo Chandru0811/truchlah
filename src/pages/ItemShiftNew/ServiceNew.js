@@ -252,21 +252,21 @@ const ServiceNew = forwardRef(
                         <b>No.Of Workers</b>
                       </span>
                       <div
-                        className="quantity-input d-flex align-items-center"
+                        className="quantity-input d-flex align-items-center px-1"
                         style={{
-                          backgroundColor: "#84cd1f",
+                          backgroundColor: "#acff3b",
                           borderRadius: "30px",
                         }}
                       >
                         {/* Decrease button */}
                         <button
-                          className="quantity-btn"
+                          className="quantity-btn "
                           type="button"
                           onClick={decreaseManpowerQuantity}
                           disabled={formik.values.quantity === 1}
                           style={{
-                            backgroundColor: "#84cd1f",
-                            color: "#fff",
+                            backgroundColor: "#acff3b",
+                            color: "#333",
                             borderRadius: "50%",
                             width: "20px", // Decreased width
                             display: "flex",
@@ -294,8 +294,8 @@ const ServiceNew = forwardRef(
                             textAlign: "center",
                             border: "none",
                             borderRadius: "5px",
-                            backgroundColor: "#84cd1f",
-                            color: "#fff",
+                            backgroundColor: "#acff3b",
+                            color: "#333",
                           }}
                         />
 
@@ -306,8 +306,8 @@ const ServiceNew = forwardRef(
                           type="button"
                           disabled={formik.values.quantity === 99}
                           style={{
-                            backgroundColor: "#84cd1f",
-                            color: "#fff",
+                            backgroundColor: "#acff3b",
+                            color: "#333",
                             borderRadius: "50%",
                             width: "20px", // Decreased width
                             display: "flex",

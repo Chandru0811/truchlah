@@ -8,7 +8,7 @@ import BookingSummary from "../ItemShiftNew/BookingSummary";
 import SuccessfullNew from "../ItemShiftNew/SuccessFulNew";
 
 
-const steps = ["Pickup / Dropoff", "Vechicle Selection", "Service", "Booking Summary", "Complete"];
+const steps = ["Pickup / Dropoff", "Vechicle Selection", "Service", "Booking Summary"];
 
 const ItemShift = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -141,7 +141,7 @@ const ItemShift = () => {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 4 && (
+          {/* {activeStep === 4 && (
             <SuccessfullNew
               formData={formData}
               ref={childRef}
@@ -149,7 +149,7 @@ const ItemShift = () => {
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
             />
-          )}
+          )} */}
           {/* {activeStep === 1 && (
               <Form3
                 formData={formData}

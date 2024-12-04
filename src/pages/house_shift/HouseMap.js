@@ -532,7 +532,7 @@ const HouseMap = forwardRef(
                             key={category.id}
                             value={category.houseCategoryName}
                           >
-                            {category.houseCategoryName}
+                            {(category.houseCategoryName.charAt(0).toUpperCase() + category.houseCategoryName.slice(1)).replace("_", " ")}
                           </option>
                         ))}
                     </select>

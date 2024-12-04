@@ -7,6 +7,7 @@ import React, {
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
+import yellow from "../../asset/Ellipse 1.png";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaAddressCard, FaPlusCircle } from "react-icons/fa";
 import { IoMdContact, IoMdCloseCircle } from "react-icons/io";
@@ -67,6 +68,7 @@ const MapNew = forwardRef(
 
     const [pickupPlace, setPickupPlace] = useState(null);
     const [dropoffPlace, setDropoffPlace] = useState(null);
+    const [stopPlaces, setStopPlaces] = useState(null);
     const [distance, setDistance] = useState(null);
 
     const userId = sessionStorage.getItem("userId");
@@ -101,9 +103,19 @@ const MapNew = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        // values.type = values.type==="ITEM"?"ITEM":"HOUSE"
+        const reformattedLocationDetail = [
+          values.locationDetail[0],
+          ...values.locationDetail.slice(2).map((item) => ({
+            ...item,
+          })),
+          values.locationDetail[1],
+        ];
+        const payload = {
+          ...values,
+          locationDetail: reformattedLocationDetail,
+        };
         try {
-          const response = await bookingApi.post(`booking/create`, values);
+          const response = await bookingApi.post(`booking/create`, payload);
           if (response.status === 200) {
             toast.success("Location has been successfully added!");
             const bookingId = response.data.responseBody.booking.bookingId;
@@ -151,7 +163,7 @@ const MapNew = forwardRef(
             geometry: place.geometry,
           });
           formik.setFieldValue(
-            `locationDetail[${index}].location`,
+            `locationDetail[1].location`,
             place.formatted_address
           );
           // console.log("place.formatted_address",place.formatted_address)
@@ -161,14 +173,18 @@ const MapNew = forwardRef(
       } else if (type === "stop" && autocompleteStop) {
         const place = autocompleteStop.getPlace();
         if (place.geometry && place.formatted_address) {
-          setDropoffPlace({
+          setStopPlaces({
             formatted_address: place.formatted_address,
             geometry: place.geometry,
           });
           formik.setFieldValue(
-            "locationDetail[1].location",
+            `locationDetail[${index}].location`,
             place.formatted_address
           );
+          formik.setFieldValue(`locationDetail[${index}].coordinates`, {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          });
           // console.log("place.formatted_address",place.formatted_address)
         } else {
           console.error("No sufficient details available for input:", place);
@@ -180,36 +196,76 @@ const MapNew = forwardRef(
       if (pickupPlace && dropoffPlace) {
         const service = new window.google.maps.DistanceMatrixService();
 
-        service.getDistanceMatrix(
-          {
-            origins: [pickupPlace.geometry.location],
-            destinations: [dropoffPlace.geometry.location],
-            travelMode: window.google.maps.TravelMode.DRIVING,
-          },
-          (response, status) => {
-            if (status === "OK") {
-              const distanceResult = response.rows[0].elements[0];
-              if (distanceResult.status === "OK") {
-                setDistance(distanceResult.distance.text);
-                const numericDistance = parseFloat(
-                  distanceResult.distance.text
-                );
-                if (!isNaN(numericDistance)) {
-                  formik.setFieldValue("estKm", numericDistance);
-                } else {
-                  console.error("Error parsing distance value");
-                }
-              } else {
-                console.error(
-                  "Error fetching distance:",
-                  distanceResult.status
-                );
-              }
+        // Validate and extract stop locations
+        const stopLocations = formik.values.locationDetail
+          .slice(2)
+          .filter((stop) => stop.location && stop.coordinates)
+          .map((stop) => {
+            if (
+              stop.coordinates &&
+              stop.coordinates.lat &&
+              stop.coordinates.lng
+            ) {
+              return new window.google.maps.LatLng(
+                stop.coordinates.lat,
+                stop.coordinates.lng
+              );
             } else {
-              console.error("Distance Matrix request failed:", status);
+              console.warn("Invalid stop location or coordinates:", stop);
+              return null;
             }
-          }
-        );
+          })
+          .filter((location) => location !== null);
+
+        const locations = [
+          pickupPlace.geometry.location,
+          ...stopLocations,
+          dropoffPlace.geometry.location,
+        ];
+
+        const totalDistance = { value: 0, text: "" };
+
+        const promises = locations.slice(0, -1).map((origin, index) => {
+          const destination = locations[index + 1];
+          return new Promise((resolve, reject) => {
+            service.getDistanceMatrix(
+              {
+                origins: [origin],
+                destinations: [destination],
+                travelMode: window.google.maps.TravelMode.DRIVING,
+              },
+              (response, status) => {
+                if (status === "OK") {
+                  const distanceResult = response.rows[0].elements[0];
+                  if (distanceResult.status === "OK") {
+                    totalDistance.value += distanceResult.distance.value;
+                    resolve();
+                  } else {
+                    reject(
+                      `Error fetching distance for segment: ${distanceResult.status}`
+                    );
+                  }
+                } else {
+                  reject(`Distance Matrix request failed: ${status}`);
+                }
+              }
+            );
+          });
+        });
+
+        Promise.all(promises)
+          .then(() => {
+            totalDistance.text = `${(totalDistance.value / 1000).toFixed(
+              2
+            )} km`;
+            setDistance(totalDistance.text);
+            formik
+              .setFieldValue("estKm", totalDistance.value / 1000)
+              .toFixed(1);
+          })
+          .catch((error) => {
+            console.error("Error calculating distance:", error);
+          });
       }
     };
 
@@ -217,8 +273,7 @@ const MapNew = forwardRef(
       if (pickupPlace && dropoffPlace) {
         calculateDistance();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pickupPlace, dropoffPlace]);
+    }, [pickupPlace, dropoffPlace, formik.values.locationDetail]);
 
     useEffect(() => {
       if (formData.type) {
@@ -264,12 +319,13 @@ const MapNew = forwardRef(
       formik.setFieldValue("locationDetail", [
         ...formik.values.locationDetail,
         {
-          type: `Stop`,
+          type: "Stop",
           location: "",
           address: "",
           contactName: "",
           countryCode: 65,
           mobile: "",
+          coordinates: { lat: null, lng: null },
         },
       ]);
     };
@@ -321,7 +377,7 @@ const MapNew = forwardRef(
                               ? red
                               : location.type === "dropoff"
                               ? Green
-                              : Green
+                              : yellow
                           }
                           style={{ width: "20px" }}
                           alt="house"

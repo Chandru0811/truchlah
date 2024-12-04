@@ -117,7 +117,7 @@ const ExtraService = forwardRef(
                   >
                     <img src={card.img} alt={card.name} className="img-fluid" />
                     <div
-                      className="card-body rounded-4 m-2"
+                      className="card-body rounded-4 m-2 d-flex justify-content-center"
                       style={{ background: "#e6ffe4" }}
                     >
                       <div className="count_content rounded-4">

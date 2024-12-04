@@ -4,8 +4,8 @@ import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 import { userApi } from "../../config/URL";
 import toast from "react-hot-toast";
-import boxes from "../../asset/box1.webp";
-import ManPower from "../../asset/manpower1.png";
+import boxes from "../../asset/1.png";
+import ManPower from "../../asset/2.png";
 
 const VehicleOffer = (
   {

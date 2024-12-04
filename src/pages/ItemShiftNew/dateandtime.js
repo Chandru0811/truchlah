@@ -61,7 +61,7 @@ const DateAndTime = forwardRef(
     const [selectedImage, setSelectedImage] = useState(
       formData?.vehicle ? formData.vehicle : null
     );
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(shiftType !== "ITEM" ?true:false);
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
     // console.log("activeIndex", activeIndex);
@@ -479,9 +479,8 @@ const DateAndTime = forwardRef(
                   {selectedImage?.vehicleCapacity}kg
                 </h5>
                 <h5 className="mt-2">
-                  <span className="text-muted">Base fare </span>
-                  <PiCurrencyDollarBold size={15} className="mb-1" />
-                  {selectedImage?.baseFare}
+                  <span className="text-muted">Base fare : </span>
+                  SGD {selectedImage?.baseFare}
                 </h5>
               </div>
             </div>
