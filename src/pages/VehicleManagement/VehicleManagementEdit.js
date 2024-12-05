@@ -1024,12 +1024,6 @@ function VehicleManagementEdit() {
                     </label>
                     <div className="mb-3">
                       <input
-                        onInput={(event) => {
-                          event.target.value = event.target.value.replace(
-                            /[^0-9]/g,
-                            ""
-                          );
-                        }}
                         type="text"
                         name="suitableHouseType"
                         className={`form-control ${

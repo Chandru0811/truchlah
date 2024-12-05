@@ -61,7 +61,9 @@ const DateAndTime = forwardRef(
     const [selectedImage, setSelectedImage] = useState(
       formData?.vehicle ? formData.vehicle : null
     );
-    const [showModal, setShowModal] = useState(shiftType !== "ITEM" ?true:false);
+    const [showModal, setShowModal] = useState(
+      shiftType !== "ITEM" ? true : false
+    );
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
     // console.log("activeIndex", activeIndex);
@@ -74,8 +76,6 @@ const DateAndTime = forwardRef(
       validationSchema: validationSchema,
 
       onSubmit: async (values) => {
-        console.log("val", values);
-        const selectedDateTime = new Date(`${values.date}T${values.time}`);
         const eligibleTime = new Date();
         eligibleTime.setHours(eligibleTime.getHours());
 
@@ -155,9 +155,18 @@ const DateAndTime = forwardRef(
     useEffect(() => {
       const getVechicle = async () => {
         try {
-          const response = await userApi.get("vehicle/vehicleType");
-          if (response.status === 200) {
-            setVechicle(response.data.responseBody);
+          if (shiftType === "ITEM") {
+            const response = await userApi.get("vehicle/vehicleType");
+            if (response.status === 200) {
+              setVechicle(response.data.responseBody);
+            }
+          } else {
+            const response = await userApi.get(
+              "/vehicle/getAvailableVehiclesForHouseShifting"
+            );
+            if (response.status === 200) {
+              setVechicle(response.data.responseBody);
+            }
           }
         } catch (e) {
           toast.error("Error Fetching Data : ", e);
@@ -424,21 +433,21 @@ const DateAndTime = forwardRef(
               {/* Add the More Details button here */}
               <div className="text-center mt-3">
                 <div>
-                  <Button
-                    // variant="primary"
-                    onClick={handleShow}
-                    style={{
-                      backgroundColor: "rgb(172, 255, 59)",
-                      borderColor: "rgb(172, 255, 59)",
-                      padding: "10px 20px",
-                      fontSize: "16px",
-                      width: "350px",
-                      color: "#333",
-                    }}
-                  >
-                    Compare
-                  </Button>
-
+                  {shiftType !== "ITEM" && (
+                    <Button
+                      onClick={handleShow}
+                      style={{
+                        backgroundColor: "rgb(172, 255, 59)",
+                        borderColor: "rgb(172, 255, 59)",
+                        padding: "10px 20px",
+                        fontSize: "16px",
+                        width: "350px",
+                        color: "#333",
+                      }}
+                    >
+                      Compare
+                    </Button>
+                  )}
                   <Modal
                     show={showModal}
                     onHide={handleClose}
@@ -447,9 +456,6 @@ const DateAndTime = forwardRef(
                     keyboard={isModified ? false : true}
                     centered
                   >
-                    <Modal.Header>
-                      <Modal.Title>Vehicle Offer Details</Modal.Title>
-                    </Modal.Header>
                     <Modal.Body>
                       <VehicleOffer
                         setActiveIndex={setActiveIndex}
@@ -457,6 +463,7 @@ const DateAndTime = forwardRef(
                         onCardSelect={() => handleClose()}
                         selectedImage={selectedImage}
                         setSelectedImage={setSelectedImage}
+                        vehicle={vehicle}
                       />
                     </Modal.Body>
                   </Modal>

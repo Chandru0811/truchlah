@@ -15,39 +15,12 @@ const VehicleOffer = (
     setSelectedImage,
     setFormData,
     handleNext,
+    vehicle,
     onCardSelect,
   },
   ref
 ) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [vehicle, setVechicle] = useState([]);
-  const handleCardSelect = (selectedCard) => {
-    // Any additional logic for card selection
-    // Then close the modal
-    onCardSelect(); // This will trigger handleClose from the parent component
-  };
-
-  // Fetch vehicle data from API
-  useEffect(() => {
-    const getVechicle = async () => {
-      try {
-        const response = await userApi.get("vehicle/vehicleType");
-        if (response.status === 200) {
-          setVechicle(response.data.responseBody);
-        }
-      } catch (e) {
-        toast.error("Error Fetching Data : ", e);
-      }
-    };
-    getVechicle();
-  }, []);
-
-  const handleCarouselClick = (image, index) => {
-    const overallIndex = image.vehicletypeId;
-    setSelectedImage(image);
-    setActiveIndex(overallIndex);
-    onCardSelect();
-  };
 
   const handleNextImg = () => {
     setCurrentIndex((prevIndex) =>
@@ -61,14 +34,6 @@ const VehicleOffer = (
     );
   };
 
-  const getVisibleData = () => {
-    const visibleData = [];
-    for (let i = 0; i < 3; i++) {
-      visibleData.push(vehicle[(currentIndex + i) % vehicle.length]);
-    }
-console.log("clg",visibleData)
-    return visibleData;
-  };
 
   const handleCardClick = (image, index) => {
     // This will select the clicked card and update the carousel
@@ -136,56 +101,70 @@ console.log("clg",visibleData)
         </div>
 
         {/* Vehicle Cards */}
-        {getVisibleData().map((data, i) => (
-          <div key={i} className="col-4">
-            <div
-              className="card text-center h-100"
-              style={{ backgroundColor: "#e6ffe4", cursor: "pointer" }}
-              onClick={() => handleCardClick(data, i)} // Make the card clickable
-            >
-              <div className="card border-0 mt-2 mx-2 pt-3 text-center d-block">
-                <img
-                  style={{ width: "13rem" }}
-                  className="card-img-top img-fluid"
-                  src={data?.vehicleImage}
-                  alt={data?.vehicleType}
-                />
-                <div className="card-body pt-5">
+        {vehicle &&
+          vehicle.map((data, i) => (
+            <div key={i} className="col-4">
+              <div
+                className="card text-center h-100"
+                style={{ backgroundColor: "#e6ffe4", cursor: "pointer" }}
+                onClick={() => handleCardClick(data, i)} // Make the card clickable
+              >
+                <div className="card border-0 mt-2 mx-2 pt-3 text-center d-block">
                   <h5 className="card-title">
-                    house 1BHK {/* {data?.bookingType?.split("_").join(" ")} */}
+                    {data?.suitableHouseType}{" "}
+                    {/* {data?.bookingType?.split("_").join(" ")} */}
                   </h5>
-                  <h4 className="text-danger mb-0">SGD {data?.baseFare}.00</h4>
-                  <p className="card-text text-muted">
-                    *inclusive {data?.gst}% GST
-                  </p>
+                  <img
+                    style={{ width: "13rem" }}
+                    className="card-img-top img-fluid"
+                    src={data?.vehicleImage}
+                    alt={data?.vehicleType}
+                  />
+                  <div className="card-body pt-0">
+                    <h4 className="text-danger mb-0">
+                      SGD {data?.baseFare}.00
+                    </h4>
+                    <p className="card-text text-muted">
+                      *inclusive {data?.gst}% GST
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-3 px-3">
-                <h5 className="card-title my-1">
-                   {data?.type?.split("_").join(" ")}
-                </h5>
-                <p className="card-text text-muted my-3">{data?.description}</p>
-                <h5 className="card-title text-start">Package Includes :</h5>
-                <div className="row justify-content-around">
-                  {[
-                    { icon: boxes, offer: "5x Free Boxes" },
-                    { icon: ManPower, offer: "3x Manpower" },
-                  ].map((item, i) => (
-                    <div key={i} className="col-auto mt-3 ms-3">
+                <div className="mt-3 px-3">
+                  <h5 className="card-title my-1">
+                    {data?.type?.split("_").join(" ")}
+                  </h5>
+                  <p className="card-text text-muted my-3">
+                    {data?.description}
+                  </p>
+                  <h5 className="card-title text-start">Package Includes :</h5>
+                  <div className="row  justify-content-around">
+                    <div className="col-auto col align-self-end mt-3 ms-3">
                       <img
                         style={{ width: "3rem" }}
                         className="card-img-top img-fluid"
-                        src={item.icon}
-                        alt={item.offer}
+                        src={boxes}
+                        alt="Free Boxes"
                       />
-                      <p className="text-muted">{item.offer}</p>
+                      <p className="text-muted">
+                        {`${data?.packageBoxes}x Free Boxes` ?? "--"}
+                      </p>
                     </div>
-                  ))}
+                    <div className="col-auto col align-self-end  mt-3 ms-3">
+                      <img
+                        style={{ width: "3rem" }}
+                        className="card-img-top img-fluid"
+                        src={ManPower}
+                        alt="Package with Free Manpower"
+                      />
+                      <p className="text-muted">
+                        {`${data?.packageManpower}x Manpower` ?? "--"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
