@@ -339,7 +339,7 @@ const ServiceNew = forwardRef(
                 }}
               >
                 <span>
-                  <b>Trolly Required</b>
+                  <b>Trolley Required</b>
                 </span>
                 <div className="form-check">
                   <input

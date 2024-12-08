@@ -162,16 +162,16 @@ const BookingSummary = forwardRef(
                   <ul className="list-group-flush mt-3 ps-4 pe-3">
                     <li className="list-group-item mb-2 ">
                       <div className="d-flex align-items-center ">
-                        <span className="text-danger">&#9679;</span>
+                        <span className=""
+                          style={{ color: "#F32323" }}>&#9679;</span>
                         <strong className="ms-1">Pickup Location</strong>
                       </div>
                       <div className="accordion bg-light" id="accordionExample">
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingOne">
                             <button
-                              className={`accordion-button ${
-                                expandedAccordion === "Pickup" ? "" : "collapsed"
-                              }`}
+                              className={`accordion-button ${expandedAccordion === "Pickup" ? "" : "collapsed"
+                                }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseOne"
@@ -184,9 +184,8 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseOne"
-                            className={`accordion-collapse collapse ${
-                              expandedAccordion === "Pickup" ? "show" : ""
-                            }`}
+                            className={`accordion-collapse collapse ${expandedAccordion === "Pickup" ? "show" : ""
+                              }`}
                             aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample"
                           >
@@ -233,9 +232,8 @@ const BookingSummary = forwardRef(
                                 id={`heading${index}`}
                               >
                                 <button
-                                  className={`accordion-button ${
-                                    expandedAccordion === `stop${index}` ? "" : "collapsed"
-                                  }`}
+                                  className={`accordion-button ${expandedAccordion === `stop${index}` ? "" : "collapsed"
+                                    }`}
                                   type="button"
                                   data-bs-toggle="collapse"
                                   data-bs-target={`#collapse${index}`}
@@ -252,11 +250,10 @@ const BookingSummary = forwardRef(
                               </h2>
                               <div
                                 id={`collapse${index}`}
-                                className={`accordion-collapse collapse ${
-                                  expandedAccordion === `stop${index}`
-                                    ? "show"
-                                    : ""
-                                }`}
+                                className={`accordion-collapse collapse ${expandedAccordion === `stop${index}`
+                                  ? "show"
+                                  : ""
+                                  }`}
                                 aria-labelledby={`heading${index}`}
                                 data-bs-parent={`#accordionExample${index}`}
                               >
@@ -287,7 +284,8 @@ const BookingSummary = forwardRef(
                       ))}
                     <li className="list-group-item mb-2">
                       <div className="d-flex align-items-center ">
-                        <span className="text-success">&#9679;</span>
+                        <span className=""
+                          style={{ color: "#64E329" }}>&#9679;</span>
                         <strong className="ms-1">Dropoff Location</strong>
                       </div>
                       <div
@@ -297,9 +295,8 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingTwo">
                             <button
-                              className={`accordion-button ${
-                                expandedAccordion === "Drop" ? "" : "collapsed"
-                              }`}
+                              className={`accordion-button ${expandedAccordion === "Drop" ? "" : "collapsed"
+                                }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseTwo"
@@ -312,9 +309,8 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseTwo"
-                            className={`accordion-collapse collapse ${
-                              expandedAccordion === "Drop" ? "show" : ""
-                            }`}
+                            className={`accordion-collapse collapse ${expandedAccordion === "Drop" ? "show" : ""
+                              }`}
                             aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample1"
                           >
@@ -367,13 +363,13 @@ const BookingSummary = forwardRef(
                     <p>Manpower</p>
                   </div>
                   <div className="col-6">
-                    <p>:{data?.booking?.helper === "Y" ? "Yes" : "No"}</p>
+                    <p>: {data?.booking?.helper === "Y" ? "Yes" : "No"}</p>
                   </div>
                   <div className="col-6">
                     <p>Extra ManPower</p>
                   </div>
                   <div className="col-6">
-                    <p>:{data?.booking?.extraHelper === "Y" ? "Yes" : "No"}</p>
+                    <p>: {data?.booking?.extraHelper === "Y" ? "Yes" : "No"}</p>
                   </div>
                   {data?.booking?.extraHelper === "Y" ? (
                     <>
@@ -382,7 +378,7 @@ const BookingSummary = forwardRef(
                       </div>
 
                       <div className="col-6">
-                        <p>:{data?.booking?.quantity || 0}</p>
+                        <p>: {data?.booking?.quantity || 0}</p>
                       </div>
                     </>
                   ) : null}
@@ -392,24 +388,26 @@ const BookingSummary = forwardRef(
                   </div>
                   <div className="col-6">
                     <p>
-                      :{data?.booking?.trollyRequired === "Y" ? "Yes" : "No"}
+                      : {data?.booking?.trollyRequired === "Y" ? "Yes" : "No"}
                     </p>
                   </div>
                   <div className="col-6">
                     <p>Round Trip</p>
                   </div>
                   <div className="col-6">
-                    <p>:{data?.booking?.roundTrip === "Y" ? "Yes" : "No"}</p>
+                    <p>: {data?.booking?.roundTrip === "Y" ? "Yes" : "No"}</p>
                   </div>
+
                   {shiftType !== "ITEM" && (
                     <>
+                      <h4>Extra Services</h4>
                       <>
                         <div className="col-6">
                           <p>Boxes</p>
                         </div>
 
                         <div className="col-6">
-                          <p>:{data?.booking?.boxesCharge || 0}</p>
+                          <p>: {data?.booking?.boxesCharge || 0}</p>
                         </div>
                         <div className="col-6">
                           <p>Long Push</p>
@@ -417,8 +415,7 @@ const BookingSummary = forwardRef(
 
                         <div className="col-6">
                           <p>
-                            :
-                            {data?.booking?.longPushCharge === "Y"
+                            : {data?.booking?.longPushCharge === "Y"
                               ? "Yes"
                               : "NO"}
                           </p>
@@ -429,7 +426,7 @@ const BookingSummary = forwardRef(
 
                         <div className="col-6">
                           <p>
-                            :{data?.booking?.assemblyDisassemblyCharge || 0}
+                            : {data?.booking?.assemblyDisassemblyCharge || 0}
                           </p>
                         </div>
                         <div className="col-6">
@@ -437,7 +434,7 @@ const BookingSummary = forwardRef(
                         </div>
 
                         <div className="col-6">
-                          <p>:{data?.booking?.bubbleWrappingCharge || 0}</p>
+                          <p>: {data?.booking?.bubbleWrappingCharge || 0}</p>
                         </div>
                       </>
                     </>
@@ -446,7 +443,7 @@ const BookingSummary = forwardRef(
                     <p>Message To Driver</p>
                   </div>
                   <div className="col-6">
-                    <p>:{data?.booking?.msgToDriver || "--"}</p>
+                    <p>: {data?.booking?.msgToDriver || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -487,11 +484,10 @@ const BookingSummary = forwardRef(
                 </div>
                 <div className="card p-3 border-0">
                   <div className="row">
-                    <div className="col-md-6 col-12">
+                    <div className="col-md-6 col-12 mb-3">
                       <div
-                        className={`payment-option text-center p-4 ${
-                          formik.values.paymentType === "cash" ? "active" : ""
-                        }`}
+                        className={`payment-option text-center p-4 ${formik.values.paymentType === "cash" ? "active" : ""
+                          }`}
                         onClick={() =>
                           formik.setFieldValue("paymentType", "cash")
                         }
@@ -514,9 +510,8 @@ const BookingSummary = forwardRef(
                     </div>
                     <div className="col-md-6 col-12">
                       <div
-                        className={`payment-option text-center p-4 ${
-                          formik.values.paymentType === "online" ? "active" : ""
-                        }`}
+                        className={`payment-option text-center p-4 ${formik.values.paymentType === "online" ? "active" : ""
+                          }`}
                         onClick={() =>
                           formik.setFieldValue("paymentType", "online")
                         }
@@ -558,7 +553,7 @@ const BookingSummary = forwardRef(
                         : "Pay securely through online payment."}
                     </p>
                   </div>
-                  <div className="form-check mt-3">
+                  <div className="form-check">
                     <input
                       type="checkbox"
                       checked={formik.values.isAgreed}

@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
-import Green from "../../asset/Ellipse 2.png";
+import Green from "../../asset/Ellipse 1.png";
 import red from "../../asset/Ellipse 3.png";
 import yellow from "../../asset/Ellipse 1.png";
 import { IoLocationSharp } from "react-icons/io5";
@@ -319,7 +319,7 @@ const MapNew = forwardRef(
       formik.setFieldValue("locationDetail", [
         ...formik.values.locationDetail,
         {
-          type: "Stop",
+          type: "Intermediate Location",
           location: "",
           address: "",
           contactName: "",

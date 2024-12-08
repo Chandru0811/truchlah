@@ -163,7 +163,7 @@ const ItemShift = () => {
           <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
             {activeStep !== 0 &&  (
               <button
-                className="btn btn-secondary btn-sm border-0"
+                className="btn btn-secondary btn-sm border-0 fw-bold"
                 style={{ padding: "7px", color: "black", background:"#f4f4f4", width: "7%" }}
                 disabled={activeStep === 0}
                 onClick={handleBack}
@@ -177,7 +177,7 @@ const ItemShift = () => {
               type="submit"
               onClick={handleButtonClick}
               style={{ padding: "7px", background: "#acff3b", minWidth: "7%" }}
-              className="btn btn-sm"
+              className="btn btn-sm fw-bold"
               disabled={loadIndicator}
             >
               {loadIndicator && (
