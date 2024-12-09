@@ -418,7 +418,7 @@ function VehicleManagementView() {
                     </div>
                     <div className="col-6">
                       <p className="text-muted text-sm">
-                        : {data.houseShiftingStatus || ""}
+                        : {data.houseShiftingStatus ?"Yes" :"No" || ""}
                       </p>
                     </div>
                   </div>

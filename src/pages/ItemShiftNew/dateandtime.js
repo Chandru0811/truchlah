@@ -54,12 +54,12 @@ const DateAndTime = forwardRef(
     const userId = sessionStorage.getItem("userId");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeIndex, setActiveIndex] = useState(
-      formData?.vehicle?.vehicletypeId ? formData.vehicle.vehicletypeId : 1
+      formData?.form2.vehicle?.vehicletypeId ? formData.form2.vehicle.vehicletypeId : 1
     );
     const [isModified, setIsModified] = useState(false);
     const [vehicle, setVechicle] = useState([]);
     const [selectedImage, setSelectedImage] = useState(
-      formData?.vehicle ? formData.vehicle : null
+      formData?.form2.vehicle ? formData.form2.vehicle : null
     );
     const [showModal, setShowModal] = useState(
       shiftType !== "ITEM" ? true : false
@@ -67,11 +67,11 @@ const DateAndTime = forwardRef(
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
     // console.log("activeIndex", activeIndex);
-    console.log("currentIndex", formData);
+    // console.log("from", formData);
     const formik = useFormik({
       initialValues: {
-        date: formData.date,
-        time: formData.time,
+        date: formData.form2.date,
+        time: formData.form2.time,
       },
       validationSchema: validationSchema,
 
@@ -83,57 +83,33 @@ const DateAndTime = forwardRef(
         const selectedOption = vehicle.find(
           (item) => item.vehicletypeId === selectedImage.vehicletypeId
         );
-        setFormData((prv) => ({ ...prv, vehicle: selectedOption }));
-        // const totalKilometer = parseInt(formData.distance);
-        // const km_charge = 0.75 * totalKilometer;
-        // const total = selectedOption.baseFare + km_charge;
-
-        // let driverAmount = 0;
-        // let extraHelper = 0;
-
-        // if (values.driverAsManpower) {
-        //   driverAmount = selectedOption.driverHelper;
-        // }
-
-        // if (values.extraManpower) {
-        //   extraHelper = selectedOption.helper * values.quantity;
-        // }
-
-        // const totalCharges = total + driverAmount + extraHelper;
-        // console.log(totalCharges);
-
+        // setFormData((prv) => ({ ...prv, vehicle: selectedOption }));
+        setFormData((prev) => ({
+          ...prev,
+          form2: { ...values,vehicle: selectedOption },
+        }));
         const deliveryDate = new Date(`${values.date}T${values.time}`);
         deliveryDate.setDate(deliveryDate.getDate() + 2);
 
         setLoadIndicators(true);
         const payload = {
           userId: userId,
-          type: formData.type,
-          locationDetail: formData.locationDetail,
+          type: formData.form1.type,
+          locationDetail: formData.form1.locationDetail,
           bookingId: formData.bookingId,
-          estKm: formData.estKm,
+          estKm: formData.form1.estKm,
           scheduledDate: `${values.date}T${values.time}.000Z`,
           deliveryDate: deliveryDate,
-          quantity: formData?.data?.booking?.quantity,
-          msgToDriver: formData?.msgToDriver,
-          noOfPieces: formData?.data?.booking?.noOfPieces,
-          helper: formData?.data?.booking?.helper === "Y" ? "Y" : "N",
-          extraHelper: formData?.data?.booking?.extraHelper === "Y" ? "Y" : "N",
-          trollyRequired:
-            formData?.data?.booking?.trollyRequired === "Y" ? "Y" : "N",
-          roundTrip: formData?.data?.booking?.roundTrip === "Y" ? "Y" : "N",
           vehicleType: selectedOption.type,
-          promoCode: "",
-          actualKm: formData.estKm,
+          actualKm: formData.form1.estKm,
         };
         try {
           const response = await bookingApi.put(`booking/update`, payload);
           if (response.status === 200) {
             toast.success("Vehicle selected successfully!");
-            setFormData((prv) => ({
-              ...prv,
-              date: values.date,
-              time: values.time,
+            setFormData((prev) => ({
+              ...prev,
+              form2: { ...values,vehicle: selectedOption },
             }));
             handleNext();
             // navigate(`/summary/${bookingId}`);
@@ -219,7 +195,7 @@ const DateAndTime = forwardRef(
       const today = new Date().toISOString().split("T")[0];
       const currentTime = new Date().toTimeString().slice(0, 8);
       if (selectedDate === today) {
-        console.log("currentTime", currentTime);
+        // console.log("currentTime", currentTime);
         const timesAfterFilter = availableTimes.reduce((acc, time) => {
           if (timeToMinutes(time) > timeToMinutes(currentTime)) {
             acc.push(time);

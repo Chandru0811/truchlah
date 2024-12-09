@@ -3,11 +3,11 @@ import { Stomp } from "@stomp/stompjs";
 
 class WebSocketService {
   constructor() {
-    // this.socket = new SockJS("https://uat.hrisasia.com/booking-service/ws");
+    this.socket = new SockJS("https://uat.hrisasia.com/booking-service/ws");
     // this.socket = new SockJS("https://trucklah.com/booking-service/ws");
     // this.socket = new SockJS("http://13.213.208.92:9084/booking-service/ws");
     // UAT
-    this.socket = new SockJS("http://52.74.83.44:7080/booking-service/ws");
+    // this.socket = new SockJS("http://52.74.83.44:7080/booking-service/ws");
     this.stompClient = Stomp.over(this.socket);
     // this.stompClient.debug = false;
     this.connected = false;

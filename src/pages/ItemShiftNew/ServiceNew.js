@@ -14,10 +14,6 @@ const ServiceNew = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
-    const [data, setData] = useState({});
-
-    // console.log("data", data);
-    // console.log("formData", formData);
 
     const formik = useFormik({
       initialValues: {
@@ -29,33 +25,13 @@ const ServiceNew = forwardRef(
         messageToDriver: "",
       },
       onSubmit: async (values) => {
-        console.log("val", values);
-
-        // if (selectedDateTime >= eligibleTime) {
-        // const selectedOption = formData.vehicle;
-
-        // const totalKilometer = parseInt(formData.distance);
-        // const km_charge = 0.75 * totalKilometer;
-        // const total = selectedOption.baseFare + km_charge;
-
-        // let driverAmount = 0;
-        // let extraHelper = 0;
-
-        // if (values.driverAsManpower) {
-        //   driverAmount = selectedOption.driverHelper;
-        // }
-
-        // if (values.extraManpower) {
-        //   extraHelper = selectedOption.helper * formik.values.quantity;
-        // }
-
         const payload = {
           userId: userId,
-          type: formData.type,
+          type: formData.form1.type,
           // locationDetail: JSON.parse(decodeURIComponent(formData.location)),
           bookingId: formData.bookingId,
-          estKm: formData.estKm,
-          scheduledDate: data.booking.scheduledDate,
+          estKm: formData.form1.estKm,
+          scheduledDate: `${formData?.form2?.date}T${formData?.form2?.time}.000Z`,
           // deliveryDate: deliveryDate,
           quantity: values.extraManpower ? values.quantity : 0,
           msgToDriver: values.messageToDriver,
@@ -64,20 +40,19 @@ const ServiceNew = forwardRef(
           extraHelper: values.extraManpower ? "Y" : "N",
           trollyRequired: values.trollyRequired ? "Y" : "N",
           roundTrip: values.roundTripRequired ? "Y" : "N",
-          vehicleType: formData?.vehicle?.type,
-          promoCode: "",
-          actualKm: formData.estKm,
+          vehicleType: formData?.form2?.vehicle?.type,
+          // promoCode: "",
+          actualKm: formData?.form1.estKm,
         };
         setLoadIndicators(true);
         try {
           const response = await bookingApi.put(`booking/update`, payload);
-          console.log("Response:", response);
+          // console.log("Response:", response);
           if (response.status === 200) {
             toast.success("Vehicle selected successfully!");
-            setFormData((prv) => ({
-              ...prv,
-              data: response.data.responseBody,
-              msgToDriver: values.messageToDriver,
+            setFormData((prev) => ({
+              ...prev,
+              form3: { ...values },
             }));
             handleNext();
           } else {
@@ -108,56 +83,8 @@ const ServiceNew = forwardRef(
     };
 
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await bookingApi.get(
-            `booking/getBookingById/${formData.bookingId}`
-          );
-          if (response.status === 200) {
-            setData(response.data.responseBody);
-            if (response.data.responseBody) {
-              const booking = response.data?.responseBody?.booking;
-              if (booking) {
-                // const [scheduledDate, scheduledTime] = booking?.scheduledDate
-                //   ? booking.scheduledDate.split("T")
-                //   : [null, null];
-                // formik.setFieldValue("date", scheduledDate);
-                // formik.setFieldValue(
-                //   "time",
-                //   scheduledTime ? scheduledTime.slice(0, 5) : ""
-                // );
-                formik.setFieldValue(
-                  "driverAsManpower",
-                  booking.helper === "Y" ? true : false
-                );
-                formik.setFieldValue(
-                  "extraManpower",
-                  booking.extraHelper === "Y" ? true : false
-                );
-                formik.setFieldValue(
-                  "trollyRequired",
-                  booking.trollyRequired === "Y" ? true : false
-                );
-                formik.setFieldValue(
-                  "roundTripRequired",
-                  booking.roundTrip === "Y" ? true : false
-                );
-                formik.setFieldValue("quantity", booking.quantity || 0);
-                formik.setFieldValue("noOfPieces", booking.noOfPieces || 0);
-                formik.setFieldValue(
-                  "messageToDriver",
-                  formData.msgToDriver
-                );
-              }
-            }
-          }
-        } catch (error) {
-          toast.error("Error Fetching Data: " + error.message);
-        } finally {
-          // setIsLoading(false);
-        }
-      };
-      fetchData();
+      // console.log("form",formData.form3)
+      formik.setValues(formData.form3)
     }, []);
 
     useImperativeHandle(ref, () => ({

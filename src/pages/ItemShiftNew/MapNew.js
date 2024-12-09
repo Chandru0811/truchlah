@@ -65,7 +65,6 @@ const MapNew = forwardRef(
     const [autocompletePickup, setAutocompletePickup] = useState(null);
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
     const [autocompleteStop, setAutocompleteStop] = useState(null);
-
     const [pickupPlace, setPickupPlace] = useState(null);
     const [dropoffPlace, setDropoffPlace] = useState(null);
     const [stopPlaces, setStopPlaces] = useState(null);
@@ -73,9 +72,6 @@ const MapNew = forwardRef(
 
     const userId = sessionStorage.getItem("userId");
     const shiftingType = sessionStorage.getItem("shiftType");
-    console.log("Shift Type", shiftingType);
-    console.log("FormData", formData);
-
     const formik = useFormik({
       initialValues: {
         userId: userId,
@@ -119,14 +115,12 @@ const MapNew = forwardRef(
           if (response.status === 200) {
             toast.success("Location has been successfully added!");
             const bookingId = response.data.responseBody.booking.bookingId;
-            // const locations = encodeURIComponent(
-            //   JSON.stringify(values.locationDetail)
-            // );
-            setFormData((prv) => ({ ...prv, ...values, bookingId: bookingId }));
+            setFormData((prev) => ({
+              ...prev,
+              form1: {...values },
+              bookingId,
+            }));
             handleNext();
-            // navigate(
-            //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-            // );
           } else {
             toast.error(response.data.message);
             // toast.warning("Pleas Enter the Locations");
@@ -197,7 +191,7 @@ const MapNew = forwardRef(
         const service = new window.google.maps.DistanceMatrixService();
 
         // Validate and extract stop locations
-        const stopLocations = formik.values.locationDetail
+        const stopLocations = formik?.values?.locationDetail
           .slice(2)
           .filter((stop) => stop.location && stop.coordinates)
           .map((stop) => {
@@ -259,9 +253,7 @@ const MapNew = forwardRef(
               2
             )} km`;
             setDistance(totalDistance.text);
-            formik
-              .setFieldValue("estKm", totalDistance.value / 1000)
-              .toFixed(1);
+            formik.setFieldValue("estKm", (totalDistance.value / 1000).toFixed(1))
           })
           .catch((error) => {
             console.error("Error calculating distance:", error);
@@ -283,7 +275,7 @@ const MapNew = forwardRef(
       if (formData && Object.keys(formData).length > 0) {
         formik.setValues({
           ...formik.initialValues,
-          ...formData,
+          ...formData.form1,
         });
       } else {
         formik.setValues({
@@ -309,17 +301,14 @@ const MapNew = forwardRef(
           ],
         });
       }
-      formik.setFieldValue("locationDetail[0].countryCode", 65);
-      formik.setFieldValue("locationDetail[1].countryCode", 65);
-      console.log("formik", formik.values);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // console.log("FormData", formData);
     }, []);
 
     const handleAddDropoff = () => {
       formik.setFieldValue("locationDetail", [
         ...formik.values.locationDetail,
         {
-          type: "Intermediate Location",
+          type: "stop",
           location: "",
           address: "",
           contactName: "",
@@ -340,15 +329,6 @@ const MapNew = forwardRef(
       map: formik.handleSubmit,
     }));
 
-    // useEffect(() => {
-    //   if (formData) {
-    //     Object.keys(formData).forEach((key) => {
-    //       formik.setFieldValue(key, formData[key]);
-    //     });
-    //   }
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [formData]);
-
     if (!isLoaded) {
       return (
         <div className="darksoul-layout">
@@ -359,7 +339,6 @@ const MapNew = forwardRef(
       );
     }
 
-    console.log("Formik Values", formik.values);
     return (
       <div className="container">
         <form onSubmit={formik.handleSubmit}>
@@ -388,7 +367,7 @@ const MapNew = forwardRef(
                             ? "Pick Up Location"
                             : location.type === "dropoff"
                             ? "Dropoff Location"
-                            : `${location.type} ${index - 1}`}
+                            : `Intermediate Location ${index - 1}`}
                         </span>
                       </div>
                       {location.type !== "pickup" &&

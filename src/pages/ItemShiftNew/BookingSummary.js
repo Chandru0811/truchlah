@@ -22,28 +22,25 @@ const validationSchema = Yup.object().shape({
 const BookingSummary = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const shiftType = sessionStorage.getItem("shiftType");
-    const [data, setData] = useState({});
     const [expandedAccordion, setExpandedAccordion] = useState(null);
     const navigate=useNavigate();
     const handleAccordionToggle = (accordionKey) => {
       setExpandedAccordion((prev) => (prev === accordionKey ? null : accordionKey));
     };
     
-    console.log("object", data);
     const formik = useFormik({
       initialValues: {
-        paymentType: "",
+        paymentType: formData?.form4?.paymentType,
         isAgreed: false,
       },
       validationSchema: validationSchema,
 
       onSubmit: async (values) => {
-        console.log("values", values);
+        // console.log("values", values);
         setLoadIndicators(true);
-        setFormData((prv) => ({
-          ...prv,
-          paymentType: values.paymentType,
-          isAgreed: values.isAgreed,
+        setFormData((prev) => ({
+          ...prev,
+          form4: { ...values },
         }));
         if (values.paymentType === "cash") {
           try {
@@ -53,18 +50,18 @@ const BookingSummary = forwardRef(
             if (response.status === 200) {
               // navigate(`/successful?type=${data?.booking?.bookingType}`);
               navigate(
-                `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=success`
+                `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=success`
               );
               sessionStorage.removeItem("shiftType");
             } else {
               navigate(
-                `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+                `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
               );
             }
           } catch (error) {
             toast.error("Error Fetching Data: " + error.message);
             navigate(
-              `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+              `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
             );
           } finally {
             setLoadIndicators(false);
@@ -83,13 +80,13 @@ const BookingSummary = forwardRef(
             } else {
               toast.error("Payment failed, please try again.");
               navigate(
-                `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+                `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
               );
             }
           } catch (error) {
             console.error("Payment error: " + error.message);
             navigate(
-              `/paymentstatus?type=${formData.data?.booking?.bookingType}&bookingId=${formData.bookingId}?result=error`
+              `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
             );
           } finally {
             setLoadIndicators(false);
@@ -99,37 +96,17 @@ const BookingSummary = forwardRef(
     });
 
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await bookingApi.get(
-            `booking/getBookingById/${formData.bookingId}`
-          );
-          if (response.status === 200) {
-            setData(response.data.responseBody);
-          }
-        } catch (error) {
-          toast.error("Error Fetching Data: " + error.message);
-        } finally {
-          // setIsLoading(false);
-        }
-      };
-
-      if (formData.paymentType && formData.isAgreed) {
-        formik.setFieldValue("paymentType", formData.paymentType);
-        formik.setFieldValue("isAgreed", formData.isAgreed);
+      if (formData.form4.paymentType && formData.form4.isAgreed) {
+        formik.setFieldValue("paymentType", formData.form4.paymentType);
+        formik.setFieldValue("isAgreed", formData.form4.isAgreed);
+        // console.log("form4",formData)
       }
-
-      fetchData();
     }, []);
 
-    const bookingTripLocations = data.bookingTripLocations || [];
+    const bookingTripLocations = formData?.form1?.locationDetail || [];
     const firstLocation = bookingTripLocations[0] || {};
     const lastLocation =
-      bookingTripLocations[bookingTripLocations.length - 1] || {};
-
-    // console.log("booking", firstLocation);
-    // console.log("form", lastLocation);
-    // console.log("bookingTripLocations", bookingTripLocations);
+      bookingTripLocations[1] || {};
 
     useImperativeHandle(ref, () => ({
       summary: formik.handleSubmit,
@@ -145,7 +122,7 @@ const BookingSummary = forwardRef(
                   <div className="d-flex justify-content-between align-items-center border-bottom ms-3 me-3 p-2">
                     <h5>Item Shifting</h5>
                     <span>
-                      {new Date(data?.booking?.scheduledDate).toLocaleString(
+                      {new Date(`${formData?.form2?.date}T${formData?.form2?.time}.000Z`).toLocaleString(
                         "en-US",
                         {
                           year: "numeric",
@@ -179,7 +156,7 @@ const BookingSummary = forwardRef(
                               aria-controls="collapseOne"
                               onClick={() => handleAccordionToggle("Pickup")}
                             >
-                              {firstLocation.pickup}
+                              {firstLocation.location}
                             </button>
                           </h2>
                           <div
@@ -195,16 +172,16 @@ const BookingSummary = forwardRef(
                                   <p>Address Info:</p>
                                 </div>
                                 <div className="col-6">
-                                  <p>{firstLocation.pickupAddress}</p>
+                                  <p>{firstLocation.address}</p>
                                 </div>
                                 <div className="col-6">
                                   <p>Contact Details:</p>
                                 </div>
                                 <div className="col-6">
                                   <p>
-                                    {firstLocation.pickupContactName} | +
-                                    {firstLocation.pickupCountryCode}{" "}
-                                    {firstLocation.pickupMobile}
+                                    {firstLocation.contactName} | +
+                                    {firstLocation.countryCode}{" "}
+                                    {firstLocation.mobile}
                                   </p>
                                 </div>
                               </div>
@@ -214,7 +191,7 @@ const BookingSummary = forwardRef(
                       </div>
                     </li>
                     {bookingTripLocations.length > 1 &&
-                      bookingTripLocations.slice(0, -1).map((stop, index) => (
+                      bookingTripLocations.slice(2).map((stop, index) => (
                         <li className="list-group-item mb-2" key={index}>
                           <div className="d-flex align-items-center ">
                             <span className="text-warning">&#9679;</span>
@@ -245,7 +222,7 @@ const BookingSummary = forwardRef(
                                     handleAccordionToggle(`stop${index}`)
                                   }
                                 >
-                                  {stop.dropoff}
+                                  {stop.location}
                                 </button>
                               </h2>
                               <div
@@ -263,16 +240,16 @@ const BookingSummary = forwardRef(
                                       <p>Address Info:</p>
                                     </div>
                                     <div className="col-6">
-                                      <p>{stop.dropoffAddress}</p>
+                                      <p>{stop.address}</p>
                                     </div>
                                     <div className="col-6">
                                       <p>Contact Details:</p>
                                     </div>
                                     <div className="col-6">
                                       <p>
-                                        {stop.dropoffContactName} | +
-                                        {stop.dropoffCountryCode}{" "}
-                                        {stop.dropoffMobile}
+                                        {stop.contactName} | +
+                                        {stop.countryCode}{" "}
+                                        {stop.mobile}
                                       </p>
                                     </div>
                                   </div>
@@ -304,7 +281,7 @@ const BookingSummary = forwardRef(
                               aria-controls="collapseTwo"
                               onClick={() => handleAccordionToggle("Drop")}
                             >
-                              {lastLocation.dropoff}
+                              {lastLocation.location}
                             </button>
                           </h2>
                           <div
@@ -320,16 +297,16 @@ const BookingSummary = forwardRef(
                                   <p>Address Info:</p>
                                 </div>
                                 <div className="col-6">
-                                  <p>{lastLocation.dropoffAddress}</p>
+                                  <p>{lastLocation.address}</p>
                                 </div>
                                 <div className="col-6">
                                   <p>Contact Details:</p>
                                 </div>
                                 <div className="col-6">
                                   <p>
-                                    {lastLocation.dropoffContactName} | +
-                                    {lastLocation.dropoffCountryCode}{" "}
-                                    {lastLocation.dropoffMobile}
+                                    {lastLocation.contactName} | +
+                                    {lastLocation.countryCode}{" "}
+                                    {lastLocation.mobile}
                                   </p>
                                 </div>
                               </div>
@@ -338,7 +315,7 @@ const BookingSummary = forwardRef(
                         </div>
                       </div>
                       <p className="text-center mt-2">
-                        <strong>Total Distance:</strong> {data?.booking?.estKm}{" "}
+                        <strong>Total Distance:</strong> {formData?.form1?.estKm}{" "}
                         KM
                       </p>
                     </li>
@@ -349,13 +326,13 @@ const BookingSummary = forwardRef(
                 <h3>Package details</h3>
                 <div className="text-center">
                   <img
-                    src={data?.booking?.vehicleImage}
-                    alt={data?.booking?.vehicleName}
+                    src={formData?.form2?.vehicle?.vehicleImage}
+                    alt={formData?.form2?.vehicle?.vehicleName}
                     className="img-fluid w-25"
                   />
-                  <h4>{data?.booking?.vehicleName?.split("_").join(" ")}</h4>
+                  <h4>{formData?.form2?.vehicle?.vehicleName?.split("_").join(" ")}</h4>
                   <p>
-                    <FaWeightHanging /> {formData?.vehicle?.vehicleCapacity} Kg
+                    <FaWeightHanging /> {formData?.form2?.vehicle?.vehicleCapacity} Kg
                   </p>
                 </div>
                 <div className="row ps-4">
@@ -363,22 +340,22 @@ const BookingSummary = forwardRef(
                     <p>Manpower</p>
                   </div>
                   <div className="col-6">
-                    <p>: {data?.booking?.helper === "Y" ? "Yes" : "No"}</p>
+                    <p>: {formData?.form3?.driverAsManpower ? "Yes" : "No"}</p>
                   </div>
                   <div className="col-6">
                     <p>Extra ManPower</p>
                   </div>
                   <div className="col-6">
-                    <p>: {data?.booking?.extraHelper === "Y" ? "Yes" : "No"}</p>
+                    <p>: {formData?.form3?.extraManpower ? "Yes" : "No"}</p>
                   </div>
-                  {data?.booking?.extraHelper === "Y" ? (
+                  {formData?.form3?.extraManpower ? (
                     <>
                       <div className="col-6">
                         <p>Extra ManPower Quantity</p>
                       </div>
 
                       <div className="col-6">
-                        <p>: {data?.booking?.quantity || 0}</p>
+                        <p>: {formData?.form3?.quantity || 0}</p>
                       </div>
                     </>
                   ) : null}
@@ -388,14 +365,14 @@ const BookingSummary = forwardRef(
                   </div>
                   <div className="col-6">
                     <p>
-                      : {data?.booking?.trollyRequired === "Y" ? "Yes" : "No"}
+                      : {formData?.form3?.trollyRequired ? "Yes" : "No"}
                     </p>
                   </div>
                   <div className="col-6">
                     <p>Round Trip</p>
                   </div>
                   <div className="col-6">
-                    <p>: {data?.booking?.roundTrip === "Y" ? "Yes" : "No"}</p>
+                    <p>: {formData?.form3?.roundTripRequired ? "Yes" : "No"}</p>
                   </div>
 
                   {shiftType !== "ITEM" && (
@@ -407,7 +384,7 @@ const BookingSummary = forwardRef(
                         </div>
 
                         <div className="col-6">
-                          <p>: {data?.booking?.boxesCharge || 0}</p>
+                          <p>: {formData?.form3?.boxesCharge || 0}</p>
                         </div>
                         <div className="col-6">
                           <p>Long Push</p>
@@ -415,7 +392,7 @@ const BookingSummary = forwardRef(
 
                         <div className="col-6">
                           <p>
-                            : {data?.booking?.longPushCharge === "Y"
+                            : {formData?.form3?.longPushCharge === "Y"
                               ? "Yes"
                               : "NO"}
                           </p>
@@ -426,7 +403,7 @@ const BookingSummary = forwardRef(
 
                         <div className="col-6">
                           <p>
-                            : {data?.booking?.assemblyDisassemblyCharge || 0}
+                            : {formData?.form3?.assemblyDisassemblyCharge || 0}
                           </p>
                         </div>
                         <div className="col-6">
@@ -434,7 +411,7 @@ const BookingSummary = forwardRef(
                         </div>
 
                         <div className="col-6">
-                          <p>: {data?.booking?.bubbleWrappingCharge || 0}</p>
+                          <p>: {formData?.form3?.bubbleWrappingCharge || 0}</p>
                         </div>
                       </>
                     </>
@@ -443,7 +420,7 @@ const BookingSummary = forwardRef(
                     <p>Message To Driver</p>
                   </div>
                   <div className="col-6">
-                    <p>: {data?.booking?.msgToDriver || "--"}</p>
+                    <p>: {formData?.form3?.messageToDriver || "--"}</p>
                   </div>
                 </div>
               </div>
@@ -486,14 +463,14 @@ const BookingSummary = forwardRef(
                   <div className="row">
                     <div className="col-md-6 col-12 mb-3">
                       <div
-                        className={`payment-option text-center p-4 ${formik.values.paymentType === "cash" ? "active" : ""
+                        className={`payment-option text-center p-4 ${formik.values.paymentType === "CASH" ? "active" : ""
                           }`}
                         onClick={() =>
-                          formik.setFieldValue("paymentType", "cash")
+                          formik.setFieldValue("paymentType", "CASH")
                         }
                         style={{
                           border:
-                            formik.values.paymentType === "cash"
+                            formik.values.paymentType === "CASH"
                               ? "2px solid #28a745"
                               : "1px solid #e0e0e0",
                           cursor: "pointer",
@@ -510,14 +487,14 @@ const BookingSummary = forwardRef(
                     </div>
                     <div className="col-md-6 col-12">
                       <div
-                        className={`payment-option text-center p-4 ${formik.values.paymentType === "online" ? "active" : ""
+                        className={`payment-option text-center p-4 ${formik.values.paymentType === "ONLINE" ? "active" : ""
                           }`}
                         onClick={() =>
-                          formik.setFieldValue("paymentType", "online")
+                          formik.setFieldValue("paymentType", "ONLINE")
                         }
                         style={{
                           border:
-                            formik.values.paymentType === "online"
+                            formik.values.paymentType === "ONLINE"
                               ? "2px solid #28a745"
                               : "1px solid #e0e0e0",
                           cursor: "pointer",
@@ -543,12 +520,12 @@ const BookingSummary = forwardRef(
                   </div>
                   <div className="mt-3">
                     <h5>
-                      {formik.values.paymentType === "cash"
+                      {formik.values.paymentType === "CASH"
                         ? "Pay by Cash on Delivery"
                         : "Pay by Online Payment"}
                     </h5>
                     <p>
-                      {formik.values.paymentType === "cash"
+                      {formik.values.paymentType === "CASH"
                         ? "Pay conveniently at your doorstep with cash on delivery."
                         : "Pay securely through online payment."}
                     </p>
