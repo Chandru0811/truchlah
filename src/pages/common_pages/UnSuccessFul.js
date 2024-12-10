@@ -7,7 +7,9 @@ import toast from "react-hot-toast";
 function PaymentUnsuccessful() {
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type");
-  const bookingId = searchParams.get("bookingId");
+  const bookingid = searchParams.get("bookingId");
+  const bookingId = bookingid?.split('?')[0];
+  console.log("success", bookingId)
   const result = searchParams.get("result");
   const refNo = searchParams.get("refNo");
 
@@ -18,7 +20,7 @@ function PaymentUnsuccessful() {
   // }, []);
 
   return (
-    <section className="PaymentUnsuccessful" style={{background:"#faf5f6"}}>
+    <section className="PaymentUnsuccessful" style={{ background: "#faf5f6" }}>
       <center>
         <div className="container py-5 px-2">
           <div className="row">
@@ -28,7 +30,7 @@ function PaymentUnsuccessful() {
                 <center>
                   <div className="d-flex justify-content-center align-item-center mt-2">
                     {/* <img src={error} style={{ border: "none", width: "200px" }} alt="Payment Error"/> */}
-                    <GiCancel className="text-danger my-5" size={70}/>
+                    <GiCancel className="text-danger my-5" size={70} />
                   </div>
                 </center>
                 <span className="fw-bolder">Booking ID: {bookingId}</span>

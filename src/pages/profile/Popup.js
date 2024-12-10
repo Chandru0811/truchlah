@@ -152,7 +152,7 @@ function Popup({ bookingId, onSuccess }) {
               <button
                 className="btn btn-danger px-5"
                 onClick={handleClose}
-                style={{ borderRadius: "20px" }}
+                // style={{ borderRadius: "20px" }}
                 type="button"
               >
                 Cancel

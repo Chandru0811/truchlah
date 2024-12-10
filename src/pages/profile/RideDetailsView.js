@@ -1018,7 +1018,7 @@ function RideDetailsView() {
                         <button
                           className="btn btn-danger px-5"
                           onClick={handleShow}
-                          style={{ borderRadius: "20px" }}
+                          // style={{ borderRadius: "20px" }}
                         >
                           Cancel
                         </button>
