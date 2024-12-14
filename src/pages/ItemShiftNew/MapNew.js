@@ -109,23 +109,29 @@ const MapNew = forwardRef(
         const payload = {
           ...values,
           locationDetail: reformattedLocationDetail,
-        };
+        }
         try {
-          const response = await bookingApi.post(`booking/create`, payload);
+          let response;
+          if (formData.bookingId) {
+            payload.bookingId=  formData.bookingId
+            response = await bookingApi.post(`/booking/resume`, payload);
+          } else {
+            response = await bookingApi.post(`booking/create`, payload);
+          }
           if (response.status === 200) {
             toast.success("Location has been successfully added!");
             const bookingId = response.data.responseBody.booking.bookingId;
-            setFormData((prev) => ({
-              ...prev,
-              form1: {...values },
-              bookingId,
+            setFormData((prv) => ({
+              ...prv,
+              form1: { ...values },
+              bookingId: bookingId,
             }));
             handleNext();
           } else {
             toast.error(response.data.message);
-            // toast.warning("Pleas Enter the Locations");
           }
         } catch (error) {
+          console.log("error",error)
           toast.error("Please Enter the Locations");
         } finally {
           setLoadIndicators(false);
@@ -301,7 +307,7 @@ const MapNew = forwardRef(
           ],
         });
       }
-      // console.log("FormData", formData);
+      console.log("FormData", formData);
     }, []);
 
     const handleAddDropoff = () => {

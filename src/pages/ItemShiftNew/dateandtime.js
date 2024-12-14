@@ -52,14 +52,14 @@ const DateAndTime = forwardRef(
     ]);
     const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
+    const [vehicle, setVechicle] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeIndex, setActiveIndex] = useState(
-      formData?.form2.vehicle?.vehicletypeId ? formData.form2.vehicle.vehicletypeId : 1
+      formData?.form2.vehicle?.vehicletypeId ? formData.form2?.vehicle?.vehicletypeId : 0
     );
     const [isModified, setIsModified] = useState(false);
-    const [vehicle, setVechicle] = useState([]);
     const [selectedImage, setSelectedImage] = useState(
-      formData?.form2.vehicle ? formData.form2.vehicle : null
+      formData?.form2?.vehicle?.vehicletypeId ? vehicle.find((data)=>data.vehicletypeId === formData?.form2.vehicle.vehicletypeId) : null
     );
     const [showModal, setShowModal] = useState(
       shiftType !== "ITEM" ? true : false
@@ -135,6 +135,8 @@ const DateAndTime = forwardRef(
             const response = await userApi.get("vehicle/vehicleType");
             if (response.status === 200) {
               setVechicle(response.data.responseBody);
+              console.log("object",response.data.responseBody[0]?.vehicletypeId)
+              setActiveIndex(formData?.form2.vehicle?.vehicletypeId ? formData.form2.vehicle.vehicletypeId : response.data.responseBody[0]?.vehicletypeId)
             }
           } else {
             const response = await userApi.get(
@@ -142,6 +144,8 @@ const DateAndTime = forwardRef(
             );
             if (response.status === 200) {
               setVechicle(response.data.responseBody);
+              console.log("object",response.data.responseBody[0]?.vehicletypeId)
+              setActiveIndex(formData?.form2.vehicle?.vehicletypeId ? formData.form2.vehicle.vehicletypeId : response.data.responseBody[0]?.vehicletypeId)
             }
           }
         } catch (e) {
@@ -149,13 +153,19 @@ const DateAndTime = forwardRef(
         }
       };
       getVechicle();
+      console.log("object",vehicle)
     }, []);
 
     useEffect(() => {
-      if (vehicle.length > 0 && selectedImage === null) {
-        setSelectedImage(vehicle[0]);
+      if (vehicle.length > 0 && (!selectedImage || (typeof selectedImage === 'object' && Object.keys(selectedImage).length === 0))
+      ) {
+        const selectedVehicle =vehicle.find((data)=>data.vehicletypeId === activeIndex)
+        setSelectedImage(selectedVehicle);
+        console.log("select",selectedVehicle);
       }
-      // console.log("setSelectedImage",selectedImage);
+      console.log("setSelectedImage",selectedImage);
+      console.log("active",activeIndex);
+      console.log("form",formData);
     }, [vehicle, selectedImage]);
 
     const handleCarouselClick = (image, index) => {

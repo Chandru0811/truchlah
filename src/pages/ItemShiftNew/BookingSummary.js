@@ -98,8 +98,8 @@ const BookingSummary = forwardRef(
       if (formData.form4.paymentType && formData.form4.isAgreed) {
         formik.setFieldValue("paymentType", formData.form4.paymentType);
         formik.setFieldValue("isAgreed", formData.form4.isAgreed);
-        // console.log("form4",formData)
       }
+      console.log("form4",formData)
     }, []);
 
     const bookingTripLocations = formData?.form1?.locationDetail || [];
@@ -393,7 +393,7 @@ const BookingSummary = forwardRef(
                           <p>
                             : {formData?.form3?.longPushCharge === "Y"
                               ? "Yes"
-                              : "NO"}
+                              : "No"}
                           </p>
                         </div>
                         <div className="col-6">

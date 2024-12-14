@@ -14,7 +14,7 @@ import Popup from "./Popup";
 // import { MdCancel } from "react-icons/md";
 import { useFormik } from "formik";
 import { Modal } from "react-bootstrap";
-import { Badge } from "antd";
+import { Badge, Card, Space } from "antd";
 import * as Yup from "yup";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { GoStarFill } from "react-icons/go";
@@ -31,6 +31,7 @@ function RideDetailsView() {
   const [isLoading, setIsLoading] = useState(true);
   // console.log("Type:", shiftType);
   const [isPopupVisible, setPopupVisible] = useState(true);
+  const [checkedValues, setCheckedValues] = useState([]);
   const navigate = useNavigate();
   console.log("Booking Data:", data);
   console.log("Location Details Data:", locationDetail);
@@ -51,10 +52,10 @@ function RideDetailsView() {
   };
 
   const handleClick = () => {
-    if (bookingId.id && data.booking.bookingType === "ITEM") {
-      navigate(`/itemshift`, { state: { id: bookingId.id } });
-    } else {
-      navigate(`/houseshift`, { state: { id: bookingId.id } });
+    if (bookingId.id && data.booking.bookingType ==="ITEM") {
+      navigate(`/itemshift`,{state:{id:bookingId.id}});
+    }else{
+      navigate(`/houseshift`,{state:{id:bookingId.id}})
     }
   };
 
@@ -1019,7 +1020,7 @@ function RideDetailsView() {
                         <button
                           className="btn btn-danger px-5"
                           onClick={handleShow}
-                          // style={{ borderRadius: "20px" }}
+                          style={{ borderRadius: "20px" }}
                         >
                           Cancel
                         </button>

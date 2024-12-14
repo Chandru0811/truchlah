@@ -24,7 +24,7 @@ const HouseShiftSteps = () => {
   const form = {
     bookingId: null,
     form1: {
-      type: "ITEM",
+      type: "",
       estKm: "",
       locationDetail: [
         {
@@ -58,7 +58,7 @@ const HouseShiftSteps = () => {
       roundTripRequired: false,
       messageToDriver: "",
     },
-
+    extraService:{ 1:0 ,2:"N",3:0,4:0},
     form4: {
       paymentType: "",
       isAgreed: false,
@@ -149,11 +149,11 @@ const HouseShiftSteps = () => {
               time: data?.booking?.scheduledDate
                 ? data.booking.scheduledDate.substring(11, 19)
                 : "",
-              vehicle: {
+              vehicle: data.booking?.vehicletypeId ? {
                 vehicletypeId: data.booking?.vehicletypeId || "",
                 type: data.booking?.vehicleName || "",
                 vehicleImage: data.booking?.vehicleImage || "",
-              },
+              }:null,
             },
             form3: {
               driverAsManpower: data.booking?.helper === "Y",
@@ -163,6 +163,7 @@ const HouseShiftSteps = () => {
               roundTripRequired: data.booking?.roundTrip === "Y",
               messageToDriver: data.booking?.msgToDriver || "",
             },
+            extraService:{1:data?.booking?.boxesCharge ,2:data.booking?.extraHelper === "Y"?"Y":"N",3: data?.booking?.assemblyDisassemblyCharge,4:data?.booking?.bubbleWrappingCharge },
             form4: {
               paymentType: data.transactionDetails?.paymentMode || "",
               isAgreed: false,

@@ -103,30 +103,25 @@ const HouseMap = forwardRef(
         try {
           let response;
           if (formData.bookingId) {
-            response = await bookingApi.put(`booking/update`, values);
+          values.bookingId=  formData.bookingId
+            response = await bookingApi.post(`/booking/resume`, values);
           } else {
             response = await bookingApi.post(`booking/create`, values);
           }
           if (response.status === 200) {
             toast.success("Location has been successfully added!");
             const bookingId = response.data.responseBody.booking.bookingId;
-            // const locations = encodeURIComponent(
-            //   JSON.stringify(values.locationDetail)
-            // );
             setFormData((prv) => ({
               ...prv,
               form1: { ...values },
               bookingId: bookingId,
             }));
             handleNext();
-            // navigate(
-            //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
-            // );
           } else {
             toast.error(response.data.message);
-            // toast.warning("Pleas Enter the Locations");
           }
         } catch (error) {
+          console.log("error",error)
           toast.error("Please Enter the Locations");
         } finally {
           setLoadIndicators(false);
@@ -208,7 +203,7 @@ const HouseMap = forwardRef(
       if (pickupPlace && dropoffPlace) {
         calculateDistance();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      console.log("form",formData)
     }, [pickupPlace, dropoffPlace]);
 
     const fetchData = async () => {
@@ -252,8 +247,6 @@ const HouseMap = forwardRef(
           ],
         });
       }
-      formik.setFieldValue("locationDetail[0].countryCode", 65);
-      formik.setFieldValue("locationDetail[1].countryCode", 65);
       fetchData();
       console.log("formik", formik.values);
       // eslint-disable-next-line react-hooks/exhaustive-deps

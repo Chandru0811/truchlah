@@ -57,7 +57,6 @@ const ItemShift = () => {
       roundTripRequired: false,
       messageToDriver: "",
     },
-
     form4: {
       paymentType: "",
       isAgreed: false,
@@ -146,11 +145,11 @@ const ItemShift = () => {
               time: data?.booking?.scheduledDate
                 ? data.booking.scheduledDate.substring(11, 19)
                 : "",
-              vehicle: {
+              vehicle: data.booking?.vehicletypeId ? {
                 vehicletypeId: data.booking?.vehicletypeId || "",
                 type: data.booking?.vehicleName || "",
                 vehicleImage: data.booking?.vehicleImage || "",
-              },
+              }:null,
             },
             form3: {
               driverAsManpower: data.booking?.helper === "Y",
