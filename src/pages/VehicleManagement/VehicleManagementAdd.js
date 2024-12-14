@@ -26,6 +26,7 @@ function VehicleManagementAdd() {
       )
       .required("*Vehicle Type is required"),
     imageUrl: Yup.string().required("*Image is required"),
+    vehicleCapacitySize: Yup.string().required("*Image is required"),
     vehicleCapacity: Yup.mixed().required("*Vehicle Capacity is required"),
     vehicleStatus: Yup.string().required("*vehicle Status is required"),
     description: Yup.string().required("*Description is required"),
@@ -86,6 +87,7 @@ function VehicleManagementAdd() {
       peakHourCharge: "",
       description: "",
       imageUrl: null,
+      vehicleCapacitySize: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -383,6 +385,7 @@ function VehicleManagementAdd() {
                   )}
                 </div>
               </div>
+              
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
                   Base Charge<span className="text-danger">*</span>

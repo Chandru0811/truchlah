@@ -17,6 +17,20 @@ function HouseCategoryManagementAdd() {
     price: Yup.number()
       .typeError("*must be a digit")
       .required("*Price is required"),
+    houseImage: Yup.mixed().required("House Category Image is required"),
+    // .test(
+    //   "fileSize",
+    //   "File size must not exceed 2MB",
+    //   (value) => !value || (value && value.size <= 2 * 1024 * 1024)
+    // )
+    // .test(
+    //   "fileType",
+    //   "Only image files are allowed",
+    //   (value) =>
+    //     !value ||
+    //     (value &&
+    //       ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
+    // ),
   });
 
   const formik = useFormik({
@@ -24,11 +38,17 @@ function HouseCategoryManagementAdd() {
       houseCategoryName: "",
       status: "",
       price: "",
+      houseImage: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // console.log("additems:", values);
       setLoading(true);
+      const formdata = new FormData();
+      formdata.append("houseCategoryName", values.houseCategoryName);
+      formdata.append("price", values.price);
+      formdata.append("status", values.status);
+      if (values.houseImage) formdata.append("houseImage", values.houseImage);
       try {
         const response = await bookingApi.post(`createHouseShifting`, values);
         console.log(response);
@@ -127,7 +147,13 @@ function HouseCategoryManagementAdd() {
                   Price<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
-                  <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                  <input
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
                     type="text"
                     name="price"
                     className={`form-control ${
@@ -145,7 +171,7 @@ function HouseCategoryManagementAdd() {
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <label className="form-label mb-0">
+                <label className="form-label">
                   Status<span className="text-danger">*</span>
                 </label>
                 <div className="mb-3">
@@ -166,6 +192,31 @@ function HouseCategoryManagementAdd() {
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
                       {formik.errors.status}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  House Category Image <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="houseImage"
+                    className={`form-control ${
+                      formik.touched.houseImage && formik.errors.houseImage
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(event) => {
+                      const file = event.currentTarget.files[0];
+                      formik.setFieldValue("houseImage", file);
+                    }}
+                  />
+                  {formik.touched.houseImage && formik.errors.houseImage && (
+                    <div className="invalid-feedback">
+                      {formik.errors.houseImage}
                     </div>
                   )}
                 </div>
