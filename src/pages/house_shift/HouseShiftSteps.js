@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { FaChevronRight } from "react-icons/fa";
 import DateandTime from "../ItemShiftNew/dateandtime";
@@ -6,7 +6,9 @@ import HouseMap from "./HouseMap";
 import ServiceNew from "../ItemShiftNew/ServiceNew";
 import ExtraService from "../ItemShiftNew/ExtraService";
 import BookingSummary from "../ItemShiftNew/BookingSummary";
-import SuccessfullNew from "../ItemShiftNew/SuccessFulNew";
+import { useLocation } from "react-router-dom";
+import { bookingApi } from "../../config/URL";
+import { toast } from "react-toastify";
 
 const steps = [
   "Pickup / Dropoff",
@@ -17,10 +19,57 @@ const steps = [
 ];
 
 const HouseShiftSteps = () => {
+  const location = useLocation();
+  const { id } = location.state || {};
+  const form = {
+    bookingId: null,
+    form1: {
+      type: "ITEM",
+      estKm: "",
+      locationDetail: [
+        {
+          type: "pickup",
+          location: "",
+          address: "",
+          contactName: "",
+          countryCode: 65,
+          mobile: "",
+        },
+        {
+          type: "dropoff",
+          location: "",
+          address: "",
+          contactName: "",
+          countryCode: 65,
+          mobile: "",
+        },
+      ],
+    },
+    form2: {
+      date: "",
+      time: "",
+      vehicle: {},
+    },
+    form3: {
+      driverAsManpower: false,
+      extraManpower: false,
+      quantity: 0,
+      trollyRequired: false,
+      roundTripRequired: false,
+      messageToDriver: "",
+    },
+
+    form4: {
+      paymentType: "",
+      isAgreed: false,
+    },
+  };
   const [activeStep, setActiveStep] = useState(0);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [loader, setLoader] = useState(false);
+  const [formData, setFormData] = useState(form);
   const childRef = React.useRef();
+  const bookingId = id;
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
@@ -28,6 +77,113 @@ const HouseShiftSteps = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  useEffect(() => {
+    const fetchData = async (id) => {
+      setLoader(true);
+      try {
+        const response = await bookingApi.get(`booking/getBookingById/${id}`);
+        if (response.status === 200) {
+          const data = response.data.responseBody;
+
+          const transformBookingLocations = (locations) => {
+            const result = [];
+
+            const firstLocation = locations[0];
+            result.push({
+              address: firstLocation.pickupAddress || "",
+              contactName: firstLocation.pickupContactName || "",
+              countryCode: firstLocation.pickupCountryCode || "",
+              location: firstLocation.pickup || "",
+              mobile: firstLocation.pickupMobile
+                ? firstLocation.pickupMobile.toString()
+                : "",
+              type: "pickup",
+            });
+
+            const lastLocation = locations[locations.length - 1];
+            result.push({
+              address: lastLocation.dropoffAddress || "",
+              contactName: lastLocation.dropoffContactName || "",
+              countryCode: lastLocation.dropoffCountryCode || "",
+              location: lastLocation.dropoff || "",
+              mobile: lastLocation.dropoffMobile
+                ? lastLocation.dropoffMobile.toString()
+                : "",
+              type: "dropoff",
+            });
+
+            for (let i = 0; i < locations.length - 1; i++) {
+              const location = locations[i];
+              result.push({
+                address: location.dropoffAddress || "",
+                contactName: location.dropoffContactName || "",
+                countryCode: location.dropoffCountryCode || "",
+                location: location.dropoff || "",
+                mobile: location.dropoffMobile
+                  ? location.dropoffMobile.toString()
+                  : "",
+                type: "Stop",
+              });
+            }
+
+            return result;
+          };
+
+          const locationDetail = transformBookingLocations(
+            data.bookingTripLocations
+          );
+          // console.log("object", data);
+          setFormData((prev) => ({
+            ...prev,
+            bookingId: data?.booking?.bookingId,
+            form1: {
+              type: data?.booking?.bookingType || "",
+              estKm: data?.booking?.estKm || "",
+              locationDetail: locationDetail,
+            },
+            form2: {
+              date: data?.booking?.scheduledDate
+                ? data.booking.scheduledDate.split("T")[0]
+                : "",
+              time: data?.booking?.scheduledDate
+                ? data.booking.scheduledDate.substring(11, 19)
+                : "",
+              vehicle: {
+                vehicletypeId: data.booking?.vehicletypeId || "",
+                type: data.booking?.vehicleName || "",
+                vehicleImage: data.booking?.vehicleImage || "",
+              },
+            },
+            form3: {
+              driverAsManpower: data.booking?.helper === "Y",
+              extraManpower: data.booking?.extraHelper === "Y",
+              quantity: data.booking?.quantity || 0,
+              trollyRequired: data.booking?.trollyRequired === "Y",
+              roundTripRequired: data.booking?.roundTrip === "Y",
+              messageToDriver: data.booking?.msgToDriver || "",
+            },
+            form4: {
+              paymentType: data.transactionDetails?.paymentMode || "",
+              isAgreed: false,
+            },
+          }));
+          // console.log("form", formData);
+        } else {
+          toast.error(`Error: ${response.data.message}`);
+        }
+      } catch (error) {
+        toast.error("Error Fetching Data: " + error.message);
+      } finally {
+        setLoader(false);
+      }
+    };
+
+    if (bookingId) {
+      fetchData(bookingId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleButtonClick = () => {
     switch (activeStep.toString()) {
@@ -109,53 +265,56 @@ const HouseShiftSteps = () => {
         className="text-centerborder-0 mb-4"
         //   style={{ minHeight: "70vh", }}
       >
-        <React.Fragment>
-          {activeStep === 0 && (
-            <HouseMap
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 1 && (
-            <DateandTime
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 2 && (
-            <ServiceNew
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 3 && (
-            <ExtraService
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {activeStep === 4 && (
-            <BookingSummary
-              formData={formData}
-              ref={childRef}
-              setFormData={setFormData}
-              handleNext={handleNext}
-              setLoadIndicators={setLoadIndicator}
-            />
-          )}
-          {/* {activeStep === 5 && (
+        {loader ? (
+          <p>loding...</p>
+        ) : (
+          <React.Fragment>
+            {activeStep === 0 && (
+              <HouseMap
+                formData={formData}
+                ref={childRef}
+                setFormData={setFormData}
+                handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
+              />
+            )}
+            {activeStep === 1 && (
+              <DateandTime
+                formData={formData}
+                ref={childRef}
+                setFormData={setFormData}
+                handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
+              />
+            )}
+            {activeStep === 2 && (
+              <ServiceNew
+                formData={formData}
+                ref={childRef}
+                setFormData={setFormData}
+                handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
+              />
+            )}
+            {activeStep === 3 && (
+              <ExtraService
+                formData={formData}
+                ref={childRef}
+                setFormData={setFormData}
+                handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
+              />
+            )}
+            {activeStep === 4 && (
+              <BookingSummary
+                formData={formData}
+                ref={childRef}
+                setFormData={setFormData}
+                handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
+              />
+            )}
+            {/* {activeStep === 5 && (
             <SuccessfullNew
               formData={formData}
               ref={childRef}
@@ -165,45 +324,46 @@ const HouseShiftSteps = () => {
             />
           )} */}
 
-          <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
-            {activeStep !== 0 && (
-              <button
-                className="btn btn-secondary btn-sm border-0 fw-bold"
-                style={{
-                  padding: "7px",
-                  color: "black",
-                  background: "#f4f4f4",
-                }}
-                disabled={activeStep === 0}
-                onClick={handleBack}
-              >
-                Back
-              </button>
-            )}
-            <div style={{ flex: "1 1 auto" }}></div>
-            {activeStep !== 5 && (
-              <button
-                type="submit"
-                onClick={handleButtonClick}
-                style={{
-                  padding: "7px",
-                  background: "#acff3b",
-                  minWidth: "7%",
-                }}
-                className="btn btn-sm fw-bold"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                {activeStep !== steps.length - 2 ? "Next" : "Proceed"}
-              </button>
-            )}
-          </div>
-        </React.Fragment>
+            <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
+              {activeStep !== 0 && (
+                <button
+                  className="btn btn-secondary btn-sm border-0 fw-bold"
+                  style={{
+                    padding: "7px",
+                    color: "black",
+                    background: "#f4f4f4",
+                  }}
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                >
+                  Back
+                </button>
+              )}
+              <div style={{ flex: "1 1 auto" }}></div>
+              {activeStep !== 5 && (
+                <button
+                  type="submit"
+                  onClick={handleButtonClick}
+                  style={{
+                    padding: "7px",
+                    background: "#acff3b",
+                    minWidth: "7%",
+                  }}
+                  className="btn btn-sm fw-bold"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  {activeStep !== steps.length - 2 ? "Next" : "Proceed"}
+                </button>
+              )}
+            </div>
+          </React.Fragment>
+        )}
       </div>
     </section>
   );

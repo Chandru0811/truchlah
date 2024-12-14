@@ -36,13 +36,12 @@ const BookingSummary = forwardRef(
       validationSchema: validationSchema,
 
       onSubmit: async (values) => {
-        // console.log("values", values);
         setLoadIndicators(true);
         setFormData((prev) => ({
           ...prev,
           form4: { ...values },
         }));
-        if (values.paymentType === "cash") {
+        if (values.paymentType === "CASH") {
           try {
             const response = await bookingApi.post(
               `booking/cashPayment/${formData.bookingId}`

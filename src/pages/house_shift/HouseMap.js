@@ -70,7 +70,7 @@ const HouseMap = forwardRef(
 
     const userId = sessionStorage.getItem("userId");
     const [categorys, setCategoryData] = useState(null);
-    
+
     const formik = useFormik({
       initialValues: {
         userId: userId,
@@ -98,17 +98,26 @@ const HouseMap = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        console.log("values",values)
+        console.log("values", values);
         // values.type = values.type==="ITEM"?"ITEM":"HOUSE"
         try {
-          const response = await bookingApi.post(`booking/create`, values);
+          let response;
+          if (formData.bookingId) {
+            response = await bookingApi.put(`booking/update`, values);
+          } else {
+            response = await bookingApi.post(`booking/create`, values);
+          }
           if (response.status === 200) {
             toast.success("Location has been successfully added!");
             const bookingId = response.data.responseBody.booking.bookingId;
             // const locations = encodeURIComponent(
             //   JSON.stringify(values.locationDetail)
             // );
-            setFormData((prv) => ({ ...prv, ...values,bookingId:bookingId }));
+            setFormData((prv) => ({
+              ...prv,
+              form1: { ...values },
+              bookingId: bookingId,
+            }));
             handleNext();
             // navigate(
             //   `/service?location=${locations}&bookingId=${bookingId}&distance=${distance}`
@@ -218,7 +227,7 @@ const HouseMap = forwardRef(
       if (formData && Object.keys(formData).length > 0) {
         formik.setValues({
           ...formik.initialValues,
-          ...formData, 
+          ...formData.form1,
         });
       } else {
         formik.setValues({
@@ -246,7 +255,7 @@ const HouseMap = forwardRef(
       formik.setFieldValue("locationDetail[0].countryCode", 65);
       formik.setFieldValue("locationDetail[1].countryCode", 65);
       fetchData();
-      console.log("formik",formik.values)
+      console.log("formik", formik.values);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -340,7 +349,10 @@ const HouseMap = forwardRef(
                               location.type === "pickup" ? "Pickup" : "Dropoff"
                             } Location`}
                             className="form-control"
-                            value={formik.values.locationDetail?.[index]?.location || ""}
+                            value={
+                              formik.values.locationDetail?.[index]?.location ||
+                              ""
+                            }
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             style={{
@@ -381,7 +393,9 @@ const HouseMap = forwardRef(
                         <input
                           type="text"
                           name={`locationDetail[${index}].address`}
-                          value={formik.values.locationDetail?.[index]?.address || ""}
+                          value={
+                            formik.values.locationDetail?.[index]?.address || ""
+                          }
                           placeholder={`Enter ${
                             location.type === "pickup" ? "Pickup" : "Dropoff"
                           } Address`}
@@ -433,7 +447,10 @@ const HouseMap = forwardRef(
                                   : "Dropoff"
                               } Contact Name`}
                               className="form-control"
-                              value={formik.values.locationDetail?.[index]?.contactName || ""}
+                              value={
+                                formik.values.locationDetail?.[index]
+                                  ?.contactName || ""
+                              }
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                             />
@@ -467,7 +484,10 @@ const HouseMap = forwardRef(
                               <select
                                 name={`locationDetail[${index}].countryCode`}
                                 onChange={formik.handleChange}
-                                value={formik.values.locationDetail?.[index]?.countryCode || ""}
+                                value={
+                                  formik.values.locationDetail?.[index]
+                                    ?.countryCode || ""
+                                }
                                 onBlur={formik.handleBlur}
                                 className=""
                               >
@@ -478,7 +498,10 @@ const HouseMap = forwardRef(
                             <input
                               type="text"
                               name={`locationDetail[${index}].mobile`}
-                              value={formik.values.locationDetail?.[index]?.mobile || ""}
+                              value={
+                                formik.values.locationDetail?.[index]?.mobile ||
+                                ""
+                              }
                               placeholder={`Enter ${
                                 location.type === "pickup"
                                   ? "Pickup"
@@ -532,7 +555,12 @@ const HouseMap = forwardRef(
                             key={category.id}
                             value={category.houseCategoryName}
                           >
-                            {(category.houseCategoryName.charAt(0).toUpperCase() + category.houseCategoryName.slice(1)).replace("_", " ")}
+                            {(
+                              category.houseCategoryName
+                                .charAt(0)
+                                .toUpperCase() +
+                              category.houseCategoryName.slice(1)
+                            ).replace("_", " ")}
                           </option>
                         ))}
                     </select>

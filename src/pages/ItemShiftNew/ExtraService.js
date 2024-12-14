@@ -25,8 +25,7 @@ const ExtraService = forwardRef(
     const [counts, setCounts] = useState(
       cardData.reduce((acc, card) => ({ ...acc, [card.id]: 0 }), {})
     );
-    console.log("counts", counts);
-    console.log("form", formData);
+
     const handleIncrement = (id) => {
       setCounts((prevCounts) => ({ ...prevCounts, [id]: prevCounts[id] + 1 }));
     };
@@ -56,27 +55,25 @@ const ExtraService = forwardRef(
       console.log("object", counts);
       setLoadIndicators(true);
       const payload = {
-        userId: formData?.data?.user?.userId,
-        type: formData.type,
-        // locationDetail: JSON.parse(decodeURIComponent(formData.location)),
+        userId: formData?.form1.userId,
+        type: formData.form1.type,
         bookingId: formData.bookingId,
-        estKm: formData.estKm,
-        scheduledDate: formData?.data?.booking?.scheduledDate,
-        vehicleType: formData?.vehicle?.type,
-        quantity:formData?.data?.booking?.quantity,
-        msgToDriver: formData?.msgToDriver,
-        noOfPieces: formData?.data?.booking?.noOfPieces,
-        helper: formData?.data?.booking?.helper ==="Y" ? "Y" : "N",
-        extraHelper: formData?.data?.booking?.extraHelper ==="Y" ? "Y" : "N",
-        trollyRequired: formData?.data?.booking?.trollyRequired ==="Y" ? "Y" : "N",
-        roundTrip: formData?.data?.booking?.roundTrip ==="Y" ? "Y" : "N",
-        actualKm: formData.estKm,
+        estKm: formData.form1.estKm,
+        scheduledDate: `${formData?.form2.date}T${formData?.form2.time}.000Z`,
+        vehicleType: formData?.form2.vehicle?.type,
+        quantity: formData?.form3.quantity,
+        msgToDriver: formData?.form3.msgToDriver,
+        noOfPieces: formData?.form3.noOfPieces,
+        helper: formData?.form3.helper === "Y" ? "Y" : "N",
+        extraHelper: formData?.form3.extraHelper === "Y" ? "Y" : "N",
+        trollyRequired: formData?.form3.trollyRequired === "Y" ? "Y" : "N",
+        roundTrip: formData?.form3.roundTrip === "Y" ? "Y" : "N",
+        actualKm: formData.form1.estKm,
         assemblyDisassemblyCharge: counts[3],
         bubbleWrappingCharge: counts[4],
         boxesCharge: counts[1],
         longPushCharge: counts[2],
       };
-      // console.log("payload",payload)
       try {
         const response = await bookingApi.put(`booking/update`, payload);
         if (response.status === 200) {
