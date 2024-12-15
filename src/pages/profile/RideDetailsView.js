@@ -216,7 +216,7 @@ function RideDetailsView() {
   return (
     <section
       className="summary container-fluid"
-      style={{ background: "#faf5f6" }}
+      style={{ background: "#ffffff" }}
     >
       {isLoading ? (
         <div className="darksoul-layout">
@@ -273,13 +273,13 @@ function RideDetailsView() {
                 vehicleImages.default} */}
             </div>
 
-            <p className="mt-3">{data.booking?.vehicleName}</p>
-            {vechicle &&
+            <p className="mt-3">{data.booking?.vehicleName?.split("_").join(" ")}</p>
+            {/* {vechicle &&
               vechicle.map((vechicles) =>
                 parseInt(data.centerId) === vechicles.vehicletypeId
                   ? vechicles.types || "--"
                   : ""
-              )}
+              )} */}
             <p>{data.transactionDetails?.txnRef}</p>
           </center>
           <div className="row">
@@ -430,7 +430,7 @@ function RideDetailsView() {
                         <div className="col-md-6 col-12 ps-1" id="drop">
                           {" "}
                           <p className="line" style={{ color: "#494949" }}>
-                            {data?.booking?.bookingType || "--"}
+                            {data?.booking?.bookingType?.split("_").join(" ") || "--"}
                           </p>
                         </div>
                       </div>
@@ -1004,7 +1004,7 @@ function RideDetailsView() {
               data.bookingStatus?.status !== "CANCELLED" && (
                 <div
                   className="container-fluid py-4"
-                  style={{ background: "#faf5f6" }}
+                  style={{ background: "#ffffff" }}
                 >
                   <div className="container">
                     <div

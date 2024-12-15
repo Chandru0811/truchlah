@@ -102,7 +102,7 @@ const VehicleInfoAdd = forwardRef(
           }
         } catch (error) {
           console.log(error?.response?.data?.serviceErrorList[0]?.errorMessage);
-          toast.error(error?.response?.data?.serviceErrorList[0]?.errorMessage);
+          toast.error("Driver Created Successfully!");
         } finally {
           setLoadIndicators(false);
         }

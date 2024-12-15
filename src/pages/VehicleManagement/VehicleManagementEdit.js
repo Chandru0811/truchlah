@@ -61,7 +61,6 @@ function VehicleManagementEdit() {
 
   const formik = useFormik({
     initialValues: {
-      vehicletypeId: "",
       type: "",
       vehicleCapacity: "",
       vehicleStatus: "",
@@ -77,6 +76,7 @@ function VehicleManagementEdit() {
       securedZoneCharge: "",
       gst: "",
       roundTrip: "",
+      wrappingCharge: "",
       boxesCharge: "",
       longPushCharge: "",
       assemblyDisassemblyCharge: "",
@@ -84,27 +84,50 @@ function VehicleManagementEdit() {
       packageBoxes: "",
       packageManpower: "",
       houseShiftingStatus: false,
-      wrappingCharge: "",
       addStopCharge: "",
       tenToTwelveCharge: "",
       twelveToSevenCharge: "",
       peakHourCharge: "",
       description: "",
       imageUrl: null,
+      vehicleCapacitySize: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      console.log(values);
-      const formData = new FormData();
       const { vehicleImage, ...valuess } = values;
-      Object.entries(valuess).forEach(([key, value]) => {
-        if (key === "imageUrl" && value) {
-          formData.append(key, value);
-        } else if (key !== "imageUrl") {
-          formData.append(key, value);
-        }
-      });
+      const formData = new FormData();
+      formData.append("type", values.type);
+      formData.append("description", values.description);
+      formData.append("baseFare", values.baseFare);
+      formData.append("perKm", values.perKm);
+      formData.append("helper", values.helper);
+      formData.append("extraHelper", values.extraHelper);
+      formData.append("tailGateCharge", values.tailGateCharge);
+      formData.append("overtimeCharge", values.overtimeCharge);
+      formData.append("nonLiftAccess", values.nonLiftAccess);
+      formData.append("erpCharge", values.erpCharge);
+      formData.append("cbdCharge", values.cbdCharge);
+      formData.append("securedZoneCharge", values.securedZoneCharge);
+      formData.append("gst", values.gst);
+      formData.append("roundTrip", values.roundTrip);
+      formData.append("wrappingCharge", values.wrappingCharge);
+      formData.append("addStopCharge", values.addStopCharge);
+      formData.append("tenToTwelveCharge", values.tenToTwelveCharge);
+      formData.append("twelveToSevenCharge", values.twelveToSevenCharge);
+      formData.append("peakHourCharge", values.peakHourCharge);
+      formData.append("vehicleCapacity", values.vehicleCapacity);
+      formData.append("vehicleStatus", values.vehicleStatus);
+      formData.append("longPushCharge", values.longPushCharge);
+      formData.append("assemblyDisassemblyCharge", values.assemblyDisassemblyCharge);
+      formData.append("bubbleWrappingCharge", values.wrappingCharge);
+      formData.append("boxesCharge", values.boxesCharge);
+      formData.append("suitableHouseType", values.suitableHouseType);
+      formData.append("packageBoxes", values.packageBoxes);
+      formData.append("packageManpower", values.packageManpower);
+      formData.append("houseShiftingStatus", values.houseShiftingStatus);
+      if(values.imageUrl) formData.append("imageUrl", values.imageUrl);
+      if(values.vehicleCapacitySize) formData.append("vehicleCapacitySize", values.vehicleCapacitySize);
       try {
         const response = await driverApi.post(
           `/vehicle/updateVehicleType/${id}`,
@@ -429,6 +452,34 @@ function VehicleManagementEdit() {
                         </button>
                       </div>
                     )}
+                  </div>
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label">
+                      Vehicle Capacity Image{" "}
+                      <span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        type="file"
+                        name="vehicleCapacitySize"
+                        className={`form-control ${
+                          formik.touched.vehicleCapacitySize &&
+                          formik.errors.vehicleCapacitySize
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        onChange={(event) => {
+                          const file = event.currentTarget.files[0];
+                          formik.setFieldValue("vehicleCapacitySize", file);
+                        }}
+                      />
+                      {formik.touched.vehicleCapacitySize &&
+                        formik.errors.vehicleCapacitySize && (
+                          <div className="invalid-feedback">
+                            {formik.errors.vehicleCapacitySize}
+                          </div>
+                        )}
+                    </div>
                   </div>
                   <div className="col-md-6 col-12 mb-2">
                     <label className="form-label mb-0">

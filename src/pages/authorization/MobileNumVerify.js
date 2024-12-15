@@ -63,16 +63,23 @@ console.log("id",id)
             );
             if (otpResponse.status === 200) {
               navigate("/otp", { state: { mobileNo } });
+              resetForm();
             }
           } catch (error) {
             toast.error("Failed to send OTP. Please try again.");
           }
         }
       } catch (error) {
-        toast.error("Failed to send OTP. Please try again.");
+        if (error.response.status === 409) {        
+          toast.warning(error.response.data.errorList[0].errorMessage);
+        }else if (error.response.status === 400) {
+          toast.warning(error.response.data.errorList[0].errorMessage);
+          console.log("object", error.response.data.errorList[0].errorMessage);
+        } else {
+          toast.error(error);
+        }
       } finally {
         setSubmitting(false);
-        resetForm();
       }
     },
   });

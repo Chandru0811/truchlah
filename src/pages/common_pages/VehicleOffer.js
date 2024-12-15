@@ -141,7 +141,7 @@ const VehicleOffer = ({
                       SGD {data?.baseFare}.00
                     </h4>
                     <p className="card-text text-muted">
-                      *inclusive {data?.gst}% GST
+                      *inclusive SGD {data?.gst} GST
                     </p>
                   </div>
                 </div>

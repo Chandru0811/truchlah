@@ -397,6 +397,24 @@ function VehicleManagementView() {
                 </div>
                 <div className="col-md-6 col-12">
                   <div className="row mb-3">
+                    <div className="col-6">
+                      <b>Vehicle Capacity Size Image</b>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.vehicleCapacitySize ? (
+                        <img
+                          src={data.vehicleCapacitySize}
+                          alt="Driver"
+                          style={{ width: "100px" }}
+                        />
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
                       <p className="text-sm">
                         <b>Suitable House Type</b>

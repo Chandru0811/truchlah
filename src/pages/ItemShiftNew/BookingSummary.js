@@ -119,7 +119,7 @@ const BookingSummary = forwardRef(
               <div className="card">
                 <div className="">
                   <div className="d-flex justify-content-between align-items-center border-bottom ms-3 me-3 p-2">
-                    <h5>Item Shifting</h5>
+                    <h5>{formData.form1.type ==="ITEM" ?"Item Shifting":"House Shifting"}</h5>
                     <span>
                       {new Date(`${formData?.form2?.date}T${formData?.form2?.time}.000Z`).toLocaleString(
                         "en-US",
@@ -383,7 +383,7 @@ const BookingSummary = forwardRef(
                         </div>
 
                         <div className="col-6">
-                          <p>: {formData?.form3?.boxesCharge || 0}</p>
+                          <p>: {formData?.extraService[1] || 0}</p>
                         </div>
                         <div className="col-6">
                           <p>Long Push</p>
@@ -391,7 +391,7 @@ const BookingSummary = forwardRef(
 
                         <div className="col-6">
                           <p>
-                            : {formData?.form3?.longPushCharge === "Y"
+                            : {formData?.extraService[2] === "Y"
                               ? "Yes"
                               : "No"}
                           </p>
@@ -402,7 +402,7 @@ const BookingSummary = forwardRef(
 
                         <div className="col-6">
                           <p>
-                            : {formData?.form3?.assemblyDisassemblyCharge || 0}
+                            : {formData?.extraService[3] || 0}
                           </p>
                         </div>
                         <div className="col-6">
@@ -410,7 +410,7 @@ const BookingSummary = forwardRef(
                         </div>
 
                         <div className="col-6">
-                          <p>: {formData?.form3?.bubbleWrappingCharge || 0}</p>
+                          <p>: {formData?.extraService[4] || 0}</p>
                         </div>
                       </>
                     </>

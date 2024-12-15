@@ -50,7 +50,7 @@ function HouseCategoryManagementAdd() {
       formdata.append("status", values.status);
       if (values.houseImage) formdata.append("houseImage", values.houseImage);
       try {
-        const response = await bookingApi.post(`createHouseShifting`, values);
+        const response = await bookingApi.post(`createHouseShifting`, formdata);
         console.log(response);
         if (response.status === 200) {
           toast.success(response.data.message);

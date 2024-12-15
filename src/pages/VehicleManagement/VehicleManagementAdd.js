@@ -93,16 +93,37 @@ function VehicleManagementAdd() {
     onSubmit: async (values) => {
       setLoading(true);
       const formData = new FormData();
-
-      Object.entries(values).forEach(([key, value]) => {
-        if (key === "imageUrl") {
-          if (value) {
-            formData.append(key, croppedImage);
-          }
-        } else {
-          formData.append(key, value);
-        }
-      });
+      formData.append("type", values.type);
+      formData.append("description", values.description);
+      formData.append("baseFare", values.baseFare);
+      formData.append("perKm", values.perKm);
+      formData.append("helper", values.helper);
+      formData.append("extraHelper", values.extraHelper);
+      formData.append("tailGateCharge", values.tailGateCharge);
+      formData.append("overtimeCharge", values.overtimeCharge);
+      formData.append("nonLiftAccess", values.nonLiftAccess);
+      formData.append("erpCharge", values.erpCharge);
+      formData.append("cbdCharge", values.cbdCharge);
+      formData.append("securedZoneCharge", values.securedZoneCharge);
+      formData.append("gst", values.gst);
+      formData.append("roundTrip", values.roundTrip);
+      formData.append("wrappingCharge", values.wrappingCharge);
+      formData.append("addStopCharge", values.addStopCharge);
+      formData.append("tenToTwelveCharge", values.tenToTwelveCharge);
+      formData.append("twelveToSevenCharge", values.twelveToSevenCharge);
+      formData.append("peakHourCharge", values.peakHourCharge);
+      formData.append("vehicleCapacity", values.vehicleCapacity);
+      formData.append("vehicleStatus", values.vehicleStatus);
+      formData.append("longPushCharge", values.longPushCharge);
+      formData.append("assemblyDisassemblyCharge", values.assemblyDisassemblyCharge);
+      formData.append("bubbleWrappingCharge", values.wrappingCharge);
+      formData.append("boxesCharge", values.boxesCharge);
+      formData.append("suitableHouseType", values.suitableHouseType);
+      formData.append("packageBoxes", values.packageBoxes);
+      formData.append("packageManpower", values.packageManpower);
+      formData.append("houseShiftingStatus", values.houseShiftingStatus);
+      if(values.imageUrl) formData.append("imageUrl", values.imageUrl);
+      if(values.vehicleCapacitySize) formData.append("vehicleCapacitySize", values.vehicleCapacitySize);
       try {
         const response = await driverApi.post(
           `vehicle/addVehicleType`,
@@ -385,7 +406,33 @@ function VehicleManagementAdd() {
                   )}
                 </div>
               </div>
-              
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Vehicle Capacity Image <span className="text-danger">*</span>
+                </label>
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    name="vehicleCapacitySize"
+                    className={`form-control ${
+                      formik.touched.vehicleCapacitySize &&
+                      formik.errors.vehicleCapacitySize
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(event) => {
+                      const file = event.currentTarget.files[0];
+                      formik.setFieldValue("vehicleCapacitySize", file);
+                    }}
+                  />
+                  {formik.touched.vehicleCapacitySize &&
+                    formik.errors.vehicleCapacitySize && (
+                      <div className="invalid-feedback">
+                        {formik.errors.vehicleCapacitySize}
+                      </div>
+                    )}
+                </div>
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-label mb-0">
                   Base Charge<span className="text-danger">*</span>

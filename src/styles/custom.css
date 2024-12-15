@@ -242,7 +242,7 @@
 /* Check Details  */
 
 .summary #Ace {
-  background-color: #faf5f6;
+  background-color: #ffffff;
 }
 
 .summary #address {
@@ -2218,6 +2218,10 @@ body {
 
 .vehicleImages-card {
   width: 25%;
+  
+}
+.vehicleImages-card img{
+  border: 1px solid #a4a4a4;
 }
 
 @media (max-width: 800px) {

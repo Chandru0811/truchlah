@@ -54,7 +54,7 @@ function HouseCategoryManagementEdit() {
       try {
         const response = await bookingApi.put(
           `updateHouseShifting/${id}`,
-          values
+          formdata
         );
         console.log(response);
         if (response.status === 200) {

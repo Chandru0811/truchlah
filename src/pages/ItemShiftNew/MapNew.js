@@ -22,7 +22,7 @@ const libraries = ["places"];
 
 const validationSchema = Yup.object().shape({
   type: Yup.string().required("!Type is required"),
-  estKm: Yup.number().required("!Estimated KM is required"),
+  // estKm: Yup.number().required("!Estimated KM is required"),
   locationDetail: Yup.array()
     .of(
       Yup.object().shape({
@@ -99,6 +99,7 @@ const MapNew = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        await calculateDistance()
         const reformattedLocationDetail = [
           values.locationDetail[0],
           ...values.locationDetail.slice(2).map((item) => ({
@@ -191,87 +192,92 @@ const MapNew = forwardRef(
         }
       }
     };
-
     const calculateDistance = () => {
-      if (pickupPlace && dropoffPlace) {
-        const service = new window.google.maps.DistanceMatrixService();
-
-        // Validate and extract stop locations
-        const stopLocations = formik?.values?.locationDetail
-          .slice(2)
-          .filter((stop) => stop.location && stop.coordinates)
-          .map((stop) => {
-            if (
-              stop.coordinates &&
-              stop.coordinates.lat &&
-              stop.coordinates.lng
-            ) {
-              return new window.google.maps.LatLng(
-                stop.coordinates.lat,
+      return new Promise((resolve, reject) => {
+        if ((pickupPlace && dropoffPlace)||(formik.values.locationDetail[0].location &&formik.values.locationDetail[1].location)) {
+          const service = new window.google.maps.DistanceMatrixService();
+    
+          const stopLocations = formik?.values?.locationDetail
+            .slice(2)
+            .filter((stop) => stop.location && stop.coordinates)
+            .map((stop) => {
+              if (
+                stop.coordinates &&
+                stop.coordinates.lat &&
                 stop.coordinates.lng
-              );
-            } else {
-              console.warn("Invalid stop location or coordinates:", stop);
-              return null;
-            }
-          })
-          .filter((location) => location !== null);
-
-        const locations = [
-          pickupPlace.geometry.location,
-          ...stopLocations,
-          dropoffPlace.geometry.location,
-        ];
-
-        const totalDistance = { value: 0, text: "" };
-
-        const promises = locations.slice(0, -1).map((origin, index) => {
-          const destination = locations[index + 1];
-          return new Promise((resolve, reject) => {
-            service.getDistanceMatrix(
-              {
-                origins: [origin],
-                destinations: [destination],
-                travelMode: window.google.maps.TravelMode.DRIVING,
-              },
-              (response, status) => {
-                if (status === "OK") {
-                  const distanceResult = response.rows[0].elements[0];
-                  if (distanceResult.status === "OK") {
-                    totalDistance.value += distanceResult.distance.value;
-                    resolve();
-                  } else {
-                    reject(
-                      `Error fetching distance for segment: ${distanceResult.status}`
-                    );
-                  }
-                } else {
-                  reject(`Distance Matrix request failed: ${status}`);
-                }
+              ) {
+                return new window.google.maps.LatLng(
+                  stop.coordinates.lat,
+                  stop.coordinates.lng
+                );
+              } else {
+                console.warn("Invalid stop location or coordinates:", stop);
+                return null;
               }
-            );
+            })
+            .filter((location) => location !== null);
+    
+          const locations = [
+            formik.values.locationDetail[0].location,
+            ...stopLocations,
+            formik.values.locationDetail[1].location,
+          ];
+    
+          const totalDistance = { value: 0, text: "" };
+    
+          const promises = locations.slice(0, -1).map((origin, index) => {
+            const destination = locations[index + 1];
+            return new Promise((resolveSegment, rejectSegment) => {
+              service.getDistanceMatrix(
+                {
+                  origins: [origin],
+                  destinations: [destination],
+                  travelMode: window.google.maps.TravelMode.DRIVING,
+                },
+                (response, status) => {
+                  if (status === "OK") {
+                    const distanceResult = response.rows[0].elements[0];
+                    if (distanceResult.status === "OK") {
+                      totalDistance.value += distanceResult.distance.value;
+                      resolveSegment();
+                    } else {
+                      rejectSegment(
+                        `Error fetching distance for segment: ${distanceResult.status}`
+                      );
+                    }
+                  } else {
+                    rejectSegment(`Distance Matrix request failed: ${status}`);
+                  }
+                }
+              );
+            });
           });
-        });
-
-        Promise.all(promises)
-          .then(() => {
-            totalDistance.text = `${(totalDistance.value / 1000).toFixed(
-              2
-            )} km`;
-            setDistance(totalDistance.text);
-            formik.setFieldValue("estKm", (totalDistance.value / 1000).toFixed(1))
-          })
-          .catch((error) => {
-            console.error("Error calculating distance:", error);
-          });
-      }
+    
+          Promise.all(promises)
+            .then(() => {
+              totalDistance.text = `${(totalDistance.value / 1000).toFixed(2)} km`;
+              setDistance(totalDistance.text);
+              console.log("est",(totalDistance.value / 1000).toFixed(1));
+              formik.setFieldValue("estKm", (totalDistance.value / 1000).toFixed(1));
+              resolve(); // Resolve the main promise after all calculations
+            })
+            .catch((error) => {
+              console.error("Error calculating distance:", error);
+              reject(error); // Reject the main promise on error
+            });
+        } else {
+          reject("Pickup or dropoff place is missing.");
+        }
+      });
     };
+    
 
-    useEffect(() => {
-      if (pickupPlace && dropoffPlace) {
-        calculateDistance();
-      }
-    }, [pickupPlace, dropoffPlace, formik.values.locationDetail]);
+    // useEffect(() => {
+    //   console.log("autocompletePickup",autocompletePickup)
+    //   if (pickupPlace && dropoffPlace) {
+    //     calculateDistance();
+    //   }
+    // }, [pickupPlace, dropoffPlace, formik.values.locationDetail]);
 
     useEffect(() => {
       if (formData.type) {

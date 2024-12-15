@@ -115,6 +115,24 @@ function HouseCategoryManagementView() {
                       </div>
                     </div>
                   </div>
+                  <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6">
+                      <b>House Category Image</b>
+                    </div>
+                    <div className="col-6 text-muted">
+                      {data.houseImage ? (
+                        <img
+                          src={data.houseImage}
+                          alt="Driver"
+                          style={{ width: "100px" }}
+                        />
+                      ) : (
+                        "N/A"
+                      )}
+                    </div>
+                  </div>
+                </div>
                 </div>
               </div>
             </div>

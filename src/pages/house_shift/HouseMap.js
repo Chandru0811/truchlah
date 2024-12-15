@@ -98,6 +98,7 @@ const HouseMap = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        // await calculateDistance()
         console.log("values", values);
         // values.type = values.type==="ITEM"?"ITEM":"HOUSE"
         try {
@@ -161,44 +162,49 @@ const HouseMap = forwardRef(
         }
       }
     };
-
     const calculateDistance = () => {
-      if (pickupPlace && dropoffPlace) {
-        const service = new window.google.maps.DistanceMatrixService();
-
-        service.getDistanceMatrix(
-          {
-            origins: [pickupPlace.geometry.location],
-            destinations: [dropoffPlace.geometry.location],
-            travelMode: window.google.maps.TravelMode.DRIVING,
-          },
-          (response, status) => {
-            if (status === "OK") {
-              const distanceResult = response.rows[0].elements[0];
-              if (distanceResult.status === "OK") {
-                setDistance(distanceResult.distance.text);
-                const numericDistance = parseFloat(
-                  distanceResult.distance.text
-                );
-                if (!isNaN(numericDistance)) {
-                  formik.setFieldValue("estKm", numericDistance);
+      return new Promise((resolve, reject) => {
+        if (pickupPlace && dropoffPlace) {
+          const service = new window.google.maps.DistanceMatrixService();
+          console.log("adres",pickupPlace.geometry.location)
+          const locations = [
+            pickupPlace.geometry.location,
+            dropoffPlace.geometry.location,
+          ];
+    
+          const totalDistance = { value: 0, text: "" };
+          service.getDistanceMatrix(
+            {
+              origins: [locations[0]], 
+              destinations: [locations[1]], 
+              travelMode: window.google.maps.TravelMode.DRIVING,
+            },
+            (response, status) => {
+              if (status === "OK") {
+                const distanceResult = response.rows[0].elements[0];
+                if (distanceResult.status === "OK") {
+                  totalDistance.value = distanceResult.distance.value;
+                  totalDistance.text = `${(totalDistance.value / 1000).toFixed(2)} km`;
+                  setDistance(totalDistance.text);
+                  formik.setFieldValue("estKm", (totalDistance.value / 1000).toFixed(1));
+                  resolve(); 
                 } else {
-                  console.error("Error parsing distance value");
+                  console.error(`Error fetching distance: ${distanceResult.status}`);
+                  reject(`Error fetching distance: ${distanceResult.status}`);
                 }
               } else {
-                console.error(
-                  "Error fetching distance:",
-                  distanceResult.status
-                );
+                console.error(`Distance Matrix request failed: ${status}`);
+                reject(`Distance Matrix request failed: ${status}`);
               }
-            } else {
-              console.error("Distance Matrix request failed:", status);
             }
-          }
-        );
-      }
+          );
+        } else {
+          reject("Pickup or dropoff place is missing.");
+          setLoadIndicators(false);
+        }
+      });
     };
-
+    
     useEffect(() => {
       if (pickupPlace && dropoffPlace) {
         calculateDistance();
