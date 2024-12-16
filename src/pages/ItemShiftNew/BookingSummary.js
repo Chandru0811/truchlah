@@ -22,12 +22,15 @@ const validationSchema = Yup.object().shape({
 const BookingSummary = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const shiftType = sessionStorage.getItem("shiftType");
+    const [data, setData] = useState({});
     const [expandedAccordion, setExpandedAccordion] = useState(null);
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const handleAccordionToggle = (accordionKey) => {
-      setExpandedAccordion((prev) => (prev === accordionKey ? null : accordionKey));
+      setExpandedAccordion((prev) =>
+        prev === accordionKey ? null : accordionKey
+      );
     };
-    
+
     const formik = useFormik({
       initialValues: {
         paymentType: formData?.form4?.paymentType,
@@ -99,17 +102,31 @@ const BookingSummary = forwardRef(
         formik.setFieldValue("paymentType", formData.form4.paymentType);
         formik.setFieldValue("isAgreed", formData.form4.isAgreed);
       }
-      console.log("form4",formData)
+      console.log("form4", formData);
     }, []);
 
     const bookingTripLocations = formData?.form1?.locationDetail || [];
     const firstLocation = bookingTripLocations[0] || {};
-    const lastLocation =
-      bookingTripLocations[1] || {};
+    const lastLocation = bookingTripLocations[1] || {};
 
     useImperativeHandle(ref, () => ({
       summary: formik.handleSubmit,
     }));
+
+    const fetchData = async () => {
+      try {
+        const response = await bookingApi.get(
+          `booking/getBookingById/${formData.bookingId}`
+        );
+        setData(response.data.responseBody);
+      } catch (error) {
+        toast.error("Error Fetching Data: " + error.message);
+      }
+    };
+
+    useEffect(() => {
+      fetchData();
+    }, []);
 
     return (
       <div className="container my-4">
@@ -459,13 +476,25 @@ const BookingSummary = forwardRef(
                       </button>
                     </div>
                     <div className="d-flex justify-content-between mb-1">
-                      <p>Subtotal</p> <p>$66.09</p>
+                      <p>Subtotal</p>{" "}
+                      <p>
+                        ${" "}
+                        {data.transactionDetails
+                          ? `${data.transactionDetails.txnAmount.toFixed(2)}`
+                          : "0.00"}
+                      </p>
                     </div>
                     <div className="d-flex justify-content-between mb-1 text-danger">
                       <p>Discount</p> <p>$0.00</p>
                     </div>
                     <div className="d-flex justify-content-between fw-bold mb-3">
-                      <p>Total Price</p> <p>$66.09</p>
+                      <p>Total Price</p>{" "}
+                      <p>
+                        ${" "}
+                        {data.transactionDetails
+                          ? `${data.transactionDetails.txnAmount.toFixed(2)}`
+                          : "0.00"}
+                      </p>
                     </div>
                     <p className="mt-3">
                       Please select your preferred payment method
