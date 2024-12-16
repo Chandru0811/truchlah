@@ -69,7 +69,7 @@ const MapNew = forwardRef(
     const [dropoffPlace, setDropoffPlace] = useState(null);
     const [stopPlaces, setStopPlaces] = useState(null);
     const [distance, setDistance] = useState(null);
-
+    console.log("Distance is ", distance);
     const userId = sessionStorage.getItem("userId");
     const shiftingType = sessionStorage.getItem("shiftType");
     const formik = useFormik({
@@ -99,22 +99,26 @@ const MapNew = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        await calculateDistance()
-        const reformattedLocationDetail = [
-          values.locationDetail[0],
-          ...values.locationDetail.slice(2).map((item) => ({
-            ...item,
-          })),
-          values.locationDetail[1],
-        ];
-        const payload = {
-          ...values,
-          locationDetail: reformattedLocationDetail,
-        }
         try {
+          const totalEstKm = await calculateDistance();
+
+          const reformattedLocationDetail = [
+            values.locationDetail[0],
+            ...values.locationDetail.slice(2).map((item) => ({
+              ...item,
+            })),
+            values.locationDetail[1],
+          ];
+          const payload = {
+            ...values,
+            estKm: totalEstKm,
+            locationDetail: reformattedLocationDetail,
+          };
+          console.log("Formik values is ", values);
+          console.log("Payload values is ", payload);
           let response;
           if (formData.bookingId) {
-            payload.bookingId=  formData.bookingId
+            payload.bookingId = formData.bookingId;
             response = await bookingApi.post(`/booking/resume`, payload);
           } else {
             response = await bookingApi.post(`booking/create`, payload);
@@ -124,7 +128,7 @@ const MapNew = forwardRef(
             const bookingId = response.data.responseBody.booking.bookingId;
             setFormData((prv) => ({
               ...prv,
-              form1: { ...values },
+              form1: { ...values, estKm: totalEstKm },
               bookingId: bookingId,
             }));
             handleNext();
@@ -132,7 +136,6 @@ const MapNew = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          console.log("error",error)
           toast.error("Please Enter the Locations");
         } finally {
           setLoadIndicators(false);
@@ -167,7 +170,6 @@ const MapNew = forwardRef(
             `locationDetail[1].location`,
             place.formatted_address
           );
-          // console.log("place.formatted_address",place.formatted_address)
         } else {
           console.error("No sufficient details available for input:", place);
         }
@@ -192,11 +194,16 @@ const MapNew = forwardRef(
         }
       }
     };
+
     const calculateDistance = () => {
       return new Promise((resolve, reject) => {
-        if ((pickupPlace && dropoffPlace)||(formik.values.locationDetail[0].location &&formik.values.locationDetail[1].location)) {
+        if (
+          (pickupPlace && dropoffPlace) ||
+          (formik.values.locationDetail[0].location &&
+            formik.values.locationDetail[1].location)
+        ) {
           const service = new window.google.maps.DistanceMatrixService();
-    
+
           const stopLocations = formik?.values?.locationDetail
             .slice(2)
             .filter((stop) => stop.location && stop.coordinates)
@@ -216,15 +223,15 @@ const MapNew = forwardRef(
               }
             })
             .filter((location) => location !== null);
-    
+
           const locations = [
             formik.values.locationDetail[0].location,
             ...stopLocations,
             formik.values.locationDetail[1].location,
           ];
-    
+
           const totalDistance = { value: 0, text: "" };
-    
+
           const promises = locations.slice(0, -1).map((origin, index) => {
             const destination = locations[index + 1];
             return new Promise((resolveSegment, rejectSegment) => {
@@ -252,25 +259,30 @@ const MapNew = forwardRef(
               );
             });
           });
-    
+
           Promise.all(promises)
             .then(() => {
-              totalDistance.text = `${(totalDistance.value / 1000).toFixed(2)} km`;
-              setDistance(totalDistance.text);
-              console.log("est",(totalDistance.value / 1000).toFixed(1));
-              formik.setFieldValue("estKm", (totalDistance.value / 1000).toFixed(1));
-              resolve(); // Resolve the main promise after all calculations
+              totalDistance.text = `${(totalDistance.value / 1000).toFixed(
+                2
+              )} km`;
+              const totalNumericKm = (totalDistance.value / 1000).toFixed(1);
+
+              // Directly set state and formik value
+              setDistance(totalNumericKm); // Ensure distance state is set
+              formik.setFieldValue("estKm", totalNumericKm); // Ensure Formik is updated
+
+              console.log("est", totalNumericKm);
+               resolve(totalNumericKm);
             })
             .catch((error) => {
               console.error("Error calculating distance:", error);
-              reject(error); // Reject the main promise on error
+              reject(error); // Reject if there's an error in calculation
             });
         } else {
           reject("Pickup or dropoff place is missing.");
         }
       });
     };
-    
 
     // useEffect(() => {
     //   console.log("autocompletePickup",autocompletePickup)

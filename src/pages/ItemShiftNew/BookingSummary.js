@@ -119,9 +119,13 @@ const BookingSummary = forwardRef(
               <div className="card">
                 <div className="">
                   <div className="d-flex justify-content-between align-items-center border-bottom ms-3 me-3 p-2">
-                    <h5>{formData.form1.type ==="ITEM" ?"Item Shifting":"House Shifting"}</h5>
-                    <span>
-                      {new Date(`${formData?.form2?.date}T${formData?.form2?.time}.000Z`).toLocaleString(
+                    <h5>
+                      {formData.form1.type === "ITEM"
+                        ? "Item Shifting"
+                        : "House Shifting"}
+                    </h5>
+
+                    {/* <span>  {new Date(`${formData?.form2?.date}T${formData?.form2?.time}.000Z`).toLocaleString(
                         "en-US",
                         {
                           year: "numeric",
@@ -132,22 +136,26 @@ const BookingSummary = forwardRef(
                           hour12: true,
                         }
                       )}
-                    </span>
+                    </span> */}
                   </div>
 
                   <ul className="list-group-flush mt-3 ps-4 pe-3">
                     <li className="list-group-item mb-2 ">
                       <div className="d-flex align-items-center ">
-                        <span className=""
-                          style={{ color: "#F32323" }}>&#9679;</span>
+                        <span className="" style={{ color: "#F32323" }}>
+                          &#9679;
+                        </span>
                         <strong className="ms-1">Pickup Location</strong>
                       </div>
                       <div className="accordion bg-light" id="accordionExample">
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingOne">
                             <button
-                              className={`accordion-button ${expandedAccordion === "Pickup" ? "" : "collapsed"
-                                }`}
+                              className={`accordion-button ${
+                                expandedAccordion === "Pickup"
+                                  ? ""
+                                  : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseOne"
@@ -160,8 +168,9 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseOne"
-                            className={`accordion-collapse collapse ${expandedAccordion === "Pickup" ? "show" : ""
-                              }`}
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Pickup" ? "show" : ""
+                            }`}
                             aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample"
                           >
@@ -208,8 +217,11 @@ const BookingSummary = forwardRef(
                                 id={`heading${index}`}
                               >
                                 <button
-                                  className={`accordion-button ${expandedAccordion === `stop${index}` ? "" : "collapsed"
-                                    }`}
+                                  className={`accordion-button ${
+                                    expandedAccordion === `stop${index}`
+                                      ? ""
+                                      : "collapsed"
+                                  }`}
                                   type="button"
                                   data-bs-toggle="collapse"
                                   data-bs-target={`#collapse${index}`}
@@ -226,10 +238,11 @@ const BookingSummary = forwardRef(
                               </h2>
                               <div
                                 id={`collapse${index}`}
-                                className={`accordion-collapse collapse ${expandedAccordion === `stop${index}`
-                                  ? "show"
-                                  : ""
-                                  }`}
+                                className={`accordion-collapse collapse ${
+                                  expandedAccordion === `stop${index}`
+                                    ? "show"
+                                    : ""
+                                }`}
                                 aria-labelledby={`heading${index}`}
                                 data-bs-parent={`#accordionExample${index}`}
                               >
@@ -246,8 +259,7 @@ const BookingSummary = forwardRef(
                                     </div>
                                     <div className="col-6">
                                       <p>
-                                        {stop.contactName} | +
-                                        {stop.countryCode}{" "}
+                                        {stop.contactName} | +{stop.countryCode}{" "}
                                         {stop.mobile}
                                       </p>
                                     </div>
@@ -260,8 +272,9 @@ const BookingSummary = forwardRef(
                       ))}
                     <li className="list-group-item mb-2">
                       <div className="d-flex align-items-center ">
-                        <span className=""
-                          style={{ color: "#64E329" }}>&#9679;</span>
+                        <span className="" style={{ color: "#64E329" }}>
+                          &#9679;
+                        </span>
                         <strong className="ms-1">Dropoff Location</strong>
                       </div>
                       <div
@@ -271,8 +284,9 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingTwo">
                             <button
-                              className={`accordion-button ${expandedAccordion === "Drop" ? "" : "collapsed"
-                                }`}
+                              className={`accordion-button ${
+                                expandedAccordion === "Drop" ? "" : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseTwo"
@@ -285,8 +299,9 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseTwo"
-                            className={`accordion-collapse collapse ${expandedAccordion === "Drop" ? "show" : ""
-                              }`}
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Drop" ? "show" : ""
+                            }`}
                             aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample1"
                           >
@@ -314,8 +329,8 @@ const BookingSummary = forwardRef(
                         </div>
                       </div>
                       <p className="text-center mt-2">
-                        <strong>Total Distance:</strong> {formData?.form1?.estKm}{" "}
-                        KM
+                        <strong>Total Distance:</strong>{" "}
+                        {formData?.form1?.estKm} KM
                       </p>
                     </li>
                   </ul>
@@ -329,9 +344,14 @@ const BookingSummary = forwardRef(
                     alt={formData?.form2?.vehicle?.vehicleName}
                     className="img-fluid w-25"
                   />
-                  <h4>{formData?.form2?.vehicle?.vehicleName?.split("_").join(" ")}</h4>
+                  <h4>
+                    {formData?.form2?.vehicle?.vehicleName
+                      ?.split("_")
+                      .join(" ")}
+                  </h4>
                   <p>
-                    <FaWeightHanging /> {formData?.form2?.vehicle?.vehicleCapacity} Kg
+                    <FaWeightHanging />{" "}
+                    {formData?.form2?.vehicle?.vehicleCapacity} Kg
                   </p>
                 </div>
                 <div className="row ps-4">
@@ -363,9 +383,7 @@ const BookingSummary = forwardRef(
                     <p>Trolley Required</p>
                   </div>
                   <div className="col-6">
-                    <p>
-                      : {formData?.form3?.trollyRequired ? "Yes" : "No"}
-                    </p>
+                    <p>: {formData?.form3?.trollyRequired ? "Yes" : "No"}</p>
                   </div>
                   <div className="col-6">
                     <p>Round Trip</p>
@@ -391,9 +409,7 @@ const BookingSummary = forwardRef(
 
                         <div className="col-6">
                           <p>
-                            : {formData?.extraService[2] === "Y"
-                              ? "Yes"
-                              : "No"}
+                            : {formData?.extraService[2] === "Y" ? "Yes" : "No"}
                           </p>
                         </div>
                         <div className="col-6">
@@ -401,9 +417,7 @@ const BookingSummary = forwardRef(
                         </div>
 
                         <div className="col-6">
-                          <p>
-                            : {formData?.extraService[3] || 0}
-                          </p>
+                          <p>: {formData?.extraService[3] || 0}</p>
                         </div>
                         <div className="col-6">
                           <p>Wrapping</p>
@@ -462,8 +476,9 @@ const BookingSummary = forwardRef(
                   <div className="row">
                     <div className="col-md-6 col-12 mb-3">
                       <div
-                        className={`payment-option text-center p-4 ${formik.values.paymentType === "CASH" ? "active" : ""
-                          }`}
+                        className={`payment-option text-center p-4 ${
+                          formik.values.paymentType === "CASH" ? "active" : ""
+                        }`}
                         onClick={() =>
                           formik.setFieldValue("paymentType", "CASH")
                         }
@@ -486,8 +501,9 @@ const BookingSummary = forwardRef(
                     </div>
                     <div className="col-md-6 col-12">
                       <div
-                        className={`payment-option text-center p-4 ${formik.values.paymentType === "ONLINE" ? "active" : ""
-                          }`}
+                        className={`payment-option text-center p-4 ${
+                          formik.values.paymentType === "ONLINE" ? "active" : ""
+                        }`}
                         onClick={() =>
                           formik.setFieldValue("paymentType", "ONLINE")
                         }
