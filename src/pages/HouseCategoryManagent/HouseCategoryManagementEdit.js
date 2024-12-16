@@ -13,30 +13,16 @@ function HouseCategoryManagementEdit() {
 
   const validationSchema = Yup.object({
     houseCategoryName: Yup.string().required("*Name is required"),
-    status: Yup.string().required("*Status is required"),
+    houseStatus: Yup.string().required("*Status is required"),
     price: Yup.number()
       .typeError("*must be a digit")
       .required("*Price is required"),
-    // houseImage: Yup.mixed().required("House Category Image is required"),
-    // .test(
-    //   "fileSize",
-    //   "File size must not exceed 2MB",
-    //   (value) => !value || (value && value.size <= 2 * 1024 * 1024)
-    // )
-    // .test(
-    //   "fileType",
-    //   "Only image files are allowed",
-    //   (value) =>
-    //     !value ||
-    //     (value &&
-    //       ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
-    // ),
   });
 
   const formik = useFormik({
     initialValues: {
       houseCategoryName: "",
-      status: "",
+      houseStatus: "",
       price: "",
       houseImage: null,
     },
@@ -47,10 +33,9 @@ function HouseCategoryManagementEdit() {
       const formdata = new FormData();
       formdata.append("houseCategoryName", values.houseCategoryName);
       formdata.append("price", values.price);
-      formdata.append("status", values.status);
+      formdata.append("status", values.houseStatus);
       if (values.houseImage) formdata.append("houseImage", values.houseImage);
-      const {houseStatus}=values
-      values.status=houseStatus
+
       try {
         const response = await bookingApi.put(
           `updateHouseShifting/${id}`,
@@ -80,10 +65,19 @@ function HouseCategoryManagementEdit() {
           `getAllHouseShifting/${id}?id=${id}`
         );
         if (response.status === 200) {
-          formik.setValues((prevValues) => ({
-            ...prevValues,
-            ...response.data,
-          }));
+          formik.setFieldValue(
+            "houseCategoryName",
+            response.data.houseCategoryName
+          );
+          formik.setFieldValue(
+            "houseStatus",
+            response.data.houseStatus
+          );
+          formik.setFieldValue(
+            "price",
+            response.data.price
+          );
+
         }
       } catch (error) {
         toast.error("Error Fetch Data ", error);
@@ -114,7 +108,7 @@ function HouseCategoryManagementEdit() {
                 <div className="col">
                   <div className="d-flex align-items-center gap-4">
                     <h1 className="h4 ls-tight headingColor">
-                      Add House Category Management
+                      Edit House Category Management
                     </h1>
                   </div>
                 </div>
@@ -224,7 +218,7 @@ function HouseCategoryManagementEdit() {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                 <label className="form-label">
-                  House Category Image <span className="text-danger">*</span>
+                  House Category Image
                 </label>
                 <div className="mb-3">
                   <input
