@@ -15,10 +15,14 @@ function UserManagementEdit() {
   const validationSchema = Yup.object({
     firstName: Yup.string().required("*First Name is required"),
     lastName: Yup.string().required("*Last Name is required"),
-    password: Yup.string().required("*Password is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .matches(/^\S*$/, "Password must not contain spaces")
+      .required("Please enter your password"),
+
     cPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "*Passwords must match")
-      .required("*Confirm Password is required"),
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
     email: Yup.string()
       .email("*Invalid email address")
       .required("*Email is required"),
@@ -37,15 +41,15 @@ function UserManagementEdit() {
           return value && value.length === 8
             ? true
             : this.createError({
-              message: "Phone number must be 8 digits only",
-            });
+                message: "Phone number must be 8 digits only",
+              });
         }
         if (countryCode === "91") {
           return value && value.length === 10
             ? true
             : this.createError({
-              message: "Phone number must be 10 digits only",
-            });
+                message: "Phone number must be 10 digits only",
+              });
         }
         return false;
       }),
@@ -130,7 +134,7 @@ function UserManagementEdit() {
             </div>
           </div>
         </div>
-        <div className="card shadow  border-0 my-2" >
+        <div className="card shadow  border-0 my-2">
           <div className="container mb-5">
             <div className="row py-4">
               <div className="col-md-6 col-12 mb-2">
@@ -141,10 +145,11 @@ function UserManagementEdit() {
                   <input
                     type="text"
                     name="firstName"
-                    className={`form-control ${formik.touched.firstName && formik.errors.firstName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.firstName && formik.errors.firstName
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("firstName")}
                   />
                   {formik.touched.firstName && formik.errors.firstName && (
@@ -162,10 +167,11 @@ function UserManagementEdit() {
                   <input
                     type="text"
                     name="lastName"
-                    className={`form-control ${formik.touched.lastName && formik.errors.lastName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.lastName && formik.errors.lastName
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("lastName")}
                   />
                   {formik.touched.lastName && formik.errors.lastName && (
@@ -183,10 +189,11 @@ function UserManagementEdit() {
                   <input
                     type="email"
                     name="email"
-                    className={`form-control ${formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.email && formik.errors.email
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("email")}
                   />
                   {formik.touched.email && formik.errors.email && (
@@ -204,10 +211,11 @@ function UserManagementEdit() {
                   <div className="input-group">
                     <select
                       name="countryCode"
-                      className={`form-select form-select-sm ${formik.touched.countryCode && formik.errors.countryCode
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-select form-select-sm ${
+                        formik.touched.countryCode && formik.errors.countryCode
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{ maxWidth: "80px" }} // Adjust width as needed
                       {...formik.getFieldProps("countryCode")}
                     >
@@ -219,10 +227,11 @@ function UserManagementEdit() {
                       type="text"
                       name="mobileNo"
                       placeholder="Mobile Number"
-                      className={`form-control ${formik.touched.mobileNo && formik.errors.mobileNo
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control ${
+                        formik.touched.mobileNo && formik.errors.mobileNo
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       {...formik.getFieldProps("mobileNo")}
                     />
                     {formik.touched.mobileNo && formik.errors.mobileNo && (
@@ -241,13 +250,17 @@ function UserManagementEdit() {
                   <input
                     type={passwordVisible ? "text" : "password"}
                     name="password"
-                    className={`form-control ${formik.touched.password && formik.errors.password
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.password && formik.errors.password
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("password")}
                   />
-                  <span className="input-group-text" onClick={togglePasswordVisibility}>
+                  <span
+                    className="input-group-text"
+                    onClick={togglePasswordVisibility}
+                  >
                     {passwordVisible ? <FaEyeSlash /> : <FaEye />}
                   </span>
                   {formik.touched.password && formik.errors.password && (
@@ -265,13 +278,17 @@ function UserManagementEdit() {
                   <input
                     type={cPasswordVisible ? "text" : "password"}
                     name="cPassword"
-                    className={`form-control ${formik.touched.cPassword && formik.errors.cPassword
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.cPassword && formik.errors.cPassword
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("cPassword")}
                   />
-                  <span className="input-group-text" onClick={toggleCPasswordVisibility}>
+                  <span
+                    className="input-group-text"
+                    onClick={toggleCPasswordVisibility}
+                  >
                     {cPasswordVisible ? <FaEyeSlash /> : <FaEye />}
                   </span>
                   {formik.touched.cPassword && formik.errors.cPassword && (
@@ -289,10 +306,11 @@ function UserManagementEdit() {
                   <input
                     type="text"
                     name="refCode"
-                    className={`form-control ${formik.touched.refCode && formik.errors.refCode
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.refCode && formik.errors.refCode
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("refCode")}
                   />
                   {formik.touched.refCode && formik.errors.refCode && (
@@ -304,19 +322,18 @@ function UserManagementEdit() {
               </div>
             </div>
             <div className="col-md-6 col-12 mb-2">
-              <label className="form-label">
-                Terms Condition
-              </label>
+              <label className="form-label">Terms Condition</label>
               <div className="form-check mb-3 d-flex ">
                 <input
                   type="checkbox"
                   id="termsCheckbox"
                   name="termsCondition"
-                  className={`form-check-input ${formik.touched.termsCondition &&
+                  className={`form-check-input ${
+                    formik.touched.termsCondition &&
                     formik.errors.termsCondition
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("termsCondition")}
                   checked
                 />
@@ -337,25 +354,21 @@ function UserManagementEdit() {
                 <input
                   type="checkbox"
                   id="privacyCheckbox"
-                  className={`form-check-input  ${formik.touched.agree && formik.errors.agree
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-check-input  ${
+                    formik.touched.agree && formik.errors.agree
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("agree")}
                   checked
                 />
                 &nbsp; &nbsp;
-                <label
-                  className="form-check-label "
-                  htmlFor="privacyCheckbox"
-                >
-                  I agree the use of my personal data for direct marketing
-                  in accordance with the stated Privacy Policy.{" "}
+                <label className="form-check-label " htmlFor="privacyCheckbox">
+                  I agree the use of my personal data for direct marketing in
+                  accordance with the stated Privacy Policy.{" "}
                 </label>
                 {formik.touched.agree && formik.errors.agree && (
-                  <div className="invalid-feedback">
-                    {formik.errors.agree}
-                  </div>
+                  <div className="invalid-feedback">{formik.errors.agree}</div>
                 )}
               </div>
             </div>

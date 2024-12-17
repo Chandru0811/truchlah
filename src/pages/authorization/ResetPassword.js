@@ -15,7 +15,7 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { mailId,token } = location.state || {};
+  const { mailId, token } = location.state || {};
   const PasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -30,11 +30,13 @@ const ResetPassword = () => {
       )
       .required("*Email is required"),
     password: Yup.string()
-      .required("*Password is required")
-      .min(6, "*Password must be at least 6 characters"),
+      .min(8, "Password must be at least 8 characters long")
+      .matches(/^\S*$/, "Password must not contain spaces")
+      .required("Please enter your password"),
+
     confirmPassword: Yup.string()
-      .required("*Confirm Password is required")
-      .oneOf([Yup.ref("password")], "*Passwords must match"),
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
   const formik = useFormik({
@@ -46,14 +48,17 @@ const ResetPassword = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
-      setLoading(true)
+      setLoading(true);
       const formData = new FormData();
-      formData.append("token",token)
-      formData.append("email",mailId)
-      formData.append("password",values.password)
-      formData.append("confirmPassword",values.confirmPassword)
+      formData.append("token", token);
+      formData.append("email", mailId);
+      formData.append("password", values.password);
+      formData.append("confirmPassword", values.confirmPassword);
       try {
-        const response = await userApi.post(`user/forgotPasswordForEmailOTP`, formData);
+        const response = await userApi.post(
+          `user/forgotPasswordForEmailOTP`,
+          formData
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/login");
@@ -62,8 +67,8 @@ const ResetPassword = () => {
         }
       } catch (error) {
         toast.error("Error Submitting Data, ", error);
-      }finally{
-        setLoading(false)
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -82,7 +87,7 @@ const ResetPassword = () => {
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
           style={{
             backgroundColor: "#e6ffe4",
-            height: "100%", 
+            height: "100%",
           }}
         >
           <div className="d-flex flex-column align-items-center h-100">
@@ -235,9 +240,12 @@ const ResetPassword = () => {
                       <button
                         type="submit"
                         className="btn btn-primary py-2 border-0"
-                        style={{ width: "100%",backgroundColor:"#333" }}
+                        style={{ width: "100%", backgroundColor: "#333" }}
                         id="registerButton"
-                      >{loading && <span className="spinner-border spinner-border-sm me-2"></span>}
+                      >
+                        {loading && (
+                          <span className="spinner-border spinner-border-sm me-2"></span>
+                        )}
                         Reset Password
                       </button>
                     </div>

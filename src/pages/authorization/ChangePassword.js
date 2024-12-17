@@ -39,20 +39,17 @@ function ChangePassword() {
     //   )
     //   .required("*Email is required"),
     password: Yup.string()
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
-      )
-      .required("*Please Enter your new password"),
+      .min(8, "Password must be at least 8 characters long")
+      .matches(/^\S*$/, "Password must not contain spaces")
+      .required("Please enter your password"),
+
     confirmPassword: Yup.string()
-      .required("*Confirm Password is required")
+      .required("Confirm password is required")
       .oneOf([Yup.ref("password")], "Passwords must match"),
     oldPassword: Yup.string()
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
-      )
-      .required("*Please Enter your current password"),
+      .min(8, "Password must be at least 8 characters long")
+      .matches(/^\S*$/, "Password must not contain spaces")
+      .required("Please enter your Current password"),
   });
   console.log("userName", userName)
 

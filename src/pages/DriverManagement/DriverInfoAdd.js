@@ -50,15 +50,13 @@ const DriverInfoAdd = forwardRef(
         .email("*Invalid email format")
         .required("*Email is required"),
       password: Yup.string()
-        .required("Password is required")
         .min(8, "Password must be at least 8 characters long")
-        .matches(
-          /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
-          "Password must contain at least one uppercase, one number, and one special character"
-        ),
+        .matches(/^\S*$/, "Password must not contain spaces")
+        .required("Please enter your password"),
+
       cPassword: Yup.string()
-        .required("Confirm Password is required")
-        .oneOf([Yup.ref("password"), null], "Passwords must match"),
+        .required("Confirm password is required")
+        .oneOf([Yup.ref("password")], "Passwords must match"),
       // refCode: Yup.string().required("*Referral code is required"),
       // termsCondition: Yup.string().required(
       //   "*Terms and conditions must be accepted"

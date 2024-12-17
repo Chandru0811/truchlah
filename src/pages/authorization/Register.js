@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import Logins from "../../asset/Login.png";
-import { AiOutlineGoogle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
@@ -10,9 +9,7 @@ import { userApi } from "../../config/URL";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { LoginSocialFacebook } from "reactjs-social-login";
 // import { GoogleLoginButton } from "react-social-login-buttons";
-import { FaSquareFacebook } from "react-icons/fa6";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("*First Name is required"),
   lastName: Yup.string().required("*Last Name is required"),
@@ -53,21 +50,18 @@ const validationSchema = Yup.object().shape({
       return true; // Default validation for other country codes
     }),
   password: Yup.string()
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
-    )
-    .required("Please Enter your password"),
+    .min(8, "Password must be at least 8 characters long")
+    .matches(/^\S*$/, "Password must not contain spaces")
+    .required("Please enter your password"),
 
   confirmPassword: Yup.string()
-    .required("Confirm Password is required")
+    .required("Confirm password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
 
   // refCode: Yup.string().required("*Referral Code is required"),
-  termsCondition: Yup.string().required(
-    "Please accept the terms and conditions"
-  ),
-  agree: Yup.string().required("Please accept the condition"),
+  termsCondition: Yup.boolean()
+    .oneOf([true], "Please accept the terms and conditions")
+    .required("Please accept the terms and conditions"),
 });
 
 function Register({ handleLogin }) {
@@ -93,7 +87,7 @@ function Register({ handleLogin }) {
       confirmPassword: "",
       countryCode: "",
       refCode: "",
-      termsCondition: "",
+      termsCondition: false,
       agree: "",
     },
     validationSchema: validationSchema,
@@ -106,12 +100,12 @@ function Register({ handleLogin }) {
         password: values.password,
         countryCode: values.countryCode,
         refCode: values.refCode,
-        termsCondition: values.termsCondition ? "y" : "N",
+        termsCondition: values.termsCondition ? "Y" : "N",
       };
       // console.log("values", values);
       try {
         const response = await userApi.post(`user/signup`, payload);
-        if (response.status === 200 ) {
+        if (response.status === 200) {
           toast.success(response.data.message);
           const mobileNo = `${values.countryCode}${values.mobileNo}`;
           try {
@@ -126,9 +120,9 @@ function Register({ handleLogin }) {
           }
         }
       } catch (error) {
-        if (error.response.status === 409) {        
+        if (error.response.status === 409) {
           toast.warning(error.response.data.message);
-          console.log("object",error)
+          console.log("object", error);
           const mobileNo = `${values.countryCode}${values.mobileNo}`;
           try {
             const otpResponse = await userApi.post(
@@ -140,7 +134,7 @@ function Register({ handleLogin }) {
           } catch (error) {
             toast.error(error);
           }
-        }else if (error.response.status === 400) {
+        } else if (error.response.status === 400) {
           toast.warning(error.response.data.errorList[0].errorMessage);
           console.log("object", error.response.data.errorList[0].errorMessage);
         } else {
@@ -154,19 +148,18 @@ function Register({ handleLogin }) {
     formik.setFieldValue("countryCode", 65);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const handleGoogleLoginSuccess = async (credentialResponse) => {
-
     const decodedToken = jwtDecode(credentialResponse.credential);
-      console.log("Credential Response:",decodedToken);
+    console.log("Credential Response:", decodedToken);
 
-      const payload = {
-        firstName: decodedToken.given_name,
-        lastName: decodedToken.family_name,
-        email: decodedToken.email,
-        profileImage: decodedToken.picture
-      };
-      console.log("Payload :",payload);
+    const payload = {
+      firstName: decodedToken.given_name,
+      lastName: decodedToken.family_name,
+      email: decodedToken.email,
+      profileImage: decodedToken.picture,
+    };
+    console.log("Payload :", payload);
 
     try {
       const response = await userApi.post("/user/signWithGoogle", payload, {
@@ -277,8 +270,7 @@ function Register({ handleLogin }) {
                   onError={() => {
                     console.log("Login Failed");
                   }}
-                >
-                </GoogleLogin>
+                ></GoogleLogin>
 
                 {/* <LoginSocialFacebook
                   appId="386027390559424"
@@ -590,7 +582,7 @@ function Register({ handleLogin }) {
                       </div>
                     </div>
                   </div>
-                  <div className="form-check mb-3 d-flex ">
+                  <div className="form-check mb-3">
                     <input
                       type="checkbox"
                       id="termsCheckbox"
@@ -602,10 +594,11 @@ function Register({ handleLogin }) {
                           : ""
                       }`}
                       {...formik.getFieldProps("termsCondition")}
+                      checked={formik.values.termsCondition}
                     />
-                    &nbsp; &nbsp;{" "}
-                    <label className="form-check-label" htmlFor="termsCheckbox">
-                      I agree all statements in Terms and Conditions.
+                    &nbsp;
+                    <label className="" htmlFor="termsCheckbox">
+                      I agree to Terms and Conditions
                     </label>
                     {formik.touched.termsCondition &&
                       formik.errors.termsCondition && (
@@ -630,8 +623,9 @@ function Register({ handleLogin }) {
                       className="form-check-label "
                       htmlFor="privacyCheckbox"
                     >
-                      I agree the use of my personal data for direct marketing
-                      in accordance with the stated Privacy Policy.{" "}
+                      I consent to the use of data entered for promotional
+                      purpose by Trucklah.com in accordance with the Privacy
+                      Policy
                     </label>
                     {formik.touched.agree && formik.errors.agree && (
                       <div className="invalid-feedback">
@@ -641,7 +635,7 @@ function Register({ handleLogin }) {
                   </div>
                   <button
                     type="submit"
-                    style={{ width: "100%",backgroundColor:"#333" }}
+                    style={{ width: "100%", backgroundColor: "#333" }}
                     className="btn btn-primary border-0"
                   >
                     Submit

@@ -18,15 +18,13 @@ function SupportTeamManagementAdd() {
     firstName: Yup.string().required("*First Name is required"),
     lastName: Yup.string().required("*Last Name is required"),
     password: Yup.string()
-  .required('*Password is required')
-  .min(8, '*Password must be at least 8 characters long')
-  .matches(
-    /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
-    'Password must contain at least one uppercase, one number, and one special character'
-  ),
+      .min(8, "Password must be at least 8 characters long")
+      .matches(/^\S*$/, "Password must not contain spaces")
+      .required("Please enter your password"),
+
     cPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "*Passwords must match")
-      .required("*Confirm Password is required"),
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
     email: Yup.string()
       .email("*Invalid email address")
       .required("*Email is required"),
@@ -53,7 +51,9 @@ function SupportTeamManagementAdd() {
       }),
     // refCode: Yup.string().required("*Reference Code is required"),
     // loginType: Yup.string().required("*Login Type is required"),
-    agreeConditionOne: Yup.boolean().oneOf([true], "*This condition must be accepted").required(),
+    agreeConditionOne: Yup.boolean()
+      .oneOf([true], "*This condition must be accepted")
+      .required(),
     // agreeConditionTwo: Yup.boolean().oneOf([true], "*This condition must be accepted").required(),
   });
 
@@ -73,7 +73,7 @@ function SupportTeamManagementAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      values.agreeConditionTwo = true
+      values.agreeConditionTwo = true;
       setLoading(true);
       try {
         const response = await userApi.post(`staff/signup`, values);
@@ -85,12 +85,11 @@ function SupportTeamManagementAdd() {
           toast.error(response?.data?.message);
         }
       } catch (error) {
-        if (error.response.status ===409){
+        if (error.response.status === 409) {
           toast.error(error?.response?.data?.message);
-        }else{
+        } else {
           toast.error(error?.response?.data?.errorList[0]?.errorMessage);
         }
-        
       } finally {
         setLoading(false);
       }
@@ -437,12 +436,12 @@ function SupportTeamManagementAdd() {
                     I agree all statements in Terms and Conditions.
                   </label>
                 </div>
-                  {formik.touched.agreeConditionOne &&
-                    formik.errors.agreeConditionOne && (
-                      <small className="text-danger ">
-                        {formik.errors.agreeConditionOne}
-                      </small>
-                    )}
+                {formik.touched.agreeConditionOne &&
+                  formik.errors.agreeConditionOne && (
+                    <small className="text-danger ">
+                      {formik.errors.agreeConditionOne}
+                    </small>
+                  )}
               </div>
             </div>
           </div>
