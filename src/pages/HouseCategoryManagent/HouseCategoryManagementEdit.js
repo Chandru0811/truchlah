@@ -10,7 +10,7 @@ function HouseCategoryManagementEdit() {
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
-
+  const [data, setData] = useState();
   const validationSchema = Yup.object({
     houseCategoryName: Yup.string().required("*Name is required"),
     houseStatus: Yup.string().required("*Status is required"),
@@ -50,7 +50,7 @@ function HouseCategoryManagementEdit() {
           toast.error(response?.data?.message);
         }
       } catch (error) {
-        toast.error( error?.response?.data?.message);
+        toast.error(error?.response?.data?.message);
       } finally {
         setLoading(false);
       }
@@ -64,20 +64,15 @@ function HouseCategoryManagementEdit() {
         const response = await bookingApi.get(
           `getAllHouseShifting/${id}?id=${id}`
         );
+        setData(response.data);
+
         if (response.status === 200) {
           formik.setFieldValue(
             "houseCategoryName",
             response.data.houseCategoryName
           );
-          formik.setFieldValue(
-            "houseStatus",
-            response.data.houseStatus
-          );
-          formik.setFieldValue(
-            "price",
-            response.data.price
-          );
-
+          formik.setFieldValue("houseStatus", response.data.houseStatus);
+          formik.setFieldValue("price", response.data.price);
         }
       } catch (error) {
         toast.error("Error Fetch Data ", error);
@@ -190,15 +185,14 @@ function HouseCategoryManagementEdit() {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label mb-0">
-                   Status<span className="text-danger">*</span>
+                    Status<span className="text-danger">*</span>
                   </label>
-                  <div className="mb-3">
+                  <div className="mt-2 mb-3">
                     <select
                       type="text"
                       name="houseStatus"
                       className={`form-select ${
-                        formik.touched.houseStatus &&
-                        formik.errors.houseStatus
+                        formik.touched.houseStatus && formik.errors.houseStatus
                           ? "is-invalid"
                           : ""
                       }`}
@@ -217,30 +211,42 @@ function HouseCategoryManagementEdit() {
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                  House Category Image
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="file"
-                    name="houseImage"
-                    className={`form-control ${
-                      formik.touched.houseImage && formik.errors.houseImage
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    onChange={(event) => {
-                      const file = event.currentTarget.files[0];
-                      formik.setFieldValue("houseImage", file);
-                    }}
-                  />
-                  {formik.touched.houseImage && formik.errors.houseImage && (
-                    <div className="invalid-feedback">
-                      {formik.errors.houseImage}
+                  <label className="form-label">House Category Image</label>
+                  <div className="mb-3">
+                    <input
+                      type="file"
+                      name="houseImage"
+                      className={`form-control ${
+                        formik.touched.houseImage && formik.errors.houseImage
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      onChange={(event) => {
+                        const file = event.currentTarget.files[0];
+                        formik.setFieldValue("houseImage", file);
+                      }}
+                    />
+                    {formik.touched.houseImage && formik.errors.houseImage && (
+                      <div className="invalid-feedback">
+                        {formik.errors.houseImage}
+                      </div>
+                    )}
+                  </div>
+                  {(data?.houseImage || formik.values.houseImage) && (
+                    <div>
+                      <img
+                        src={
+                          formik.values.houseImage
+                            ? URL.createObjectURL(formik.values.houseImage)
+                            : data.houseImage
+                        }
+                        alt="Vehicle"
+                        className="img-fluid"
+                        style={{ maxWidth: "20%" }}
+                      />
                     </div>
                   )}
                 </div>
-              </div>
               </div>
             </div>
           </div>

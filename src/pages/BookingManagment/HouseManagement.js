@@ -147,7 +147,7 @@ const HouseManagement = () => {
                     <td className="text-center">
                       {data.bookingTime ? (
                         <>
-                          {data.bookingTime.substring(0, 10)} <b>&</b>{" "}
+                          {data.bookingTime.substring(0, 10)} <b>at</b>{" "}
                           {new Date(data.bookingTime).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",

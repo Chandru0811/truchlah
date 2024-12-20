@@ -21,8 +21,8 @@ import { bookingApi } from "../../config/URL";
 import { FaEdit, FaMinus, FaPlus } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
-  pickupLocation: Yup.string().required("!Pickup Location is required"),
-  dropLocation: Yup.string().required("!Drop Location is required"),
+  pickupLocation: Yup.string().required("Pickup Location is required"),
+  dropLocation: Yup.string().required("Drop Location is required"),
 });
 
 const Map = forwardRef(

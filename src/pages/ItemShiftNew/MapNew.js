@@ -21,39 +21,39 @@ import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
 const libraries = ["places"];
 
 const validationSchema = Yup.object().shape({
-  type: Yup.string().required("!Type is required"),
-  // estKm: Yup.number().required("!Estimated KM is required"),
+  type: Yup.string().required("Type is required"),
+  // estKm: Yup.number().required("Estimated KM is required"),
   locationDetail: Yup.array()
     .of(
       Yup.object().shape({
-        location: Yup.string().required("!Location is required"),
-        address: Yup.string().required("!Address is required"),
-        contactName: Yup.string().required("!Contact name is required"),
-        countryCode: Yup.string().required("!Country code is required"),
+        location: Yup.string().required("Location is required"),
+        address: Yup.string().required("Address is required"),
+        contactName: Yup.string().required("Contact name is required"),
+        countryCode: Yup.string().required("Country code is required"),
         mobile: Yup.string()
-          .required("!Mobile number is required")
-          .matches(/^\d+$/, "!Mobile number must contain only digits")
+          .required("Mobile number is required")
+          .matches(/^\d+$/, "Mobile number must contain only digits")
           .test("phone-length", function (value) {
             const { countryCode } = this.parent;
             if (countryCode === "65") {
               return value && value.length === 8
                 ? true
                 : this.createError({
-                    message: "!Phone number must be 8 digits only",
+                    message: "Phone number must be 8 digits only",
                   });
             }
             if (countryCode === "91") {
               return value && value.length === 10
                 ? true
                 : this.createError({
-                    message: "!Phone number must be 10 digits only",
+                    message: "Phone number must be 10 digits only",
                   });
             }
             return true;
           }),
       })
     )
-    .min(2, "!At least two locations are required"),
+    .min(2, "At least two locations are required"),
 });
 
 const MapNew = forwardRef(
@@ -69,7 +69,6 @@ const MapNew = forwardRef(
     const [dropoffPlace, setDropoffPlace] = useState(null);
     const [stopPlaces, setStopPlaces] = useState(null);
     const [distance, setDistance] = useState(null);
-    console.log("Distance is ", distance);
     const userId = sessionStorage.getItem("userId");
     const shiftingType = sessionStorage.getItem("shiftType");
     const formik = useFormik({
@@ -102,6 +101,11 @@ const MapNew = forwardRef(
         try {
           const totalEstKm = await calculateDistance();
 
+          if (totalEstKm < 1 || !totalEstKm) {
+            toast.error("Invalid locations or distance too short for a ride.");
+            setLoadIndicators(false);
+            return;
+          }
           const reformattedLocationDetail = [
             values.locationDetail[0],
             ...values.locationDetail.slice(2).map((item) => ({
@@ -114,8 +118,6 @@ const MapNew = forwardRef(
             estKm: totalEstKm,
             locationDetail: reformattedLocationDetail,
           };
-          console.log("Formik values is ", values);
-          console.log("Payload values is ", payload);
           let response;
           if (formData.bookingId) {
             payload.bookingId = formData.bookingId;
@@ -272,7 +274,7 @@ const MapNew = forwardRef(
               formik.setFieldValue("estKm", totalNumericKm); // Ensure Formik is updated
 
               console.log("est", totalNumericKm);
-               resolve(totalNumericKm);
+              resolve(totalNumericKm);
             })
             .catch((error) => {
               console.error("Error calculating distance:", error);
@@ -650,7 +652,7 @@ const MapNew = forwardRef(
                   >
                     <FaPlusCircle />
                     <span className="fw-bold text-black mx-2">
-                      Add Intermediate Stop
+                      Add an Intermediate Stop
                     </span>
                   </button>
                 </div>

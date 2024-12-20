@@ -214,7 +214,7 @@
 /* Cancel  */
 
 .Cancel {
-  background-color: #faf5f6;
+  background-color: #ffffff;
 }
 
 .Cancel .checkmark {
@@ -1259,10 +1259,6 @@ body {
 
 /* Shift  */
 
-#heros {
-  background-color: #fcf3f6;
-}
-
 #heros .btn-outline-secondary {
   font-family: "Nunito";
   font-style: normal;
@@ -2271,7 +2267,7 @@ body {
 } */
 
 .hover-card:hover {
-  border: 2px solid #adff3ba8 !important;
+  border: 2px solid #e0e0e0a8 !important;
   transform: scale(1.05) !important;
 }
 

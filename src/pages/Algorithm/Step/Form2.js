@@ -38,10 +38,10 @@ const path = [
 ];
 
 const validationSchema = Yup.object().shape({
-  location: Yup.string().required("!Location is required"),
-  address: Yup.string().required("!Address is required"),
-  contactName: Yup.string().required("!Contact Name is required"),
-  contactNumber: Yup.string().required("!Contact Number is required"),
+  location: Yup.string().required("Location is required"),
+  address: Yup.string().required("Address is required"),
+  contactName: Yup.string().required("Contact Name is required"),
+  contactNumber: Yup.string().required("Contact Number is required"),
 });
 
 function HouseShift({ handleNext }) {

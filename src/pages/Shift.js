@@ -9,7 +9,6 @@ function Shift() {
   // const [type , setType] = useState({});
 
   const logType = (selectedType) => {
-    // console.log("Selected Shift Type:", selectedType);
     sessionStorage.removeItem("shiftType");
     sessionStorage.setItem("shiftType", selectedType);
   };
@@ -19,8 +18,11 @@ function Shift() {
       <div className="row">
         <div className="col-md-6 col-12">
           <div className="row justify-content-center mb-3">
-            <div className="col-6 mt-4 mb-4 ps-1" style={{minWidth:"70%"}}>
-          <h1 className="LoginSubHead text-start text-muted" style={{fontSize:"23px"}} >
+            <div className="col-6 mt-4 mb-4 ps-1" style={{ minWidth: "70%" }}>
+              <h1
+                className="LoginSubHead text-start text-muted"
+                style={{ fontSize: "23px" }}
+              >
                 Trucklah Booking - Move Easy with Trucklah
               </h1>
             </div>
@@ -42,7 +44,7 @@ function Shift() {
                       PACKERS & MOVERS
                     </span>
                     {/* <h1 className="fw-small text-muted m-0" style={{fontSize:"16px"}}>Trucklah Booking - Move Easy with Trucklah</h1> */}
-                    <h3 style={{ color: "#525252" }}>ITEM SHIFTING</h3>
+                    <h3 style={{ color: "#525252" }}>Item Shifting</h3>
                     <span className="fw-medium text-muted">
                       Secure Item Shifting
                     </span>
@@ -71,14 +73,14 @@ function Shift() {
                     <span className="fw-medium text-muted">
                       PACKERS & MOVERS
                     </span>
-                    <h3 style={{ color: "#525252" }}>HOUSE SHIFTING</h3>
+                    <h3 style={{ color: "#525252" }}>House Moving</h3>
                     {/* <div>
                     <button type="button" class="px-2 btn-custom">
                       Coming Soon
                     </button>
                   </div> */}
                     <span className="fw-medium text-muted">
-                      House Move Made Easy
+                      House Moving Made Easy
                     </span>
                   </div>
                   <div className="col-md-6 col-12 pe-0">

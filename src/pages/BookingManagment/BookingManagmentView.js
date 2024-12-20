@@ -350,7 +350,7 @@ function BookingManagmentView() {
                                 {data.user?.createdDate ? (
                                   <>
                                     {data.user?.createdDate.substring(0, 10)}{" "}
-                                    <b>&</b>{" "}
+                                    <b>at</b>{" "}
                                     {new Date(
                                       data.user?.createdDate
                                     ).toLocaleTimeString([], {

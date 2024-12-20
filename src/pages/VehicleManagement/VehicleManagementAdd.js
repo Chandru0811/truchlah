@@ -372,7 +372,7 @@ function VehicleManagementAdd() {
                         image={imageSrc}
                         crop={crop}
                         zoom={zoom}
-                        aspect={4 / 2}
+                        aspect={500 / 500}
                         onCropChange={setCrop}
                         onZoomChange={setZoom}
                         onCropComplete={onCropComplete}

@@ -16,10 +16,10 @@ import * as Yup from "yup";
 const initialCenter = { lat: 13.05, lng: 80.2824 };
 
 const validationSchema = Yup.object().shape({
-  location: Yup.string().required("!Location is required"),
-  address: Yup.string().required("!Address is required"),
-  contactName: Yup.string().required("!Contact Name is required"),
-  contactNumber: Yup.string().required("!Contact Number is required"),
+  location: Yup.string().required("Location is required"),
+  address: Yup.string().required("Address is required"),
+  contactName: Yup.string().required("Contact Name is required"),
+  contactNumber: Yup.string().required("Contact Number is required"),
 });
 
 function HouseShift() {

@@ -480,6 +480,20 @@ function VehicleManagementEdit() {
                           </div>
                         )}
                     </div>
+                    {(data.vehicleCapacitySize || formik.values.imageUrl) && (
+                      <div>
+                        <img
+                          src={
+                            formik.values.imageUrl
+                              ? URL.createObjectURL(formik.values.imageUrl)
+                              : data.vehicleCapacitySize
+                          }
+                          alt="Vehicle"
+                          className="img-fluid"
+                          style={{ maxWidth: "20%" }}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="col-md-6 col-12 mb-2">
                     <label className="form-label mb-0">

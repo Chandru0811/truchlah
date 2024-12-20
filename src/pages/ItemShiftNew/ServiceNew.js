@@ -9,11 +9,19 @@ import toast from "react-hot-toast";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { bookingApi } from "../../config/URL";
 import { Data } from "@react-google-maps/api";
+import * as Yup from "yup";
 
 const ServiceNew = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
+
+    const validationSchema = Yup.object().shape({
+      messageToDriver: Yup.string().max(
+        255,
+        "Message to Driver cannot exceed 255 characters"
+      ),
+    });
 
     const formik = useFormik({
       initialValues: {
@@ -24,6 +32,7 @@ const ServiceNew = forwardRef(
         roundTripRequired: false,
         messageToDriver: "",
       },
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         const payload = {
           userId: userId,
@@ -152,7 +161,7 @@ const ServiceNew = forwardRef(
                       checked={formik.values.extraManpower}
                       onChange={(e) => {
                         const isChecked = e.target.checked;
-                        formik.setFieldValue("extraManpower",isChecked);
+                        formik.setFieldValue("extraManpower", isChecked);
                         if (isChecked) {
                           formik.setFieldValue("quantity", 1);
                         }
@@ -216,7 +225,7 @@ const ServiceNew = forwardRef(
                           max={99}
                           readOnly
                           style={{
-                            width: "25px", 
+                            width: "35px",
                             padding: "1px",
                             textAlign: "center",
                             border: "none",
@@ -318,10 +327,13 @@ const ServiceNew = forwardRef(
               <textarea
                 id="exampleTextarea"
                 rows="4"
-                placeholder="write your message here........"
+                placeholder="Please write your message here........"
                 className="form-control form-control-lg "
                 {...formik.getFieldProps("messageToDriver")}
               ></textarea>
+              {formik.touched.messageToDriver && formik.errors.messageToDriver && (
+                <div className="mb-2 text-danger">{formik.errors.messageToDriver}</div>
+              )}
             </div>
           </div>
         </form>

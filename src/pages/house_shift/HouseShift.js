@@ -24,9 +24,9 @@ import fetchAllCategorysWithIds from "../../pages/Lists/CategoryList";
 // const center = { lat: 13.05, lng: 80.2824 };
 
 const validationSchema = Yup.object().shape({
-  pickupLocation: Yup.string().required("!Pickup Location is required"),
-  dropLocation: Yup.string().required("!Drop Location is required"),
-  type:Yup.string().required("!Catagories is required"),
+  pickupLocation: Yup.string().required("Pickup Location is required"),
+  dropLocation: Yup.string().required("Drop Location is required"),
+  type:Yup.string().required("Catagories is required"),
 });
 
 const HouseShift =forwardRef(

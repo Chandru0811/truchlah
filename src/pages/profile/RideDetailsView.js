@@ -287,15 +287,15 @@ function RideDetailsView() {
               <div className="col-lg-3 col-md-3 col-12"></div>
               <div className="col-lg-6 col-md-6 col-12">
                 <p className="mt-5 ps-2">
-                  <b>Shifting Informations :</b>
+                  <b>Moving Information :</b>
                 </p>
                 <div className="card ms-2">
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
                         <div>
-                          <p style={{ color: "#00316B" }}>
-                            <span style={{ color: "#00316B" }}>
+                          <p style={{ color: "#1e1e1e" }}>
+                            <span style={{ color: "#1e1e1e" }}>
                               <b>Pickup Address : </b>
                             </span>
                             <span style={{ color: "#494949" }}>
@@ -303,7 +303,7 @@ function RideDetailsView() {
                             </span>
                           </p>
                           <p>
-                            <span style={{ color: "#00316B" }}>
+                            <span style={{ color: "#1e1e1e" }}>
                               <b>Name : </b>
                             </span>
                             <span style={{ color: "#494949" }}>
@@ -312,7 +312,7 @@ function RideDetailsView() {
                             </span>
                           </p>
                           <p>
-                            <span style={{ color: "#00316B" }}>
+                            <span style={{ color: "#1e1e1e" }}>
                               <b>Address : </b>
                             </span>
                             <span style={{ color: "#494949" }}>
@@ -320,7 +320,7 @@ function RideDetailsView() {
                             </span>
                           </p>
                           <p>
-                            <span style={{ color: "#00316B" }}>
+                            <span style={{ color: "#1e1e1e" }}>
                               <b>Contact:</b>{" "}
                             </span>
                             <span style={{ color: "#494949" }}>
@@ -330,8 +330,8 @@ function RideDetailsView() {
                         </div>
                       </div>
                       <div className="col-md-6 col-12 ps-1" id="drop">
-                        <p style={{ color: "#00316B" }}>
-                          <span className="col-6" style={{ color: "#00316B" }}>
+                        <p style={{ color: "#1e1e1e" }}>
+                          <span className="col-6" style={{ color: "#1e1e1e" }}>
                             <b>Drop Address : </b>
                           </span>
                           <span className="col-6" style={{ color: "#494949" }}>
@@ -339,7 +339,7 @@ function RideDetailsView() {
                           </span>
                         </p>
                         <p>
-                          <span style={{ color: "#00316B" }}>
+                          <span style={{ color: "#1e1e1e" }}>
                             <b>Name :</b>{" "}
                           </span>
                           <span style={{ color: "#494949" }}>
@@ -347,7 +347,7 @@ function RideDetailsView() {
                           </span>
                         </p>
                         <p>
-                          <span style={{ color: "#00316B" }}>
+                          <span style={{ color: "#1e1e1e" }}>
                             <b>Address :</b>{" "}
                           </span>
                           <span style={{ color: "#494949" }}>
@@ -355,7 +355,7 @@ function RideDetailsView() {
                           </span>
                         </p>
                         <p>
-                          <span style={{ color: "#00316B" }}>
+                          <span style={{ color: "#1e1e1e" }}>
                             <b>Contact: </b>
                           </span>
                           <span style={{ color: "#494949" }}>
@@ -376,7 +376,7 @@ function RideDetailsView() {
                                 <div>
                                   <p
                                     className="line"
-                                    style={{ color: "#00316B" }}
+                                    style={{ color: "#1e1e1e" }}
                                   >
                                     <b>Stop {index + 1}</b>
                                   </p>
@@ -384,7 +384,7 @@ function RideDetailsView() {
                               </div>
                               <div className="col-md-6 col-12 ps-1" id="drop">
                                 <p className="line">
-                                  <span style={{ color: "#00316B" }}>
+                                  <span style={{ color: "#1e1e1e" }}>
                                     <b>Location: </b>
                                   </span>
                                   <span style={{ color: "#494949" }}>
@@ -392,7 +392,7 @@ function RideDetailsView() {
                                   </span>
                                 </p>
                                 <p>
-                                  <span style={{ color: "#00316B" }}>
+                                  <span style={{ color: "#1e1e1e" }}>
                                     <b>Name :</b>{" "}
                                   </span>
                                   <span style={{ color: "#494949" }}>
@@ -400,7 +400,7 @@ function RideDetailsView() {
                                   </span>
                                 </p>
                                 <p>
-                                  <span style={{ color: "#00316B" }}>
+                                  <span style={{ color: "#1e1e1e" }}>
                                     <b>Address :</b>{" "}
                                   </span>
                                   <span style={{ color: "#494949" }}>
@@ -408,7 +408,7 @@ function RideDetailsView() {
                                   </span>
                                 </p>
                                 <p>
-                                  <span style={{ color: "#00316B" }}>
+                                  <span style={{ color: "#1e1e1e" }}>
                                     <b>Contact: </b>
                                   </span>
                                   <span style={{ color: "#494949" }}>
@@ -422,7 +422,7 @@ function RideDetailsView() {
                       <div className="row">
                         <div className="col-md-6 col-12 ps-1">
                           <div>
-                            <p className="lineh" style={{ color: "#00316B" }}>
+                            <p className="lineh" style={{ color: "#1e1e1e" }}>
                               <b>Category</b>
                             </p>
                           </div>
@@ -437,7 +437,7 @@ function RideDetailsView() {
                       <div className="row">
                         <div className="col-md-6 col-12 ps-1">
                           <div>
-                            <p className="lineh" style={{ color: "#00316B" }}>
+                            <p className="lineh" style={{ color: "#1e1e1e" }}>
                               <b>Date & Time</b>
                             </p>
                           </div>
@@ -447,7 +447,7 @@ function RideDetailsView() {
                             {data?.booking?.scheduledDate ? (
                               <>
                                 {data.booking.scheduledDate.substring(0, 10)}{" "}
-                                <b>&</b>{" "}
+                                <b>at</b>{" "}
                                 {new Date(
                                   data.booking.scheduledDate
                                 ).toLocaleTimeString([], {
@@ -465,7 +465,7 @@ function RideDetailsView() {
                     </>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Status</b>
                         </p>
                       </div>
@@ -479,7 +479,7 @@ function RideDetailsView() {
                                 ? "red" // Red color for CANCELLED
                                 : data.bookingStatus?.status === "COMPLETED"
                                 ? "green" // Green color for COMPLETED
-                                : "orange", // Orange color for other statuses
+                                : "blue", // Orange color for other statuses
                           }}
                         >
                           {data.bookingStatus?.status || "--"}
@@ -488,7 +488,7 @@ function RideDetailsView() {
                     </div>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Manpower</b>
                         </p>
                       </div>
@@ -501,7 +501,7 @@ function RideDetailsView() {
                     </div>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Extra ManPower</b>
                         </p>
                       </div>
@@ -514,7 +514,7 @@ function RideDetailsView() {
                     </div>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Extra ManPower Quantity</b>
                         </p>
                       </div>
@@ -527,7 +527,7 @@ function RideDetailsView() {
                     </div>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Trolly Required</b>
                         </p>
                       </div>
@@ -540,7 +540,7 @@ function RideDetailsView() {
                     </div>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Round Trip</b>
                         </p>
                       </div>
@@ -555,7 +555,7 @@ function RideDetailsView() {
                       <>
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
-                            <p className="line" style={{ color: "#00316B" }}>
+                            <p className="line" style={{ color: "#1e1e1e" }}>
                               <b>Boxes</b>
                             </p>
                           </div>
@@ -568,7 +568,7 @@ function RideDetailsView() {
                         </div>
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
-                            <p className="line" style={{ color: "#00316B" }}>
+                            <p className="line" style={{ color: "#1e1e1e" }}>
                               <b>Long Push</b>
                             </p>
                           </div>
@@ -583,7 +583,7 @@ function RideDetailsView() {
                         </div>
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
-                            <p className="line" style={{ color: "#00316B" }}>
+                            <p className="line" style={{ color: "#1e1e1e" }}>
                               <b>Assemble/Disassembly</b>
                             </p>
                           </div>
@@ -596,7 +596,7 @@ function RideDetailsView() {
                         </div>
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
-                            <p className="line" style={{ color: "#00316B" }}>
+                            <p className="line" style={{ color: "#1e1e1e" }}>
                               <b>Wrapping</b>
                             </p>
                           </div>
@@ -612,7 +612,7 @@ function RideDetailsView() {
 
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Estimate km</b>
                         </p>
                       </div>
@@ -625,7 +625,7 @@ function RideDetailsView() {
                     </div>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Total amount</b>
                         </p>
                       </div>
@@ -641,7 +641,7 @@ function RideDetailsView() {
                     </div>
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
-                        <p className="lineh" style={{ color: "#00316B" }}>
+                        <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Message To Driver</b>
                         </p>
                       </div>
@@ -675,7 +675,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="" style={{ color: "#00316B" }}>
+                              <p className="" style={{ color: "#1e1e1e" }}>
                                 <b>Transaction Amount</b>
                               </p>
                             </div>
@@ -689,7 +689,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="lineh" style={{ color: "#00316B" }}>
+                              <p className="lineh" style={{ color: "#1e1e1e" }}>
                                 <b>Payment Mode</b>
                               </p>
                             </div>
@@ -703,7 +703,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="lineh" style={{ color: "#00316B" }}>
+                              <p className="lineh" style={{ color: "#1e1e1e" }}>
                                 <b>Payment Status</b>
                               </p>
                             </div>
@@ -717,7 +717,7 @@ function RideDetailsView() {
                         {/* <div className="row">
                         <div className="col-md-6 col-12 ps-1">
                           <div>
-                            <p className="line" style={{ color: "#00316B" }}>
+                            <p className="line" style={{ color: "#1e1e1e" }}>
                               <b>Resp Code</b>
                             </p>
                           </div>
@@ -749,7 +749,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="lineh" style={{ color: "#00316B" }}>
+                              <p className="lineh" style={{ color: "#1e1e1e" }}>
                                 <b>Cancelled By</b>
                               </p>
                             </div>
@@ -763,7 +763,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="lineh" style={{ color: "#00316B" }}>
+                              <p className="lineh" style={{ color: "#1e1e1e" }}>
                                 <b>User Name</b>
                               </p>
                             </div>
@@ -777,7 +777,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="lineh" style={{ color: "#00316B" }}>
+                              <p className="lineh" style={{ color: "#1e1e1e" }}>
                                 <b>Cancelled Date & Time</b>
                               </p>
                             </div>
@@ -806,7 +806,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="line" style={{ color: "#00316B" }}>
+                              <p className="line" style={{ color: "#1e1e1e" }}>
                                 <b>Comments</b>
                               </p>
                             </div>
@@ -846,7 +846,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div>
-                              <p className="mt-2" style={{ color: "#00316B" }}>
+                              <p className="mt-2" style={{ color: "#1e1e1e" }}>
                                 <b>Rating By User</b>
                               </p>
                             </div>
@@ -878,7 +878,7 @@ function RideDetailsView() {
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
                             <div style={{ borderTop: "1px solid #e4e2e2" }}>
-                              <p className="mt-2" style={{ color: "#00316B" }}>
+                              <p className="mt-2" style={{ color: "#1e1e1e" }}>
                                 <b>Comments</b>
                               </p>
                             </div>
@@ -915,7 +915,7 @@ function RideDetailsView() {
                               <div>
                                 <p
                                   className="mt-2"
-                                  style={{ color: "#00316B" }}
+                                  style={{ color: "#1e1e1e" }}
                                 >
                                   <b>Rating By Driver</b>
                                 </p>
@@ -952,7 +952,7 @@ function RideDetailsView() {
                               <div style={{ borderTop: "1px solid #e4e2e2" }}>
                                 <p
                                   className="mt-2"
-                                  style={{ color: "#00316B" }}
+                                  style={{ color: "#1e1e1e" }}
                                 >
                                   <b>Comments</b>
                                 </p>
@@ -1008,17 +1008,16 @@ function RideDetailsView() {
                 >
                   <div className="container">
                     <div
-                      className="d-flex justify-content-between p-3 mt-5"
-                      style={{ backgroundColor: "#D6E6FA" }}
+                      className="d-flex justify-content-between align-items-center p-3 mt-5"
                     >
                       <span className="d-flex align-item-center">
-                        <p>
+                        <p className="mb-0">
                           <b>Want to cancel your order?</b>
                         </p>
                       </span>
                       <span>
                         <button
-                          className="btn btn-danger px-5"
+                          className="btn btn-outline-danger px-5"
                           onClick={handleShow}
                           style={{ borderRadius: "20px" }}
                         >
@@ -1043,7 +1042,7 @@ function RideDetailsView() {
                 <Modal.Body>
                   <div className="container">
                     <p>
-                      Before canceling, let us know why you’re leaving. Your
+                      Before canceling, Please let us know why you’re leaving. Your
                       response may be shared with the provider.
                     </p>
 
@@ -1092,7 +1091,7 @@ function RideDetailsView() {
                               ? "is-invalid"
                               : ""
                           }`}
-                          placeholder="Write your reason here..."
+                          placeholder="Please write your reason here..."
                           {...formik.getFieldProps("comments")}
                         ></textarea>
                         {formik.touched.comments && formik.errors.comments && (

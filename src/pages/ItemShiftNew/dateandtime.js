@@ -19,8 +19,8 @@ import { Modal } from "react-bootstrap";
 import VehicleOffer from "../../pages/common_pages/VehicleOffer.js";
 
 const validationSchema = Yup.object().shape({
-  date: Yup.string().required("!Date is required"),
-  time: Yup.string().required("!Time is required"),
+  date: Yup.string().required("Date is required"),
+  time: Yup.string().required("Time is required"),
 });
 
 const DateAndTime = forwardRef(
@@ -49,17 +49,26 @@ const DateAndTime = forwardRef(
       "18:00:00",
       "18:30:00",
       "19:00:00",
+      "19:30:00",
+      "20:00:00",
     ]);
     const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
     const [vehicle, setVechicle] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeIndex, setActiveIndex] = useState(
-      formData?.form2.vehicle?.vehicletypeId ? formData.form2?.vehicle?.vehicletypeId : 0
+      formData?.form2.vehicle?.vehicletypeId
+        ? formData.form2?.vehicle?.vehicletypeId
+        : 0
     );
     const [isModified, setIsModified] = useState(false);
     const [selectedImage, setSelectedImage] = useState(
-      formData?.form2?.vehicle?.vehicletypeId ? vehicle.find((data)=>data.vehicletypeId === formData?.form2.vehicle.vehicletypeId) : null
+      formData?.form2?.vehicle?.vehicletypeId
+        ? vehicle.find(
+            (data) =>
+              data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
+          )
+        : null
     );
     const [showModal, setShowModal] = useState(
       shiftType !== "ITEM" ? true : false
@@ -86,7 +95,7 @@ const DateAndTime = forwardRef(
         // setFormData((prv) => ({ ...prv, vehicle: selectedOption }));
         setFormData((prev) => ({
           ...prev,
-          form2: { ...values,vehicle: selectedOption },
+          form2: { ...values, vehicle: selectedOption },
         }));
         const deliveryDate = new Date(`${values.date}T${values.time}`);
         deliveryDate.setDate(deliveryDate.getDate() + 2);
@@ -109,7 +118,7 @@ const DateAndTime = forwardRef(
             toast.success("Vehicle selected successfully!");
             setFormData((prev) => ({
               ...prev,
-              form2: { ...values,vehicle: selectedOption },
+              form2: { ...values, vehicle: selectedOption },
             }));
             handleNext();
             // navigate(`/summary/${bookingId}`);
@@ -135,8 +144,15 @@ const DateAndTime = forwardRef(
             const response = await userApi.get("vehicle/vehicleType");
             if (response.status === 200) {
               setVechicle(response.data.responseBody);
-              console.log("object",response.data.responseBody[0]?.vehicletypeId)
-              setActiveIndex(formData?.form2.vehicle?.vehicletypeId ? formData.form2.vehicle.vehicletypeId : response.data.responseBody[0]?.vehicletypeId)
+              console.log(
+                "object",
+                response.data.responseBody[0]?.vehicletypeId
+              );
+              setActiveIndex(
+                formData?.form2.vehicle?.vehicletypeId
+                  ? formData.form2.vehicle.vehicletypeId
+                  : response.data.responseBody[0]?.vehicletypeId
+              );
             }
           } else {
             const response = await userApi.get(
@@ -144,8 +160,15 @@ const DateAndTime = forwardRef(
             );
             if (response.status === 200) {
               setVechicle(response.data.responseBody);
-              console.log("object",response.data.responseBody[0]?.vehicletypeId)
-              setActiveIndex(formData?.form2.vehicle?.vehicletypeId ? formData.form2.vehicle.vehicletypeId : response.data.responseBody[0]?.vehicletypeId)
+              console.log(
+                "object",
+                response.data.responseBody[0]?.vehicletypeId
+              );
+              setActiveIndex(
+                formData?.form2.vehicle?.vehicletypeId
+                  ? formData.form2.vehicle.vehicletypeId
+                  : response.data.responseBody[0]?.vehicletypeId
+              );
             }
           }
         } catch (e) {
@@ -153,19 +176,25 @@ const DateAndTime = forwardRef(
         }
       };
       getVechicle();
-      console.log("object",vehicle)
+      console.log("object", vehicle);
     }, []);
 
     useEffect(() => {
-      if (vehicle.length > 0 && (!selectedImage || (typeof selectedImage === 'object' && Object.keys(selectedImage).length === 0))
+      if (
+        vehicle.length > 0 &&
+        (!selectedImage ||
+          (typeof selectedImage === "object" &&
+            Object.keys(selectedImage).length === 0))
       ) {
-        const selectedVehicle =vehicle.find((data)=>data.vehicletypeId === activeIndex)
+        const selectedVehicle = vehicle.find(
+          (data) => data.vehicletypeId === activeIndex
+        );
         setSelectedImage(selectedVehicle);
-        console.log("select",selectedVehicle);
+        console.log("select", selectedVehicle);
       }
-      console.log("setSelectedImage",selectedImage);
-      console.log("active",activeIndex);
-      console.log("form",formData);
+      console.log("setSelectedImage", selectedImage);
+      console.log("active", activeIndex);
+      console.log("form", formData);
     }, [vehicle, selectedImage]);
 
     const handleCarouselClick = (image, index) => {
@@ -330,7 +359,21 @@ const DateAndTime = forwardRef(
                   <div className="mb-2 text-danger">{formik.errors.time}</div>
                 )}
               </div>
-
+              <div className="text-end">
+                {shiftType !== "ITEM" && (
+                  <p
+                    onClick={handleShow}
+                    style={{
+                      padding: "10px 20px",
+                      fontSize: "16px",
+                      color: "#333",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <u>Compare</u>
+                  </p>
+                )}
+              </div>
               <div className="d-flex justify-content-between align-items-center my-3">
                 <Button
                   variant="link"
@@ -417,23 +460,8 @@ const DateAndTime = forwardRef(
               </div>
 
               {/* Add the More Details button here */}
-              <div className="text-center mt-3">
+              <div className="text-end mt-3">
                 <div>
-                  {shiftType !== "ITEM" && (
-                    <Button
-                      onClick={handleShow}
-                      style={{
-                        backgroundColor: "rgb(172, 255, 59)",
-                        borderColor: "rgb(172, 255, 59)",
-                        padding: "10px 20px",
-                        fontSize: "16px",
-                        width: "350px",
-                        color: "#333",
-                      }}
-                    >
-                      Compare
-                    </Button>
-                  )}
                   <Modal
                     show={showModal}
                     onHide={handleClose}
@@ -468,8 +496,8 @@ const DateAndTime = forwardRef(
                   {selectedImage?.type?.split("_").join(" ")}
                 </h5>
                 <h5 className="mt-2">
-                  <GiShoppingBag style={{ padding: "1px" }} />
-                  {selectedImage?.vehicleCapacity}kg
+                  <span className="text-muted">Capacity : </span>
+                  {selectedImage?.vehicleCapacity} Kg
                 </h5>
                 <h5 className="mt-2">
                   <span className="text-muted">Base fare : </span>

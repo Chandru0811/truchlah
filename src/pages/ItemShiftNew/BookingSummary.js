@@ -15,8 +15,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  paymentType: Yup.string().required("!Payment Type is required"),
-  isAgreed: Yup.bool().oneOf([true], "!Agreement is required"),
+  paymentType: Yup.string().required("Payment Type is required"),
+  isAgreed: Yup.bool().oneOf([true], "Agreement is required"),
 });
 
 const BookingSummary = forwardRef(
@@ -159,7 +159,7 @@ const BookingSummary = forwardRef(
                   <ul className="list-group-flush mt-3 ps-4 pe-3">
                     <li className="list-group-item mb-2 ">
                       <div className="d-flex align-items-center ">
-                        <span className="" style={{ color: "#F32323" }}>
+                        <span className="" style={{ color: "#5271ff" }}>
                           &#9679;
                         </span>
                         <strong className="ms-1">Pickup Location</strong>
@@ -219,7 +219,7 @@ const BookingSummary = forwardRef(
                       bookingTripLocations.slice(2).map((stop, index) => (
                         <li className="list-group-item mb-2" key={index}>
                           <div className="d-flex align-items-center ">
-                            <span className="text-warning">&#9679;</span>
+                            <span style={{ color: "#acff3b" }}>&#9679;</span>
                             <strong className="ms-1">
                               Intermediate Location - {index + 1}
                             </strong>
@@ -289,7 +289,7 @@ const BookingSummary = forwardRef(
                       ))}
                     <li className="list-group-item mb-2">
                       <div className="d-flex align-items-center ">
-                        <span className="" style={{ color: "#64E329" }}>
+                        <span className="" style={{ color: "#00bf63" }}>
                           &#9679;
                         </span>
                         <strong className="ms-1">Dropoff Location</strong>
@@ -469,6 +469,7 @@ const BookingSummary = forwardRef(
                         placeholder="Enter a Coupon Code"
                       />
                       <button
+                        type="button"
                         className="btn w-25"
                         style={{ background: "rgb(172, 255, 59)" }}
                       >
@@ -484,7 +485,7 @@ const BookingSummary = forwardRef(
                           : "0.00"}
                       </p>
                     </div>
-                    <div className="d-flex justify-content-between mb-1 text-danger">
+                    <div className="d-flex justify-content-between mb-1 text-success">
                       <p>Discount</p> <p>$0.00</p>
                     </div>
                     <div className="d-flex justify-content-between fw-bold mb-3">

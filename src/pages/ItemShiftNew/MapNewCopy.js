@@ -20,79 +20,79 @@ import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
 const libraries = ["places"];
 
 const validationSchema = Yup.object().shape({
-  pickupLocation: Yup.string().required("!Pickup location is required"),
-  pickupAddress: Yup.string().required("!Pickup address is required"),
-  pickupContactName: Yup.string().required("!Contact name is required"),
-  pickupCountryCode: Yup.string().required("!Contact number is required"),
+  pickupLocation: Yup.string().required("Pickup location is required"),
+  pickupAddress: Yup.string().required("Pickup address is required"),
+  pickupContactName: Yup.string().required("Contact name is required"),
+  pickupCountryCode: Yup.string().required("Contact number is required"),
   pickupContactNumber: Yup.string()
-    .required("!Mobile number is required")
-    .matches(/^\d+$/, "!Mobile number must contain only digits")
+    .required("Mobile number is required")
+    .matches(/^\d+$/, "Mobile number must contain only digits")
     .test("phone-length", function (value) {
       const { pickupCountryCode } = this.parent;
       if (pickupCountryCode === "65") {
         return value && value.length === 8
           ? true
           : this.createError({
-              message: "!Phone number must be 8 digits only",
+              message: "Phone number must be 8 digits only",
             });
       }
       if (pickupCountryCode === "91") {
         return value && value.length === 10
           ? true
           : this.createError({
-              message: "!Phone number must be 10 digits only",
+              message: "Phone number must be 10 digits only",
             });
       }
       return true;
     }),
-  dropoffLocation: Yup.string().required("!Drop-off location is required"),
-  dropoffAddress: Yup.string().required("!Drop-off address is required"),
-  dropoffContactName: Yup.string().required("!Contact name is required"),
-  dropoffCountryCode: Yup.string().required("!Contact number is required"),
+  dropoffLocation: Yup.string().required("Drop-off location is required"),
+  dropoffAddress: Yup.string().required("Drop-off address is required"),
+  dropoffContactName: Yup.string().required("Contact name is required"),
+  dropoffCountryCode: Yup.string().required("Contact number is required"),
   dropoffContactNumber: Yup.string()
-    .required("!Mobile number is required")
-    .matches(/^\d+$/, "!Mobile number must contain only digits")
+    .required("Mobile number is required")
+    .matches(/^\d+$/, "Mobile number must contain only digits")
     .test("phone-length", function (value) {
       const { dropoffCountryCode } = this.parent;
       if (dropoffCountryCode === "65") {
         return value && value.length === 8
           ? true
           : this.createError({
-              message: "!Phone number must be 8 digits only",
+              message: "Phone number must be 8 digits only",
             });
       }
       if (dropoffCountryCode === "91") {
         return value && value.length === 10
           ? true
           : this.createError({
-              message: "!Phone number must be 10 digits only",
+              message: "Phone number must be 10 digits only",
             });
       }
       return true;
     }),
   stops: Yup.array().of(
     Yup.object({
-      location: Yup.string().required("!Location is required"),
-      address: Yup.string().required("!Address is required"),
-      contactName: Yup.string().required("!Contact name is required"),
-      countryCode: Yup.string().required("!Contact number is required"),
+      location: Yup.string().required("Location is required"),
+      address: Yup.string().required("Address is required"),
+      contactName: Yup.string().required("Contact name is required"),
+      countryCode: Yup.string().required("Contact number is required"),
       contactNumber: Yup.string()
-        .required("!Mobile number is required")
-        .matches(/^\d+$/, "!Mobile number must contain only digits")
+        .required("Mobile number is required")
+        .matches(/^\d+$/, "Mobile number must contain only digits")
         .test("phone-length", function (value) {
           const { countryCode } = this.parent;
           if (countryCode === "65") {
             return value && value.length === 8
               ? true
               : this.createError({
-                  message: "!Phone number must be 8 digits only",
+                  message: "Phone number must be 8 digits only",
                 });
           }
           if (countryCode === "91") {
             return value && value.length === 10
               ? true
               : this.createError({
-                  message: "!Phone number must be 10 digits only",
+                  message: "Phone number must be 10 digits only",
                 });
           }
           return true;

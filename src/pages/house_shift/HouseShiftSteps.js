@@ -325,43 +325,47 @@ const HouseShiftSteps = () => {
             />
           )} */}
 
-            <div className="container-fluid p-5 d-flex align-items-center justify-content-center gap-2 py-3">
-              {activeStep !== 0 && (
-                <button
-                  className="btn btn-secondary btn-sm border-0 fw-bold"
-                  style={{
-                    padding: "7px",
-                    color: "black",
-                    background: "#f4f4f4",
-                  }}
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                >
-                  Back
-                </button>
-              )}
-              <div style={{ flex: "1 1 auto" }}></div>
-              {activeStep !== 5 && (
-                <button
-                  type="submit"
-                  onClick={handleButtonClick}
-                  style={{
-                    padding: "7px",
-                    background: "#acff3b",
-                    minWidth: "7%",
-                  }}
-                  className="btn btn-sm fw-bold"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
+            <div className="container-fluid p-5 py-3">
+              <div className="row">
+                <div className="col-md-6 col-12 d-flex align-items-center justify-content-between pt-4">
+                  {activeStep !== 0 ? (
+                    <button
+                      className="btn btn-secondary btn-sm border-0 fw-bold"
+                      style={{
+                        padding: "7px 25px",
+                        color: "black",
+                        background: "#f4f4f4",
+                      }}
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                    >
+                      Back
+                    </button>
+                  ) : (
+                    <span></span>
                   )}
-                  {activeStep !== steps.length - 2 ? "Next" : "Proceed"}
-                </button>
-              )}
+                  {activeStep !== 5 && (
+                    <button
+                      type="submit"
+                      onClick={handleButtonClick}
+                      style={{
+                        padding: "7px 25px",
+                        background: "#acff3b",
+                      }}
+                      className="btn btn-sm fw-bold"
+                      disabled={loadIndicator}
+                    >
+                      {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
+                      {activeStep !== steps.length - 1 ? "Next" : "Proceed"}
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </React.Fragment>
         )}
