@@ -27,12 +27,13 @@ const VehicleOffer = ({
   const createSlides = () => {
     if (!vehicle.length) return; // Avoid creating slides if no data exists
     const visibleSlides = getVisibleSlides();
+    console.log("visi", visibleSlides)
     const chunked = [];
     for (let i = 0; i < vehicle.length; i += visibleSlides) {
       const chunk = vehicle.slice(i, i + visibleSlides);
 
       // Add the first data at the end if screen size is medium and the chunk is incomplete
-      if (chunk.length < visibleSlides && visibleSlides === 2) {
+      if (chunk.length < visibleSlides && (visibleSlides === 2 || 3)) {
         chunk.push(vehicle[0]); // Append the first item
       }
 

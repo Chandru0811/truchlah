@@ -18,6 +18,8 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [showButton, setShowButton] = useState(true);
+
   const currentPath = location.pathname;
   console.log("Current path:", currentPath);
 
@@ -35,6 +37,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
       handleCloseMain();
     }
     navigate("/shift");
+    setShowButton(false);
   };
 
 
@@ -135,22 +138,24 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                             <div className="d-lg-flex justify-content-end">
                               <div className="me-2">
                                 {isAuthenticate && (
-                                  <User handleLogout={handleLogout} handleCloseMain={handleCloseMain}/>
+                                  <User handleLogout={handleLogout} handleCloseMain={handleCloseMain} />
                                 )}
                               </div>
                               <div className="ride ">
                                 {isAuthenticate ? (
-                                  <Link to="/shift">
-                                    <li className="nav-item">
-                                      <button
-                                        type="button"
-                                        className="login-btn py-2 px-3"
-                                        onClick={handleBookRide}
-                                      >
-                                        Book Ride
-                                      </button>
-                                    </li>
-                                  </Link>
+                                  showButton && (
+                                    <Link to="/shift">
+                                      <li className="nav-item">
+                                        <button
+                                          type="button"
+                                          className="login-btn py-2 px-3"
+                                          onClick={handleBookRide}
+                                        >
+                                          Book Ride
+                                        </button>
+                                      </li>
+                                    </Link>
+                                  )
                                 ) : (
                                   <Link to="/login">
                                     <li className="nav-item">

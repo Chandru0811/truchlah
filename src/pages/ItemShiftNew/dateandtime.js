@@ -71,7 +71,7 @@ const DateAndTime = forwardRef(
         : null
     );
     const [showModal, setShowModal] = useState(
-      shiftType !== "ITEM" ? true : false
+      formData.form1.type !== "ITEM" ? true : false
     );
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
@@ -268,6 +268,8 @@ const DateAndTime = forwardRef(
           "18:00:00",
           "18:30:00",
           "19:00:00",
+          "19:30:00",
+          "20:00:00",
         ]);
       }
     };
@@ -360,7 +362,7 @@ const DateAndTime = forwardRef(
                 )}
               </div>
               <div className="text-end">
-                {shiftType !== "ITEM" && (
+                {formData.form1.type !== "ITEM" && (
                   <p
                     onClick={handleShow}
                     style={{

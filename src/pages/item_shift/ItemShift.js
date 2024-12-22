@@ -343,7 +343,7 @@ const ItemShift = () => {
                   ) : (
                     <span></span>
                   )}
-                  {activeStep !== 4 && (
+                  {activeStep !== 3 && (
                     <button
                       type="submit"
                       onClick={handleButtonClick}
