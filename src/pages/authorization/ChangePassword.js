@@ -46,10 +46,10 @@ function ChangePassword() {
     confirmPassword: Yup.string()
       .required("Confirm password is required")
       .oneOf([Yup.ref("password")], "Passwords must match"),
-    oldPassword: Yup.string()
-      .min(8, "Password must be at least 8 characters long")
-      .matches(/^\S*$/, "Password must not contain spaces")
-      .required("Please enter your Current password"),
+    // oldPassword: Yup.string()
+    //   .min(8, "Password must be at least 8 characters long")
+    //   .matches(/^\S*$/, "Password must not contain spaces")
+    //   .required("Please enter your Current password"),
   });
   console.log("userName", userName)
 
@@ -58,13 +58,13 @@ function ChangePassword() {
       email: userName,
       password: "",
       confirmPassword: "",
-      oldPassword: "",
+      // oldPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("values", values);
       try {
-        const response = await userApi.post(`user/changePassword`, values);
+        const response = await userApi.post(`user/newPassword`, values);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/shift");
@@ -226,7 +226,7 @@ function ChangePassword() {
                             )}
                         </FloatingLabel>
                       </div>
-                      <div className="">
+                      {/* <div className="">
                         <FloatingLabel
                           controlId="floatingOldPassword"
                           label="Old Password"
@@ -271,7 +271,7 @@ function ChangePassword() {
                               </div>
                             )}
                         </FloatingLabel>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="text-center">
                       <button
