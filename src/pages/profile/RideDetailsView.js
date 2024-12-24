@@ -219,14 +219,8 @@ function RideDetailsView() {
       style={{ background: "#ffffff" }}
     >
       {isLoading ? (
-        <div className="darksoul-layout">
-          <div className="darksoul-grid">
-            <div className="item1"></div>
-            <div className="item2"></div>
-            <div className="item3"></div>
-            <div className="item4"></div>
-          </div>
-          <h3 className="darksoul-loader-h">Trucklah</h3>
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
         </div>
       ) : (
         <div className="container-fluid pt-3" id="Ace">
@@ -273,7 +267,9 @@ function RideDetailsView() {
                 vehicleImages.default} */}
             </div>
 
-            <p className="mt-3">{data.booking?.vehicleName?.split("_").join(" ")}</p>
+            <p className="mt-3">
+              {data.booking?.vehicleName?.split("_").join(" ")}
+            </p>
             {/* {vechicle &&
               vechicle.map((vechicles) =>
                 parseInt(data.centerId) === vechicles.vehicletypeId
@@ -430,7 +426,8 @@ function RideDetailsView() {
                         <div className="col-md-6 col-12 ps-1" id="drop">
                           {" "}
                           <p className="line" style={{ color: "#494949" }}>
-                            {data?.booking?.bookingType?.split("_").join(" ") || "--"}
+                            {data?.booking?.bookingType?.split("_").join(" ") ||
+                              "--"}
                           </p>
                         </div>
                       </div>
@@ -1007,9 +1004,7 @@ function RideDetailsView() {
                   style={{ background: "#ffffff" }}
                 >
                   <div className="container">
-                    <div
-                      className="d-flex justify-content-between align-items-center p-3 mt-5"
-                    >
+                    <div className="d-flex justify-content-between align-items-center p-3 mt-5">
                       <span className="d-flex align-item-center">
                         <p className="mb-0">
                           <b>Want to cancel your order?</b>
@@ -1042,8 +1037,8 @@ function RideDetailsView() {
                 <Modal.Body>
                   <div className="container">
                     <p>
-                      Before canceling, Please let us know why you’re leaving. Your
-                      response may be shared with the provider.
+                      Before canceling, Please let us know why you’re leaving.
+                      Your response may be shared with the provider.
                     </p>
 
                     {[

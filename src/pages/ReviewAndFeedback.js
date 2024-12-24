@@ -84,14 +84,8 @@ const ReviewAndFeedback = () => {
   return (
     <div>
       {loading ? (
-        <div className="darksoul-layout">
-          <div className="darksoul-grid">
-            <div className="item1"></div>
-            <div className="item2"></div>
-            <div className="item3"></div>
-            <div className="item4"></div>
-          </div>
-          <h3 className="darksoul-loader-h">Trucklah</h3>
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
         </div>
       ) : (
         <div className="container-fluid px-2 minHeight">
@@ -136,13 +130,18 @@ const ReviewAndFeedback = () => {
                       <tr>
                         <td className="text-center">{index + 1}</td>
                         <td className="text-center">
-                          <IoMdStar className="text-warning mb-1 fs-5"/> {data.ratingByUser || ""}
+                          <IoMdStar className="text-warning mb-1 fs-5" />{" "}
+                          {data.ratingByUser || ""}
                         </td>
                         <td className="text-center">
                           {data.reviewByUser || ""}
                         </td>
                         <td className="text-center">
-                          <IoMdStar className="text-warning mb-1 fs-5"/> {data.ratingByDriver === "Driver rating not yet available." ? 0 : "0"}
+                          <IoMdStar className="text-warning mb-1 fs-5" />{" "}
+                          {data.ratingByDriver ===
+                          "Driver rating not yet available."
+                            ? 0
+                            : "0"}
                         </td>
                         <td className="text-center">
                           {data.reviewByDriver || ""}

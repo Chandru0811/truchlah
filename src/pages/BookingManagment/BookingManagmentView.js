@@ -152,14 +152,8 @@ function BookingManagmentView() {
   return (
     <div>
       {loading ? (
-        <div className="darksoul-layout">
-          <div className="darksoul-grid">
-            <div className="item1"></div>
-            <div className="item2"></div>
-            <div className="item3"></div>
-            <div className="item4"></div>
-          </div>
-          <h3 className="darksoul-loader-h">Trucklah</h3>
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
         </div>
       ) : (
         <div className="container-fluid px-2 minHeight">
@@ -422,71 +416,73 @@ function BookingManagmentView() {
                             </div>
                           </div>
                         </div>
-                        {data?.booking?.bookingType !== "ITEM" &&(
+                        {data?.booking?.bookingType !== "ITEM" && (
                           <>
-                          <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Boxes Charge</b>
-                              </p>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Boxes Charge</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    : {data?.booking?.boxesCharge || ""}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data?.booking?.boxesCharge || ""}
-                              </p>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Bubble Wrapping Charge</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {data?.booking?.bubbleWrappingCharge || ""}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Bubble Wrapping Charge</b>
-                              </p>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Assembly Disassembly Charge</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {data?.booking?.assemblyDisassemblyCharge ||
+                                      ""}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data?.booking?.bubbleWrappingCharge || ""}
-                              </p>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Long Push Charge</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {data?.booking?.longPushCharge === "Y"
+                                      ? "yes"
+                                      : "No" || ""}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Assembly Disassembly Charge</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                :{" "}
-                                {data?.booking?.assemblyDisassemblyCharge || ""}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Long Push Charge</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                :{" "}
-                                {data?.booking?.longPushCharge === "Y"
-                                  ? "yes"
-                                  : "No" || ""}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
                           </>
                         )}
-                        
+
                         <div className="col-md-6 col-12">
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">

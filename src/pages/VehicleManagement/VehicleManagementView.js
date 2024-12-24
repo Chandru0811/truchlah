@@ -26,14 +26,8 @@ function VehicleManagementView() {
   return (
     <div className="container-fluid px-2 minHeight">
       {loading ? (
-        <div className="darksoul-layout">
-          <div className="darksoul-grid">
-            <div className="item1"></div>
-            <div className="item2"></div>
-            <div className="item3"></div>
-            <div className="item4"></div>
-          </div>
-          <h3 className="darksoul-loader-h">Trucklah</h3>
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
         </div>
       ) : (
         <>
@@ -436,7 +430,7 @@ function VehicleManagementView() {
                     </div>
                     <div className="col-6">
                       <p className="text-muted text-sm">
-                        : {data.houseShiftingStatus ?"Yes" :"No" || ""}
+                        : {data.houseShiftingStatus ? "Yes" : "No" || ""}
                       </p>
                     </div>
                   </div>

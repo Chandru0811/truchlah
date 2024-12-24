@@ -81,14 +81,8 @@ const HouseCategoryManagement = () => {
   return (
     <div>
       {loading ? (
-        <div className="darksoul-layout">
-          <div className="darksoul-grid">
-            <div className="item1"></div>
-            <div className="item2"></div>
-            <div className="item3"></div>
-            <div className="item4"></div>
-          </div>
-          <h3 className="darksoul-loader-h">Trucklah</h3>
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
         </div>
       ) : (
         <div className="container-fluid px-2 minHeight">
@@ -134,50 +128,59 @@ const HouseCategoryManagement = () => {
                     {/* <th scope="col" className="text-center">
                   Unit
                 </th> */}
-                    <th scope="col" className="text-center"  aria-disabled="true" style={{ pointerEvents: "none" }}>
+                    <th
+                      scope="col"
+                      className="text-center"
+                      aria-disabled="true"
+                      style={{ pointerEvents: "none" }}
+                    >
                       ACTION
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {datas.map((data, index) => (
-                  <tr>
-                    <td className="text-center">{index+1}</td>
-                    <td className="text-center">{data.houseCategoryName}</td>
-                    <td className="text-center">{data.price}</td>
-                    <td className="text-center">
-                  {data.houseStatus === "ACTIVE" ? (
-                    <span className="badge active">Active</span>
-                  ) : (
-                    <span className="badge badges-Red inactive">Inactive</span>
-                  )}
-                </td>
-                    {/* <td className="text-center">unit</td> */}
-                    <td className="text-center">
-                      <div className="gap-2">
-                        <Link to={`/housecategorymanagement/view/${data.houseSftId}`}>
-                          <button className="btn btn-light btn-sm  shadow-none border-none">
-                            View
-                          </button>
-                        </Link>
-                        <Link
-                          to={`/housecategorymanagement/edit/${data.houseSftId}`}
-                          className="px-2"
-                        >
-                          <button className="btn btn-light  btn-sm shadow-none border-none">
-                            Edit
-                          </button>
-                        </Link>
-                        <DeleteModel
-                          onSuccess={refreshData}
-                          onDelete={()=>funDelete(data.houseSftId)}
-                          // path={`deleteMstrItem/${data.id}`}
-                          style={{ display: "inline-block" }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                  ))} 
+                    <tr>
+                      <td className="text-center">{index + 1}</td>
+                      <td className="text-center">{data.houseCategoryName}</td>
+                      <td className="text-center">{data.price}</td>
+                      <td className="text-center">
+                        {data.houseStatus === "ACTIVE" ? (
+                          <span className="badge active">Active</span>
+                        ) : (
+                          <span className="badge badges-Red inactive">
+                            Inactive
+                          </span>
+                        )}
+                      </td>
+                      {/* <td className="text-center">unit</td> */}
+                      <td className="text-center">
+                        <div className="gap-2">
+                          <Link
+                            to={`/housecategorymanagement/view/${data.houseSftId}`}
+                          >
+                            <button className="btn btn-light btn-sm  shadow-none border-none">
+                              View
+                            </button>
+                          </Link>
+                          <Link
+                            to={`/housecategorymanagement/edit/${data.houseSftId}`}
+                            className="px-2"
+                          >
+                            <button className="btn btn-light  btn-sm shadow-none border-none">
+                              Edit
+                            </button>
+                          </Link>
+                          <DeleteModel
+                            onSuccess={refreshData}
+                            onDelete={() => funDelete(data.houseSftId)}
+                            // path={`deleteMstrItem/${data.id}`}
+                            style={{ display: "inline-block" }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

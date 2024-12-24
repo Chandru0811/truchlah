@@ -26,15 +26,9 @@ function BannerAndOfferView() {
   return (
     <div>
       {loading ? (
-        <div className="darksoul-layout">
-      <div className="darksoul-grid">
-        <div className="item1"></div>
-        <div className="item2"></div>
-        <div className="item3"></div>
-        <div className="item4"></div>
-      </div>
-      <h3 className="darksoul-loader-h">Trucklah</h3>
-    </div>
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
+        </div>
       ) : (
         <div className="container-fluid px-2 minHeight">
           <div className="card shadow border-0 mb-2 top-header">
@@ -42,7 +36,9 @@ function BannerAndOfferView() {
               <div className="row align-items-center">
                 <div className="col">
                   <div className="d-flex align-items-center gap-4">
-                    <h1 className="h4 ls-tight headingColor">View Banner And Offer</h1>
+                    <h1 className="h4 ls-tight headingColor">
+                      View Banner And Offer
+                    </h1>
                   </div>
                 </div>
                 <div className="col-auto">
@@ -68,7 +64,9 @@ function BannerAndOfferView() {
                       </p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {data.offerStatus || ""}</p>
+                      <p className="text-muted text-sm">
+                        : {data.offerStatus || ""}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -80,7 +78,9 @@ function BannerAndOfferView() {
                       </p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {data.description || ""}</p>
+                      <p className="text-muted text-sm">
+                        : {data.description || ""}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -105,12 +105,11 @@ function BannerAndOfferView() {
                     </div>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
         </div>
-      )} 
+      )}
     </div>
   );
 }

@@ -72,122 +72,149 @@ function ContactFormEdit() {
 
   return (
     <div>
-       {loader ? (
-        <div className="darksoul-layout">
-      <div className="darksoul-grid">
-        <div className="item1"></div>
-        <div className="item2"></div>
-        <div className="item3"></div>
-        <div className="item4"></div>
-      </div>
-      <h3 className="darksoul-loader-h">Trucklah</h3>
-    </div>
+      {loader ? (
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
+        </div>
       ) : (
-    <div className="container-fluid p-2 minHeight m-0">
-      <form onSubmit={formik.handleSubmit}>
-        <div className="card shadow border-0 mb-2 top-header">
-          <div className="container-fluid py-4">
-            <div className="row align-items-center">
-              <div className="col">
-                <div className="d-flex align-items-center gap-4">
-                  <h1 className="h4 ls-tight headingColor">Edit Contact Form</h1>
-                </div>
-              </div>
-              <div className="col-auto">
-                <div className="hstack gap-2 justify-content-end">
-                  <Link to="/contactform">
-                    <button type="button" className="btn btn-sm btn-light">
-                      <span>Back</span>
-                    </button>
-                  </Link>
-                  <button type="submit" className="btn btn-sm btn-button" disabled={loading}>
-                    {loading ? (
-                      <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                    ) : (
-                      <span>Save</span>
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="card shadow border-0 my-2">
-          <div className="container mb-5">
-            <div className="row py-4">
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                Name<span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="name"
-                    className={`form-control ${formik.touched.name && formik.errors.name ? "is-invalid" : ""}`}
-                    {...formik.getFieldProps("name")}
-                  />
-                  {formik.touched.name && formik.errors.name && (
-                    <div className="invalid-feedback">{formik.errors.name}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                  Email <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="email"
-                    className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
-                    {...formik.getFieldProps("email")}
-                  />
-                  {formik.touched.email && formik.errors.email && (
-                    <div className="invalid-feedback">{formik.errors.email}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                  Mobile Number <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="mobile"
-                    className={`form-control ${formik.touched.mobile && formik.errors.mobile ? "is-invalid" : ""}`}
-                    {...formik.getFieldProps("mobile")}
-                  />
-                  {formik.touched.mobile && formik.errors.mobile && (
-                    <div className="invalid-feedback">{formik.errors.mobile}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label">
-                  Enquiry <span className="text-danger">*</span>
-                </label>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    name="enquiry"
-                    className={`form-control ${formik.touched.enquiry && formik.errors.enquiry ? "is-invalid" : ""}`}
-                    {...formik.getFieldProps("enquiry")}
-                  />
-                  {formik.touched.enquiry && formik.errors.enquiry && (
-                    <div className="invalid-feedback">{formik.errors.enquiry}</div>
-                  )}
+        <div className="container-fluid p-2 minHeight m-0">
+          <form onSubmit={formik.handleSubmit}>
+            <div className="card shadow border-0 mb-2 top-header">
+              <div className="container-fluid py-4">
+                <div className="row align-items-center">
+                  <div className="col">
+                    <div className="d-flex align-items-center gap-4">
+                      <h1 className="h4 ls-tight headingColor">
+                        Edit Contact Form
+                      </h1>
+                    </div>
+                  </div>
+                  <div className="col-auto">
+                    <div className="hstack gap-2 justify-content-end">
+                      <Link to="/contactform">
+                        <button type="button" className="btn btn-sm btn-light">
+                          <span>Back</span>
+                        </button>
+                      </Link>
+                      <button
+                        type="submit"
+                        className="btn btn-sm btn-button"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <span
+                            className="spinner-border spinner-border-sm"
+                            aria-hidden="true"
+                          ></span>
+                        ) : (
+                          <span>Save</span>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+
+            <div className="card shadow border-0 my-2">
+              <div className="container mb-5">
+                <div className="row py-4">
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label">
+                      Name<span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        name="name"
+                        className={`form-control ${
+                          formik.touched.name && formik.errors.name
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("name")}
+                      />
+                      {formik.touched.name && formik.errors.name && (
+                        <div className="invalid-feedback">
+                          {formik.errors.name}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label">
+                      Email <span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        name="email"
+                        className={`form-control ${
+                          formik.touched.email && formik.errors.email
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("email")}
+                      />
+                      {formik.touched.email && formik.errors.email && (
+                        <div className="invalid-feedback">
+                          {formik.errors.email}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label">
+                      Mobile Number <span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        name="mobile"
+                        className={`form-control ${
+                          formik.touched.mobile && formik.errors.mobile
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("mobile")}
+                      />
+                      {formik.touched.mobile && formik.errors.mobile && (
+                        <div className="invalid-feedback">
+                          {formik.errors.mobile}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-md-6 col-12 mb-2">
+                    <label className="form-label">
+                      Enquiry <span className="text-danger">*</span>
+                    </label>
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        name="enquiry"
+                        className={`form-control ${
+                          formik.touched.enquiry && formik.errors.enquiry
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("enquiry")}
+                      />
+                      {formik.touched.enquiry && formik.errors.enquiry && (
+                        <div className="invalid-feedback">
+                          {formik.errors.enquiry}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
       )}
     </div>
   );

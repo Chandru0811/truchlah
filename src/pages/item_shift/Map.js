@@ -406,10 +406,8 @@ const Map = forwardRef(
 
   if (!isLoaded) {
     return (
-      <div className="darksoul-layout">
-        <div className="loader-container">
-          <div className="spinner"></div>
-        </div>
+      <div className="loader-container d-flex align-items-center justify-content-center">
+        <div class="loader"></div>
       </div>
     );
   }

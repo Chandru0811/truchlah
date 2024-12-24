@@ -169,7 +169,7 @@ function Order() {
               data-placement="bottom"
               title="Back"
               className="me-3"
-              style={{ cursor: 'pointer', color: "rgb(16, 110, 234)" }}
+              style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
             >
               <IoArrowBackCircleOutline size={30} />
             </div>
@@ -194,38 +194,30 @@ function Order() {
               ITEM SHIFT
             </button>
           </div>
-
         </div>
       </div>
 
       <div id="shift-bg">
         {isLoaded ? (
-          <div className="darksoul-layout">
-            <div className="darksoul-grid">
-              <div className="item1"></div>
-              <div className="item2"></div>
-              <div className="item3"></div>
-              <div className="item4"></div>
-            </div>
-            <h3 className="darksoul-loader-h">Trucklah</h3>
+          <div className="loader-container d-flex align-items-center justify-content-center">
+            <div class="loader"></div>
           </div>
         ) : (
           <>
-            <div
-              className="col-12 d-flex justify-content-center mt-5 py-3 flex-wrap">
+            <div className="col-12 d-flex justify-content-center mt-5 py-3 flex-wrap">
               <button
                 className={`mx-3 my-1 ${showDraftSection ? "underline" : ""}`}
                 id="shift-btn"
                 onClick={draftSection}
-                style={{ position: 'relative' }}
+                style={{ position: "relative" }}
               >
                 DRAFT BOOKING
                 <span
                   className="position-absolute start-100 translate-middle badge rag rounded-pill"
                   style={{
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: '0.75em',
-                    padding: '0.3em 0.6em'
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "0.75em",
+                    padding: "0.3em 0.6em",
                   }}
                 >
                   {draftCount}
@@ -236,15 +228,15 @@ function Order() {
                 className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
                 id="shift-btn"
                 onClick={inprogressSection}
-                style={{ position: 'relative' }}
+                style={{ position: "relative" }}
               >
                 INPROGRESS
                 <span
                   className="position-absolute start-100 translate-middle badge rag rounded-pill"
                   style={{
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: '0.75em',
-                    padding: '0.3em 0.6em'
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "0.75em",
+                    padding: "0.3em 0.6em",
                   }}
                 >
                   {inprogressCount}
@@ -255,16 +247,16 @@ function Order() {
                 className={`mx-3 ${showCompletedSection ? "underline" : ""}`}
                 id="shift-btn"
                 onClick={completedSection}
-                style={{ position: 'relative' }}
+                style={{ position: "relative" }}
               >
                 COMPLETED
                 <span
-                 className="position-absolute start-100 translate-middle badge rag rounded-pill"
-                 style={{
-                   transform: 'translate(-50%, -50%)',
-                   fontSize: '0.75em',
-                   padding: '0.3em 0.6em'
-                 }}
+                  className="position-absolute start-100 translate-middle badge rag rounded-pill"
+                  style={{
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "0.75em",
+                    padding: "0.3em 0.6em",
+                  }}
                 >
                   {completedCount}
                 </span>
@@ -274,15 +266,15 @@ function Order() {
                 className={`mx-3 ${showCanceledSection ? "underline" : ""}`}
                 id="shift-btn"
                 onClick={cancelSection}
-                style={{ position: 'relative' }}
+                style={{ position: "relative" }}
               >
                 CANCELLED
                 <span
                   className="position-absolute start-100 translate-middle badge rag rounded-pill"
                   style={{
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: '0.75em',
-                    padding: '0.3em 0.6em'
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "0.75em",
+                    padding: "0.3em 0.6em",
                   }}
                 >
                   {canceledCount}
@@ -303,28 +295,28 @@ function Order() {
                         <div className="row" id="on">
                           <div className="col-lg-10 col-md-6 col-12 p-3">
                             <p className="fw-medium">
-                              Booking Id : {item.booking.bookingId ||
-                                ""}
+                              Booking Id : {item.booking.bookingId || ""}
                             </p>
                             {/* <p className="fw-medium">
-                              Amount : 
+                              Amount :
                               $ {item.transactionDetails?.txnAmount.toFixed(2) ||
                                 "0.00"}
                               <br />
                             </p> */}
-                            <p>
-                              {item.booking.type ||
-                                "Unknown Vehicle"}
-                            </p>
-                            <p className="fw-bold"
+                            <p>{item.booking.type || "Unknown Vehicle"}</p>
+                            <p
+                              className="fw-bold"
                               style={{
-                                letterSpacing:"1px",
-                                color: showDraftSection ? "orange" :
-                                  showInprogressSection
-                                    ? "orange" // Yellow color for INPROGRESS
-                                    : showCompletedSection
-                                      ? "green" // Green color for COMPLETED
-                                      :showCanceledSection? "red":"#28d8b7", // Red color for CANCELLED
+                                letterSpacing: "1px",
+                                color: showDraftSection
+                                  ? "orange"
+                                  : showInprogressSection
+                                  ? "orange" // Yellow color for INPROGRESS
+                                  : showCompletedSection
+                                  ? "green" // Green color for COMPLETED
+                                  : showCanceledSection
+                                  ? "red"
+                                  : "#28d8b7", // Red color for CANCELLED
                               }}
                             >
                               {/* {showDraftSection
@@ -334,7 +326,7 @@ function Order() {
                                   : showCompletedSection
                                     ? "COMPLETED"
                                     : "CANCELLED"} */}
-                                    {item.bookingStatus.status}
+                              {item.bookingStatus.status}
                             </p>
 
                             <p style={{ marginTop: "0", marginBottom: "0" }}>
@@ -344,28 +336,33 @@ function Order() {
                               <br />
                               <span className="line"></span>
                             </p>
-                            {item.bookingTripLocations?.map((location, index) => (
-                              <div key={index}>
-                                {index > 0 && (
-                                  <div className="line-container">
-                                    <span className="line"></span>
-                                  </div>
-                                )}
-                                <p
-                                  key={index}
-                                  style={{ marginTop: "0", marginBottom: "0" }}
-                                >
-                                  <span
-                                    className="dot2"
+                            {item.bookingTripLocations?.map(
+                              (location, index) => (
+                                <div key={index}>
+                                  {index > 0 && (
+                                    <div className="line-container">
+                                      <span className="line"></span>
+                                    </div>
+                                  )}
+                                  <p
+                                    key={index}
                                     style={{
-                                      backgroundColor:
-                                        colors[index % colors.length],
+                                      marginTop: "0",
+                                      marginBottom: "0",
                                     }}
-                                  ></span>
-                                  &nbsp;&nbsp;&nbsp;{location.dropoff}
-                                </p>
-                              </div>
-                            ))}
+                                  >
+                                    <span
+                                      className="dot2"
+                                      style={{
+                                        backgroundColor:
+                                          colors[index % colors.length],
+                                      }}
+                                    ></span>
+                                    &nbsp;&nbsp;&nbsp;{location.dropoff}
+                                  </p>
+                                </div>
+                              )
+                            )}
                           </div>
                           <div className="col-lg-2 col-md-6 col-12 p-3">
                             <p className="pt-2">
@@ -377,7 +374,6 @@ function Order() {
                           </div>
                         </div>
                       </div>
-
                     </Link>
                   </>
                 ))

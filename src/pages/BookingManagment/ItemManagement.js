@@ -97,14 +97,8 @@ const ItemManagement = () => {
   return (
     <div>
       {loading ? (
-        <div className="darksoul-layout">
-          <div className="darksoul-grid">
-            <div className="item1"></div>
-            <div className="item2"></div>
-            <div className="item3"></div>
-            <div className="item4"></div>
-          </div>
-          <h3 className="darksoul-loader-h">Trucklah</h3>
+        <div className="loader-container d-flex align-items-center justify-content-center">
+          <div class="loader"></div>
         </div>
       ) : (
         <div className="table-responsive p-2 minHeight">
@@ -140,82 +134,64 @@ const ItemManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {(datas? datas:[]).map((data, index) => (
-                  <tr>
-                    <td className="text-center">{index + 1}</td>
-                    <td className="text-center">{data.bookingId || ""}</td>
-                    <td className="text-center">
-                      {data.bookingTime ? (
-                        <>
-                          {data.bookingTime.substring(0, 10)} <b>at</b>{" "}
-                          {new Date(data.bookingTime).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          })}
-                        </>
-                      ) : (
-                        " "
-                      )}
-                    </td>
-                    <td className="text-center">{data.estKm || ""}</td>
-                    <td className="text-center">{data.totalAmount || "0.0"}</td>
-                    <td className="text-center">
-                      {data.status === "DRAFT_BOOKING" ? (
-                        <span
-                          className="badge"
-                          style={{ background: "#fcd162" }}
-                        >
-                          Draft Booking
-                        </span>
-                      ) : data.status === "CANCELLED" ? (
-                        <span
-                          className="badge"
-                          style={{ background: "#f04545" }}
-                        >
-                          Cancelled
-                        </span>
-                      ) : data.status === "BOOKED" ? (
-                        <span
-                          className="badge"
-                          style={{ background: "#2593fb" }}
-                        >
-                          Booked
-                        </span>
-                      ) : data.status === "COMPLETED" ? (
-                        <span
-                          className="badge"
-                          style={{ background: "#17e540" }}
-                        >
-                          Completed
-                        </span>
-                      ) : data.status === "ASSIGNED" ? (
-                        <span
-                          className="badge"
-                          style={{ background: "#28d8b7" }}
-                        >
-                          Assigned
-                        </span>
-                      ) : (
-                        <span
-                          className="badge"
-                          style={{ background: "#6d736e" }}
-                        >
-                          Unknown
-                        </span>
-                      )}
-                    </td>
+              {(datas ? datas : []).map((data, index) => (
+                <tr>
+                  <td className="text-center">{index + 1}</td>
+                  <td className="text-center">{data.bookingId || ""}</td>
+                  <td className="text-center">
+                    {data.bookingTime ? (
+                      <>
+                        {data.bookingTime.substring(0, 10)} <b>at</b>{" "}
+                        {new Date(data.bookingTime).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </>
+                    ) : (
+                      " "
+                    )}
+                  </td>
+                  <td className="text-center">{data.estKm || ""}</td>
+                  <td className="text-center">{data.totalAmount || "0.0"}</td>
+                  <td className="text-center">
+                    {data.status === "DRAFT_BOOKING" ? (
+                      <span className="badge" style={{ background: "#fcd162" }}>
+                        Draft Booking
+                      </span>
+                    ) : data.status === "CANCELLED" ? (
+                      <span className="badge" style={{ background: "#f04545" }}>
+                        Cancelled
+                      </span>
+                    ) : data.status === "BOOKED" ? (
+                      <span className="badge" style={{ background: "#2593fb" }}>
+                        Booked
+                      </span>
+                    ) : data.status === "COMPLETED" ? (
+                      <span className="badge" style={{ background: "#17e540" }}>
+                        Completed
+                      </span>
+                    ) : data.status === "ASSIGNED" ? (
+                      <span className="badge" style={{ background: "#28d8b7" }}>
+                        Assigned
+                      </span>
+                    ) : (
+                      <span className="badge" style={{ background: "#6d736e" }}>
+                        Unknown
+                      </span>
+                    )}
+                  </td>
 
-                    <td className="text-center">
-                      <div className="gap-2">
-                        <Link to={`/bookingManagement/view/${data.bookingId}`}>
-                          <Space size="small">
-                            {/* {data.status === "ASSIGNED" ? ( */}
+                  <td className="text-center">
+                    <div className="gap-2">
+                      <Link to={`/bookingManagement/view/${data.bookingId}`}>
+                        <Space size="small">
+                          {/* {data.status === "ASSIGNED" ? ( */}
 
-                            <button className="btn btn-light btn-sm shadow-none border-none me-2">
-                              View
-                            </button>
-                            {/* ) : (
+                          <button className="btn btn-light btn-sm shadow-none border-none me-2">
+                            View
+                          </button>
+                          {/* ) : (
                                 <Badge
                                   size="small"
                                   color="#acff3b"
@@ -229,19 +205,19 @@ const ItemManagement = () => {
                                   </button>
                                 </Badge>
                               )} */}
-                          </Space>
-                        </Link>
+                        </Space>
+                      </Link>
 
-                        <DeleteModel
-                          onSuccess={refreshData}
-                          onDelete={() => deleteFun(data.bookingId)}
-                          // path={`deleteMstrItem/${data.id}`}
-                          style={{ display: "inline-block" }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      <DeleteModel
+                        onSuccess={refreshData}
+                        onDelete={() => deleteFun(data.bookingId)}
+                        // path={`deleteMstrItem/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

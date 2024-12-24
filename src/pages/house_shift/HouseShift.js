@@ -258,14 +258,8 @@ const HouseShift =forwardRef(
 
   if (!isLoaded) {
     return (
-      <div class="darksoul-layout">
-        <div class="darksoul-grid">
-          <div class="item1"></div>
-          <div class="item2"></div>
-          <div class="item3"></div>
-          <div class="item4"></div>
-        </div>
-        <h3 class="darksoul-loader-h">Trucklah</h3>
+      <div className="loader-container d-flex align-items-center justify-content-center">
+        <div class="loader"></div>
       </div>
     );
   }
