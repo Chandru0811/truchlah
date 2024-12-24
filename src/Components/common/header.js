@@ -76,7 +76,11 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
               <Container fluid>
                 <Navbar.Brand>
                   <Link to="https://trucklah.com/auth">
-                    <img src={logo} alt="Trucklah" className="img-fluid truckLogo" />
+                    <img
+                      src={logo}
+                      alt="Trucklah"
+                      className="img-fluid truckLogo"
+                    />
                   </Link>
                 </Navbar.Brand>
                 <Navbar.Toggle
@@ -138,27 +142,28 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                             <div className="d-lg-flex justify-content-end">
                               <div className="me-2">
                                 {isAuthenticate && (
-                                  <User handleLogout={handleLogout} handleCloseMain={handleCloseMain} />
+                                  <User
+                                    handleLogout={handleLogout}
+                                    handleCloseMain={handleCloseMain}
+                                  />
                                 )}
                               </div>
                               <div className="ride ">
                                 {isAuthenticate ? (
-                                  showButton && (
+                                  <li className="nav-item">
                                     <Link to="/shift">
-                                      <li className="nav-item">
-                                        <button
-                                          type="button"
-                                          className="login-btn py-2 px-3"
-                                          onClick={handleBookRide}
-                                        >
-                                          Book Ride
-                                        </button>
-                                      </li>
+                                      <button
+                                        type="button"
+                                        className="login-btn py-2 px-3"
+                                        onClick={handleBookRide}
+                                      >
+                                        Book Ride
+                                      </button>
                                     </Link>
-                                  )
+                                  </li>
                                 ) : (
-                                  <Link to="/login">
-                                    <li className="nav-item">
+                                  <li className="nav-item">
+                                    <Link to="/login">
                                       <button
                                         type="button"
                                         className="login-btn py-2 px-3"
@@ -166,8 +171,8 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                         <FaRegUser className="mb-1 me-2" />{" "}
                                         Login
                                       </button>
-                                    </li>
-                                  </Link>
+                                    </Link>
+                                  </li>
                                 )}
                               </div>
                             </div>

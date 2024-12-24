@@ -364,7 +364,7 @@ const BookingSummary = forwardRef(
                       .join(" ")}
                   </h4>
                   <p>
-                    <FaWeightHanging />{" "}
+                    <b>Capacity : </b>{" "}
                     {formData?.form2?.vehicle?.vehicleCapacity} Kg
                   </p>
                 </div>

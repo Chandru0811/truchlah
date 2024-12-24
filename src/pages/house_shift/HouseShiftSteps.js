@@ -344,7 +344,7 @@ const HouseShiftSteps = () => {
                   ) : (
                     <span></span>
                   )}
-                  {activeStep !== 5 && (
+                  {activeStep !== 4 && (
                     <button
                       type="submit"
                       onClick={handleButtonClick}
