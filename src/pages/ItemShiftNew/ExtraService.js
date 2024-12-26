@@ -49,6 +49,7 @@ const ExtraService = forwardRef(
       if (formData.extraService) {
         setCounts(formData.extraService);
       }
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, [formData.extraService]);
 
     const handleService = async () => {

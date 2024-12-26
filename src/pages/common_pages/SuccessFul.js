@@ -188,7 +188,7 @@ function Successfull() {
               )}
               <center>
                 {result === "success" ? (
-                  <Link to={`/ridedetailsview/${bookingId}`}>
+                  <Link to={`/rides?type=${type}`}>
                     <button
                       id="button"
                       type="button"

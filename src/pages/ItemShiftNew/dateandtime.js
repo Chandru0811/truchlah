@@ -177,6 +177,7 @@ const DateAndTime = forwardRef(
       };
       getVechicle();
       console.log("object", vehicle);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     useEffect(() => {
@@ -377,27 +378,31 @@ const DateAndTime = forwardRef(
                 )}
               </div>
               <div className="d-flex justify-content-between align-items-center my-3">
-                <Button
-                  variant="link"
-                  onClick={handlePrev}
-                  style={{
-                    color: "black",
-                    backgroundColor: "rgb(172, 255, 59)",
-                    paddingInline: "0px",
-                    paddingBlock: "5px",
-                    borderRadius: "4px",
-                    border: "2px solid #acff3b",
-                    opacity: ".7",
-                  }}
-                >
-                  <GrFormPrevious
-                    style={{
-                      fontSize: "1.5em",
-                      color: "black",
-                    }}
-                    aria-hidden="true"
-                  />
-                </Button>
+                {vehicle.length > 3 && (
+                  <>
+                    <Button
+                      variant="link"
+                      onClick={handlePrev}
+                      style={{
+                        color: "black",
+                        backgroundColor: "rgb(172, 255, 59)",
+                        paddingInline: "0px",
+                        paddingBlock: "5px",
+                        borderRadius: "4px",
+                        border: "2px solid #acff3b",
+                        opacity: ".7",
+                      }}
+                    >
+                      <GrFormPrevious
+                        style={{
+                          fontSize: "1.5em",
+                          color: "black",
+                        }}
+                        aria-hidden="true"
+                      />
+                    </Button>
+                  </>
+                )}
 
                 <div className="d-flex justify-content-around w-75">
                   {getVisibleData().map((image, index) => {
@@ -416,18 +421,19 @@ const DateAndTime = forwardRef(
                           transition: "0.3s",
                         }}
                       >
-                        <img
-                          src={image?.vehicleImage}
-                          alt={image?.type}
-                          className={`img-fluid shadow hover-card-img hover-card ${
-                            activeIndex === overallIndex ? "active" : ""
-                          }`}
-                          style={{
-                            maxHeight: "150px",
-                            borderRadius: "20px",
-                            transition: "border-color 0.3s",
-                          }}
-                        />
+                        <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+                          <img
+                            src={image?.vehicleImage}
+                            alt={image?.type}
+                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${
+                              activeIndex === overallIndex ? "active" : ""
+                            }`}
+                            style={{
+                              borderRadius: "20px",
+                              transition: "border-color 0.3s",
+                            }}
+                          />
+                        </div>
                         <div className="text-center mt-2">
                           <h6 className="card-title text-dark">
                             {image?.type?.split("_").join("  ")}
@@ -438,27 +444,31 @@ const DateAndTime = forwardRef(
                   })}
                 </div>
 
-                <Button
-                  variant="link"
-                  onClick={handleNextImg}
-                  style={{
-                    color: "black",
-                    backgroundColor: "rgb(172, 255, 59)",
-                    paddingInline: "0px",
-                    paddingBlock: "5px",
-                    borderRadius: "4px",
-                    border: "2px solid #acff3b",
-                    opacity: ".7",
-                  }}
-                >
-                  <MdNavigateNext
-                    style={{
-                      fontSize: "1.5em",
-                      color: "black",
-                    }}
-                    aria-hidden="true"
-                  />
-                </Button>
+                {vehicle.length > 3 && (
+                  <>
+                    <Button
+                      variant="link"
+                      onClick={handleNextImg}
+                      style={{
+                        color: "black",
+                        backgroundColor: "rgb(172, 255, 59)",
+                        paddingInline: "0px",
+                        paddingBlock: "5px",
+                        borderRadius: "4px",
+                        border: "2px solid #acff3b",
+                        opacity: ".7",
+                      }}
+                    >
+                      <MdNavigateNext
+                        style={{
+                          fontSize: "1.5em",
+                          color: "black",
+                        }}
+                        aria-hidden="true"
+                      />
+                    </Button>
+                  </>
+                )}
               </div>
 
               {/* Add the More Details button here */}

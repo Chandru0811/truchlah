@@ -24,7 +24,7 @@ function VehicleManagementEdit() {
   const [croppedImage, setCroppedImage] = useState(null);
   const [croppedImage1, setCroppedImag1] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [cro1, setCrop1] = useState({ x: 0, y: 0 });
+  const [crop1, setCrop1] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [zoom1, setZoom1] = useState(1);
 
@@ -125,7 +125,10 @@ function VehicleManagementEdit() {
       formData.append("vehicleCapacity", values.vehicleCapacity);
       formData.append("vehicleStatus", values.vehicleStatus);
       formData.append("longPushCharge", values.longPushCharge);
-      formData.append("assemblyDisassemblyCharge", values.assemblyDisassemblyCharge);
+      formData.append(
+        "assemblyDisassemblyCharge",
+        values.assemblyDisassemblyCharge
+      );
       formData.append("bubbleWrappingCharge", values.wrappingCharge);
       formData.append("boxesCharge", values.boxesCharge);
       formData.append("suitableHouseType", values.suitableHouseType);
@@ -133,7 +136,8 @@ function VehicleManagementEdit() {
       formData.append("packageManpower", values.packageManpower);
       formData.append("houseShiftingStatus", values.houseShiftingStatus);
       if (values.imageUrl) formData.append("imageUrl", values.imageUrl);
-      if (values.vehicleCapacitySize) formData.append("vehicleCapacitySize", values.vehicleCapacitySize);
+      if (values.vehicleCapacitySize)
+        formData.append("vehicleCapacitySize", values.vehicleCapacitySize);
       try {
         const response = await driverApi.post(
           `/vehicle/updateVehicleType/${id}`,
@@ -251,7 +255,10 @@ function VehicleManagementEdit() {
 
   const handleCrop1 = useCallback(async () => {
     try {
-      const croppedImageData = await getCroppedImg(imageSrc1, croppedAreaPixels1);
+      const croppedImageData = await getCroppedImg(
+        imageSrc1,
+        croppedAreaPixels1
+      );
       //  console.log("filename",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
       const croppedImageFile = blobToFile1(
         croppedImageData,
@@ -556,8 +563,8 @@ function VehicleManagementEdit() {
                       >
                         <Cropper
                           image={imageSrc1}
-                          crop={crop}
-                          zoom={zoom}
+                          crop={crop1}
+                          zoom={zoom1}
                           aspect={4 / 2} // Adjust the aspect ratio if needed
                           onCropChange={setCrop1}
                           onZoomChange={setZoom1}

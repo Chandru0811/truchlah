@@ -221,7 +221,7 @@ const ItemShift = () => {
           Booking Type <FaChevronRight size={"15"} />
         </p>
         <p style={{ fontSize: "20px", color: "#acff3b" }}>
-          Item Shifting
+          &nbsp;&nbsp;Item Shifting
           {/* {shiftType} Sfifting */}
         </p>
       </span>
@@ -322,6 +322,7 @@ const ItemShift = () => {
                 handleNext={handleNext}
                 setLoadIndicators={setLoadIndicator}
               />
+
             )} */}
 
             <div className="container-fluid p-5 py-3">

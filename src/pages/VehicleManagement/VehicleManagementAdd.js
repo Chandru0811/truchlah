@@ -19,7 +19,7 @@ function VehicleManagementAdd() {
   const [croppedImage, setCroppedImage] = useState(null);
   const [croppedImage1, setCroppedImag1] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [cro1, setCrop1] = useState({ x: 0, y: 0 });
+  const [crop1, setCrop1] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [zoom1, setZoom1] = useState(1);
 
@@ -95,7 +95,7 @@ function VehicleManagementAdd() {
       imageUrl: null,
       vehicleCapacitySize: null,
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
       const formData = new FormData();
@@ -121,7 +121,10 @@ function VehicleManagementAdd() {
       formData.append("vehicleCapacity", values.vehicleCapacity);
       formData.append("vehicleStatus", values.vehicleStatus);
       formData.append("longPushCharge", values.longPushCharge);
-      formData.append("assemblyDisassemblyCharge", values.assemblyDisassemblyCharge);
+      formData.append(
+        "assemblyDisassemblyCharge",
+        values.assemblyDisassemblyCharge
+      );
       formData.append("bubbleWrappingCharge", values.wrappingCharge);
       formData.append("boxesCharge", values.boxesCharge);
       formData.append("suitableHouseType", values.suitableHouseType);
@@ -129,7 +132,8 @@ function VehicleManagementAdd() {
       formData.append("packageManpower", values.packageManpower);
       formData.append("houseShiftingStatus", values.houseShiftingStatus);
       if (values.imageUrl) formData.append("imageUrl", values.imageUrl);
-      if (values.vehicleCapacitySize) formData.append("vehicleCapacitySize", values.vehicleCapacitySize);
+      if (values.vehicleCapacitySize)
+        formData.append("vehicleCapacitySize", values.vehicleCapacitySize);
       try {
         const response = await driverApi.post(
           `vehicle/addVehicleType`,
@@ -229,7 +233,10 @@ function VehicleManagementAdd() {
 
   const handleCrop1 = useCallback(async () => {
     try {
-      const croppedImageData = await getCroppedImg(imageSrc1, croppedAreaPixels1);
+      const croppedImageData = await getCroppedImg(
+        imageSrc1,
+        croppedAreaPixels1
+      );
       //  console.log("filename",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
       const croppedImageFile = blobToFile1(
         croppedImageData,
@@ -324,10 +331,11 @@ function VehicleManagementAdd() {
                   <input
                     type="text"
                     name="type"
-                    className={`form-control ${formik.touched.type && formik.errors.type
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.type && formik.errors.type
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("type")}
                   />
                   {formik.touched.type && formik.errors.type && (
@@ -349,11 +357,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="vehicleCapacity"
-                    className={`form-control ${formik.touched.vehicleCapacity &&
+                    className={`form-control ${
+                      formik.touched.vehicleCapacity &&
                       formik.errors.vehicleCapacity
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("vehicleCapacity")}
                   />
                   {formik.touched.vehicleCapacity &&
@@ -372,11 +381,12 @@ function VehicleManagementAdd() {
                   <select
                     type="text"
                     name="vehicleStatus"
-                    className={`form-select ${formik.touched.vehicleStatus &&
+                    className={`form-select ${
+                      formik.touched.vehicleStatus &&
                       formik.errors.vehicleStatus
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("vehicleStatus")}
                   >
                     <option value={""}></option>
@@ -400,10 +410,11 @@ function VehicleManagementAdd() {
                     type="file"
                     name="imageUrl"
                     accept="image/jpeg, image/png"
-                    className={`form-control ${formik.touched.imageUrl && formik.errors.imageUrl
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.imageUrl && formik.errors.imageUrl
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     onChange={handleFileChange}
                   />
                   {formik.touched.imageUrl && formik.errors.imageUrl && (
@@ -468,17 +479,20 @@ function VehicleManagementAdd() {
                     type="file"
                     name="vehicleCapacitySize"
                     accept="image/jpeg, image/png"
-                    className={`form-control ${formik.touched.vehicleCapacitySize && formik.errors.vehicleCapacitySize
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.vehicleCapacitySize &&
+                      formik.errors.vehicleCapacitySize
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     onChange={handleFileChange1}
                   />
-                  {formik.touched.vehicleCapacitySize && formik.errors.vehicleCapacitySize && (
-                    <div className="invalid-feedback">
-                      {formik.errors.vehicleCapacitySize}
-                    </div>
-                  )}
+                  {formik.touched.vehicleCapacitySize &&
+                    formik.errors.vehicleCapacitySize && (
+                      <div className="invalid-feedback">
+                        {formik.errors.vehicleCapacitySize}
+                      </div>
+                    )}
                   {showCropper1 && (
                     <div
                       className="crop-container mt-3"
@@ -490,8 +504,8 @@ function VehicleManagementAdd() {
                     >
                       <Cropper
                         image={imageSrc1}
-                        crop={crop}
-                        zoom={zoom}
+                        crop={crop1}
+                        zoom={zoom1}
                         aspect={500 / 500}
                         onCropChange={setCrop1}
                         onZoomChange={setZoom1}
@@ -540,10 +554,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="baseFare"
-                    className={`form-control ${formik.touched.baseFare && formik.errors.baseFare
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.baseFare && formik.errors.baseFare
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("baseFare")}
                   />
                   {formik.touched.baseFare && formik.errors.baseFare && (
@@ -567,10 +582,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="perKm"
-                    className={`form-control ${formik.touched.perKm && formik.errors.perKm
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.perKm && formik.errors.perKm
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("perKm")}
                   />
                   {formik.touched.perKm && formik.errors.perKm && (
@@ -594,10 +610,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="helper"
-                    className={`form-control ${formik.touched.helper && formik.errors.helper
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.helper && formik.errors.helper
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("helper")}
                   />
                   {formik.touched.helper && formik.errors.helper && (
@@ -621,10 +638,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="extraHelper"
-                    className={`form-control ${formik.touched.extraHelper && formik.errors.extraHelper
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.extraHelper && formik.errors.extraHelper
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("extraHelper")}
                   />
                   {formik.touched.extraHelper && formik.errors.extraHelper && (
@@ -648,11 +666,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="tailGateCharge"
-                    className={`form-control ${formik.touched.tailGateCharge &&
+                    className={`form-control ${
+                      formik.touched.tailGateCharge &&
                       formik.errors.tailGateCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("tailGateCharge")}
                   />
                   {formik.touched.tailGateCharge &&
@@ -677,11 +696,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="overtimeCharge"
-                    className={`form-control ${formik.touched.overtimeCharge &&
+                    className={`form-control ${
+                      formik.touched.overtimeCharge &&
                       formik.errors.overtimeCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("overtimeCharge")}
                   />
                   {formik.touched.overtimeCharge &&
@@ -706,11 +726,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="nonLiftAccess"
-                    className={`form-control ${formik.touched.nonLiftAccess &&
+                    className={`form-control ${
+                      formik.touched.nonLiftAccess &&
                       formik.errors.nonLiftAccess
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("nonLiftAccess")}
                   />
                   {formik.touched.nonLiftAccess &&
@@ -735,10 +756,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="erpCharge"
-                    className={`form-control ${formik.touched.erpCharge && formik.errors.erpCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.erpCharge && formik.errors.erpCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("erpCharge")}
                   />
                   {formik.touched.erpCharge && formik.errors.erpCharge && (
@@ -762,10 +784,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="cbdCharge"
-                    className={`form-control ${formik.touched.cbdCharge && formik.errors.cbdCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.cbdCharge && formik.errors.cbdCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("cbdCharge")}
                   />
                   {formik.touched.cbdCharge && formik.errors.cbdCharge && (
@@ -789,11 +812,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="securedZoneCharge"
-                    className={`form-control ${formik.touched.securedZoneCharge &&
+                    className={`form-control ${
+                      formik.touched.securedZoneCharge &&
                       formik.errors.securedZoneCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("securedZoneCharge")}
                   />
                   {formik.touched.securedZoneCharge &&
@@ -818,10 +842,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="gst"
-                    className={`form-control ${formik.touched.gst && formik.errors.gst
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.gst && formik.errors.gst
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("gst")}
                   />
                   {formik.touched.gst && formik.errors.gst && (
@@ -843,10 +868,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="roundTrip"
-                    className={`form-control ${formik.touched.roundTrip && formik.errors.roundTrip
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.roundTrip && formik.errors.roundTrip
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("roundTrip")}
                   />
                   {formik.touched.roundTrip && formik.errors.roundTrip && (
@@ -870,10 +896,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="boxesCharge"
-                    className={`form-control ${formik.touched.boxesCharge && formik.errors.boxesCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.boxesCharge && formik.errors.boxesCharge
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("boxesCharge")}
                   />
                   {formik.touched.boxesCharge && formik.errors.boxesCharge && (
@@ -897,11 +924,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="longPushCharge"
-                    className={`form-control ${formik.touched.longPushCharge &&
+                    className={`form-control ${
+                      formik.touched.longPushCharge &&
                       formik.errors.longPushCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("longPushCharge")}
                   />
                   {formik.touched.longPushCharge &&
@@ -926,11 +954,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="assemblyDisassemblyCharge"
-                    className={`form-control ${formik.touched.assemblyDisassemblyCharge &&
+                    className={`form-control ${
+                      formik.touched.assemblyDisassemblyCharge &&
                       formik.errors.assemblyDisassemblyCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("assemblyDisassemblyCharge")}
                   />
                   {formik.touched.assemblyDisassemblyCharge &&
@@ -955,11 +984,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="wrappingCharge"
-                    className={`form-control ${formik.touched.wrappingCharge &&
+                    className={`form-control ${
+                      formik.touched.wrappingCharge &&
                       formik.errors.wrappingCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("wrappingCharge")}
                   />
                   {formik.touched.wrappingCharge &&
@@ -984,11 +1014,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="addStopCharge"
-                    className={`form-control ${formik.touched.addStopCharge &&
+                    className={`form-control ${
+                      formik.touched.addStopCharge &&
                       formik.errors.addStopCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("addStopCharge")}
                   />
                   {formik.touched.addStopCharge &&
@@ -1013,11 +1044,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="tenToTwelveCharge"
-                    className={`form-control ${formik.touched.tenToTwelveCharge &&
+                    className={`form-control ${
+                      formik.touched.tenToTwelveCharge &&
                       formik.errors.tenToTwelveCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("tenToTwelveCharge")}
                   />
                   {formik.touched.tenToTwelveCharge &&
@@ -1042,11 +1074,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="twelveToSevenCharge"
-                    className={`form-control ${formik.touched.twelveToSevenCharge &&
+                    className={`form-control ${
+                      formik.touched.twelveToSevenCharge &&
                       formik.errors.twelveToSevenCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("twelveToSevenCharge")}
                   />
                   {formik.touched.twelveToSevenCharge &&
@@ -1071,11 +1104,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="peakHourCharge"
-                    className={`form-control ${formik.touched.peakHourCharge &&
+                    className={`form-control ${
+                      formik.touched.peakHourCharge &&
                       formik.errors.peakHourCharge
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("peakHourCharge")}
                   />
                   {formik.touched.peakHourCharge &&
@@ -1092,11 +1126,12 @@ function VehicleManagementAdd() {
                   <input
                     type="text"
                     name="suitableHouseType"
-                    className={`form-control ${formik.touched.suitableHouseType &&
+                    className={`form-control ${
+                      formik.touched.suitableHouseType &&
                       formik.errors.suitableHouseType
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("suitableHouseType")}
                   />
                   {formik.touched.suitableHouseType &&
@@ -1112,11 +1147,12 @@ function VehicleManagementAdd() {
                   <input
                     type="checkbox"
                     name="houseShiftingStatus"
-                    className={`form-check-input ${formik.touched.houseShiftingStatus &&
+                    className={`form-check-input ${
+                      formik.touched.houseShiftingStatus &&
                       formik.errors.houseShiftingStatus
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     checked={formik.values.houseShiftingStatus}
                     onChange={(event) =>
                       formik.setFieldValue(
@@ -1151,10 +1187,11 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="packageBoxes"
-                    className={`form-control ${formik.touched.packageBoxes && formik.errors.packageBoxes
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.packageBoxes && formik.errors.packageBoxes
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("packageBoxes")}
                   />
                   {formik.touched.packageBoxes &&
@@ -1179,11 +1216,12 @@ function VehicleManagementAdd() {
                     }}
                     type="text"
                     name="packageManpower"
-                    className={`form-control ${formik.touched.packageManpower &&
+                    className={`form-control ${
+                      formik.touched.packageManpower &&
                       formik.errors.packageManpower
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("packageManpower")}
                   />
                   {formik.touched.packageManpower &&
@@ -1201,10 +1239,11 @@ function VehicleManagementAdd() {
                 <div className="mb-3">
                   <textarea
                     name="description"
-                    className={`form-control ${formik.touched.description && formik.errors.description
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.description && formik.errors.description
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("description")}
                   />
                   {formik.touched.description && formik.errors.description && (

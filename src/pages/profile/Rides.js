@@ -81,10 +81,10 @@ function Order() {
     const status = showDraftSection
       ? "DRAFT_BOOKING"
       : showInprogressSection
-        ? "INPROGRESS"
-        : showCompletedSection
-          ? "COMPLETED"
-          : "CANCELLED";
+      ? "INPROGRESS"
+      : showCompletedSection
+      ? "COMPLETED"
+      : "CANCELLED";
 
     const shiftType = showHouseShift ? "HOUSE" : "ITEM";
 
@@ -149,11 +149,11 @@ function Order() {
   useEffect(() => {
     if (type === "ITEM") {
       setShowItemShift(true);
-      inprogressSection()
+      inprogressSection();
       setShowHouseShift(false);
     } else {
       setShowItemShift(false);
-      inprogressSection()
+      inprogressSection();
       setShowHouseShift(true);
     }
   }, [type]);
@@ -173,7 +173,7 @@ function Order() {
             >
               <IoArrowBackCircleOutline size={30} />
             </div>
-            <h2 style={{ color: "#106EEA", marginBottom: "0" }}>ORDERS</h2>
+            <h2 style={{ color: "#1e1e1e", marginBottom: "0" }}>ORDERS</h2>
           </div>
         </div>
         <div className="row mt-3">

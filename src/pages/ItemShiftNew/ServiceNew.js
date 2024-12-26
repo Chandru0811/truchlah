@@ -94,6 +94,7 @@ const ServiceNew = forwardRef(
     useEffect(() => {
       // console.log("form",formData.form3)
       formik.setValues(formData.form3)
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     useImperativeHandle(ref, () => ({

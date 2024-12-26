@@ -52,10 +52,10 @@ function RideDetailsView() {
   };
 
   const handleClick = () => {
-    if (bookingId.id && data.booking.bookingType ==="ITEM") {
-      navigate(`/itemshift`,{state:{id:bookingId.id}});
-    }else{
-      navigate(`/houseshift`,{state:{id:bookingId.id}})
+    if (bookingId.id && data.booking.bookingType === "ITEM") {
+      navigate(`/itemshift`, { state: { id: bookingId.id } });
+    } else {
+      navigate(`/houseshift`, { state: { id: bookingId.id } });
     }
   };
 
@@ -235,7 +235,7 @@ function RideDetailsView() {
             <IoArrowBackCircleOutline size={30} />
           </div>
           <center>
-            <h3 style={{ color: "#106EEA" }}>SUMMARY</h3>
+            <h3 style={{ color: "#1e1e1e" }}>SUMMARY</h3>
           </center>
 
           <div className="row">
