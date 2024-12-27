@@ -40,7 +40,7 @@ function UserRoute() {
       sessionStorage.getItem("isAuthenticate") === "true";
     setIsAuthenticate(isAuthenticateFromStorage);
     setIsAdmin(isAdminFromStorage);
-    setLoader(false)
+    setLoader(false);
   }, []);
 
   return (

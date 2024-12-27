@@ -85,7 +85,7 @@ const HouseShiftSteps = () => {
         const response = await bookingApi.get(`booking/getBookingById/${id}`);
         if (response.status === 200) {
           const data = response.data.responseBody;
-
+          console.log("Data is ", data);
           const transformBookingLocations = (locations) => {
             const result = [];
 
@@ -95,6 +95,8 @@ const HouseShiftSteps = () => {
               contactName: firstLocation.pickupContactName || "",
               countryCode: firstLocation.pickupCountryCode || "",
               location: firstLocation.pickup || "",
+              latitude: firstLocation.pickupLatitude || "",
+              longitude: firstLocation.pickupLongitude || "",
               mobile: firstLocation.pickupMobile
                 ? firstLocation.pickupMobile.toString()
                 : "",
@@ -107,6 +109,8 @@ const HouseShiftSteps = () => {
               contactName: lastLocation.dropoffContactName || "",
               countryCode: lastLocation.dropoffCountryCode || "",
               location: lastLocation.dropoff || "",
+              latitude: lastLocation.dropoffLatitude || "",
+              longitude: lastLocation.dropoffLongitude || "",
               mobile: lastLocation.dropoffMobile
                 ? lastLocation.dropoffMobile.toString()
                 : "",
@@ -120,6 +124,8 @@ const HouseShiftSteps = () => {
                 contactName: location.dropoffContactName || "",
                 countryCode: location.dropoffCountryCode || "",
                 location: location.dropoff || "",
+                latitude: location.dropoffLatitude || "",
+                longitude: location.dropoffLongitude || "",
                 mobile: location.dropoffMobile
                   ? location.dropoffMobile.toString()
                   : "",

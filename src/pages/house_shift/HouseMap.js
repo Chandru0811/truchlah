@@ -64,8 +64,6 @@ const HouseMap = forwardRef(
     const [autocompletePickup, setAutocompletePickup] = useState(null);
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
 
-    const [pickupPlace, setPickupPlace] = useState(null);
-    const [dropoffPlace, setDropoffPlace] = useState(null);
     const [distance, setDistance] = useState(null);
 
     const userId = sessionStorage.getItem("userId");
@@ -84,6 +82,8 @@ const HouseMap = forwardRef(
             contactName: "",
             countryCode: "",
             mobile: "",
+            latitude: "",
+            longitude: "",
           },
           {
             type: "dropoff",
@@ -92,15 +92,14 @@ const HouseMap = forwardRef(
             contactName: "",
             countryCode: "",
             mobile: "",
+            latitude: "",
+            longitude: "",
           },
         ],
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        // await calculateDistance()
-        console.log("values", values);
-        // values.type = values.type==="ITEM"?"ITEM":"HOUSE"
         if (values.estKm < 1 || !values.estKm) {
           toast.error("Invalid locations or distance too short for a ride.");
           setLoadIndicators(false);
@@ -139,65 +138,73 @@ const HouseMap = forwardRef(
       if (type === "pickup" && autocompletePickup) {
         const place = autocompletePickup.getPlace();
         if (place.geometry && place.formatted_address) {
-          setPickupPlace({
-            formatted_address: place.formatted_address,
-            geometry: place.geometry,
-          });
+          const latitude = place.geometry.location.lat();
+          const longitude = place.geometry.location.lng();
+
           formik.setFieldValue(
             "locationDetail[0].location",
             place.formatted_address
           );
+          formik.setFieldValue("locationDetail[0].latitude", latitude);
+          formik.setFieldValue("locationDetail[0].longitude", longitude);
         } else {
           console.error("No sufficient details available for input:", place);
         }
       } else if (type === "dropoff" && autocompleteDropoff) {
         const place = autocompleteDropoff.getPlace();
         if (place.geometry && place.formatted_address) {
-          setDropoffPlace({
-            formatted_address: place.formatted_address,
-            geometry: place.geometry,
-          });
+          const latitude = place.geometry.location.lat();
+          const longitude = place.geometry.location.lng();
+
           formik.setFieldValue(
             "locationDetail[1].location",
             place.formatted_address
           );
-          // console.log("place.formatted_address",place.formatted_address)
+          formik.setFieldValue("locationDetail[1].latitude", latitude);
+          formik.setFieldValue("locationDetail[1].longitude", longitude);
         } else {
           console.error("No sufficient details available for input:", place);
         }
       }
     };
+
     const calculateDistance = () => {
       return new Promise((resolve, reject) => {
-        if (pickupPlace && dropoffPlace) {
+        const pickupLat = formik.values.locationDetail[0].latitude;
+        const pickupLng = formik.values.locationDetail[0].longitude;
+        const dropoffLat = formik.values.locationDetail[1].latitude;
+        const dropoffLng = formik.values.locationDetail[1].longitude;
+
+        if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
           const service = new window.google.maps.DistanceMatrixService();
-          console.log("adres", pickupPlace.geometry.location);
-          const locations = [
-            pickupPlace.geometry.location,
-            dropoffPlace.geometry.location,
+
+          const origins = [
+            { lat: parseFloat(pickupLat), lng: parseFloat(pickupLng) },
+          ];
+          const destinations = [
+            { lat: parseFloat(dropoffLat), lng: parseFloat(dropoffLng) },
           ];
 
-          const totalDistance = { value: 0, text: "" };
           service.getDistanceMatrix(
             {
-              origins: [locations[0]],
-              destinations: [locations[1]],
+              origins: origins,
+              destinations: destinations,
               travelMode: window.google.maps.TravelMode.DRIVING,
             },
             (response, status) => {
               if (status === "OK") {
                 const distanceResult = response.rows[0].elements[0];
                 if (distanceResult.status === "OK") {
-                  totalDistance.value = distanceResult.distance.value;
-                  totalDistance.text = `${(totalDistance.value / 1000).toFixed(
-                    2
-                  )} km`;
-                  setDistance(totalDistance.text);
-                  formik.setFieldValue(
-                    "estKm",
-                    (totalDistance.value / 1000).toFixed(1)
-                  );
-                  resolve();
+                  const totalDistanceInMeters = distanceResult.distance.value; // Distance in meters
+                  const totalDistanceInKm = (
+                    totalDistanceInMeters / 1000
+                  ).toFixed(2); // Convert to km
+
+                  // Update Formik and state
+                  setDistance(`${totalDistanceInKm} km`);
+                  formik.setFieldValue("estKm", totalDistanceInKm);
+
+                  resolve(totalDistanceInKm);
                 } else {
                   console.error(
                     `Error fetching distance: ${distanceResult.status}`
@@ -211,18 +218,32 @@ const HouseMap = forwardRef(
             }
           );
         } else {
-          reject("Pickup or dropoff place is missing.");
+          reject(
+            "Latitude or longitude is missing for pickup or dropoff location."
+          );
           setLoadIndicators(false);
         }
       });
     };
 
     useEffect(() => {
-      if (pickupPlace && dropoffPlace) {
+      const pickupLat = formik.values.locationDetail[0].latitude;
+      const pickupLng = formik.values.locationDetail[0].longitude;
+      const dropoffLat = formik.values.locationDetail[1].latitude;
+      const dropoffLng = formik.values.locationDetail[1].longitude;
+
+      // Check if latitude and longitude for both pickup and dropoff are present
+      if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
         calculateDistance();
       }
-      console.log("form", formData);
-    }, [pickupPlace, dropoffPlace]);
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      formik.values.locationDetail[0].latitude,
+      formik.values.locationDetail[0].longitude,
+      formik.values.locationDetail[1].latitude,
+      formik.values.locationDetail[1].longitude,
+    ]);
 
     const fetchData = async () => {
       try {

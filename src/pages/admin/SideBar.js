@@ -1,12 +1,14 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Logo from "../../asset/logo.png";
 import "../../styles/bootstrapCdn.css";
 
 function SideBar({ onLogout }) {
-  const role =sessionStorage.getItem("roles")
+  const role = sessionStorage.getItem("roles");
+  const navigate = useNavigate();
   const handleLogOutClick = () => {
     onLogout();
+    navigate("/");
   };
 
   return (
@@ -41,18 +43,20 @@ function SideBar({ onLogout }) {
                 <i className="bx bx-bar-chart pe-3"></i> Dashboard
               </NavLink>
             </li>
-            {role !== "ROLE_STAFF" &&(<>
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/vehiclemanagement">
-                <i className="bx bx-car pe-3"></i> Vehicle Management
-              </NavLink>
-            </li>
-            
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/housecategorymanagement">
-                <i className="bx bx-home pe-3"></i> House Category
-              </NavLink>
-            </li></>
+            {role !== "ROLE_STAFF" && (
+              <>
+                <li className="nav-item pt-2">
+                  <NavLink className="nav-link" to="/vehiclemanagement">
+                    <i className="bx bx-car pe-3"></i> Vehicle Management
+                  </NavLink>
+                </li>
+
+                <li className="nav-item pt-2">
+                  <NavLink className="nav-link" to="/housecategorymanagement">
+                    <i className="bx bx-home pe-3"></i> House Category
+                  </NavLink>
+                </li>
+              </>
             )}
             <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/supportteammanagement">
@@ -79,7 +83,7 @@ function SideBar({ onLogout }) {
                 <i className="bx bx-gift pe-3"></i> Banners and Offers
               </NavLink>
             </li>
-            
+
             {/* <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/reviewandfeedback">
                 <i className="bx bx-message-square-dots pe-3"></i> Reviews and

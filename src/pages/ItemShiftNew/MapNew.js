@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
-import Green from "../../asset/Ellipse 1.png";
+import Green from "../../asset/Ellipse 2.png";
 import red from "../../asset/Ellipse 3.png";
 import yellow from "../../asset/Ellipse 1.png";
 import { IoLocationSharp } from "react-icons/io5";
@@ -15,7 +15,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { bookingApi } from "../../config/URL";
-import fetchAllCategorysWithIds from "../Lists/CategoryList";
 import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
 
 const libraries = ["places"];
@@ -65,9 +64,6 @@ const MapNew = forwardRef(
     const [autocompletePickup, setAutocompletePickup] = useState(null);
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
     const [autocompleteStop, setAutocompleteStop] = useState(null);
-    const [pickupPlace, setPickupPlace] = useState(null);
-    const [dropoffPlace, setDropoffPlace] = useState(null);
-    const [stopPlaces, setStopPlaces] = useState(null);
     const [distance, setDistance] = useState(null);
     const userId = sessionStorage.getItem("userId");
     const shiftingType = sessionStorage.getItem("shiftType");
@@ -84,6 +80,8 @@ const MapNew = forwardRef(
             contactName: "",
             countryCode: "",
             mobile: "",
+            latitude: "",
+            longitude: "",
           },
           {
             type: "dropoff",
@@ -92,14 +90,18 @@ const MapNew = forwardRef(
             contactName: "",
             countryCode: "",
             mobile: "",
+            latitude: "",
+            longitude: "",
           },
         ],
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        console.log("Formik values is ", values);
         try {
           const totalEstKm = await calculateDistance();
+          console.log("Total KM ", totalEstKm);
 
           if (totalEstKm < 1 || !totalEstKm) {
             toast.error("Invalid locations or distance too short for a ride.");
@@ -148,15 +150,18 @@ const MapNew = forwardRef(
     const onPlaceChanged = (type, index) => {
       if (type === "pickup" && autocompletePickup) {
         const place = autocompletePickup.getPlace();
-        console.log("Pickup Place", autocompletePickup);
         if (place.geometry && place.formatted_address) {
-          setPickupPlace({
-            formatted_address: place.formatted_address,
-            geometry: place.geometry,
-          });
           formik.setFieldValue(
             "locationDetail[0].location",
             place.formatted_address
+          );
+          formik.setFieldValue(
+            "locationDetail[0].latitude",
+            place.geometry.location.lat()
+          );
+          formik.setFieldValue(
+            "locationDetail[0].longitude",
+            place.geometry.location.lng()
           );
         } else {
           console.error("No sufficient details available for input:", place);
@@ -164,13 +169,17 @@ const MapNew = forwardRef(
       } else if (type === "dropoff" && autocompleteDropoff) {
         const place = autocompleteDropoff.getPlace();
         if (place.geometry && place.formatted_address) {
-          setDropoffPlace({
-            formatted_address: place.formatted_address,
-            geometry: place.geometry,
-          });
           formik.setFieldValue(
-            `locationDetail[1].location`,
+            "locationDetail[1].location",
             place.formatted_address
+          );
+          formik.setFieldValue(
+            "locationDetail[1].latitude",
+            place.geometry.location.lat()
+          );
+          formik.setFieldValue(
+            "locationDetail[1].longitude",
+            place.geometry.location.lng()
           );
         } else {
           console.error("No sufficient details available for input:", place);
@@ -178,19 +187,18 @@ const MapNew = forwardRef(
       } else if (type === "stop" && autocompleteStop) {
         const place = autocompleteStop.getPlace();
         if (place.geometry && place.formatted_address) {
-          setStopPlaces({
-            formatted_address: place.formatted_address,
-            geometry: place.geometry,
-          });
           formik.setFieldValue(
             `locationDetail[${index}].location`,
             place.formatted_address
           );
-          formik.setFieldValue(`locationDetail[${index}].coordinates`, {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-          });
-          // console.log("place.formatted_address",place.formatted_address)
+          formik.setFieldValue(
+            `locationDetail[${index}].latitude`,
+            place.geometry.location.lat()
+          );
+          formik.setFieldValue(
+            `locationDetail[${index}].longitude`,
+            place.geometry.location.lng()
+          );
         } else {
           console.error("No sufficient details available for input:", place);
         }
@@ -199,37 +207,29 @@ const MapNew = forwardRef(
 
     const calculateDistance = () => {
       return new Promise((resolve, reject) => {
+        const pickup = formik.values.locationDetail[0];
+        const dropoff = formik.values.locationDetail[1];
+
         if (
-          (pickupPlace && dropoffPlace) ||
-          (formik.values.locationDetail[0].location &&
-            formik.values.locationDetail[1].location)
+          pickup.latitude &&
+          pickup.longitude &&
+          dropoff.latitude &&
+          dropoff.longitude
         ) {
           const service = new window.google.maps.DistanceMatrixService();
 
-          const stopLocations = formik?.values?.locationDetail
+          const stopLocations = formik.values.locationDetail
             .slice(2)
-            .filter((stop) => stop.location && stop.coordinates)
-            .map((stop) => {
-              if (
-                stop.coordinates &&
-                stop.coordinates.lat &&
-                stop.coordinates.lng
-              ) {
-                return new window.google.maps.LatLng(
-                  stop.coordinates.lat,
-                  stop.coordinates.lng
-                );
-              } else {
-                console.warn("Invalid stop location or coordinates:", stop);
-                return null;
-              }
-            })
-            .filter((location) => location !== null);
+            .filter((stop) => stop.latitude && stop.longitude)
+            .map(
+              (stop) =>
+                new window.google.maps.LatLng(stop.latitude, stop.longitude)
+            );
 
           const locations = [
-            formik.values.locationDetail[0].location,
+            new window.google.maps.LatLng(pickup.latitude, pickup.longitude),
             ...stopLocations,
-            formik.values.locationDetail[1].location,
+            new window.google.maps.LatLng(dropoff.latitude, dropoff.longitude),
           ];
 
           const totalDistance = { value: 0, text: "" };
@@ -262,6 +262,7 @@ const MapNew = forwardRef(
             });
           });
 
+          // Resolve all distance calculations
           Promise.all(promises)
             .then(() => {
               totalDistance.text = `${(totalDistance.value / 1000).toFixed(
@@ -269,19 +270,19 @@ const MapNew = forwardRef(
               )} km`;
               const totalNumericKm = (totalDistance.value / 1000).toFixed(1);
 
-              // Directly set state and formik value
-              setDistance(totalNumericKm); // Ensure distance state is set
-              formik.setFieldValue("estKm", totalNumericKm); // Ensure Formik is updated
+              // Update state and formik
+              setDistance(totalNumericKm);
+              formik.setFieldValue("estKm", totalNumericKm);
 
-              console.log("est", totalNumericKm);
+              console.log("Total Estimated Distance (km):", totalNumericKm);
               resolve(totalNumericKm);
             })
             .catch((error) => {
               console.error("Error calculating distance:", error);
-              reject(error); // Reject if there's an error in calculation
+              reject(error);
             });
         } else {
-          reject("Pickup or dropoff place is missing.");
+          reject("Pickup or dropoff place latitude/longitude is missing.");
         }
       });
     };

@@ -150,17 +150,19 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                               </div>
                               <div className="ride ">
                                 {isAuthenticate ? (
-                                  <li className="nav-item">
-                                    <Link to="/shift">
-                                      <button
-                                        type="button"
-                                        className="login-btn py-2 px-3"
-                                        onClick={handleBookRide}
-                                      >
-                                        Book Ride
-                                      </button>
-                                    </Link>
-                                  </li>
+                                  location.pathname !== "/shift" && (
+                                    <li className="nav-item">
+                                      <Link to="/shift">
+                                        <button
+                                          type="button"
+                                          className="login-btn py-2 px-3"
+                                          onClick={handleBookRide}
+                                        >
+                                          Book Ride
+                                        </button>
+                                      </Link>
+                                    </li>
+                                  )
                                 ) : (
                                   <li className="nav-item">
                                     <Link to="/login">

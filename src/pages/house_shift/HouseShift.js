@@ -82,6 +82,11 @@ const HouseShift = forwardRef(
           estKm: distance?.split(" ")[0],
           locationDetail: locationDetail,
         };
+        if (payload.estKm < 1 || !payload.estKm) {
+          toast.error("Invalid locations or distance too short for a ride.");
+          setLoadIndicators(false);
+          return;
+        }
         console.log("Form values:", values);
         try {
           const response = await bookingApi.post(`booking/create`, payload);

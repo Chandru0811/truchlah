@@ -91,6 +91,8 @@ const ItemShift = () => {
               contactName: firstLocation.pickupContactName || "",
               countryCode: firstLocation.pickupCountryCode || "",
               location: firstLocation.pickup || "",
+              latitude: firstLocation.pickupLatitude || "",
+              longitude: firstLocation.pickupLongitude || "",
               mobile: firstLocation.pickupMobile
                 ? firstLocation.pickupMobile.toString()
                 : "",
@@ -103,6 +105,8 @@ const ItemShift = () => {
               contactName: lastLocation.dropoffContactName || "",
               countryCode: lastLocation.dropoffCountryCode || "",
               location: lastLocation.dropoff || "",
+              latitude: lastLocation.dropoffLatitude || "",
+              longitude: lastLocation.dropoffLongitude || "",
               mobile: lastLocation.dropoffMobile
                 ? lastLocation.dropoffMobile.toString()
                 : "",
@@ -116,6 +120,8 @@ const ItemShift = () => {
                 contactName: location.dropoffContactName || "",
                 countryCode: location.dropoffCountryCode || "",
                 location: location.dropoff || "",
+                latitude: location.dropoffLatitude || "",
+                longitude: location.dropoffLongitude || "",
                 mobile: location.dropoffMobile
                   ? location.dropoffMobile.toString()
                   : "",
