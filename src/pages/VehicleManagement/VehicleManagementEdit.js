@@ -317,7 +317,7 @@ function VehicleManagementEdit() {
                             aria-hidden="true"
                           ></span>
                         ) : (
-                          <span>Save</span>
+                          <span>Update</span>
                         )}
                       </button>
                     </div>
@@ -359,11 +359,10 @@ function VehicleManagementEdit() {
                       <input
                         type="text"
                         name="type"
-                        className={`form-control ${
-                          formik.touched.type && formik.errors.type
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.type && formik.errors.type
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("type")}
                       />
                       {formik.touched.type && formik.errors.type && (
@@ -387,12 +386,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="vehicleCapacity"
-                        className={`form-control ${
-                          formik.touched.vehicleCapacity &&
+                        className={`form-control ${formik.touched.vehicleCapacity &&
                           formik.errors.vehicleCapacity
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("vehicleCapacity")}
                       />
                       {formik.touched.vehicleCapacity &&
@@ -411,12 +409,11 @@ function VehicleManagementEdit() {
                       <select
                         type="text"
                         name="vehicleStatus"
-                        className={`form-select ${
-                          formik.touched.vehicleStatus &&
+                        className={`form-select ${formik.touched.vehicleStatus &&
                           formik.errors.vehicleStatus
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("vehicleStatus")}
                       >
                         <option value={""}></option>
@@ -439,11 +436,10 @@ function VehicleManagementEdit() {
                       <input
                         type="file"
                         name="imageUrl"
-                        className={`form-control ${
-                          formik.touched.imageUrl && formik.errors.imageUrl
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.imageUrl && formik.errors.imageUrl
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         onChange={handleFileChange}
                       />
                       {formik.touched.imageUrl && formik.errors.imageUrl && (
@@ -479,15 +475,15 @@ function VehicleManagementEdit() {
                           image={imageSrc}
                           crop={crop}
                           zoom={zoom}
-                          aspect={4 / 2} // Adjust the aspect ratio if needed
+                          aspect={500 / 500}
                           onCropChange={setCrop}
                           onZoomChange={setZoom}
                           onCropComplete={onCropComplete}
-                          cropShape="box" // You can also use 'round' for circular cropping
+                          cropShape="box"
                           showGrid={false}
                           style={{
                             containerStyle: { width: "100%", height: "100%" },
-                          }} // Make it responsive within the container
+                          }}
                         />
                       </div>
                     )}
@@ -522,12 +518,11 @@ function VehicleManagementEdit() {
                       <input
                         type="file"
                         name="vehicleCapacitySize"
-                        className={`form-control ${
-                          formik.touched.vehicleCapacitySize &&
+                        className={`form-control ${formik.touched.vehicleCapacitySize &&
                           formik.errors.vehicleCapacitySize
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         onChange={handleFileChange1}
                       />
                       {formik.touched.vehicleCapacitySize &&
@@ -539,19 +534,19 @@ function VehicleManagementEdit() {
                     </div>
                     {(data.vehicleCapacitySize ||
                       formik.values.vehicleCapacitySize) && (
-                      <div>
-                        <img
-                          src={
-                            formik.values.imageUrl
-                              ? URL.createObjectURL(formik.values.imageUrl)
-                              : data.vehicleCapacitySize
-                          }
-                          alt="Vehicle"
-                          className="img-fluid"
-                          style={{ maxWidth: "20%" }}
-                        />
-                      </div>
-                    )}
+                        <div>
+                          <img
+                            src={
+                              formik.values.imageUrl
+                                ? URL.createObjectURL(formik.values.imageUrl)
+                                : data.vehicleCapacitySize
+                            }
+                            alt="Vehicle"
+                            className="img-fluid"
+                            style={{ maxWidth: "20%" }}
+                          />
+                        </div>
+                      )}
                     {showCropper1 && (
                       <div
                         className="crop-container"
@@ -565,15 +560,15 @@ function VehicleManagementEdit() {
                           image={imageSrc1}
                           crop={crop1}
                           zoom={zoom1}
-                          aspect={4 / 2} // Adjust the aspect ratio if needed
+                          aspect={500 / 500}
                           onCropChange={setCrop1}
                           onZoomChange={setZoom1}
                           onCropComplete={onCropComplete1}
-                          cropShape="box" // You can also use 'round' for circular cropping
+                          cropShape="box"
                           showGrid={false}
                           style={{
                             containerStyle: { width: "100%", height: "100%" },
-                          }} // Make it responsive within the container
+                          }}
                         />
                       </div>
                     )}
@@ -613,11 +608,10 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="baseFare"
-                        className={`form-control ${
-                          formik.touched.baseFare && formik.errors.baseFare
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.baseFare && formik.errors.baseFare
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("baseFare")}
                       />
                       {formik.touched.baseFare && formik.errors.baseFare && (
@@ -641,11 +635,10 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="perKm"
-                        className={`form-control ${
-                          formik.touched.perKm && formik.errors.perKm
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.perKm && formik.errors.perKm
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("perKm")}
                       />
                       {formik.touched.perKm && formik.errors.perKm && (
@@ -669,11 +662,10 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="helper"
-                        className={`form-control ${
-                          formik.touched.helper && formik.errors.helper
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.helper && formik.errors.helper
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("helper")}
                       />
                       {formik.touched.helper && formik.errors.helper && (
@@ -697,12 +689,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="extraHelper"
-                        className={`form-control ${
-                          formik.touched.extraHelper &&
+                        className={`form-control ${formik.touched.extraHelper &&
                           formik.errors.extraHelper
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("extraHelper")}
                       />
                       {formik.touched.extraHelper &&
@@ -727,12 +718,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="tailGateCharge"
-                        className={`form-control ${
-                          formik.touched.tailGateCharge &&
+                        className={`form-control ${formik.touched.tailGateCharge &&
                           formik.errors.tailGateCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("tailGateCharge")}
                       />
                       {formik.touched.tailGateCharge &&
@@ -757,12 +747,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="overtimeCharge"
-                        className={`form-control ${
-                          formik.touched.overtimeCharge &&
+                        className={`form-control ${formik.touched.overtimeCharge &&
                           formik.errors.overtimeCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("overtimeCharge")}
                       />
                       {formik.touched.overtimeCharge &&
@@ -788,12 +777,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="nonLiftAccess"
-                        className={`form-control ${
-                          formik.touched.nonLiftAccess &&
+                        className={`form-control ${formik.touched.nonLiftAccess &&
                           formik.errors.nonLiftAccess
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("nonLiftAccess")}
                       />
                       {formik.touched.nonLiftAccess &&
@@ -818,11 +806,10 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="erpCharge"
-                        className={`form-control ${
-                          formik.touched.erpCharge && formik.errors.erpCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.erpCharge && formik.errors.erpCharge
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("erpCharge")}
                       />
                       {formik.touched.erpCharge && formik.errors.erpCharge && (
@@ -846,11 +833,10 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="cbdCharge"
-                        className={`form-control ${
-                          formik.touched.cbdCharge && formik.errors.cbdCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.cbdCharge && formik.errors.cbdCharge
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("cbdCharge")}
                       />
                       {formik.touched.cbdCharge && formik.errors.cbdCharge && (
@@ -874,12 +860,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="securedZoneCharge"
-                        className={`form-control ${
-                          formik.touched.securedZoneCharge &&
+                        className={`form-control ${formik.touched.securedZoneCharge &&
                           formik.errors.securedZoneCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("securedZoneCharge")}
                       />
                       {formik.touched.securedZoneCharge &&
@@ -904,11 +889,10 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="gst"
-                        className={`form-control ${
-                          formik.touched.gst && formik.errors.gst
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.gst && formik.errors.gst
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("gst")}
                       />
                       {formik.touched.gst && formik.errors.gst && (
@@ -932,11 +916,10 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="roundTrip"
-                        className={`form-control ${
-                          formik.touched.roundTrip && formik.errors.roundTrip
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.roundTrip && formik.errors.roundTrip
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("roundTrip")}
                       />
                       {formik.touched.roundTrip && formik.errors.roundTrip && (
@@ -960,12 +943,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="boxesCharge"
-                        className={`form-control ${
-                          formik.touched.boxesCharge &&
+                        className={`form-control ${formik.touched.boxesCharge &&
                           formik.errors.boxesCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("boxesCharge")}
                       />
                       {formik.touched.boxesCharge &&
@@ -990,12 +972,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="longPushCharge"
-                        className={`form-control ${
-                          formik.touched.longPushCharge &&
+                        className={`form-control ${formik.touched.longPushCharge &&
                           formik.errors.longPushCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("longPushCharge")}
                       />
                       {formik.touched.longPushCharge &&
@@ -1021,12 +1002,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="assemblyDisassemblyCharge"
-                        className={`form-control ${
-                          formik.touched.assemblyDisassemblyCharge &&
+                        className={`form-control ${formik.touched.assemblyDisassemblyCharge &&
                           formik.errors.assemblyDisassemblyCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("assemblyDisassemblyCharge")}
                       />
                       {formik.touched.assemblyDisassemblyCharge &&
@@ -1051,12 +1031,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="wrappingCharge"
-                        className={`form-control ${
-                          formik.touched.wrappingCharge &&
+                        className={`form-control ${formik.touched.wrappingCharge &&
                           formik.errors.wrappingCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("wrappingCharge")}
                       />
                       {formik.touched.wrappingCharge &&
@@ -1081,12 +1060,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="addStopCharge"
-                        className={`form-control ${
-                          formik.touched.addStopCharge &&
+                        className={`form-control ${formik.touched.addStopCharge &&
                           formik.errors.addStopCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("addStopCharge")}
                       />
                       {formik.touched.addStopCharge &&
@@ -1111,12 +1089,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="tenToTwelveCharge"
-                        className={`form-control ${
-                          formik.touched.tenToTwelveCharge &&
+                        className={`form-control ${formik.touched.tenToTwelveCharge &&
                           formik.errors.tenToTwelveCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("tenToTwelveCharge")}
                       />
                       {formik.touched.tenToTwelveCharge &&
@@ -1141,12 +1118,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="twelveToSevenCharge"
-                        className={`form-control ${
-                          formik.touched.twelveToSevenCharge &&
+                        className={`form-control ${formik.touched.twelveToSevenCharge &&
                           formik.errors.twelveToSevenCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("twelveToSevenCharge")}
                       />
                       {formik.touched.twelveToSevenCharge &&
@@ -1171,12 +1147,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="peakHourCharge"
-                        className={`form-control ${
-                          formik.touched.peakHourCharge &&
+                        className={`form-control ${formik.touched.peakHourCharge &&
                           formik.errors.peakHourCharge
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("peakHourCharge")}
                       />
                       {formik.touched.peakHourCharge &&
@@ -1195,12 +1170,11 @@ function VehicleManagementEdit() {
                       <input
                         type="text"
                         name="suitableHouseType"
-                        className={`form-control ${
-                          formik.touched.suitableHouseType &&
+                        className={`form-control ${formik.touched.suitableHouseType &&
                           formik.errors.suitableHouseType
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("suitableHouseType")}
                       />
                       {formik.touched.suitableHouseType &&
@@ -1216,12 +1190,11 @@ function VehicleManagementEdit() {
                       <input
                         type="checkbox"
                         name="houseShiftingStatus"
-                        className={`form-check-input ${
-                          formik.touched.houseShiftingStatus &&
+                        className={`form-check-input ${formik.touched.houseShiftingStatus &&
                           formik.errors.houseShiftingStatus
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         checked={formik.values.houseShiftingStatus}
                         onChange={(event) =>
                           formik.setFieldValue(
@@ -1256,12 +1229,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="packageBoxes"
-                        className={`form-control ${
-                          formik.touched.packageBoxes &&
+                        className={`form-control ${formik.touched.packageBoxes &&
                           formik.errors.packageBoxes
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("packageBoxes")}
                       />
                       {formik.touched.packageBoxes &&
@@ -1286,12 +1258,11 @@ function VehicleManagementEdit() {
                         }}
                         type="text"
                         name="packageManpower"
-                        className={`form-control ${
-                          formik.touched.packageManpower &&
+                        className={`form-control ${formik.touched.packageManpower &&
                           formik.errors.packageManpower
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("packageManpower")}
                       />
                       {formik.touched.packageManpower &&
@@ -1309,12 +1280,11 @@ function VehicleManagementEdit() {
                     <div className="mb-3">
                       <textarea
                         name="description"
-                        className={`form-control ${
-                          formik.touched.description &&
+                        className={`form-control ${formik.touched.description &&
                           formik.errors.description
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps("description")}
                       />
                       {formik.touched.description &&

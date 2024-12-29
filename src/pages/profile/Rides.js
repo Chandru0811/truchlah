@@ -81,10 +81,10 @@ function Order() {
     const status = showDraftSection
       ? "DRAFT_BOOKING"
       : showInprogressSection
-      ? "INPROGRESS"
-      : showCompletedSection
-      ? "COMPLETED"
-      : "CANCELLED";
+        ? "INPROGRESS"
+        : showCompletedSection
+          ? "COMPLETED"
+          : "CANCELLED";
 
     const shiftType = showHouseShift ? "HOUSE" : "ITEM";
 
@@ -286,95 +286,108 @@ function Order() {
               {data.length > 0 ? (
                 data.map((item, index) => (
                   <>
-                    <Link
-                      to={`/ridedetailsview/${item.booking.bookingId}`}
-                      style={{ textDecoration: "none", color: "black" }}
-                      key={index}
-                    >
-                      <div className="container py-4">
-                        <div className="row" id="on">
-                          <div className="col-lg-10 col-md-6 col-12 p-3">
-                            <p className="fw-medium">
-                              Booking Id : {item.booking.bookingId || ""}
-                            </p>
-                            {/* <p className="fw-medium">
+                    <div className="container py-4">
+                      <div className="row" id="on">
+                        <div className="col-lg-10 col-md-6 col-12 p-3">
+                          <p className="fw-medium">
+                            Booking Id : {item.booking.bookingId || ""}
+                          </p>
+                          {/* <p className="fw-medium">
                               Amount :
                               $ {item.transactionDetails?.txnAmount.toFixed(2) ||
                                 "0.00"}
                               <br />
                             </p> */}
-                            <p>{item.booking.type || "Unknown Vehicle"}</p>
-                            <p
-                              className="fw-bold"
-                              style={{
-                                letterSpacing: "1px",
-                                color: showDraftSection
+                          <p>{item.booking.type || "Unknown Vehicle"}</p>
+                          <p
+                            className="fw-bold"
+                            style={{
+                              letterSpacing: "1px",
+                              color: showDraftSection
+                                ? "orange"
+                                : showInprogressSection
                                   ? "orange"
-                                  : showInprogressSection
-                                  ? "orange" // Yellow color for INPROGRESS
                                   : showCompletedSection
-                                  ? "green" // Green color for COMPLETED
-                                  : showCanceledSection
-                                  ? "red"
-                                  : "#28d8b7", // Red color for CANCELLED
-                              }}
-                            >
-                              {/* {showDraftSection
+                                    ? "green"
+                                    : showCanceledSection
+                                      ? "red"
+                                      : "#28d8b7",
+                            }}
+                          >
+                            {/* {showDraftSection
                                 ? "DRAFT_BOOKING"
                                 : showInprogressSection
                                   ? "BOOKED"
                                   : showCompletedSection
                                     ? "COMPLETED"
                                     : "CANCELLED"} */}
-                              {item.bookingStatus.status}
-                            </p>
+                            {item.bookingStatus.status}
+                          </p>
 
-                            <p style={{ marginTop: "0", marginBottom: "0" }}>
-                              <span className="dot1"></span>
-                              &nbsp;&nbsp;&nbsp;
-                              {item.bookingTripLocations?.[0]?.pickup}
-                              <br />
-                              <span className="line"></span>
-                            </p>
-                            {item.bookingTripLocations?.map(
-                              (location, index) => (
-                                <div key={index}>
-                                  {index > 0 && (
-                                    <div className="line-container">
-                                      <span className="line"></span>
-                                    </div>
-                                  )}
-                                  <p
-                                    key={index}
-                                    style={{
-                                      marginTop: "0",
-                                      marginBottom: "0",
-                                    }}
-                                  >
-                                    <span
+                          <p style={{ marginTop: "0", marginBottom: "0" }}>
+                            <span className="dot1"></span>
+                            &nbsp;&nbsp;&nbsp;
+                            {item.bookingTripLocations?.[0]?.pickup}
+                            <br />
+                            <span className="line"></span>
+                          </p>
+                          {item.bookingTripLocations?.map(
+                            (location, index) => (
+                              <div key={index}>
+                                {index > 0 && (
+                                  <div className="line-container">
+                                    <span className="line"></span>
+                                  </div>
+                                )}
+                                <p
+                                  key={index}
+                                  style={{
+                                    marginTop: "0",
+                                    marginBottom: "0",
+                                  }}
+                                >
+                                  {/* <span
                                       className="dot2"
                                       style={{
                                         backgroundColor:
                                           colors[index % colors.length],
                                       }}
-                                    ></span>
-                                    &nbsp;&nbsp;&nbsp;{location.dropoff}
-                                  </p>
-                                </div>
-                              )
-                            )}
-                          </div>
-                          <div className="col-lg-2 col-md-6 col-12 p-3">
-                            <p className="pt-2">
-                              <FaDollarSign />{" "}
-                              {item.transactionDetails?.txnAmount.toFixed(2) ||
-                                "0.00"}
-                              <br />
-                            </p>
-                          </div>
+                                    ></span> */}
+                                  <span
+                                    className="dot2"
+                                    style={{
+                                      backgroundColor: index % 2 === 0 ? '#acff3b' : '#048c4c',
+                                    }}
+                                  ></span>
+
+                                  &nbsp;&nbsp;&nbsp;{location.dropoff}
+                                </p>
+                              </div>
+                            )
+                          )}
+                        </div>
+                        <div className="col-lg-2 col-md-6 col-12 p-3">
+                          <p className="pt-2">
+                            <FaDollarSign />{" "}
+                            {item.transactionDetails?.txnAmount.toFixed(2) ||
+                              "0.00"}
+                            <br />
+                          </p>
+                          <Link
+                            to={`/ridedetailsview/${item.booking.bookingId}`}
+                            style={{ textDecoration: "none", color: "black" }}
+                            key={index}
+                          >
+                            <button
+                              type="button"
+                              className="btn btn-outline-dark py-2 px-3 mt-5"
+                            >
+                              View Details
+                            </button>
+                          </Link>
                         </div>
                       </div>
-                    </Link>
+                    </div>
                   </>
                 ))
               ) : (

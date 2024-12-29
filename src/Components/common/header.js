@@ -139,7 +139,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                             )}
                           </div>
                           <div className="col-3">
-                            <div className="d-lg-flex justify-content-end">
+                            {/* <div className="d-lg-flex justify-content-end">
                               <div className="me-2">
                                 {isAuthenticate && (
                                   <User
@@ -148,21 +148,35 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                   />
                                 )}
                               </div>
-                              <div className="ride ">
+                              <div className="ride">
                                 {isAuthenticate ? (
-                                  location.pathname !== "/shift" && (
-                                    <li className="nav-item">
-                                      <Link to="/shift">
-                                        <button
-                                          type="button"
-                                          className="login-btn py-2 px-3"
-                                          onClick={handleBookRide}
-                                        >
-                                          Book Ride
-                                        </button>
-                                      </Link>
-                                    </li>
-                                  )
+                                  <>
+                                    {location.pathname !== "/shift" && (
+                                      <li className="nav-item">
+                                        <Link to="/shift">
+                                          <button
+                                            type="button"
+                                            className="login-btn py-2 px-3"
+                                            onClick={handleBookRide}
+                                          >
+                                            Book Ride
+                                          </button>
+                                        </Link>
+                                      </li>
+                                    )}
+                                    {location.pathname !== "/rides" && (
+                                      <li className="nav-item">
+                                        <Link to="/rides" className="data-link">
+                                          <button
+                                            type="button"
+                                            className="login-btn py-2 px-3"
+                                          >
+                                            My Orders
+                                          </button>
+                                        </Link>
+                                      </li>
+                                    )}
+                                  </>
                                 ) : (
                                   <li className="nav-item">
                                     <Link to="/login">
@@ -170,8 +184,52 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                         type="button"
                                         className="login-btn py-2 px-3"
                                       >
-                                        <FaRegUser className="mb-1 me-2" />{" "}
-                                        Login
+                                        <FaRegUser className="mb-1 me-2" /> Login
+                                      </button>
+                                    </Link>
+                                  </li>
+                                )}
+                              </div>
+                            </div> */}
+                            <div className="d-lg-flex justify-content-end">
+                              <div className="row">
+                                <div className="col-auto">
+                                  <div className="hstack gap-2 justify-content-end">
+                                    {location.pathname !== "/rides" && (
+                                      <li className="nav-item">
+                                        <Link to="/rides" className="data-link">
+                                          My Orders
+                                        </Link>
+                                      </li>
+                                    )}
+                                    {isAuthenticate && (
+                                      <User handleLogout={handleLogout} handleCloseMain={handleCloseMain} />
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="ride">
+                                {isAuthenticate ? (
+                                  <>
+                                    {location.pathname !== "/shift" && (
+                                      <li className="nav-item mb-3">
+                                        <Link to="/shift">
+                                          <button
+                                            type="button"
+                                            className="login-btn py-2 px-3"
+                                            onClick={handleBookRide}
+                                          >
+                                            Book Ride
+                                          </button>
+                                        </Link>
+                                      </li>
+                                    )}
+                                  </>
+                                ) : (
+                                  <li className="nav-item">
+                                    <Link to="/login">
+                                      <button type="button" className="login-btn py-2 px-3">
+                                        <FaRegUser className="mb-1 me-2" /> Login
                                       </button>
                                     </Link>
                                   </li>

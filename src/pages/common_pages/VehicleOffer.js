@@ -80,7 +80,7 @@ const VehicleOffer = ({
             style={{ padding: "0 10px", cursor: "pointer" }}
           >
             <div
-              className="card text-center h-100 d-flex flex-column"
+              className="card text-center h-100 d-flex flex-column card-hover"
               style={{ backgroundColor: "#e6ffe4", cursor: "pointer" }}
               onClick={() => handleCardClick(data)}
             >

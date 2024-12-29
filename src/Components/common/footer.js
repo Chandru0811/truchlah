@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/custom.css";
-import google from "../../asset/googleLogo.png";
-import app from "../../asset/appleLogo.png";
+import google from "../../asset/googleLogo.webp";
+import app from "../../asset/appleLogo.webp";
 import { FaFacebookF, FaLinkedin } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
 import { IoLogoWhatsapp } from "react-icons/io";

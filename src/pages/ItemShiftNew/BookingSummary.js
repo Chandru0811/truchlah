@@ -23,12 +23,14 @@ const BookingSummary = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const shiftType = sessionStorage.getItem("shiftType");
     const [data, setData] = useState({});
-    const [expandedAccordion, setExpandedAccordion] = useState(null);
     const navigate = useNavigate();
     const [loadIndicator, setLoadIndicator] = useState(false);
+    const [expandedAccordion, setExpandedAccordion] = useState([]);
     const handleAccordionToggle = (accordionKey) => {
       setExpandedAccordion((prev) =>
-        prev === accordionKey ? null : accordionKey
+        prev.includes(accordionKey)
+          ? prev.filter((key) => key !== accordionKey) // Remove key if already expanded
+          : [...prev, accordionKey] // Add key to expanded list
       );
     };
 
@@ -162,7 +164,7 @@ const BookingSummary = forwardRef(
 
                   <ul className="list-group-flush mt-3 ps-4 pe-3">
                     <li className="list-group-item mb-2 ">
-                      <div className="d-flex align-items-center ">
+                      <div className="d-flex align-items-center mb-2">
                         <span className="" style={{ color: "#5271ff" }}>
                           &#9679;
                         </span>
@@ -172,11 +174,10 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingOne">
                             <button
-                              className={`accordion-button ${
-                                expandedAccordion === "Pickup"
-                                  ? ""
-                                  : "collapsed"
-                              }`}
+                              className={`accordion-button ${expandedAccordion === "Pickup"
+                                ? ""
+                                : "collapsed"
+                                }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseOne"
@@ -189,9 +190,8 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseOne"
-                            className={`accordion-collapse collapse ${
-                              expandedAccordion === "Pickup" ? "show" : ""
-                            }`}
+                            className={`accordion-collapse collapse ${expandedAccordion === "Pickup" ? "show" : ""
+                              }`}
                             aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample"
                           >
@@ -222,7 +222,7 @@ const BookingSummary = forwardRef(
                     {bookingTripLocations.length > 1 &&
                       bookingTripLocations.slice(2).map((stop, index) => (
                         <li className="list-group-item mb-2" key={index}>
-                          <div className="d-flex align-items-center ">
+                          <div className="d-flex align-items-center mb-2">
                             <span style={{ color: "#acff3b" }}>&#9679;</span>
                             <strong className="ms-1">
                               Intermediate Location - {index + 1}
@@ -238,11 +238,10 @@ const BookingSummary = forwardRef(
                                 id={`heading${index}`}
                               >
                                 <button
-                                  className={`accordion-button ${
-                                    expandedAccordion === `stop${index}`
-                                      ? ""
-                                      : "collapsed"
-                                  }`}
+                                  className={`accordion-button ${expandedAccordion === `stop${index}`
+                                    ? ""
+                                    : "collapsed"
+                                    }`}
                                   type="button"
                                   data-bs-toggle="collapse"
                                   data-bs-target={`#collapse${index}`}
@@ -259,11 +258,10 @@ const BookingSummary = forwardRef(
                               </h2>
                               <div
                                 id={`collapse${index}`}
-                                className={`accordion-collapse collapse ${
-                                  expandedAccordion === `stop${index}`
-                                    ? "show"
-                                    : ""
-                                }`}
+                                className={`accordion-collapse collapse ${expandedAccordion === `stop${index}`
+                                  ? "show"
+                                  : ""
+                                  }`}
                                 aria-labelledby={`heading${index}`}
                                 data-bs-parent={`#accordionExample${index}`}
                               >
@@ -292,7 +290,7 @@ const BookingSummary = forwardRef(
                         </li>
                       ))}
                     <li className="list-group-item mb-2">
-                      <div className="d-flex align-items-center ">
+                      <div className="d-flex align-items-center mb-2">
                         <span className="" style={{ color: "#00bf63" }}>
                           &#9679;
                         </span>
@@ -305,9 +303,8 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingTwo">
                             <button
-                              className={`accordion-button ${
-                                expandedAccordion === "Drop" ? "" : "collapsed"
-                              }`}
+                              className={`accordion-button ${expandedAccordion === "Drop" ? "" : "collapsed"
+                                }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseTwo"
@@ -320,9 +317,8 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseTwo"
-                            className={`accordion-collapse collapse ${
-                              expandedAccordion === "Drop" ? "show" : ""
-                            }`}
+                            className={`accordion-collapse collapse ${expandedAccordion === "Drop" ? "show" : ""
+                              }`}
                             aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample1"
                           >
@@ -512,9 +508,8 @@ const BookingSummary = forwardRef(
                   <div className="row">
                     <div className="col-md-6 col-12 mb-3">
                       <div
-                        className={`payment-option text-center p-4 ${
-                          formik.values.paymentType === "CASH" ? "active" : ""
-                        }`}
+                        className={`payment-option text-center p-4 ${formik.values.paymentType === "CASH" ? "active" : ""
+                          }`}
                         onClick={() =>
                           formik.setFieldValue("paymentType", "CASH")
                         }
@@ -537,9 +532,8 @@ const BookingSummary = forwardRef(
                     </div>
                     <div className="col-md-6 col-12">
                       <div
-                        className={`payment-option text-center p-4 ${
-                          formik.values.paymentType === "ONLINE" ? "active" : ""
-                        }`}
+                        className={`payment-option text-center p-4 ${formik.values.paymentType === "ONLINE" ? "active" : ""
+                          }`}
                         onClick={() =>
                           formik.setFieldValue("paymentType", "ONLINE")
                         }

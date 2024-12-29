@@ -65,16 +65,19 @@ const DateAndTime = forwardRef(
     const [selectedImage, setSelectedImage] = useState(
       formData?.form2?.vehicle?.vehicletypeId
         ? vehicle.find(
-            (data) =>
-              data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
-          )
+          (data) =>
+            data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
+        )
         : null
     );
     const [showModal, setShowModal] = useState(
       formData.form1.type !== "ITEM" ? true : false
     );
     const handleShow = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
+    const handleClose = () => {
+      setShowModal(false);
+      setIsModified(false); // Reset isModified when closing the modal
+    };
     // console.log("activeIndex", activeIndex);
     // console.log("from", formData);
     const formik = useFormik({
@@ -286,7 +289,7 @@ const DateAndTime = forwardRef(
             <div className="col-md-6 col-12">
               <div
                 className="input-group mt-4"
-                // style={{ borderRadius: "50px", overflow: "hidden" }}
+              // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <span
                   className="input-group-text"
@@ -319,7 +322,7 @@ const DateAndTime = forwardRef(
 
               <div
                 className="input-group mb-3 mt-5"
-                // style={{ borderRadius: "50px", overflow: "hidden" }}
+              // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <span
                   className="input-group-text"
@@ -411,9 +414,8 @@ const DateAndTime = forwardRef(
                       <div
                         key={overallIndex}
                         onClick={() => handleCarouselClick(image, index)}
-                        className={`card p-2 border-0 ${
-                          activeIndex === overallIndex ? "active" : ""
-                        }`}
+                        className={`card p-2 border-0 ${activeIndex === overallIndex ? "active" : ""
+                          }`}
                         style={{
                           cursor: "pointer",
                           maxWidth: "30%",
@@ -425,9 +427,8 @@ const DateAndTime = forwardRef(
                           <img
                             src={image?.vehicleImage}
                             alt={image?.type}
-                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${
-                              activeIndex === overallIndex ? "active" : ""
-                            }`}
+                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${activeIndex === overallIndex ? "active" : ""
+                              }`}
                             style={{
                               borderRadius: "20px",
                               transition: "border-color 0.3s",
@@ -478,11 +479,21 @@ const DateAndTime = forwardRef(
                     show={showModal}
                     onHide={handleClose}
                     size="xl"
-                    backdrop={isModified ? "static" : true}
+                    backdrop={isModified ? "static" : false}
                     keyboard={isModified ? false : true}
                     centered
+                    onClick={handleClose}
                   >
                     <Modal.Body>
+                      <Button
+                        variant="danger"
+                        onClick={handleClose}
+                        className="position-absolute top-0 end-0 m-3"
+                      >
+                        X
+                      </Button>
+                    </Modal.Body>
+                    <Modal.Body onClick={(e) => e.stopPropagation()}>
                       <VehicleOffer
                         setActiveIndex={setActiveIndex}
                         setIsModified={setIsModified}
@@ -493,6 +504,7 @@ const DateAndTime = forwardRef(
                       />
                     </Modal.Body>
                   </Modal>
+
                 </div>
               </div>
             </div>
@@ -518,8 +530,8 @@ const DateAndTime = forwardRef(
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </form >
+      </div >
     );
   }
 );
