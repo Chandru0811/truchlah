@@ -2386,3 +2386,29 @@ body {
 .card-hover:hover {
   border: 2px solid #adff3ba8;
 }
+
+/* Disable hover effect on the button */
+.btn-outline-dark,
+.btn-outline-dark:hover {
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.data-link1 {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  font-size: 1rem;
+  border-bottom: 2px solid transparent;
+}
+
+.data-link1:hover {
+  border-bottom: 2px solid transparent;
+  color: inherit;
+}
+
+.data-link1:active, .data-link1:focus {
+  border-bottom: 2px solid black;
+  color: inherit;
+}

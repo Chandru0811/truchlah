@@ -17,7 +17,7 @@ import { TbLogout } from "react-icons/tb";
 import { toast } from "react-toastify";
 import { bookingApi, userApi } from "../../config/URL";
 
-function User({ handleLogout,handleCloseMain }) {
+function User({ handleLogout, handleCloseMain }) {
   const [, setShow] = useState(false);
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
@@ -64,13 +64,13 @@ function User({ handleLogout,handleCloseMain }) {
   }, [userId]);
   return (
     <>
-      <OverlayTrigger placement="bottom" overlay={renderTooltip}>
-        <div id="pro-btn">
+      <div id="pro-btn">
+        <OverlayTrigger placement="bottom" overlay={renderTooltip}>
           <button className="btn" onClick={handleShowProfile}>
             <CgProfile style={{ color: "#3E4D6A", fontSize: "24px" }} />
           </button>
-        </div>
-      </OverlayTrigger>
+        </OverlayTrigger>
+      </div>
 
       <Offcanvas show={showProfile} onHide={handleCloseProfile} placement="end">
         <Offcanvas.Header

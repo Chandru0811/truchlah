@@ -537,9 +537,9 @@ function VehicleManagementEdit() {
                         <div>
                           <img
                             src={
-                              formik.values.imageUrl
-                                ? URL.createObjectURL(formik.values.imageUrl)
-                                : data.vehicleCapacitySize
+                              formik.values.vehicleCapacitySize instanceof Blob
+                                ? URL.createObjectURL(formik.values.vehicleCapacitySize)
+                                : data.vehicleCapacitySize || '/default-image.png'
                             }
                             alt="Vehicle"
                             className="img-fluid"

@@ -243,7 +243,7 @@ const HouseShiftSteps = () => {
           Booking Type <FaChevronRight size={"15"} />
         </p>
         <p style={{ fontSize: "20px", color: "#acff3b" }}>
-          &nbsp;&nbsp;House Shifting
+          &nbsp;&nbsp;House Moving
           {/* {shiftType} Sfifting */}
         </p>
       </span>

@@ -195,13 +195,15 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                               <div className="row">
                                 <div className="col-auto">
                                   <div className="hstack gap-2 justify-content-end">
-                                    {location.pathname !== "/rides" && (
+                                    {isAuthenticate ? (
                                       <li className="nav-item">
-                                        <Link to="/rides" className="data-link">
+                                        <Link to="/rides" className="data-link1">
                                           My Orders
                                         </Link>
                                       </li>
-                                    )}
+                                    ) :
+                                      <></>
+                                    }
                                     {isAuthenticate && (
                                       <User handleLogout={handleLogout} handleCloseMain={handleCloseMain} />
                                     )}
@@ -211,19 +213,21 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                               <div className="ride">
                                 {isAuthenticate ? (
                                   <>
-                                    {location.pathname !== "/shift" && (
-                                      <li className="nav-item mb-3">
-                                        <Link to="/shift">
-                                          <button
-                                            type="button"
-                                            className="login-btn py-2 px-3"
-                                            onClick={handleBookRide}
-                                          >
-                                            Book Ride
-                                          </button>
-                                        </Link>
-                                      </li>
-                                    )}
+                                    {location.pathname !== "/shift" &&
+                                      location.pathname !== "/itemshift" &&
+                                      location.pathname !== "/houseshift" && (
+                                        <li className="nav-item">
+                                          <Link to="/shift">
+                                            <button
+                                              type="button"
+                                              className="login-btn py-2 px-3"
+                                              onClick={handleBookRide}
+                                            >
+                                              Book Ride
+                                            </button>
+                                          </Link>
+                                        </li>
+                                      )}
                                   </>
                                 ) : (
                                   <li className="nav-item">

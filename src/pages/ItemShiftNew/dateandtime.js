@@ -299,7 +299,7 @@ const DateAndTime = forwardRef(
                     backgroundColor: "#fff",
                   }}
                 >
-                  <FaCalendarDays />
+                  {/* <FaCalendarDays /> */}
                 </span>
                 <input
                   type="date"
@@ -312,6 +312,11 @@ const DateAndTime = forwardRef(
                   {...formik.getFieldProps("date")}
                   name="date"
                   onChange={handleDateChange}
+                  max={new Date(
+                    new Date().setMonth(new Date().getMonth() + 3)
+                  )
+                    .toISOString()
+                    .split("T")[0]}
                 />
               </div>
               <div className="p-1">
@@ -333,7 +338,7 @@ const DateAndTime = forwardRef(
                     // borderRadius: "50px 0 0 50px",
                   }}
                 >
-                  <IoIosTime />
+                  {/* <IoIosTime /> */}
                 </span>
                 <select
                   className="form-select"
@@ -485,13 +490,18 @@ const DateAndTime = forwardRef(
                     onClick={handleClose}
                   >
                     <Modal.Body>
-                      <Button
-                        variant="danger"
+                      <div
                         onClick={handleClose}
                         className="position-absolute top-0 end-0 m-3"
+                        style={{
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          fontSize: "1.2rem",
+                        }}
+                        aria-label="Close"
                       >
                         X
-                      </Button>
+                      </div>
                     </Modal.Body>
                     <Modal.Body onClick={(e) => e.stopPropagation()}>
                       <VehicleOffer

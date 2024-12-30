@@ -186,7 +186,7 @@ function Summary({ handleNext }) {
                   <div className="col-md-6 col-12 ps-1" id="drop">
                     {" "}
                     <p className="line" style={{ color: "#494949" }}>
-                      House Shifting
+                      House Moving
                     </p>
                   </div>
                 </div>

@@ -184,7 +184,7 @@ function Order() {
               onClick={houseSection}
               type="button"
             >
-              HOUSE SHIFT
+              HOUSE MOVING
             </button>
             <button
               className={`mx-3 ${showItemShift ? "underline" : ""}`}
@@ -292,12 +292,6 @@ function Order() {
                           <p className="fw-medium">
                             Booking Id : {item.booking.bookingId || ""}
                           </p>
-                          {/* <p className="fw-medium">
-                              Amount :
-                              $ {item.transactionDetails?.txnAmount.toFixed(2) ||
-                                "0.00"}
-                              <br />
-                            </p> */}
                           <p>{item.booking.type || "Unknown Vehicle"}</p>
                           <p
                             className="fw-bold"
@@ -314,64 +308,48 @@ function Order() {
                                       : "#28d8b7",
                             }}
                           >
-                            {/* {showDraftSection
-                                ? "DRAFT_BOOKING"
-                                : showInprogressSection
-                                  ? "BOOKED"
-                                  : showCompletedSection
-                                    ? "COMPLETED"
-                                    : "CANCELLED"} */}
                             {item.bookingStatus.status}
                           </p>
 
-                          <p style={{ marginTop: "0", marginBottom: "0" }}>
-                            <span className="dot1"></span>
-                            &nbsp;&nbsp;&nbsp;
-                            {item.bookingTripLocations?.[0]?.pickup}
-                            <br />
-                            <span className="line"></span>
-                          </p>
-                          {item.bookingTripLocations?.map(
-                            (location, index) => (
-                              <div key={index}>
-                                {index > 0 && (
-                                  <div className="line-container">
-                                    <span className="line"></span>
-                                  </div>
-                                )}
-                                <p
-                                  key={index}
-                                  style={{
-                                    marginTop: "0",
-                                    marginBottom: "0",
-                                  }}
-                                >
-                                  {/* <span
+                          {item.bookingTripLocations?.map((location, index, arr) => (
+                            <div key={index}>
+                              {index === 0 && (
+                                <p style={{ marginTop: "0", marginBottom: "0" }}>
+                                  <span
+                                    className="dot1"
+                                  ></span>
+                                  &nbsp;&nbsp;&nbsp;{location.pickup}
+                                  <br />
+                                  <span className="line"></span>
+                                </p>
+                              )}
+                              {index > 0 && (
+                                <div className="line-container">
+                                  <span className="line"></span>
+                                  <p
+                                    style={{
+                                      marginTop: "0",
+                                      marginBottom: "0",
+                                    }}
+                                  >
+                                    <span
                                       className="dot2"
                                       style={{
-                                        backgroundColor:
-                                          colors[index % colors.length],
+                                        backgroundColor: index === arr.length - 1 ? "#048c4c" : "#acff3b",
                                       }}
-                                    ></span> */}
-                                  <span
-                                    className="dot2"
-                                    style={{
-                                      backgroundColor: index % 2 === 0 ? '#acff3b' : '#048c4c',
-                                    }}
-                                  ></span>
-
-                                  &nbsp;&nbsp;&nbsp;{location.dropoff}
-                                </p>
-                              </div>
-                            )
-                          )}
+                                    ></span>
+                                    &nbsp;&nbsp;&nbsp;{location.dropoff}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          ))}
                         </div>
-                        <div className="col-lg-2 col-md-6 col-12 p-3">
-                          <p className="pt-2">
+
+                        <div className="col-lg-2 col-md-6 col-12 p-3 d-flex flex-column justify-content-between">
+                          <p className="pt-2 mb-0">
                             <FaDollarSign />{" "}
-                            {item.transactionDetails?.txnAmount.toFixed(2) ||
-                              "0.00"}
-                            <br />
+                            {item.transactionDetails?.txnAmount.toFixed(2) || "0.00"}
                           </p>
                           <Link
                             to={`/ridedetailsview/${item.booking.bookingId}`}
@@ -380,7 +358,7 @@ function Order() {
                           >
                             <button
                               type="button"
-                              className="btn btn-outline-dark py-2 px-3 mt-5"
+                              className="btn btn-outline-dark py-2 px-3 mt-auto"
                             >
                               View Details
                             </button>
