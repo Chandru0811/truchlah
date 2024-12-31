@@ -55,7 +55,7 @@ function RideDetailsView() {
     if (bookingId.id && data.booking.bookingType === "ITEM") {
       navigate(`/itemshift`, { state: { id: bookingId.id } });
     } else {
-      navigate(`/houseshift`, { state: { id: bookingId.id } });
+      navigate(`/housemoving`, { state: { id: bookingId.id } });
     }
   };
 

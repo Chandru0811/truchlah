@@ -292,6 +292,12 @@ function Order() {
                           <p className="fw-medium">
                             Booking Id : {item.booking.bookingId || ""}
                           </p>
+                          {/* <p className="fw-medium">
+                              Amount :
+                              $ {item.transactionDetails?.txnAmount.toFixed(2) ||
+                                "0.00"}
+                              <br />
+                            </p> */}
                           <p>{item.booking.type || "Unknown Vehicle"}</p>
                           <p
                             className="fw-bold"
@@ -308,42 +314,54 @@ function Order() {
                                       : "#28d8b7",
                             }}
                           >
+                            {/* {showDraftSection
+                                ? "DRAFT_BOOKING"
+                                : showInprogressSection
+                                  ? "BOOKED"
+                                  : showCompletedSection
+                                    ? "COMPLETED"
+                                    : "CANCELLED"} */}
                             {item.bookingStatus.status}
                           </p>
 
-                          {item.bookingTripLocations?.map((location, index, arr) => (
+                          {/* <p style={{ marginTop: "0", marginBottom: "0" }}>
+                            <span className="dot1"></span>
+                            &nbsp;&nbsp;&nbsp;
+                            {item.bookingTripLocations?.[0]?.pickup}
+                            <br />
+                            <span className="line"></span>
+                          </p> */}
+                          {item.bookingTripLocations?.map((location, index) => (
                             <div key={index}>
                               {index === 0 && (
                                 <p style={{ marginTop: "0", marginBottom: "0" }}>
-                                  <span
-                                    className="dot1"
-                                  ></span>
+                                  <span className="dot1"></span>
                                   &nbsp;&nbsp;&nbsp;{location.pickup}
                                   <br />
                                   <span className="line"></span>
                                 </p>
                               )}
-                              {index > 0 && (
-                                <div className="line-container">
-                                  <span className="line"></span>
-                                  <p
+                              <div className="line-container">
+                                {index > 0 && <span className="line"></span>}
+                                <p
+                                  style={{
+                                    marginTop: "0",
+                                    marginBottom: "0",
+                                  }}
+                                >
+                                  <span
+                                    className="dot2"
                                     style={{
-                                      marginTop: "0",
-                                      marginBottom: "0",
+                                      backgroundColor:
+                                        index === item.bookingTripLocations.length - 1 ? "#048c4c" : "#acff3b",
                                     }}
-                                  >
-                                    <span
-                                      className="dot2"
-                                      style={{
-                                        backgroundColor: index === arr.length - 1 ? "#048c4c" : "#acff3b",
-                                      }}
-                                    ></span>
-                                    &nbsp;&nbsp;&nbsp;{location.dropoff}
-                                  </p>
-                                </div>
-                              )}
+                                  ></span>
+                                  &nbsp;&nbsp;&nbsp;{location.dropoff}
+                                </p>
+                              </div>
                             </div>
                           ))}
+
                         </div>
 
                         <div className="col-lg-2 col-md-6 col-12 p-3 d-flex flex-column justify-content-between">

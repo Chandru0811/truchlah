@@ -16,12 +16,6 @@ const VehicleOffer = ({
 }) => {
   const [isArrowVisible, setIsArrowVisible] = useState(false);
 
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Click to Choose
-    </Tooltip>
-  );
-
   useEffect(() => {
     // Check if there are more than 3 items to show the arrows
     setIsArrowVisible(vehicle.length > 3);
@@ -54,7 +48,7 @@ const VehicleOffer = ({
   };
 
   return (
-    <div className="container-fluid top-0" style={{ minHeight: "90vh" }}>
+    <div className="container-fluid top-0" style={{ minHeight: "86vh" }}>
       <Carousel
         responsive={responsive}
         infinite={true}
@@ -85,66 +79,67 @@ const VehicleOffer = ({
           <div
             key={i}
             className="text-center h-100 d-flex flex-column"
-            style={{ padding: "0 10px", cursor: "pointer" }}
+            style={{ padding: "0 10px"}}
           >
-            <OverlayTrigger
-              placement="top"
-              delay={{ show: 250, hide: 400 }}
-              overlay={renderTooltip}
+            <div
+              className="card text-center h-100 d-flex flex-column card-hover"
+              style={{ backgroundColor: "#e6ffe4" }}
+
             >
-              <div
-                className="card text-center h-100 d-flex flex-column card-hover"
-                style={{ backgroundColor: "#e6ffe4", cursor: "pointer" }}
-                onClick={() => handleCardClick(data)}
-              >
-                <div className="card border-0 mt-2 mx-2 pt-3 text-center d-block flex-grow-1">
-                  <h5 className="card-title">{data?.suitableHouseType}</h5>
-                  <img
-                    style={{ width: "13rem" }}
-                    className="card-img-top img-fluid"
-                    src={data?.vehicleImage}
-                    alt={data?.vehicleType}
-                  />
-                  <div className="card-body pt-0">
-                    <h4 className="text-danger mb-0">SGD {data?.baseFare}.00</h4>
-                    <p className="card-text text-muted">
-                      *inclusive SGD {data?.gst} GST
+              <div className="card border-0 mt-2 mx-2 pt-3 text-center d-block flex-grow-1">
+                <h5 className="card-title">{data?.suitableHouseType}</h5>
+                <img
+                  style={{ width: "13rem" }}
+                  className="card-img-top img-fluid"
+                  src={data?.vehicleImage}
+                  alt={data?.vehicleType}
+                />
+                <div className="card-body pt-0">
+                  <h4 className="text-danger mb-0">SGD {data?.baseFare}.00</h4>
+                  <p className="card-text text-muted">
+                    *inclusive SGD {data?.gst} GST
+                  </p>
+                </div>
+              </div>
+              <div className="mt-3 px-3 flex-grow-1">
+                <h5 className="card-title my-1">
+                  {data?.type?.split("_").join(" ")}
+                </h5>
+                <p className="card-text text-muted my-3">{data?.description}</p>
+                <h5 className="card-title text-start">Package Includes:</h5>
+                <div className="row justify-content-around">
+                  <div className="col-auto col align-self-end mt-3 ms-3">
+                    <img
+                      style={{ width: "3rem" }}
+                      className="card-img-top img-fluid"
+                      src={boxes}
+                      alt="Free Boxes"
+                    />
+                    <p className="text-muted">
+                      {`${data?.packageBoxes}x Free Boxes` ?? "--"}
+                    </p>
+                  </div>
+                  <div className="col-auto col align-self-end mt-3 ms-3">
+                    <img
+                      style={{ width: "3rem" }}
+                      className="card-img-top img-fluid"
+                      src={ManPower}
+                      alt="Package with Free Manpower"
+                    />
+                    <p className="text-muted">
+                      {`${data?.packageManpower}x Manpower` ?? "--"}
                     </p>
                   </div>
                 </div>
-                <div className="mt-3 px-3 flex-grow-1">
-                  <h5 className="card-title my-1">
-                    {data?.type?.split("_").join(" ")}
-                  </h5>
-                  <p className="card-text text-muted my-3">{data?.description}</p>
-                  <h5 className="card-title text-start">Package Includes:</h5>
-                  <div className="row justify-content-around">
-                    <div className="col-auto col align-self-end mt-3 ms-3">
-                      <img
-                        style={{ width: "3rem" }}
-                        className="card-img-top img-fluid"
-                        src={boxes}
-                        alt="Free Boxes"
-                      />
-                      <p className="text-muted">
-                        {`${data?.packageBoxes}x Free Boxes` ?? "--"}
-                      </p>
-                    </div>
-                    <div className="col-auto col align-self-end mt-3 ms-3">
-                      <img
-                        style={{ width: "3rem" }}
-                        className="card-img-top img-fluid"
-                        src={ManPower}
-                        alt="Package with Free Manpower"
-                      />
-                      <p className="text-muted">
-                        {`${data?.packageManpower}x Manpower` ?? "--"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
-            </OverlayTrigger>
+            </div>
+            <button
+              type="button"
+              className="login-btn py-2 px-3 mt-3"
+              onClick={() => handleCardClick(data)}
+            >
+              Choose Vehicle
+            </button>
           </div>
         ))}
       </Carousel>

@@ -170,7 +170,11 @@ function VehicleManagementEdit() {
           ...prevValues,
           ...response.data.responseBody,
         }));
-        setData(response.data.responseBody);
+        setData({
+          ...response.data.responseBody,
+          vehicleImage: `${response.data.responseBody.vehicleImage}?t=${new Date().getTime()}`,
+          vehicleCapacitySize: `${response.data.responseBody.vehicleCapacitySize}?t=${new Date().getTime()}`,
+        });
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       } finally {
@@ -182,11 +186,10 @@ function VehicleManagementEdit() {
 
   const handleFileChange = (event) => {
     const file = event.currentTarget.files[0];
-    console.log("object", file);
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc(reader.result);
+        setImageSrc(reader.result); // Set image source for vehicle image cropper
         setShowCropper(true);
       };
       reader.readAsDataURL(file);
@@ -207,16 +210,13 @@ function VehicleManagementEdit() {
   const handleCrop = useCallback(async () => {
     try {
       const croppedImageData = await getCroppedImg(imageSrc, croppedAreaPixels);
-      //  console.log("filename",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
       const croppedImageFile = blobToFile(
         croppedImageData,
         `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`
       );
 
       setCroppedImage(croppedImageFile);
-      // console.log("object",croppedImageFile);
-
-      formik.setFieldValue("imageUrl", croppedImageFile);
+      formik.setFieldValue("imageUrl", croppedImageFile); // Set the vehicle image field
       setShowCropper(false);
     } catch (e) {
       console.error(e);
@@ -226,8 +226,7 @@ function VehicleManagementEdit() {
   const handleCropCancel = () => {
     setShowCropper(false);
     setImageSrc(null);
-    formik.setFieldValue("imageUrl", "");
-    document.querySelector("input[type='file']").value = "";
+    formik.setFieldValue("imageUrl", null); // Reset vehicle image field
   };
 
   const handleFileChange1 = (event) => {
@@ -235,7 +234,7 @@ function VehicleManagementEdit() {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImageSrc1(reader.result);
+        setImageSrc1(reader.result); // Set image source for vehicle capacity image cropper
         setShowCropper1(true);
       };
       reader.readAsDataURL(file);
@@ -255,20 +254,14 @@ function VehicleManagementEdit() {
 
   const handleCrop1 = useCallback(async () => {
     try {
-      const croppedImageData = await getCroppedImg(
-        imageSrc1,
-        croppedAreaPixels1
-      );
-      //  console.log("filename",`${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`)
+      const croppedImageData = await getCroppedImg(imageSrc1, croppedAreaPixels1);
       const croppedImageFile = blobToFile1(
         croppedImageData,
-        `${formik.values.type}_IMAGE.${croppedImageData.type?.split("/")[1]}`
+        `${formik.values.type}_CAPACITY_IMAGE.${croppedImageData.type?.split("/")[1]}`
       );
 
       setCroppedImag1(croppedImageFile);
-      // console.log("object",croppedImageFile);
-
-      formik.setFieldValue("vehicleCapacitySize", croppedImageFile);
+      formik.setFieldValue("vehicleCapacitySize", croppedImageFile); // Set the vehicle capacity image field
       setShowCropper1(false);
     } catch (e) {
       console.error(e);
@@ -278,8 +271,7 @@ function VehicleManagementEdit() {
   const handleCropCancel1 = () => {
     setShowCropper1(false);
     setImageSrc1(null);
-    formik.setFieldValue("vehicleCapacitySize", "");
-    document.querySelector("input[type='file']").value = "";
+    formik.setFieldValue("vehicleCapacitySize", null); // Reset vehicle capacity image field
   };
 
   return (
@@ -452,7 +444,7 @@ function VehicleManagementEdit() {
                       <div>
                         <img
                           src={
-                            formik.values.imageUrl
+                            formik.values.imageUrl instanceof Blob
                               ? URL.createObjectURL(formik.values.imageUrl)
                               : data.vehicleImage
                           }
@@ -539,7 +531,7 @@ function VehicleManagementEdit() {
                             src={
                               formik.values.vehicleCapacitySize instanceof Blob
                                 ? URL.createObjectURL(formik.values.vehicleCapacitySize)
-                                : data.vehicleCapacitySize || '/default-image.png'
+                                : data.vehicleCapacitySize
                             }
                             alt="Vehicle"
                             className="img-fluid"

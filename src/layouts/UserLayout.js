@@ -127,7 +127,7 @@ function UserLayout({
             <>
               <Route path="/map" element={<Map />} />
               <Route path="/Itemshift" element={<ItemShift />} />
-              <Route path="/houseshift" element={<HouseShiftSteps />} />
+              <Route path="/housemoving" element={<HouseShiftSteps />} />
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/notification" element={<Notification />} />
               <Route path="/support" element={<Support />} />

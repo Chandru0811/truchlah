@@ -487,7 +487,6 @@ const DateAndTime = forwardRef(
                     backdrop={isModified ? "static" : false}
                     keyboard={isModified ? false : true}
                     centered
-                    onClick={handleClose}
                   >
                     <Modal.Body>
                       <div

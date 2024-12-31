@@ -63,7 +63,7 @@ function Shift() {
             >
               <Link
                 to={{
-                  pathname: "/houseshift",
+                  pathname: "/housemoving",
                   // state: { logType: logType("HOUSE") },
                 }}
                 style={{ textDecoration: "none", color: "inherit" }}
@@ -102,7 +102,7 @@ function Shift() {
           <div className="col-lg-3 col-md-3 col-12"></div>
           <div className="col-lg-6 col-md-6 col-12">
             <Link
-              to={{ pathname: "/houseshift", state: { type: "houseShift" } }}
+              to={{ pathname: "/housemoving", state: { type: "houseShift" } }}
             >
               <button
                 type="button"
