@@ -79,10 +79,10 @@ const VehicleOffer = ({
           <div
             key={i}
             className="text-center h-100 d-flex flex-column"
-            style={{ padding: "0 10px"}}
+            style={{ padding: "0 10px" }}
           >
             <div
-              className="card text-center h-100 d-flex flex-column card-hover"
+              className="card text-center h-100 d-flex flex-column"
               style={{ backgroundColor: "#e6ffe4" }}
 
             >
@@ -135,8 +135,14 @@ const VehicleOffer = ({
             </div>
             <button
               type="button"
-              className="login-btn py-2 px-3 mt-3"
+              className="choose-vehicle py-2 px-3 mt-3"
               onClick={() => handleCardClick(data)}
+              // style={{
+              //   border: selectedImage?.vehicletypeId === data?.vehicletypeId
+              //     ? "2px solid #adff3ba8"
+              //     : "none",
+              //   borderRadius: "20px",
+              // }}
             >
               Choose Vehicle
             </button>

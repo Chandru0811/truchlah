@@ -288,19 +288,9 @@ const DateAndTime = forwardRef(
           <div className="row ">
             <div className="col-md-6 col-12">
               <div
-                className="input-group mt-4"
+                className="mt-4"
               // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
-                <span
-                  className="input-group-text"
-                  id="basic-addon1"
-                  style={{
-                    borderRight: "none",
-                    backgroundColor: "#fff",
-                  }}
-                >
-                  {/* <FaCalendarDays /> */}
-                </span>
                 <input
                   type="date"
                   className="date-field form-control"
@@ -308,7 +298,7 @@ const DateAndTime = forwardRef(
                   aria-describedby="basic-addon1"
                   min={new Date().toISOString().split("T")[0]}
                   placeholder="Select date"
-                  style={{ borderLeft: "none", minHeight: "50px" }}
+                  style={{ minHeight: "50px" }}
                   {...formik.getFieldProps("date")}
                   name="date"
                   onChange={handleDateChange}
@@ -326,25 +316,13 @@ const DateAndTime = forwardRef(
               </div>
 
               <div
-                className="input-group mb-3 mt-5"
+                className="mb-3 mt-5"
               // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
-                <span
-                  className="input-group-text"
-                  id="basic-addon1"
-                  style={{
-                    borderRight: "none",
-                    backgroundColor: "#fff",
-                    // borderRadius: "50px 0 0 50px",
-                  }}
-                >
-                  {/* <IoIosTime /> */}
-                </span>
                 <select
                   className="form-select"
                   aria-label="Default select example"
                   style={{
-                    borderLeft: "none",
                     minHeight: "50px",
                   }}
                   {...formik.getFieldProps("time")}
