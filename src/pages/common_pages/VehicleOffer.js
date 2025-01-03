@@ -13,6 +13,7 @@ const VehicleOffer = ({
   setSelectedImage,
   vehicle,
   onCardSelect,
+  selectedImage,
 }) => {
   const [isArrowVisible, setIsArrowVisible] = useState(false);
 
@@ -46,6 +47,7 @@ const VehicleOffer = ({
       items: 1,
     },
   };
+  console.log("active img",)
 
   return (
     <div className="container-fluid top-0" style={{ minHeight: "86vh" }}>
@@ -135,14 +137,8 @@ const VehicleOffer = ({
             </div>
             <button
               type="button"
-              className="choose-vehicle py-2 px-3 mt-3"
+              className={`choose-vehicle py-2 px-3 mt-3 ${selectedImage?.vehicletypeId === data.vehicletypeId ? "active" : ""}`}
               onClick={() => handleCardClick(data)}
-              // style={{
-              //   border: selectedImage?.vehicletypeId === data?.vehicletypeId
-              //     ? "2px solid #adff3ba8"
-              //     : "none",
-              //   borderRadius: "20px",
-              // }}
             >
               Choose Vehicle
             </button>

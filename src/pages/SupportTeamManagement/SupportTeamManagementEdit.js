@@ -127,7 +127,7 @@ function SupportTeamManagementEdit() {
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      <span>Save</span>
+                      <span>Update</span>
                     )}
                   </button>
                 </div>

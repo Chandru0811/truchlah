@@ -278,6 +278,16 @@ const DateAndTime = forwardRef(
       }
     };
 
+    console.log(
+      "Current date:",
+      new Date().toISOString().split("T")[0]
+    );
+
+    const maxDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
+      .toISOString().split("T")[0];
+
+    console.log("date", maxDate)
+
     useImperativeHandle(ref, () => ({
       dateandtime: formik.handleSubmit,
     }));
@@ -302,11 +312,7 @@ const DateAndTime = forwardRef(
                   {...formik.getFieldProps("date")}
                   name="date"
                   onChange={handleDateChange}
-                  max={new Date(
-                    new Date().setMonth(new Date().getMonth() + 3)
-                  )
-                    .toISOString()
-                    .split("T")[0]}
+                  max={maxDate}
                 />
               </div>
               <div className="p-1">

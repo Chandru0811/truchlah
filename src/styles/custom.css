@@ -2399,7 +2399,7 @@ body {
   font-family: "Afacad", system-ui;
   border-radius: 5px;
 }
-.choose-vehicle:active {
+.choose-vehicle.active {
   color: #333333;
   background: #acff3b;
   font-size: 18px;
