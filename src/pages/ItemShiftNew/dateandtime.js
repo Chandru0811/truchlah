@@ -65,9 +65,9 @@ const DateAndTime = forwardRef(
     const [selectedImage, setSelectedImage] = useState(
       formData?.form2?.vehicle?.vehicletypeId
         ? vehicle.find(
-          (data) =>
-            data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
-        )
+            (data) =>
+              data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
+          )
         : null
     );
     const [showModal, setShowModal] = useState(
@@ -181,6 +181,7 @@ const DateAndTime = forwardRef(
       getVechicle();
       console.log("object", vehicle);
       window.scrollTo({ top: 0, behavior: "smooth" });
+      formik.setFieldValue("date", new Date().toISOString().split("T")[0]);
     }, []);
 
     useEffect(() => {
@@ -278,15 +279,11 @@ const DateAndTime = forwardRef(
       }
     };
 
-    console.log(
-      "Current date:",
-      new Date().toISOString().split("T")[0]
-    );
-
     const maxDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
-      .toISOString().split("T")[0];
+      .toISOString()
+      .split("T")[0];
 
-    console.log("date", maxDate)
+    console.log("date", maxDate);
 
     useImperativeHandle(ref, () => ({
       dateandtime: formik.handleSubmit,
@@ -299,7 +296,7 @@ const DateAndTime = forwardRef(
             <div className="col-md-6 col-12">
               <div
                 className="mt-4"
-              // style={{ borderRadius: "50px", overflow: "hidden" }}
+                // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <input
                   type="date"
@@ -323,7 +320,7 @@ const DateAndTime = forwardRef(
 
               <div
                 className="mb-3 mt-5"
-              // style={{ borderRadius: "50px", overflow: "hidden" }}
+                // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <select
                   className="form-select"
@@ -403,8 +400,9 @@ const DateAndTime = forwardRef(
                       <div
                         key={overallIndex}
                         onClick={() => handleCarouselClick(image, index)}
-                        className={`card p-2 border-0 ${activeIndex === overallIndex ? "active" : ""
-                          }`}
+                        className={`card p-2 border-0 ${
+                          activeIndex === overallIndex ? "active" : ""
+                        }`}
                         style={{
                           cursor: "pointer",
                           maxWidth: "30%",
@@ -416,8 +414,9 @@ const DateAndTime = forwardRef(
                           <img
                             src={image?.vehicleImage}
                             alt={image?.type}
-                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${activeIndex === overallIndex ? "active" : ""
-                              }`}
+                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${
+                              activeIndex === overallIndex ? "active" : ""
+                            }`}
                             style={{
                               borderRadius: "20px",
                               transition: "border-color 0.3s",
@@ -497,7 +496,6 @@ const DateAndTime = forwardRef(
                       />
                     </Modal.Body>
                   </Modal>
-
                 </div>
               </div>
             </div>
@@ -523,8 +521,8 @@ const DateAndTime = forwardRef(
               </div>
             </div>
           </div>
-        </form >
-      </div >
+        </form>
+      </div>
     );
   }
 );
