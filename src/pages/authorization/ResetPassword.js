@@ -22,6 +22,34 @@ const ResetPassword = () => {
   const ConfirmPasswordVisibility = () => {
     setConfirmPassword(!confirmPassword);
   };
+  const checkPasswordComplexity = (password) => {
+
+    if (!password) return "";
+
+    const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
+    if (password.length < 6 || isOnlyNumbersOrLetters) {
+      return "Password Strength is Weak";
+    }
+
+    const hasLettersAndNumbers = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/.test(password);
+    const hasLettersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+    const hasNumbersAndSpecialCharacter = /^(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+    const hasLettersNumbersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+
+    if (password.length >= 6 && hasLettersNumbersAndSpecialCharacter) {
+      return "Password Strength is Strong";
+    }
+
+    if (
+      password.length >= 6 &&
+      (hasLettersAndNumbers || hasLettersAndSpecialCharacter || hasNumbersAndSpecialCharacter)
+    ) {
+      return "Password Strength is Medium";
+    }
+
+    return "";
+  };
+
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .matches(
@@ -30,7 +58,7 @@ const ResetPassword = () => {
       )
       .required("*Email is required"),
     password: Yup.string()
-      .min(8, "Password must be at least 8 characters long")
+      .min(6, "Password must be at least 6 characters long")
       .matches(/^\S*$/, "Password must not contain spaces")
       .required("Please enter your password"),
 
@@ -72,6 +100,9 @@ const ResetPassword = () => {
       }
     },
   });
+
+  const passwordFeedback = checkPasswordComplexity(formik.values.password);
+
   useEffect(() => {
     formik.setFieldValue("email", mailId);
   }, []);
@@ -127,11 +158,10 @@ const ResetPassword = () => {
                           <Form.Control
                             type="email"
                             readOnly
-                            className={`form-control  ${
-                              formik.touched.email && formik.errors.email
-                                ? ""
-                                : ""
-                            }`}
+                            className={`form-control  ${formik.touched.email && formik.errors.email
+                              ? ""
+                              : ""
+                              }`}
                             {...formik.getFieldProps("email")}
                             placeholder="Enter your name"
                           />
@@ -152,11 +182,10 @@ const ResetPassword = () => {
                           <Form.Control
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter your password"
-                            className={`form-control ${
-                              formik.touched.password && formik.errors.password
-                                ? ""
-                                : ""
-                            }`}
+                            className={`form-control ${formik.touched.password && formik.errors.password
+                              ? ""
+                              : ""
+                              }`}
                             {...formik.getFieldProps("password")}
                           />
                           {showPassword ? (
@@ -187,6 +216,69 @@ const ResetPassword = () => {
                               </div>
                             )}
                         </FloatingLabel>
+                        {passwordFeedback && (
+                          <div>
+                            {/* Progress Bar */}
+                            <div className="progress" style={{ height: "5px", marginTop: "8px" }}>
+                              <div
+                                className={`progress-bar ${passwordFeedback === "Password Strength is Weak"
+                                  ? "bg-danger"
+                                  : passwordFeedback === "Password Strength is Medium"
+                                    ? "bg-warning"
+                                    : passwordFeedback === "Password Strength is Strong"
+                                      ? "bg-success"
+                                      : ""
+                                  }`}
+                                role="progressbar"
+                                style={{
+                                  width:
+                                    passwordFeedback === "Password Strength is Weak"
+                                      ? "30%"
+                                      : passwordFeedback === "Password Strength is Medium"
+                                        ? "60%"
+                                        : passwordFeedback === "Password Strength is Strong"
+                                          ? "100%"
+                                          : "0%",
+                                }}
+                                aria-valuenow={
+                                  passwordFeedback === "Password Strength is Weak"
+                                    ? "30"
+                                    : passwordFeedback === "Password Strength is Medium"
+                                      ? "60"
+                                      : passwordFeedback === "Password Strength is Strong"
+                                        ? "100"
+                                        : "0"
+                                }
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              >
+                                {passwordFeedback === "Password Strength is Weak"
+                                  ? ""
+                                  : passwordFeedback === "Password Strength is Medium"
+                                    ? ""
+                                    : passwordFeedback === "Password Strength is Strong"
+                                      ? ""
+                                      : ""}
+                              </div>
+                            </div>
+                            {/* Feedback Message */}
+                            <div
+                              style={{
+                                marginTop: "8px",
+                                color:
+                                  passwordFeedback === "Password Strength is Weak"
+                                    ? "red"
+                                    : passwordFeedback === "Password Strength is Medium"
+                                      ? "orange"
+                                      : passwordFeedback === "Password Strength is Strong"
+                                        ? "green"
+                                        : "black",
+                              }}
+                            >
+                              {passwordFeedback}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="">
                         <FloatingLabel
@@ -198,12 +290,11 @@ const ResetPassword = () => {
                           <Form.Control
                             type={confirmPassword ? "text" : "password"}
                             placeholder="Confirm your password"
-                            className={`form-control ${
-                              formik.touched.confirmPassword &&
+                            className={`form-control ${formik.touched.confirmPassword &&
                               formik.errors.confirmPassword
-                                ? ""
-                                : ""
-                            }`}
+                              ? ""
+                              : ""
+                              }`}
                             {...formik.getFieldProps("confirmPassword")}
                           />
                           {confirmPassword ? (

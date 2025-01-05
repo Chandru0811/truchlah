@@ -50,7 +50,7 @@ const DriverInfoAdd = forwardRef(
         .email("*Invalid email format")
         .required("*Email is required"),
       password: Yup.string()
-        .min(8, "Password must be at least 8 characters long")
+        .min(6, "Password must be at least 6 characters long")
         .matches(/^\S*$/, "Password must not contain spaces")
         .required("Please enter your password"),
 

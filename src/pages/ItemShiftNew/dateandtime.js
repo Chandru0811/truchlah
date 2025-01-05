@@ -25,33 +25,33 @@ const validationSchema = Yup.object().shape({
 
 const DateAndTime = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-    const [availableTimes, setAvailableTimes] = useState([
-      "08:00:00",
-      "08:30:00",
-      "09:00:00",
-      "09:30:00",
-      "10:00:00",
-      "10:30:00",
-      "11:00:00",
-      "11:30:00",
-      "12:00:00",
-      "12:30:00",
-      "13:00:00",
-      "13:30:00",
-      "14:00:00",
-      "14:30:00",
-      "15:00:00",
-      "15:30:00",
-      "16:00:00",
-      "16:30:00",
-      "17:00:00",
-      "17:30:00",
-      "18:00:00",
-      "18:30:00",
-      "19:00:00",
-      "19:30:00",
-      "20:00:00",
-    ]);
+    // const [availableTimes, setAvailableTimes] = useState([
+    //   "08:00:00",
+    //   "08:30:00",
+    //   "09:00:00",
+    //   "09:30:00",
+    //   "10:00:00",
+    //   "10:30:00",
+    //   "11:00:00",
+    //   "11:30:00",
+    //   "12:00:00",
+    //   "12:30:00",
+    //   "13:00:00",
+    //   "13:30:00",
+    //   "14:00:00",
+    //   "14:30:00",
+    //   "15:00:00",
+    //   "15:30:00",
+    //   "16:00:00",
+    //   "16:30:00",
+    //   "17:00:00",
+    //   "17:30:00",
+    //   "18:00:00",
+    //   "18:30:00",
+    //   "19:00:00",
+    //   "19:30:00",
+    //   "20:00:00",
+    // ]);
     const shiftType = sessionStorage.getItem("shiftType");
     const userId = sessionStorage.getItem("userId");
     const [vehicle, setVechicle] = useState([]);
@@ -65,9 +65,9 @@ const DateAndTime = forwardRef(
     const [selectedImage, setSelectedImage] = useState(
       formData?.form2?.vehicle?.vehicletypeId
         ? vehicle.find(
-            (data) =>
-              data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
-          )
+          (data) =>
+            data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
+        )
         : null
     );
     const [showModal, setShowModal] = useState(
@@ -232,50 +232,109 @@ const DateAndTime = forwardRef(
       const [hours, minutes] = time.split(":").map(Number);
       return hours * 60 + minutes;
     }
+    // const handleDateChange = (e) => {
+    //   const selectedDate = e.target.value;
+    //   formik.setFieldValue("date", selectedDate);
+
+    //   const today = new Date().toISOString().split("T")[0];
+    //   const currentTime = new Date().toTimeString().slice(0, 8);
+    //   if (selectedDate === today) {
+    //     // console.log("currentTime", currentTime);
+    //     const timesAfterFilter = availableTimes.reduce((acc, time) => {
+    //       if (timeToMinutes(time) > timeToMinutes(currentTime)) {
+    //         acc.push(time);
+    //       } else {
+    //       }
+    //       return acc;
+    //     }, []);
+    //     setAvailableTimes(timesAfterFilter);
+    //   } else {
+    //     setAvailableTimes([
+    //       "08:00:00",
+    //       "08:30:00",
+    //       "09:00:00",
+    //       "09:30:00",
+    //       "10:00:00",
+    //       "10:30:00",
+    //       "11:00:00",
+    //       "11:30:00",
+    //       "12:00:00",
+    //       "12:30:00",
+    //       "13:00:00",
+    //       "13:30:00",
+    //       "14:00:00",
+    //       "14:30:00",
+    //       "15:00:00",
+    //       "15:30:00",
+    //       "16:00:00",
+    //       "16:30:00",
+    //       "17:00:00",
+    //       "17:30:00",
+    //       "18:00:00",
+    //       "18:30:00",
+    //       "19:00:00",
+    //       "19:30:00",
+    //       "20:00:00",
+    //     ]);
+    //   }
+    // };
+
+    const [availableTimes, setAvailableTimes] = useState([]);
+    const currentTime = new Date().toTimeString().slice(0, 8);
+    const today = new Date().toISOString().split("T")[0];
+
+    const allTimes = [
+      "08:00:00",
+      "08:30:00",
+      "09:00:00",
+      "09:30:00",
+      "10:00:00",
+      "10:30:00",
+      "11:00:00",
+      "11:30:00",
+      "12:00:00",
+      "12:30:00",
+      "13:00:00",
+      "13:30:00",
+      "14:00:00",
+      "14:30:00",
+      "15:00:00",
+      "15:30:00",
+      "16:00:00",
+      "16:30:00",
+      "17:00:00",
+      "17:30:00",
+      "18:00:00",
+      "18:30:00",
+      "19:00:00",
+      "19:30:00",
+      "20:00:00",
+    ];
+
+    const localTimeToMinutes  = (time) => {
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    };
+
+    useEffect(() => {
+      // Filter available times for today's date
+      const timesAfterFilter = allTimes.filter(
+        (time) => localTimeToMinutes (time) > localTimeToMinutes (currentTime)
+      );
+      setAvailableTimes(timesAfterFilter);
+    }, []); // Empty dependency array ensures this runs only on initial render.
+
     const handleDateChange = (e) => {
       const selectedDate = e.target.value;
       formik.setFieldValue("date", selectedDate);
 
-      const today = new Date().toISOString().split("T")[0];
-      const currentTime = new Date().toTimeString().slice(0, 8);
       if (selectedDate === today) {
-        // console.log("currentTime", currentTime);
-        const timesAfterFilter = availableTimes.reduce((acc, time) => {
-          if (timeToMinutes(time) > timeToMinutes(currentTime)) {
-            acc.push(time);
-          } else {
-          }
-          return acc;
-        }, []);
+        const timesAfterFilter = allTimes.filter(
+          (time) => localTimeToMinutes (time) > localTimeToMinutes (currentTime)
+        );
         setAvailableTimes(timesAfterFilter);
       } else {
-        setAvailableTimes([
-          "08:00:00",
-          "08:30:00",
-          "09:00:00",
-          "09:30:00",
-          "10:00:00",
-          "10:30:00",
-          "11:00:00",
-          "11:30:00",
-          "12:00:00",
-          "12:30:00",
-          "13:00:00",
-          "13:30:00",
-          "14:00:00",
-          "14:30:00",
-          "15:00:00",
-          "15:30:00",
-          "16:00:00",
-          "16:30:00",
-          "17:00:00",
-          "17:30:00",
-          "18:00:00",
-          "18:30:00",
-          "19:00:00",
-          "19:30:00",
-          "20:00:00",
-        ]);
+        setAvailableTimes(allTimes);
       }
     };
 
@@ -296,7 +355,7 @@ const DateAndTime = forwardRef(
             <div className="col-md-6 col-12">
               <div
                 className="mt-4"
-                // style={{ borderRadius: "50px", overflow: "hidden" }}
+              // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <input
                   type="date"
@@ -320,7 +379,7 @@ const DateAndTime = forwardRef(
 
               <div
                 className="mb-3 mt-5"
-                // style={{ borderRadius: "50px", overflow: "hidden" }}
+              // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <select
                   className="form-select"
@@ -400,9 +459,8 @@ const DateAndTime = forwardRef(
                       <div
                         key={overallIndex}
                         onClick={() => handleCarouselClick(image, index)}
-                        className={`card p-2 border-0 ${
-                          activeIndex === overallIndex ? "active" : ""
-                        }`}
+                        className={`card p-2 border-0 ${activeIndex === overallIndex ? "active" : ""
+                          }`}
                         style={{
                           cursor: "pointer",
                           maxWidth: "30%",
@@ -414,9 +472,8 @@ const DateAndTime = forwardRef(
                           <img
                             src={image?.vehicleImage}
                             alt={image?.type}
-                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${
-                              activeIndex === overallIndex ? "active" : ""
-                            }`}
+                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${activeIndex === overallIndex ? "active" : ""
+                              }`}
                             style={{
                               borderRadius: "20px",
                               transition: "border-color 0.3s",

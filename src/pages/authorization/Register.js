@@ -9,7 +9,36 @@ import { userApi } from "../../config/URL";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-// import { GoogleLoginButton } from "react-social-login-buttons";
+// import { GoogleLoginButton } from "react-socsial-login-buttons";
+
+const checkPasswordComplexity = (password) => {
+
+  if (!password) return "";
+
+  const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
+  if (password.length < 6 || isOnlyNumbersOrLetters) {
+    return "Password Strength is Weak";
+  }
+
+  const hasLettersAndNumbers = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/.test(password);
+  const hasLettersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+  const hasNumbersAndSpecialCharacter = /^(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+  const hasLettersNumbersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+
+  if (password.length >= 6 && hasLettersNumbersAndSpecialCharacter) {
+    return "Password Strength is Strong";
+  }
+
+  if (
+    password.length >= 6 &&
+    (hasLettersAndNumbers || hasLettersAndSpecialCharacter || hasNumbersAndSpecialCharacter)
+  ) {
+    return "Password Strength is Medium";
+  }
+
+  return "";
+};
+
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("*First Name is required"),
   lastName: Yup.string().required("*Last Name is required"),
@@ -44,13 +73,13 @@ const validationSchema = Yup.object().shape({
         return value && value.length === 10
           ? true
           : this.createError({
-              message: "Phone number must be 10 digits only",
-            });
+            message: "Phone number must be 10 digits only",
+          });
       }
       return true; // Default validation for other country codes
     }),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters long")
+    .min(6, "Password must be at least 6 characters long")
     .matches(/^\S*$/, "Password must not contain spaces")
     .required("Please enter your password"),
 
@@ -143,6 +172,8 @@ function Register({ handleLogin }) {
       }
     },
   });
+
+  const passwordFeedback = checkPasswordComplexity(formik.values.password);
 
   useEffect(() => {
     formik.setFieldValue("countryCode", 65);
@@ -333,11 +364,10 @@ function Register({ handleLogin }) {
                         <input
                           type="text"
                           name="firstName"
-                          className={`form-control  ${
-                            formik.touched.firstName && formik.errors.firstName
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control  ${formik.touched.firstName && formik.errors.firstName
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           {...formik.getFieldProps("firstName")}
                         />
                         {formik.touched.firstName &&
@@ -356,11 +386,10 @@ function Register({ handleLogin }) {
                         <input
                           type="text"
                           name="lastName"
-                          className={`form-control  ${
-                            formik.touched.lastName && formik.errors.lastName
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control  ${formik.touched.lastName && formik.errors.lastName
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           {...formik.getFieldProps("lastName")}
                         />
                         {formik.touched.lastName && formik.errors.lastName && (
@@ -378,11 +407,10 @@ function Register({ handleLogin }) {
                         <input
                           type="text"
                           name="email"
-                          className={`form-control  ${
-                            formik.touched.email && formik.errors.email
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control  ${formik.touched.email && formik.errors.email
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           {...formik.getFieldProps("email")}
                         />
                         {formik.touched.email && formik.errors.email && (
@@ -402,12 +430,11 @@ function Register({ handleLogin }) {
                             <select
                               name="countryCode"
                               id="countryCode"
-                              className={`form-control ${
-                                formik.touched.countryCode &&
+                              className={`form-control ${formik.touched.countryCode &&
                                 formik.errors.countryCode
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                                ? "is-invalid"
+                                : ""
+                                }`}
                               {...formik.getFieldProps("countryCode")}
                             >
                               <option value="65">+65</option>
@@ -418,11 +445,10 @@ function Register({ handleLogin }) {
                             type="text"
                             id="mobileNo"
                             name="mobileNo"
-                            className={`form-control ${
-                              formik.touched.mobileNo && formik.errors.mobileNo
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                            className={`form-control ${formik.touched.mobileNo && formik.errors.mobileNo
+                              ? "is-invalid"
+                              : ""
+                              }`}
                             {...formik.getFieldProps("mobileNo")}
                           />
                         </div>
@@ -493,11 +519,10 @@ function Register({ handleLogin }) {
                       <div className={`input-group mb-3`}>
                         <input
                           type={Password ? "text" : "password"}
-                          className={`form-control ${
-                            formik.touched.password && formik.errors.password
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control ${formik.touched.password && formik.errors.password
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{
                             borderRadius: "3px",
                             borderRight: "none",
@@ -521,6 +546,70 @@ function Register({ handleLogin }) {
                           </div>
                         )}
                       </div>
+                      {passwordFeedback && (
+                        <div>
+                          {/* Progress Bar */}
+                          <div className="progress" style={{ height: "5px", marginTop: "8px" }}>
+                            <div
+                              className={`progress-bar ${passwordFeedback === "Password Strength is Weak"
+                                ? "bg-danger"
+                                : passwordFeedback === "Password Strength is Medium"
+                                  ? "bg-warning"
+                                  : passwordFeedback === "Password Strength is Strong"
+                                    ? "bg-success"
+                                    : ""
+                                }`}
+                              role="progressbar"
+                              style={{
+                                width:
+                                  passwordFeedback === "Password Strength is Weak"
+                                    ? "30%"
+                                    : passwordFeedback === "Password is medium"
+                                      ? "60%"
+                                      : passwordFeedback === "Password Strength is Strong"
+                                        ? "100%"
+                                        : "0%",
+                              }}
+                              aria-valuenow={
+                                passwordFeedback === "Password Strength is Weak"
+                                  ? "30"
+                                  : passwordFeedback === "Password is medium"
+                                    ? "60"
+                                    : passwordFeedback === "Password Strength is Strong"
+                                      ? "100"
+                                      : "0"
+                              }
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            >
+                              {passwordFeedback === "Password Strength is Weak"
+                                ? ""
+                                : passwordFeedback === "Password is medium"
+                                  ? ""
+                                  : passwordFeedback === "Password Strength is Strong"
+                                    ? ""
+                                    : ""}
+                            </div>
+                          </div>
+                          {/* Feedback Message */}
+                          <div
+                            style={{
+                              marginTop: "8px",
+                              color:
+                                passwordFeedback === "Password Strength is Weak"
+                                  ? "red"
+                                  : passwordFeedback === "Password is medium"
+                                    ? "orange"
+                                    : passwordFeedback === "Password Strength is Strong"
+                                      ? "green"
+                                      : "black",
+                            }}
+                          >
+                            {passwordFeedback}
+                          </div>
+                        </div>
+                      )}
+
                     </div>
                     <div className="col-lg-6 col-12 pb-2">
                       <label className="form-label">
@@ -529,12 +618,11 @@ function Register({ handleLogin }) {
                       <div className={`input-group mb-3`}>
                         <input
                           type={cPassword ? "text" : "password"}
-                          className={`form-control ${
-                            formik.touched.confirmPassword &&
+                          className={`form-control ${formik.touched.confirmPassword &&
                             formik.errors.confirmPassword
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           style={{
                             borderRadius: "3px",
                             borderRight: "none",
@@ -567,11 +655,10 @@ function Register({ handleLogin }) {
                         <input
                           type="text"
                           name="refCode"
-                          className={`form-control  ${
-                            formik.touched.refCode && formik.errors.refCode
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control  ${formik.touched.refCode && formik.errors.refCode
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           {...formik.getFieldProps("refCode")}
                         />
                         {formik.touched.refCode && formik.errors.refCode && (
@@ -587,12 +674,11 @@ function Register({ handleLogin }) {
                       type="checkbox"
                       id="termsCheckbox"
                       name="termsCondition"
-                      className={`form-check-input ${
-                        formik.touched.termsCondition &&
+                      className={`form-check-input ${formik.touched.termsCondition &&
                         formik.errors.termsCondition
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       {...formik.getFieldProps("termsCondition")}
                       checked={formik.values.termsCondition}
                     />
@@ -611,11 +697,10 @@ function Register({ handleLogin }) {
                     <input
                       type="checkbox"
                       id="privacyCheckbox"
-                      className={`form-check-input  ${
-                        formik.touched.agree && formik.errors.agree
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-check-input  ${formik.touched.agree && formik.errors.agree
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       {...formik.getFieldProps("agree")}
                     />
                     &nbsp; &nbsp;

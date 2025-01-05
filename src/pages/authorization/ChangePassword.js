@@ -31,6 +31,34 @@ function ChangePassword() {
     setConfirmOldPassword(!oldPassword);
   };
 
+  const checkPasswordComplexity = (password) => {
+
+    if (!password) return "";
+
+    const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
+    if (password.length < 6 || isOnlyNumbersOrLetters) {
+      return "Password Strength is Weak";
+    }
+
+    const hasLettersAndNumbers = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/.test(password);
+    const hasLettersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+    const hasNumbersAndSpecialCharacter = /^(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+    const hasLettersNumbersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+
+    if (password.length >= 6 && hasLettersNumbersAndSpecialCharacter) {
+      return "Password Strength is Strong";
+    }
+
+    if (
+      password.length >= 6 &&
+      (hasLettersAndNumbers || hasLettersAndSpecialCharacter || hasNumbersAndSpecialCharacter)
+    ) {
+      return "Password Strength is Medium";
+    }
+
+    return "";
+  };
+
   const validationSchema = Yup.object().shape({
     // email: Yup.string()
     //   .matches(
@@ -39,7 +67,7 @@ function ChangePassword() {
     //   )
     //   .required("*Email is required"),
     password: Yup.string()
-      .min(8, "Password must be at least 8 characters long")
+      .min(6, "Password must be at least 6 characters long")
       .matches(/^\S*$/, "Password must not contain spaces")
       .required("Please enter your password"),
 
@@ -76,6 +104,7 @@ function ChangePassword() {
       }
     },
   });
+  const passwordFeedback = checkPasswordComplexity(formik.values.password);
 
   return (
     <div className="container-fluid">
@@ -179,6 +208,69 @@ function ChangePassword() {
                               </div>
                             )}
                         </FloatingLabel>
+                        {passwordFeedback && (
+                          <div>
+                            {/* Progress Bar */}
+                            <div className="progress" style={{ height: "5px", marginTop: "8px" }}>
+                              <div
+                                className={`progress-bar ${passwordFeedback === "Password Strength is Weak"
+                                  ? "bg-danger"
+                                  : passwordFeedback === "PPassword Strength is Medium"
+                                    ? "bg-warning"
+                                    : passwordFeedback === "Password Strength is Strong"
+                                      ? "bg-success"
+                                      : ""
+                                  }`}
+                                role="progressbar"
+                                style={{
+                                  width:
+                                    passwordFeedback === "Password Strength is Weak"
+                                      ? "30%"
+                                      : passwordFeedback === "PPassword Strength is Medium"
+                                        ? "60%"
+                                        : passwordFeedback === "Password Strength is Strong"
+                                          ? "100%"
+                                          : "0%",
+                                }}
+                                aria-valuenow={
+                                  passwordFeedback === "Password Strength is Weak"
+                                    ? "30"
+                                    : passwordFeedback === "PPassword Strength is Medium"
+                                      ? "60"
+                                      : passwordFeedback === "Password Strength is Strong"
+                                        ? "100"
+                                        : "0"
+                                }
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              >
+                                {passwordFeedback === "Password Strength is Weak"
+                                  ? ""
+                                  : passwordFeedback === "PPassword Strength is Medium"
+                                    ? ""
+                                    : passwordFeedback === "Password Strength is Strong"
+                                      ? ""
+                                      : ""}
+                              </div>
+                            </div>
+                            {/* Feedback Message */}
+                            <div
+                              style={{
+                                marginTop: "8px",
+                                color:
+                                  passwordFeedback === "Password Strength is Weak"
+                                    ? "red"
+                                    : passwordFeedback === "PPassword Strength is Medium"
+                                      ? "orange"
+                                      : passwordFeedback === "Password Strength is Strong"
+                                        ? "green"
+                                        : "black",
+                              }}
+                            >
+                              {passwordFeedback}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="">
                         <FloatingLabel
