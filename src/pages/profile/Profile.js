@@ -8,6 +8,7 @@ import rides from "../../asset/my rides.png";
 // import notification from "../../asset/notification.png";
 // import support from "../../asset/support.png";
 import about from "../../asset/about.png";
+import password from "../../asset/change_password.webp";
 import { Link, useNavigate } from "react-router-dom";
 // import invoice from "../../asset/invoice-logo.png";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -19,7 +20,7 @@ import { bookingApi, userApi } from "../../config/URL";
 
 function User({ handleLogout, handleCloseMain }) {
   const [, setShow] = useState(false);
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
   const [data, setData] = useState([]);
@@ -78,7 +79,7 @@ function User({ handleLogout, handleCloseMain }) {
           className="view"
           closeButton
         >
-          <div>
+          {/* <div>
             <OverlayTrigger
               placement="bottom"
               overlay={<Tooltip id="tooltip-logout">Logout</Tooltip>}
@@ -91,7 +92,7 @@ function User({ handleLogout, handleCloseMain }) {
                 <TbLogout />
               </button>
             </OverlayTrigger>
-          </div>
+          </div> */}
           <div className="w-100 centered">
             <Offcanvas.Title className="w-100">
               <div className="d-flex flex-column align-items-center">
@@ -225,16 +226,28 @@ function User({ handleLogout, handleCloseMain }) {
                     </Link>
                   </td>
                 </tr>
+                <tr>
+                  <td className="py-2">
+                    <Link
+                      to="/changepassword"
+                      onClick={handleCloseProfile}
+                      className="data-link"
+                    >
+                      <img src={password} alt="about pic" className="got mx-3" />
+                      <span>Change Password</span>
+                    </Link>
+                  </td>
+                </tr>
               </tbody>
             </Table>
           </div>
           <div className="p-3">
             <Link
               to="/changepassword"
-              onClick={handleCloseProfile}
+              onClick={onLogout}
               className="data-link"
             >
-              <button className="btn btn-danger w-100">Change Password</button>
+              <button className="btn btn-danger w-100"><TbLogout size={20} /> Logout</button>
             </Link>
           </div>
         </Offcanvas.Body>

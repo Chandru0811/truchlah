@@ -13,8 +13,8 @@ import * as Yup from "yup";
 
 const ServiceNew = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-    const shiftType = sessionStorage.getItem("shiftType");
-    const userId = sessionStorage.getItem("userId");
+    const shiftType = localStorage.getItem("shiftType");
+    const userId = localStorage.getItem("userId");
 
     const validationSchema = Yup.object().shape({
       messageToDriver: Yup.string().max(

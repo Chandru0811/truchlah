@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 import { PiCurrencyDollarBold } from "react-icons/pi";
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
+import { IoClose } from "react-icons/io5";
 import { GiShoppingBag } from "react-icons/gi";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -25,35 +26,8 @@ const validationSchema = Yup.object().shape({
 
 const DateAndTime = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-    // const [availableTimes, setAvailableTimes] = useState([
-    //   "08:00:00",
-    //   "08:30:00",
-    //   "09:00:00",
-    //   "09:30:00",
-    //   "10:00:00",
-    //   "10:30:00",
-    //   "11:00:00",
-    //   "11:30:00",
-    //   "12:00:00",
-    //   "12:30:00",
-    //   "13:00:00",
-    //   "13:30:00",
-    //   "14:00:00",
-    //   "14:30:00",
-    //   "15:00:00",
-    //   "15:30:00",
-    //   "16:00:00",
-    //   "16:30:00",
-    //   "17:00:00",
-    //   "17:30:00",
-    //   "18:00:00",
-    //   "18:30:00",
-    //   "19:00:00",
-    //   "19:30:00",
-    //   "20:00:00",
-    // ]);
-    const shiftType = sessionStorage.getItem("shiftType");
-    const userId = sessionStorage.getItem("userId");
+    const shiftType = localStorage.getItem("shiftType");
+    const userId = localStorage.getItem("userId");
     const [vehicle, setVechicle] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [activeIndex, setActiveIndex] = useState(
@@ -284,34 +258,14 @@ const DateAndTime = forwardRef(
     const today = new Date().toISOString().split("T")[0];
 
     const allTimes = [
-      "08:00:00",
-      "08:30:00",
-      "09:00:00",
-      "09:30:00",
-      "10:00:00",
-      "10:30:00",
-      "11:00:00",
-      "11:30:00",
-      "12:00:00",
-      "12:30:00",
-      "13:00:00",
-      "13:30:00",
-      "14:00:00",
-      "14:30:00",
-      "15:00:00",
-      "15:30:00",
-      "16:00:00",
-      "16:30:00",
-      "17:00:00",
-      "17:30:00",
-      "18:00:00",
-      "18:30:00",
-      "19:00:00",
-      "19:30:00",
-      "20:00:00",
+      "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00",
+      "10:30:00", "11:00:00", "11:30:00", "12:00:00", "12:30:00",
+      "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00",
+      "15:30:00", "17:00:00", "17:30:00", "18:00:00", "18:30:00",
+      "19:00:00", "19:30:00", "20:00:00",
     ];
 
-    const localTimeToMinutes  = (time) => {
+    const localTimeToMinutes = (time) => {
       const [hours, minutes] = time.split(":").map(Number);
       return hours * 60 + minutes;
     };
@@ -319,7 +273,7 @@ const DateAndTime = forwardRef(
     useEffect(() => {
       // Filter available times for today's date
       const timesAfterFilter = allTimes.filter(
-        (time) => localTimeToMinutes (time) > localTimeToMinutes (currentTime)
+        (time) => localTimeToMinutes(time) > localTimeToMinutes(currentTime)
       );
       setAvailableTimes(timesAfterFilter);
     }, []); // Empty dependency array ensures this runs only on initial render.
@@ -330,7 +284,7 @@ const DateAndTime = forwardRef(
 
       if (selectedDate === today) {
         const timesAfterFilter = allTimes.filter(
-          (time) => localTimeToMinutes (time) > localTimeToMinutes (currentTime)
+          (time) => localTimeToMinutes(time) > localTimeToMinutes(currentTime)
         );
         setAvailableTimes(timesAfterFilter);
       } else {
@@ -359,7 +313,7 @@ const DateAndTime = forwardRef(
               >
                 <input
                   type="date"
-                  className="date-field form-control"
+                  className="date-field form-control text-muted"
                   aria-label="Date"
                   aria-describedby="basic-addon1"
                   min={new Date().toISOString().split("T")[0]}
@@ -382,7 +336,7 @@ const DateAndTime = forwardRef(
               // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <select
-                  className="form-select"
+                  className="form-select text-muted"
                   aria-label="Default select example"
                   style={{
                     minHeight: "50px",
@@ -531,17 +485,29 @@ const DateAndTime = forwardRef(
                     <Modal.Body>
                       <div
                         onClick={handleClose}
-                        className="position-absolute top-0 end-0 m-3"
+                        className="position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center"
                         style={{
                           cursor: "pointer",
                           fontWeight: "bold",
                           fontSize: "1.2rem",
+                          border: "1px solid #ededed",
+                          borderRadius: "50%",
+                          width: "30px",
+                          height: "30px",
+                          backgroundColor: "#fff",
                         }}
                         aria-label="Close"
                       >
-                        X
+                        <IoClose
+                          style={{
+                            fontSize: "1.2rem",
+                            color: "black",
+                          }}
+                          aria-hidden="true"
+                        />
                       </div>
                     </Modal.Body>
+
                     <Modal.Body onClick={(e) => e.stopPropagation()}>
                       <VehicleOffer
                         setActiveIndex={setActiveIndex}
@@ -578,8 +544,8 @@ const DateAndTime = forwardRef(
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </form >
+      </div >
     );
   }
 );

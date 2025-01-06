@@ -107,8 +107,8 @@ const MapNew = forwardRef(
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
       libraries,
     });
-    const shiftType = sessionStorage.getItem("shiftType");
-    const userId = sessionStorage.getItem("userId");
+    const shiftType = localStorage.getItem("shiftType");
+    const userId = localStorage.getItem("userId");
     const [directionsResponse, setDirectionsResponse] = useState(null);
     const [totalDistance, setTotalDistance] = useState(null);
     const [dropoffSections, setDropoffSections] = useState([]);

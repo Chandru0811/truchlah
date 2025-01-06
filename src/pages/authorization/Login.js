@@ -71,10 +71,10 @@ function Login({ handleLogin, handleAdminLogin }) {
             resetForm();
             handleLogin();
           }
-          sessionStorage.setItem("userId", response.data.responseBody.userId);
-          sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
-          sessionStorage.setItem("token", response.data.responseBody.token);
-          sessionStorage.setItem(
+          localStorage.setItem("userId", response.data.responseBody.userId);
+          localStorage.setItem("roles", response.data.responseBody.roles[0]);
+          localStorage.setItem("token", response.data.responseBody.token);
+          localStorage.setItem(
             "username",
             response.data.responseBody.username
           );
@@ -126,10 +126,10 @@ function Login({ handleLogin, handleAdminLogin }) {
   //       toast.success("Login Successful!");
   //       navigate("/shift");
   //       handleLogin();
-  //       sessionStorage.setItem("userId", response.data.responseBody.userId);
-  //       sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
-  //       sessionStorage.setItem("token", response.data.responseBody.token);
-  //       sessionStorage.setItem("username", response.data.responseBody.username);
+  //       localStorage.setItem("userId", response.data.responseBody.userId);
+  //       localStorage.setItem("roles", response.data.responseBody.roles[0]);
+  //       localStorage.setItem("token", response.data.responseBody.token);
+  //       localStorage.setItem("username", response.data.responseBody.username);
   //     } else {
   //       toast.error(response.data.message);
   //     }
@@ -162,10 +162,10 @@ function Login({ handleLogin, handleAdminLogin }) {
         },
       });
       if (response.status === 200) {
-        sessionStorage.setItem("userId", response.data.responseBody.userId);
-        sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
-        sessionStorage.setItem("token", response.data.responseBody.token);
-        sessionStorage.setItem("username", response.data.responseBody.username);
+        localStorage.setItem("userId", response.data.responseBody.userId);
+        localStorage.setItem("roles", response.data.responseBody.roles[0]);
+        localStorage.setItem("token", response.data.responseBody.token);
+        localStorage.setItem("username", response.data.responseBody.username);
         if (response.data.responseBody.mobileVerified==="N"){
           navigate(`/mobile/verify`)
         }else{
@@ -209,10 +209,10 @@ function Login({ handleLogin, handleAdminLogin }) {
   //   //     toast.success("Login Successful!");
   //   //     navigate("/shift");
   //   //     handleLogin();
-  //   //     sessionStorage.setItem("userId", response.data.responseBody.userId);
-  //   //     sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
-  //   //     sessionStorage.setItem("token", response.data.responseBody.token);
-  //   //     sessionStorage.setItem("username", response.data.responseBody.username);
+  //   //     localStorage.setItem("userId", response.data.responseBody.userId);
+  //   //     localStorage.setItem("roles", response.data.responseBody.roles[0]);
+  //   //     localStorage.setItem("token", response.data.responseBody.token);
+  //   //     localStorage.setItem("username", response.data.responseBody.username);
   //   //   } else {
   //   //     toast.error(response.data.message);
   //   //   }

@@ -1633,6 +1633,10 @@ body {
   border-bottom: 2px solid #000000;
 }
 
+#order-btn.underline {
+  border-bottom: 2px solid #000000;
+}
+
 @media (max-width: 576px) {
   #shift-btn {
     font-size: 10px;
@@ -2385,11 +2389,14 @@ body {
 
 .choose-vehicle {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background: #333333;
-  color: #acff3b;
+  border: 1px solid #acff3b;
+  color: #333333;
   font-size: 18px;
   font-family: "Afacad", system-ui;
   border-radius: 5px;
+  background-color: transparent;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
 .choose-vehicle:hover {
@@ -2399,6 +2406,7 @@ body {
   font-family: "Afacad", system-ui;
   border-radius: 5px;
 }
+
 .choose-vehicle.active {
   color: #333333;
   background: #acff3b;
@@ -2433,8 +2441,12 @@ body {
   color: inherit;
 }
 
-.data-link1:active,
-.data-link1:focus {
-  border-bottom: 2px solid black;
-  color: inherit;
+#PayNow {
+  background: #00DD21;
+  /* border-radius: 28px; */
+  font-weight: bold;
+  border: none;
+  color: black;
+  cursor: pointer;
+  transition: 0.5s ease;
 }

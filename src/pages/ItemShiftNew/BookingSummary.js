@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 
 const BookingSummary = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-    const shiftType = sessionStorage.getItem("shiftType");
+    const shiftType = localStorage.getItem("shiftType");
     const [data, setData] = useState({});
     const navigate = useNavigate();
     const [loadIndicator, setLoadIndicator] = useState(false);
@@ -58,7 +58,7 @@ const BookingSummary = forwardRef(
               navigate(
                 `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=success`
               );
-              sessionStorage.removeItem("shiftType");
+              localStorage.removeItem("shiftType");
             } else {
               navigate(
                 `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
@@ -82,7 +82,7 @@ const BookingSummary = forwardRef(
               window.open(paymentLink, "_self");
               // toast.success("Payment successful!");
               // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
-              sessionStorage.removeItem("shiftType");
+              localStorage.removeItem("shiftType");
             } else {
               toast.error("Payment failed, please try again.");
               navigate(

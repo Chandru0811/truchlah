@@ -51,8 +51,8 @@ const Service=forwardRef(
 
   const [showQuantity, setShowQuantity] = useState(false);
   const navigate = useNavigate();
-  const userId = sessionStorage.getItem("userId");
-  const shiftType = sessionStorage.getItem("shiftType");
+  const userId = localStorage.getItem("userId");
+  const shiftType = localStorage.getItem("shiftType");
   const [manpowerQuantity, setManpowerQuantity] = useState(0);
   const [noOfPiecess, setNoOfPiecess] = useState(0);
   const currentDate = new Date();

@@ -23,8 +23,8 @@ function Order() {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(true);
   console.log("Data is ", data);
-  const userId = sessionStorage.getItem("userId");
-  const shiftType = sessionStorage.getItem("shiftType");
+  const userId = localStorage.getItem("userId");
+  const shiftType = localStorage.getItem("shiftType");
   console.log("Type:", shiftType);
 
   const houseSection = () => {

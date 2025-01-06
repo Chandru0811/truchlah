@@ -77,7 +77,7 @@ const Summary = forwardRef(
           navigate(
             `/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=success`
           );
-          sessionStorage.removeItem("shiftType");
+          localStorage.removeItem("shiftType");
         } else {
           navigate(
             `/paymentstatus?type=${data?.booking?.bookingType}&bookingId=${bookingId}?result=error`
@@ -105,7 +105,7 @@ const Summary = forwardRef(
           window.open(paymentLink, "_self");
           // toast.success("Payment successful!");
           // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
-          sessionStorage.removeItem("shiftType");
+          localStorage.removeItem("shiftType");
         } else {
           toast.error("Payment failed, please try again.");
           navigate(

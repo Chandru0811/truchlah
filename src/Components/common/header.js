@@ -22,6 +22,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
 
   const currentPath = location.pathname;
   console.log("Current path:", currentPath);
+  const ridespage = location.pathname === "/rides";
 
   // Handle for the first modal
   const handleCloseMain = () => setShowMain(false);
@@ -75,7 +76,9 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
             >
               <Container fluid>
                 <Navbar.Brand>
-                  <Link to="https://trucklah.com/auth">
+                  <Link
+                    to={location.pathname === "https://trucklah.com/auth" ? "https://trucklah.com" : "https://trucklah.com/auth"}
+                  >
                     <img
                       src={logo}
                       alt="Trucklah"
@@ -197,7 +200,9 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                   <div className="hstack gap-2 justify-content-end">
                                     {isAuthenticate ? (
                                       <li className="nav-item">
-                                        <Link to="/rides" className="data-link1">
+                                        <Link to="/rides"
+                                          className={`data-link1 ${ridespage ? "underline" : ""}`}
+                                          id="order-btn">
                                           My Orders
                                         </Link>
                                       </li>

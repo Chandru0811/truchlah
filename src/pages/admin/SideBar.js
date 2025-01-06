@@ -4,7 +4,7 @@ import Logo from "../../asset/logo.png";
 import "../../styles/bootstrapCdn.css";
 
 function SideBar({ onLogout }) {
-  const role = sessionStorage.getItem("roles");
+  const role = localStorage.getItem("roles");
   const navigate = useNavigate();
   const handleLogOutClick = () => {
     onLogout();

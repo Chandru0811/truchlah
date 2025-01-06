@@ -11,7 +11,7 @@ const SupportTeamManagement = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-const roles =sessionStorage.getItem("roles")
+const roles =localStorage.getItem("roles")
   useEffect(() => {
     const table = $(tableRef.current).DataTable();
   

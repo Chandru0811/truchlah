@@ -13,7 +13,7 @@ function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const [oldPassword, setConfirmOldPassword] = useState(false);
-  const userName = sessionStorage.getItem("username");
+  const userName = localStorage.getItem("username");
   const navigate = useNavigate();
 
   const PasswordVisibility = (e) => {
@@ -35,15 +35,15 @@ function ChangePassword() {
 
     if (!password) return "";
 
-    const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
-    if (password.length < 6 || isOnlyNumbersOrLetters) {
-      return "Password Strength is Weak";
-    }
-
     const hasLettersAndNumbers = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/.test(password);
     const hasLettersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
     const hasNumbersAndSpecialCharacter = /^(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
     const hasLettersNumbersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+    const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
+
+    if (password.length >= 6 && isOnlyNumbersOrLetters) {
+      return "Password Strength is Weak";
+    }
 
     if (password.length >= 6 && hasLettersNumbersAndSpecialCharacter) {
       return "Password Strength is Strong";
@@ -67,7 +67,7 @@ function ChangePassword() {
     //   )
     //   .required("*Email is required"),
     password: Yup.string()
-      .min(6, "Password must be at least 6 characters long")
+      .min(6, "Password must be at least 6 characters long and must not contain spaces")
       .matches(/^\S*$/, "Password must not contain spaces")
       .required("Please enter your password"),
 
@@ -215,7 +215,7 @@ function ChangePassword() {
                               <div
                                 className={`progress-bar ${passwordFeedback === "Password Strength is Weak"
                                   ? "bg-danger"
-                                  : passwordFeedback === "PPassword Strength is Medium"
+                                  : passwordFeedback === "Password Strength is Medium"
                                     ? "bg-warning"
                                     : passwordFeedback === "Password Strength is Strong"
                                       ? "bg-success"
@@ -226,7 +226,7 @@ function ChangePassword() {
                                   width:
                                     passwordFeedback === "Password Strength is Weak"
                                       ? "30%"
-                                      : passwordFeedback === "PPassword Strength is Medium"
+                                      : passwordFeedback === "Password Strength is Medium"
                                         ? "60%"
                                         : passwordFeedback === "Password Strength is Strong"
                                           ? "100%"
@@ -235,7 +235,7 @@ function ChangePassword() {
                                 aria-valuenow={
                                   passwordFeedback === "Password Strength is Weak"
                                     ? "30"
-                                    : passwordFeedback === "PPassword Strength is Medium"
+                                    : passwordFeedback === "Password Strength is Medium"
                                       ? "60"
                                       : passwordFeedback === "Password Strength is Strong"
                                         ? "100"
@@ -246,7 +246,7 @@ function ChangePassword() {
                               >
                                 {passwordFeedback === "Password Strength is Weak"
                                   ? ""
-                                  : passwordFeedback === "PPassword Strength is Medium"
+                                  : passwordFeedback === "Password Strength is Medium"
                                     ? ""
                                     : passwordFeedback === "Password Strength is Strong"
                                       ? ""
@@ -260,7 +260,7 @@ function ChangePassword() {
                                 color:
                                   passwordFeedback === "Password Strength is Weak"
                                     ? "red"
-                                    : passwordFeedback === "PPassword Strength is Medium"
+                                    : passwordFeedback === "Password Strength is Medium"
                                       ? "orange"
                                       : passwordFeedback === "Password Strength is Strong"
                                         ? "green"

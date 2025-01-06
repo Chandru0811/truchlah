@@ -65,8 +65,8 @@ const MapNew = forwardRef(
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
     const [autocompleteStop, setAutocompleteStop] = useState(null);
     const [distance, setDistance] = useState(null);
-    const userId = sessionStorage.getItem("userId");
-    const shiftingType = sessionStorage.getItem("shiftType");
+    const userId = localStorage.getItem("userId");
+    const shiftingType = localStorage.getItem("shiftType");
     const formik = useFormik({
       initialValues: {
         userId: userId,

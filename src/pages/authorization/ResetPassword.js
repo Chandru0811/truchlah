@@ -22,19 +22,20 @@ const ResetPassword = () => {
   const ConfirmPasswordVisibility = () => {
     setConfirmPassword(!confirmPassword);
   };
+
   const checkPasswordComplexity = (password) => {
 
     if (!password) return "";
-
-    const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
-    if (password.length < 6 || isOnlyNumbersOrLetters) {
-      return "Password Strength is Weak";
-    }
 
     const hasLettersAndNumbers = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/.test(password);
     const hasLettersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
     const hasNumbersAndSpecialCharacter = /^(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
     const hasLettersNumbersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+    const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
+
+    if (password.length >= 6 && isOnlyNumbersOrLetters) {
+      return "Password Strength is Weak";
+    }
 
     if (password.length >= 6 && hasLettersNumbersAndSpecialCharacter) {
       return "Password Strength is Strong";

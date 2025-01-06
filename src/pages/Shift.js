@@ -9,8 +9,8 @@ function Shift() {
   // const [type , setType] = useState({});
 
   const logType = (selectedType) => {
-    sessionStorage.removeItem("shiftType");
-    sessionStorage.setItem("shiftType", selectedType);
+    localStorage.removeItem("shiftType");
+    localStorage.setItem("shiftType", selectedType);
   };
 
   return (

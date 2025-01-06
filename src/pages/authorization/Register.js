@@ -15,15 +15,15 @@ const checkPasswordComplexity = (password) => {
 
   if (!password) return "";
 
-  const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
-  if (password.length < 6 || isOnlyNumbersOrLetters) {
-    return "Password Strength is Weak";
-  }
-
   const hasLettersAndNumbers = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+$/.test(password);
   const hasLettersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
   const hasNumbersAndSpecialCharacter = /^(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
   const hasLettersNumbersAndSpecialCharacter = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[^\w\s])[a-zA-Z\d\W_]+$/.test(password);
+  const isOnlyNumbersOrLetters = /^[a-zA-Z]+$|^\d+$/.test(password);
+
+  if (password.length >= 6 && isOnlyNumbersOrLetters) {
+    return "Password Strength is Weak";
+  }
 
   if (password.length >= 6 && hasLettersNumbersAndSpecialCharacter) {
     return "Password Strength is Strong";
@@ -202,10 +202,10 @@ function Register({ handleLogin }) {
         toast.success("Login Successful!");
         navigate("/shift");
         handleLogin();
-        sessionStorage.setItem("userId", response.data.responseBody.userId);
-        sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
-        sessionStorage.setItem("token", response.data.responseBody.token);
-        sessionStorage.setItem("username", response.data.responseBody.username);
+        localStorage.setItem("userId", response.data.responseBody.userId);
+        localStorage.setItem("roles", response.data.responseBody.roles[0]);
+        localStorage.setItem("token", response.data.responseBody.token);
+        localStorage.setItem("username", response.data.responseBody.username);
       } else {
         toast.error(response.data.message);
       }
@@ -237,10 +237,10 @@ function Register({ handleLogin }) {
     //     toast.success("Login Successful!");
     //     navigate("/shift");
     //     handleLogin();
-    //     sessionStorage.setItem("userId", response.data.responseBody.userId);
-    //     sessionStorage.setItem("roles", response.data.responseBody.roles[0]);
-    //     sessionStorage.setItem("token", response.data.responseBody.token);
-    //     sessionStorage.setItem("username", response.data.responseBody.username);
+    //     localStorage.setItem("userId", response.data.responseBody.userId);
+    //     localStorage.setItem("roles", response.data.responseBody.roles[0]);
+    //     localStorage.setItem("token", response.data.responseBody.token);
+    //     localStorage.setItem("username", response.data.responseBody.username);
     //   } else {
     //     toast.error(response.data.message);
     //   }
@@ -564,7 +564,7 @@ function Register({ handleLogin }) {
                                 width:
                                   passwordFeedback === "Password Strength is Weak"
                                     ? "30%"
-                                    : passwordFeedback === "Password is medium"
+                                    : passwordFeedback === "Password Strength is Medium"
                                       ? "60%"
                                       : passwordFeedback === "Password Strength is Strong"
                                         ? "100%"
@@ -573,7 +573,7 @@ function Register({ handleLogin }) {
                               aria-valuenow={
                                 passwordFeedback === "Password Strength is Weak"
                                   ? "30"
-                                  : passwordFeedback === "Password is medium"
+                                  : passwordFeedback === "Password Strength is Medium"
                                     ? "60"
                                     : passwordFeedback === "Password Strength is Strong"
                                       ? "100"
@@ -584,7 +584,7 @@ function Register({ handleLogin }) {
                             >
                               {passwordFeedback === "Password Strength is Weak"
                                 ? ""
-                                : passwordFeedback === "Password is medium"
+                                : passwordFeedback === "Password Strength is Medium"
                                   ? ""
                                   : passwordFeedback === "Password Strength is Strong"
                                     ? ""
@@ -598,7 +598,7 @@ function Register({ handleLogin }) {
                               color:
                                 passwordFeedback === "Password Strength is Weak"
                                   ? "red"
-                                  : passwordFeedback === "Password is medium"
+                                  : passwordFeedback === "Password Strength is Medium"
                                     ? "orange"
                                     : passwordFeedback === "Password Strength is Strong"
                                       ? "green"

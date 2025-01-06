@@ -36,7 +36,7 @@ const validationSchema = Yup.object().shape({
 
 const HouseShift = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-    const shiftType = sessionStorage.getItem("shiftType");
+    const shiftType = localStorage.getItem("shiftType");
     // console.log("Type:", shiftType);
 
     const { isLoaded } = useJsApiLoader({
@@ -55,7 +55,7 @@ const HouseShift = forwardRef(
       useState(null);
     const [directions, setDirections] = useState(null);
     const [locationDetail, setLocationDetail] = useState([]);
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     const [distance, setDistance] = useState("");
     const [duration, setDuration] = useState("");
     const [userLocation, setUserLocation] = useState(null);

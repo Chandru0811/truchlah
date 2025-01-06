@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
 
 const Map = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
-  const shiftType = sessionStorage.getItem("shiftType");
+  const shiftType = localStorage.getItem("shiftType");
   console.log("Type:", shiftType);
 
   const { isLoaded } = useJsApiLoader({
@@ -49,7 +49,7 @@ const Map = forwardRef(
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [stops, setStops] = useState([]);
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [showEditIcon, setShowEditIcon] = useState({

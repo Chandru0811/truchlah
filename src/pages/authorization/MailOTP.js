@@ -8,7 +8,7 @@ import { userApi } from "../../config/URL";
 import handleLoginMethod from "./handleLoginMethod";
 
 function MailOTP({ handleLogin, handleAdminLogin }) {
-    const[loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false)
   const location = useLocation();
   const navigate = useNavigate();
   const { mailId } = location.state || {};
@@ -16,12 +16,12 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
 
   const inputRefs = useRef([]);
 
-//   useEffect(() => {
-//     if (!mobileNo) {
-//       toast.warning("Mobile number is not provided");
-//       navigate("/login");
-//     }
-//   }, [mobileNo, navigate]);
+  //   useEffect(() => {
+  //     if (!mobileNo) {
+  //       toast.warning("Mobile number is not provided");
+  //       navigate("/login");
+  //     }
+  //   }, [mobileNo, navigate]);
 
   const handleOtpChange = (e, index) => {
     const value = e.target.value;
@@ -45,16 +45,18 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
   };
 
   const ResendOtp = async () => {
+    setOtp(new Array(otp.length).fill(""));
     try {
-        const response = await userApi.post(`user/sendEmailOTP?email=${mailId}`);
-        if (response.status === 200) {
-          toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error("Error Submitting Data, ", error.response.data.message);
+      const response = await userApi.post(`user/sendEmailOTP?email=${mailId}`);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
       }
+    } catch (error) {
+      toast.error("Error Submitting Data, ", error.response.data.message);
+    }
+
   };
 
   const handleSubmit = async (e) => {
@@ -69,8 +71,8 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
       const response = await userApi.post(`user/verifyEmailOTP`, formData);
       if (response.status === 200) {
         toast.success(response.data.message);
-        const token=response.data.token;
-        navigate("/resetpassword",{state:{mailId,token}} )
+        const token = response.data.token;
+        navigate("/resetpassword", { state: { mailId, token } })
         // const responseNavigate = handleLoginMethod(response.data.responseBody,handleLogin, handleAdminLogin )
         // console.log("responseNavigate",responseNavigate)
         // navigate(responseNavigate);
@@ -80,8 +82,8 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
     } catch (error) {
       toast.error(error.response.data.message);
       // console.log("object",error)
-    }finally{
-        setLoading(false)
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -91,7 +93,7 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
     // if (localPart.length <= 4) {
     //   return `${localPart.slice(0, 1)}****${localPart.slice(-1)}@${domain}`;
     // }
-    const visibleChars = 2; 
+    const visibleChars = 2;
     const maskedLength = localPart.length - visibleChars * 2;
     const maskedPart = "*".repeat(maskedLength);
     return `${localPart.slice(0, visibleChars)}${maskedPart}${localPart.slice(-visibleChars)}@${domain}`;
@@ -126,7 +128,7 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
               {/* {mailId
                 ? `${mailId.slice(0, 2)}****${mailId?.split("@")[0].slice(-2)}@${mailId?.split("@")[1]}`
                 : ""} */}
-                {maskEmail(mailId)}
+              {maskEmail(mailId)}
             </h6>
             <hr />
             <div className="row">
@@ -166,11 +168,11 @@ function MailOTP({ handleLogin, handleAdminLogin }) {
                       </button>
                     </div>
                     <Button
-                      style={{ width: "100%",backgroundColor:"#333" }}
+                      style={{ width: "100%", backgroundColor: "#333" }}
                       type="submit"
                       variant="primary"
                       className="my-4 border-0"
-                    >{loading && <span className="spinner-border spinner-border-sm me-2"></span> }
+                    >{loading && <span className="spinner-border spinner-border-sm me-2"></span>}
                       Submit
                     </Button>
                   </div>

@@ -11,33 +11,33 @@ function UserRoute() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loader, setLoader] = useState(true);
   const handleLogin = () => {
-    sessionStorage.setItem("isAuthenticate", true);
+    localStorage.setItem("isAuthenticate", true);
     setIsAuthenticate(true);
     setIsAdmin(false);
   };
 
   const handleAdminLogin = () => {
-    sessionStorage.setItem("isAdmin", true);
+    localStorage.setItem("isAdmin", true);
     setIsAuthenticate(false);
     setIsAdmin(true);
   };
 
   const handleLogout = async () => {
-    sessionStorage.removeItem("isAdmin");
-    sessionStorage.removeItem("isAuthenticate");
-    sessionStorage.removeItem("roles");
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("isAuthenticate");
+    localStorage.removeItem("roles");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
     setIsAuthenticate(false);
     setIsAdmin(false);
   };
 
   useEffect(() => {
     setLoader(true);
-    const isAdminFromStorage = sessionStorage.getItem("isAdmin") === "true";
+    const isAdminFromStorage = localStorage.getItem("isAdmin") === "true";
     const isAuthenticateFromStorage =
-      sessionStorage.getItem("isAuthenticate") === "true";
+      localStorage.getItem("isAuthenticate") === "true";
     setIsAuthenticate(isAuthenticateFromStorage);
     setIsAdmin(isAdminFromStorage);
     setLoader(false);

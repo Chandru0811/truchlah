@@ -36,7 +36,7 @@ const MobileNumVerify = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = location.state || {};
-  const id =sessionStorage.getItem("userId")
+  const id =localStorage.getItem("userId")
 console.log("id",id)
   const formik = useFormik({
     initialValues: {

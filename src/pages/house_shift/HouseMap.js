@@ -66,7 +66,7 @@ const HouseMap = forwardRef(
 
     const [distance, setDistance] = useState(null);
 
-    const userId = sessionStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     const [categorys, setCategoryData] = useState(null);
 
     const formik = useFormik({
