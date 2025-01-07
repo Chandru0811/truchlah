@@ -24,7 +24,7 @@ function User({ handleLogout, handleCloseMain }) {
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
   const [data, setData] = useState([]);
-  console.log("object", data)
+  console.log("object", data);
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Profile
@@ -102,13 +102,21 @@ function User({ handleLogout, handleCloseMain }) {
                   alt="user"
                   width={100}
                 />
-                <p className="mb-0 mt-2">{data.firstName} {data.lastName}</p>
+                <p className="mb-0 mt-2">
+                  {data.firstName} {data.lastName}
+                </p>
                 {/* <p className="mb-0 mt-2">+{data.countryCode} {data.mobileNo}</p> */}
                 <p className="mb-0 mt-2">
-                  {data.mobileNo !== 0 ? `${data?.countryCode === "+91" || data?.countryCode === "91" ? "91" : "65"} ${data.mobileNo}` : ""}
+                  {data.mobileNo !== 0
+                    ? `${
+                        data?.countryCode === "+91" ||
+                        data?.countryCode === "91"
+                          ? "91"
+                          : "65"
+                      } ${data.mobileNo}`
+                    : ""}
                 </p>
                 <p className="mb-0 mt-2">{data.email}</p>
-
               </div>
             </Offcanvas.Title>
           </div>
@@ -233,7 +241,11 @@ function User({ handleLogout, handleCloseMain }) {
                       onClick={handleCloseProfile}
                       className="data-link"
                     >
-                      <img src={password} alt="about pic" className="got mx-3" />
+                      <img
+                        src={password}
+                        alt="about pic"
+                        className="got mx-3"
+                      />
                       <span>Change Password</span>
                     </Link>
                   </td>
@@ -242,13 +254,9 @@ function User({ handleLogout, handleCloseMain }) {
             </Table>
           </div>
           <div className="p-3">
-            <Link
-              to="/changepassword"
-              onClick={onLogout}
-              className="data-link"
-            >
-              <button className="btn btn-danger w-100"><TbLogout size={20} /> Logout</button>
-            </Link>
+            <button onClick={onLogout} className="btn btn-danger w-100">
+              <TbLogout size={20} /> Logout
+            </button>
           </div>
         </Offcanvas.Body>
       </Offcanvas>

@@ -19,9 +19,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
   const navigate = useNavigate();
 
   const [showButton, setShowButton] = useState(true);
-
-  const currentPath = location.pathname;
-  console.log("Current path:", currentPath);
+  const basePath = "/auth";
   const ridespage = location.pathname === "/rides";
 
   // Handle for the first modal
@@ -41,8 +39,11 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
     setShowButton(false);
   };
 
-  const authPaths = ["/auth", "/auth/login", "/auth/shift"];
-
+  const authPaths = [`${basePath}`, `${basePath}/login`, `${basePath}/shift`];
+  const currentPath = `${basePath}${
+    location.pathname === "/" ? "" : location.pathname
+  }`;
+  console.log(authPaths.includes(currentPath));
   return (
     <section className="header">
       <Modal show={show} onHide={handleClose}>
@@ -79,9 +80,9 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                 <Navbar.Brand>
                   <Link
                     to={
-                      authPaths.includes(location.pathname)
-                        ? "/"
-                        : "/auth"
+                      authPaths.includes(currentPath)
+                        ? "https://trucklah.com/"
+                        : "https://trucklah.com/auth"
                     }
                   >
                     <img
