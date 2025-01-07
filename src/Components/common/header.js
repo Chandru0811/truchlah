@@ -41,6 +41,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
     setShowButton(false);
   };
 
+  const authPaths = ["/auth", "/auth/login", "/auth/shift"];
 
   return (
     <section className="header">
@@ -77,7 +78,11 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
               <Container fluid>
                 <Navbar.Brand>
                   <Link
-                    to={location.pathname === "https://trucklah.com/auth" ? "https://trucklah.com" : "https://trucklah.com/auth"}
+                    to={
+                      authPaths.includes(location.pathname)
+                        ? "/"
+                        : "/auth"
+                    }
                   >
                     <img
                       src={logo}
@@ -200,17 +205,24 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                   <div className="hstack gap-2 justify-content-end">
                                     {isAuthenticate ? (
                                       <li className="nav-item">
-                                        <Link to="/rides"
-                                          className={`data-link1 ${ridespage ? "underline" : ""}`}
-                                          id="order-btn">
+                                        <Link
+                                          to="/rides"
+                                          className={`data-link1 ${
+                                            ridespage ? "underline" : ""
+                                          }`}
+                                          id="order-btn"
+                                        >
                                           My Orders
                                         </Link>
                                       </li>
-                                    ) :
+                                    ) : (
                                       <></>
-                                    }
+                                    )}
                                     {isAuthenticate && (
-                                      <User handleLogout={handleLogout} handleCloseMain={handleCloseMain} />
+                                      <User
+                                        handleLogout={handleLogout}
+                                        handleCloseMain={handleCloseMain}
+                                      />
                                     )}
                                   </div>
                                 </div>
@@ -237,8 +249,12 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 ) : (
                                   <li className="nav-item">
                                     <Link to="/login">
-                                      <button type="button" className="login-btn py-2 px-3">
-                                        <FaRegUser className="mb-1 me-2" /> Login
+                                      <button
+                                        type="button"
+                                        className="login-btn py-2 px-3"
+                                      >
+                                        <FaRegUser className="mb-1 me-2" />{" "}
+                                        Login
                                       </button>
                                     </Link>
                                   </li>
