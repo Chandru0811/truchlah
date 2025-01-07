@@ -1002,7 +1002,7 @@ function RideDetailsView() {
                 </>
               )}
 
-            {data.bookingStatus?.status === "DRAFT_BOOKING" ? (
+            {data.bookingStatus?.status === "DRAFT_BOOKING" && (
               <div className="text-center py-3">
                 <button
                   onClick={handleClick}
@@ -1012,25 +1012,26 @@ function RideDetailsView() {
                   Resume Booking
                 </button>
               </div>
-            ) : (
-              <>
-                <div className="text-center py-3">
-                  <button
-                    onClick={handleClickPayNow}
-                    className="btn btn-primary px-5 py-2"
-                    id="PayNow"
-                    disabled={Loading}
-                  >
-                    {Loading && (
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        aria-hidden="true"
-                      ></span>
-                    )}
-                    Pay Now
-                  </button>
-                </div>
-              </>
+            )}
+
+
+            {data.bookingStatus?.status === "BOOKED" && data.transactionDetails?.paymentStatus === "NOT PAID" && (
+              <div className="text-center py-3">
+                <button
+                  onClick={handleClickPayNow}
+                  className="btn btn-primary px-5 py-2"
+                  id="PayNow"
+                  disabled={Loading}
+                >
+                  {Loading && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Pay Now
+                </button>
+              </div>
             )}
 
             <div className="my-3 d-flex justify-content-center">

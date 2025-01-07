@@ -205,24 +205,6 @@ function Order() {
         ) : (
           <>
             <div className="col-12 d-flex justify-content-center mt-5 py-3 flex-wrap">
-              <button
-                className={`mx-3 my-1 ${showDraftSection ? "underline" : ""}`}
-                id="shift-btn"
-                onClick={draftSection}
-                style={{ position: "relative" }}
-              >
-                DRAFT BOOKING
-                <span
-                  className="position-absolute start-100 translate-middle badge rag rounded-pill"
-                  style={{
-                    transform: "translate(-50%, -50%)",
-                    fontSize: "0.75em",
-                    padding: "0.3em 0.6em",
-                  }}
-                >
-                  {draftCount}
-                </span>
-              </button>
 
               <button
                 className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
@@ -242,7 +224,6 @@ function Order() {
                   {inprogressCount}
                 </span>
               </button>
-
               <button
                 className={`mx-3 ${showCompletedSection ? "underline" : ""}`}
                 id="shift-btn"
@@ -278,6 +259,25 @@ function Order() {
                   }}
                 >
                   {canceledCount}
+                </span>
+              </button>
+
+              <button
+                className={`mx-3 my-1 ${showDraftSection ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={draftSection}
+                style={{ position: "relative" }}
+              >
+                DRAFT BOOKING
+                <span
+                  className="position-absolute start-100 translate-middle badge rag rounded-pill"
+                  style={{
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "0.75em",
+                    padding: "0.3em 0.6em",
+                  }}
+                >
+                  {draftCount}
                 </span>
               </button>
             </div>
