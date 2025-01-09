@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 // import wallet from "../../asset/wallet.png";
-import rides from "../../asset/my rides.png";
 // import refer from "../../asset/refer and earn.png";
 // import rewards from "../../asset/rewards.png";
 // import notification from "../../asset/notification.png";
 // import support from "../../asset/support.png";
-import about from "../../asset/about.png";
-import password from "../../asset/change_password.webp";
+import about from "../../asset/about.svg";
+import rides from "../../asset/orders.svg";
+import password from "../../asset/password.svg";
 import { Link, useNavigate } from "react-router-dom";
 // import invoice from "../../asset/invoice-logo.png";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -107,13 +107,12 @@ function User({ handleLogout, handleCloseMain }) {
                 </p>
                 {/* <p className="mb-0 mt-2">+{data.countryCode} {data.mobileNo}</p> */}
                 <p className="mb-0 mt-2">
-                  {data.mobileNo !== 0
-                    ? `${
-                        data?.countryCode === "+91" ||
-                        data?.countryCode === "91"
-                          ? "91"
-                          : "65"
-                      } ${data.mobileNo}`
+                  +{data.mobileNo !== 0
+                    ? `${data?.countryCode === "+91" ||
+                      data?.countryCode === "91"
+                      ? "91"
+                      : "65"
+                    } ${data.mobileNo}`
                     : ""}
                 </p>
                 <p className="mb-0 mt-2">{data.email}</p>
@@ -144,7 +143,8 @@ function User({ handleLogout, handleCloseMain }) {
                       onClick={handleCloseProfile}
                       className="data-link"
                     >
-                      <img src={rides} alt="rides pic" className="got mx-3" />
+                      <img src={rides} alt="rides pic" className="got mx-3"
+                        style={{ width: "24px", height: "24px" }} />
                       <span>MY ORDERS</span>
                     </Link>
                   </td>
@@ -229,7 +229,8 @@ function User({ handleLogout, handleCloseMain }) {
                       onClick={handleCloseProfile}
                       className="data-link"
                     >
-                      <img src={about} alt="about pic" className="got mx-3" />
+                      <img src={about} alt="about pic" className="got mx-3"
+                        style={{ width: "20px", height: "20px" }} />
                       <span>ABOUT</span>
                     </Link>
                   </td>
@@ -241,12 +242,9 @@ function User({ handleLogout, handleCloseMain }) {
                       onClick={handleCloseProfile}
                       className="data-link"
                     >
-                      <img
-                        src={password}
-                        alt="about pic"
-                        className="got mx-3"
-                      />
-                      <span>Change Password</span>
+                      <img src={password} alt="about pic" className="got mx-3"
+                        style={{ width: "20px", height: "20px" }} />
+                      <span>CHANGE PASSWORD</span>
                     </Link>
                   </td>
                 </tr>

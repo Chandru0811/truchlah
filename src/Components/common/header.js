@@ -40,9 +40,8 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
   };
 
   const authPaths = [`${basePath}`, `${basePath}/login`, `${basePath}/shift`];
-  const currentPath = `${basePath}${
-    location.pathname === "/" ? "" : location.pathname
-  }`;
+  const currentPath = `${basePath}${location.pathname === "/" ? "" : location.pathname
+    }`;
   console.log(authPaths.includes(currentPath));
   return (
     <section className="header">
@@ -208,9 +207,8 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                       <li className="nav-item">
                                         <Link
                                           to="/rides"
-                                          className={`data-link1 ${
-                                            ridespage ? "underline" : ""
-                                          }`}
+                                          className={`data-link1 ${ridespage ? "underline" : ""
+                                            }`}
                                           id="order-btn"
                                         >
                                           My Orders
@@ -232,6 +230,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                 {isAuthenticate ? (
                                   <>
                                     {location.pathname !== "/shift" &&
+                                      location.pathname !== "/auth/shift" &&
                                       location.pathname !== "/itemshift" &&
                                       location.pathname !== "/housemoving" && (
                                         <li className="nav-item">

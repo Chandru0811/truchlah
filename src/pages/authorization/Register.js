@@ -516,7 +516,8 @@ function Register({ handleLogin }) {
                       <label className="form-label">
                         Password <span className="errmsg">*</span>
                       </label>
-                      <div className={`input-group mb-3`}>
+                      <div className={`input-group mb-3`}
+                        id="password">
                         <input
                           type={Password ? "text" : "password"}
                           className={`form-control ${formik.touched.password && formik.errors.password
@@ -615,7 +616,8 @@ function Register({ handleLogin }) {
                       <label className="form-label">
                         Confirm Password <span className="errmsg">*</span>
                       </label>
-                      <div className={`input-group mb-3`}>
+                      <div className={`input-group mb-3`}
+                      id="password">
                         <input
                           type={cPassword ? "text" : "password"}
                           className={`form-control ${formik.touched.confirmPassword &&

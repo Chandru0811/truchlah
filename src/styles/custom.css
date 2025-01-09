@@ -2442,11 +2442,21 @@ body {
 }
 
 #PayNow {
-  background: #00DD21;
+  background: #0cd72b;
   /* border-radius: 28px; */
   font-weight: bold;
   border: none;
-  color: black;
+  color: #ffffff;
   cursor: pointer;
   transition: 0.5s ease;
+}
+
+#password:focus-within {
+  box-shadow: none;
+  outline: none;
+}
+#noofworks:focus-within {
+  box-shadow: none;
+  outline: none;
+  cursor: none;
 }

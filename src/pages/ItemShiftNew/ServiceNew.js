@@ -18,7 +18,7 @@ const ServiceNew = forwardRef(
 
     const validationSchema = Yup.object().shape({
       messageToDriver: Yup.string().max(
-        255,
+        256,
         "Message to Driver cannot exceed 255 characters"
       ),
     });
@@ -186,7 +186,7 @@ const ServiceNew = forwardRef(
                       }}
                     >
                       <span>
-                        <b>No.Of Workers</b>
+                        <b>No. of Workers</b>
                       </span>
                       <div
                         className="quantity-input d-flex align-items-center px-1"
@@ -219,12 +219,13 @@ const ServiceNew = forwardRef(
 
                         {/* Quantity display */}
                         <input
-                          type="number"
+                          type="text"
                           className="quantity-value"
                           value={formik.values.quantity}
                           min={0}
                           max={99}
                           readOnly
+                          id="noofworks"
                           style={{
                             width: "35px",
                             padding: "1px",
