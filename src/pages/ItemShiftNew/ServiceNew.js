@@ -223,7 +223,7 @@ const ServiceNew = forwardRef(
                           className="quantity-value"
                           value={formik.values.quantity}
                           min={0}
-                          max={99}
+                          max={10}
                           readOnly
                           id="noofworks"
                           style={{
@@ -242,7 +242,7 @@ const ServiceNew = forwardRef(
                           className="quantity-btn"
                           onClick={increaseManpowerQuantity}
                           type="button"
-                          disabled={formik.values.quantity === 99}
+                          disabled={formik.values.quantity === 10}
                           style={{
                             backgroundColor: "#acff3b",
                             color: "#333",

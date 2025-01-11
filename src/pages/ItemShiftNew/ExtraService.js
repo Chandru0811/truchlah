@@ -27,7 +27,10 @@ const ExtraService = forwardRef(
     );
 
     const handleIncrement = (id) => {
-      setCounts((prevCounts) => ({ ...prevCounts, [id]: prevCounts[id] + 1 }));
+      if(counts[id] <= 9){
+
+        setCounts((prevCounts) => ({ ...prevCounts, [id]: prevCounts[id] + 1 }));
+      }
     };
 
     const handleDecrement = (id) => {
