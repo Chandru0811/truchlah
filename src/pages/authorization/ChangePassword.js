@@ -111,13 +111,13 @@ function ChangePassword() {
       <div
         className="row align-items-center"
         style={{
-          backgroundColor: "#9AB8DD",
+          backgroundColor: "#e6ffe4",
         }}
       >
         <div
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
           style={{
-            backgroundColor: "#9AB8DD",
+            backgroundColor: "#e6ffe4",
             height: "100%", // Set height to 100% to fill the container
           }}
         >
@@ -160,7 +160,10 @@ function ChangePassword() {
                             value={userName}
                             readOnly
                             className="form-control"
-                            style={{ backgroundColor: "#f8f9fa", border: "1px solid #ced4da" }}
+                            style={{
+                              backgroundColor: "#f8f9fa",
+                              border: "1px solid #ced4da",
+                            }}
                           />
                         </FloatingLabel>
                       </div>
@@ -174,10 +177,11 @@ function ChangePassword() {
                           <Form.Control
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter your new password"
-                            className={`form-control ${formik.touched.password && formik.errors.password
-                              ? ""
-                              : ""
-                              }`}
+                            className={`form-control ${
+                              formik.touched.password && formik.errors.password
+                                ? ""
+                                : ""
+                            }`}
                             {...formik.getFieldProps("password")}
                           />
                           {showPassword ? (
@@ -211,46 +215,62 @@ function ChangePassword() {
                         {passwordFeedback && (
                           <div>
                             {/* Progress Bar */}
-                            <div className="progress" style={{ height: "5px", marginTop: "8px" }}>
+                            <div
+                              className="progress"
+                              style={{ height: "5px", marginTop: "8px" }}
+                            >
                               <div
-                                className={`progress-bar ${passwordFeedback === "Password Strength is Weak"
-                                  ? "bg-danger"
-                                  : passwordFeedback === "Password Strength is Medium"
+                                className={`progress-bar ${
+                                  passwordFeedback ===
+                                  "Password Strength is Weak"
+                                    ? "bg-danger"
+                                    : passwordFeedback ===
+                                      "Password Strength is Medium"
                                     ? "bg-warning"
-                                    : passwordFeedback === "Password Strength is Strong"
-                                      ? "bg-success"
-                                      : ""
-                                  }`}
+                                    : passwordFeedback ===
+                                      "Password Strength is Strong"
+                                    ? "bg-success"
+                                    : ""
+                                }`}
                                 role="progressbar"
                                 style={{
                                   width:
-                                    passwordFeedback === "Password Strength is Weak"
+                                    passwordFeedback ===
+                                    "Password Strength is Weak"
                                       ? "30%"
-                                      : passwordFeedback === "Password Strength is Medium"
-                                        ? "60%"
-                                        : passwordFeedback === "Password Strength is Strong"
-                                          ? "100%"
-                                          : "0%",
+                                      : passwordFeedback ===
+                                        "Password Strength is Medium"
+                                      ? "60%"
+                                      : passwordFeedback ===
+                                        "Password Strength is Strong"
+                                      ? "100%"
+                                      : "0%",
                                 }}
                                 aria-valuenow={
-                                  passwordFeedback === "Password Strength is Weak"
+                                  passwordFeedback ===
+                                  "Password Strength is Weak"
                                     ? "30"
-                                    : passwordFeedback === "Password Strength is Medium"
-                                      ? "60"
-                                      : passwordFeedback === "Password Strength is Strong"
-                                        ? "100"
-                                        : "0"
+                                    : passwordFeedback ===
+                                      "Password Strength is Medium"
+                                    ? "60"
+                                    : passwordFeedback ===
+                                      "Password Strength is Strong"
+                                    ? "100"
+                                    : "0"
                                 }
                                 aria-valuemin="0"
                                 aria-valuemax="100"
                               >
-                                {passwordFeedback === "Password Strength is Weak"
+                                {passwordFeedback ===
+                                "Password Strength is Weak"
                                   ? ""
-                                  : passwordFeedback === "Password Strength is Medium"
-                                    ? ""
-                                    : passwordFeedback === "Password Strength is Strong"
-                                      ? ""
-                                      : ""}
+                                  : passwordFeedback ===
+                                    "Password Strength is Medium"
+                                  ? ""
+                                  : passwordFeedback ===
+                                    "Password Strength is Strong"
+                                  ? ""
+                                  : ""}
                               </div>
                             </div>
                             {/* Feedback Message */}
@@ -258,13 +278,16 @@ function ChangePassword() {
                               style={{
                                 marginTop: "8px",
                                 color:
-                                  passwordFeedback === "Password Strength is Weak"
+                                  passwordFeedback ===
+                                  "Password Strength is Weak"
                                     ? "red"
-                                    : passwordFeedback === "Password Strength is Medium"
-                                      ? "orange"
-                                      : passwordFeedback === "Password Strength is Strong"
-                                        ? "green"
-                                        : "black",
+                                    : passwordFeedback ===
+                                      "Password Strength is Medium"
+                                    ? "orange"
+                                    : passwordFeedback ===
+                                      "Password Strength is Strong"
+                                    ? "green"
+                                    : "black",
                               }}
                             >
                               {passwordFeedback}
@@ -282,11 +305,12 @@ function ChangePassword() {
                           <Form.Control
                             type={confirmPassword ? "text" : "password"}
                             placeholder="Confirm your password"
-                            className={`form-control ${formik.touched.confirmPassword &&
+                            className={`form-control ${
+                              formik.touched.confirmPassword &&
                               formik.errors.confirmPassword
-                              ? ""
-                              : ""
-                              }`}
+                                ? ""
+                                : ""
+                            }`}
                             {...formik.getFieldProps("confirmPassword")}
                           />
                           {confirmPassword ? (
@@ -367,8 +391,8 @@ function ChangePassword() {
                     </div>
                     <div className="text-center">
                       <button
-                        className="btn btn-primary py-2"
-                        style={{ width: "100%" }}
+                        className="btn btn-primary py-2 border-0"
+                        style={{ width: "100%", backgroundColor: "#333" }}
                         id="registerButton"
                         type="submit"
                       >

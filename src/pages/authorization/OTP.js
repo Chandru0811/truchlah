@@ -81,11 +81,11 @@ function OTP({ handleLogin, handleAdminLogin }) {
     <div className="container-fluid">
       <div
         className="row align-items-center"
-        style={{ backgroundColor: "#9AB8DD" }}
+        style={{ backgroundColor: "#e6ffe4" }}
       >
         <div
           className="col-lg-4 col-md-4 col-12 py-5 text-center mx-auto"
-          style={{ backgroundColor: "#9AB8DD", height: "100%" }}
+          style={{ backgroundColor: "#e6ffe4", height: "100%" }}
         >
           <div className="d-flex flex-column align-items-center h-100">
             <h2 className="LoginHeader">
@@ -145,10 +145,10 @@ function OTP({ handleLogin, handleAdminLogin }) {
                       </button>
                     </div>
                     <Button
-                      style={{ width: "100%" }}
+                      className="btn btn-primary py-2 border-0"
+                      style={{ width: "100%", backgroundColor: "#333" }}
                       type="submit"
                       variant="primary"
-                      className="my-4"
                     >
                       Submit
                     </Button>
