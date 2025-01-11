@@ -10,8 +10,8 @@ function Order() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const type = searchParams.get("type");
-  const [showDraftSection, setShowDraftSection] = useState(true);
-  const [showInprogressSection, setShowInprogressSection] = useState(false);
+  const [showDraftSection, setShowDraftSection] = useState(false);
+  const [showInprogressSection, setShowInprogressSection] = useState(true);
   const [showCompletedSection, setShowCompletedSection] = useState(false);
   const [showCanceledSection, setShowCanceledSection] = useState(false);
   const [draftCount, setDraftCount] = useState(0);
