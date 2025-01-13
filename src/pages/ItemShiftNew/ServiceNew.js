@@ -80,9 +80,9 @@ const ServiceNew = forwardRef(
     });
 
     const increaseManpowerQuantity = () => {
-      if (formik.values.quantity < 99) {
+      // if (formik.values.quantity < 99) {
         formik.setFieldValue("quantity", formik.values.quantity + 1);
-      }
+      // }
     };
 
     const decreaseManpowerQuantity = () => {
@@ -223,7 +223,6 @@ const ServiceNew = forwardRef(
                           className="quantity-value"
                           value={formik.values.quantity}
                           min={0}
-                          max={10}
                           readOnly
                           id="noofworks"
                           style={{
@@ -242,7 +241,7 @@ const ServiceNew = forwardRef(
                           className="quantity-btn"
                           onClick={increaseManpowerQuantity}
                           type="button"
-                          disabled={formik.values.quantity === 10}
+                          // disabled={formik.values.quantity === 10}
                           style={{
                             backgroundColor: "#acff3b",
                             color: "#333",
