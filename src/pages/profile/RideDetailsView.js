@@ -254,20 +254,22 @@ function RideDetailsView() {
           <div class="loader"></div>
         </div>
       ) : (
-        <div className="container-fluid pt-3" id="Ace">
-          <div
-            onClick={() => navigate(-1)}
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Back"
-            className="me-3 orderMargin"
-            style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
-          >
-            <IoArrowBackCircleOutline size={30} />
+        <div className="container-fluid" id="Ace">
+          <div className="backsticky">
+            <div
+              onClick={() => navigate(-1)}
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Back"
+              className="me-3 orderMargin"
+              style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
+            >
+              <IoArrowBackCircleOutline size={30} />
+            </div>
+            <center>
+              <h3 style={{ color: "#1e1e1e" }}>SUMMARY</h3>
+            </center>
           </div>
-          <center>
-            <h3 style={{ color: "#1e1e1e" }}>SUMMARY</h3>
-          </center>
 
           <div className="row">
             <div className="col-lg-3"></div>

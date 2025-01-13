@@ -2455,8 +2455,24 @@ body {
   box-shadow: none;
   outline: none;
 }
+
 #noofworks:focus-within {
   box-shadow: none;
   outline: none;
   cursor: none;
+}
+
+.backsticky {
+  position: sticky !important;
+  top: 66px;
+  z-index: 1000;
+  background-color: white;
+  padding: 10px;
+}
+.ordersback {
+  position: sticky !important;
+  top: 66px;
+  z-index: 1000;
+  background-color: white;
+  padding: 5px;
 }

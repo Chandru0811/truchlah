@@ -160,44 +160,45 @@ function Order() {
 
   return (
     <section className="order">
-      <div className="container-fluid mt-3">
-        <div className="row align-items-center">
-          <div className="col d-flex align-items-center orderMargin">
-            <div
-              onClick={() => navigate(-1)}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Back"
-              className="me-3"
-              style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
-            >
-              <IoArrowBackCircleOutline size={30} />
-            </div>
-            <h2 style={{ color: "#1e1e1e", marginBottom: "0" }}>ORDERS</h2>
-          </div>
-        </div>
-        <div className="row mt-3">
-          <div className="col-12 d-flex justify-content-center">
-            <button
-              className={`mx-3 ${showHouseShift ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={houseSection}
-              type="button"
-            >
-              HOUSE MOVING
-            </button>
-            <button
-              className={`mx-3 ${showItemShift ? "underline" : ""}`}
-              id="shift-btn"
-              onClick={itemSection}
-            >
-              ITEM SHIFT
-            </button>
-          </div>
-        </div>
-      </div>
+
 
       <div id="shift-bg">
+        <div className="container-fluid mt-3 ordersback">
+          <div className="row align-items-center">
+            <div className="col d-flex align-items-center orderMargin">
+              <div
+                onClick={() => navigate(-1)}
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Back"
+                className="me-3"
+                style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
+              >
+                <IoArrowBackCircleOutline size={30} />
+              </div>
+              <h2 style={{ color: "#1e1e1e", marginBottom: "0" }}>ORDERS</h2>
+            </div>
+          </div>
+          <div className="row mt-3">
+            <div className="col-12 d-flex justify-content-center">
+              <button
+                className={`mx-3 ${showHouseShift ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={houseSection}
+                type="button"
+              >
+                HOUSE MOVING
+              </button>
+              <button
+                className={`mx-3 ${showItemShift ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={itemSection}
+              >
+                ITEM SHIFT
+              </button>
+            </div>
+          </div>
+        </div>
         {isLoaded ? (
           <div className="loader-container d-flex align-items-center justify-content-center">
             <div class="loader"></div>
