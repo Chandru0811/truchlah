@@ -239,6 +239,7 @@ const ServiceNew = forwardRef(
                         {/* Increase button */}
                         <button
                           className="quantity-btn"
+                          disabled={formik.values.quantity === 10}
                           onClick={increaseManpowerQuantity}
                           type="button"
                           // disabled={formik.values.quantity === 10}

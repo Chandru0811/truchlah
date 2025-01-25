@@ -83,8 +83,7 @@ function Login({ handleLogin, handleAdminLogin }) {
         }
       } catch (error) {
         if (error.response.status === 409) {
-          toast.warning(error.response.data.errorList[0].errorMessage
-          )
+          toast.warning(error.response.data.errorList[0].errorMessage)
           const userId=error.response.data.errorList[0].userId; 
           const mobileNos = error.response.data.errorList[0].mobileNo;
           const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
@@ -103,7 +102,7 @@ function Login({ handleLogin, handleAdminLogin }) {
             }
           }
         } else {
-          toast.error(error.response.data.errorList[0].errorMessage);
+          toast.error(error.response.data?.errorList[0]?.errorMessage);
         }
       }
       // }
@@ -178,13 +177,30 @@ function Login({ handleLogin, handleAdminLogin }) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      if (error.response?.status === 409) {
-        navigate(`/mobile/verify`)
-        toast.warning(error.response.data.errorList[0].errorMessage);
+      if (error.response.status === 409) {
+        toast.warning(error.response.data.errorList[0].errorMessage)
+        const userId=error.response.data.errorList[0].userId; 
+        const mobileNos = error.response.data.errorList[0].mobileNo;
+        const mobileNo = `${error.response.data.errorList[0].countryCode}${mobileNos}`;
+        console.log("mobileNos",mobileNos)
+        if (mobileNos === 0){
+          navigate(`/mobile/verify`,{state:{userId:userId}})
+        }else{
+          try {
+            const otpResponse = await userApi.post(
+              `user/sendOTP?phone=${mobileNo}`
+            );
+            if (otpResponse.status === 200) {
+              navigate("/otp", { state: { mobileNo } });
+            }
+          } catch (error) {
+            console.log(error.response.data.errorList[0].errorMessage);
+          }
+        }
       } else if (error.response?.status === 400) {
         toast.warning(error.response.data.errorList[0].errorMessage);
       } else {
-        toast.error(error.message);
+        toast.error(error.response.data?.errorList[0]?.errorMessage);
       }
     }
   };
