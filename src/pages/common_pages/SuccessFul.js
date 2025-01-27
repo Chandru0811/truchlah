@@ -121,14 +121,14 @@ function Successfull() {
       //     </div>
       //   </div>
       // </section>
-      <div className="container mt-5 py-2">
-        <div className="row justify-content-center mt-5">
-          <div className="col-lg-4 col-md-6 col-12">
+      <div className="container mt-5 pt-4">
+        <div className="row justify-content-center mt-5 px-2 py-5">
+          <div className="col-lg-4 col-md-6 col-12" style={{ minHeight: "51vh" }}>
             <div
               className={`card p-4 text-center cardStyle position-relative ${
                 result === "error" && "pt-5 pb-4"
               }`}
-              style={{ minHeight: "60vh" }}
+              style={{ minHeight: "40vh" }}
             >
               <div className="d-flex justify-content-center align-items-center mb-3 icon-container">
                 {result === "success" ? (

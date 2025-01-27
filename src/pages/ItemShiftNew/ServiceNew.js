@@ -18,7 +18,7 @@ const ServiceNew = forwardRef(
 
     const validationSchema = Yup.object().shape({
       messageToDriver: Yup.string().max(
-        256,
+        255,
         "Message to Driver cannot exceed 255 characters"
       ),
     });

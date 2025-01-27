@@ -9,8 +9,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
-  reviewComments: Yup.string().required("Comments are required"),
-  rating: Yup.number().required("Rating is required"),
+  reviewComments: Yup.string().max(
+    255,
+    "*Comments Message cannot exceed 255 characters"
+  ).required("*Comments are required"),
+  rating: Yup.number().required("*Rating is required"),
 });
 
 const colors = {
@@ -31,6 +34,7 @@ function Popup({ bookingId, onSuccess }) {
 
   const handleClose = () => {
     setShow(false);
+    setRating(null)
     formik.resetForm();
   };
 
@@ -137,13 +141,13 @@ function Popup({ bookingId, onSuccess }) {
                     value={formik.values.reviewComments}
                     // {...formik.getFieldProps('reviewComments')}
                   />
-                </div>
                 {formik.touched.reviewComments &&
                 formik.errors.reviewComments ? (
-                  <div className="invalid-feedback">
+                  <small className="text-danger">
                     {formik.errors.reviewComments}
-                  </div>
+                  </small>
                 ) : null}
+                </div>
               </div>
             </div>
           </Modal.Body>
@@ -162,7 +166,7 @@ function Popup({ bookingId, onSuccess }) {
               type="submit"
               className="btn btn-primary px-5 py-2"
               id="NextMove"
-              disabled={!(formik.isValid && formik.dirty)}
+              // disabled={!(formik.isValid && formik.dirty)}
             >
               Submit
             </button>

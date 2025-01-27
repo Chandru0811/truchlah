@@ -96,7 +96,10 @@ function RideDetailsView() {
 
   const validationSchema = Yup.object().shape({
     cancelReason: Yup.string().required("*Please select a reason"),
-    comments: Yup.string().test(
+    comments: Yup.string().max(
+      255,
+      "Message cannot exceed 255 characters"
+    ).test(
       "is-required-if-others",
       "*Message is required",
       function (value) {
