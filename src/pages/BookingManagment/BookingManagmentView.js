@@ -266,7 +266,7 @@ function BookingManagmentView() {
                             <span>Assign</span>
                           )}
                         </button>
-                        <UpdateBokking />
+                        {/* <UpdateBokking /> */}
                       </div>
                     </div>
                   </form>
@@ -678,20 +678,6 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Booking Status</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data?.booking?.bookingStatus || ""}{" "}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
                                 <b>Upload Image</b>
                               </p>
                             </div>
@@ -705,6 +691,20 @@ function BookingManagmentView() {
                               ) : (
                                 "N/A"
                               )}
+                            </div>
+                          </div>
+                        </div>
+                        {/* <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Booking Status</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data?.booking?.bookingStatus || ""}{" "}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -735,7 +735,7 @@ function BookingManagmentView() {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

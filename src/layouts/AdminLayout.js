@@ -46,6 +46,8 @@ import ContactFormTeamView from "../pages/ContactFormTeam/ContactFormTeamView";
 import BookingManagment from "../pages/BookingManagment/BookingManagment";
 import BookingManagmentView from "../pages/BookingManagment/BookingManagmentView";
 import ScrollToTop from "../pages/admin/ScrollToTop";
+import TimeSlot from "../pages/BookTime/TimeSlot";
+import TimeSlotEdit from "../pages/BookTime/TimeSlotEdit";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -116,6 +118,12 @@ function AdminLayout({ handleLogout }) {
               <Route
                 path="/bookingManagement/view/:id"
                 element={<BookingManagmentView />}
+              />
+
+              <Route path="/timeSlot" element={<TimeSlot />} />
+              <Route
+                path="/timeSlot/view/:id"
+                element={<TimeSlotEdit />}
               />
 
               <Route path="/usermanagement" element={<UserManagement />} />

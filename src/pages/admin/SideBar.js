@@ -79,6 +79,11 @@ function SideBar({ onLogout }) {
               </NavLink>
             </li>
             <li className="nav-item pt-2">
+              <NavLink className="nav-link" to="/timeSlot">
+                <i className="bx bx-stopwatch pe-3"></i> Time Slot Management
+              </NavLink>
+            </li>
+            <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/bannerandoffer">
                 <i className="bx bx-gift pe-3"></i> Banners and Offers
               </NavLink>
