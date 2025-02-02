@@ -656,7 +656,7 @@ function RideDetailsView() {
                         </p>
                       </div>
                     </div>
-                    <div className="row">
+                    {/* <div className="row">
                       <div className="col-md-6 col-12 ps-1">
                         <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Total amount</b>
@@ -671,7 +671,7 @@ function RideDetailsView() {
                             : "0.00"}
                         </p>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
                         <p className="lineh" style={{ color: "#1e1e1e" }}>
@@ -697,7 +697,7 @@ function RideDetailsView() {
               <></>
             ) : (
               <>
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-lg-3 col-md-3 col-12"></div>
                   <div className="col-lg-6 col-md-6 col-12">
                     <p className="mt-5 ps-2">
@@ -747,25 +747,11 @@ function RideDetailsView() {
                             </p>
                           </div>
                         </div>
-                        {/* <div className="row">
-                        <div className="col-md-6 col-12 ps-1">
-                          <div>
-                            <p className="line" style={{ color: "#1e1e1e" }}>
-                              <b>Resp Code</b>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12 ps-1" id="drop">
-                          <p className="line" style={{ color: "#494949" }}>
-                            {data?.transactionDetails?.respCode || "0"}
-                          </p>
-                        </div>
-                      </div> */}
                       </div>
                     </div>
                   </div>
                   <div className="col-lg-3 col-md-3 col-12"></div>
-                </div>
+                </div> */}
 
               </>
             )}
@@ -1020,7 +1006,7 @@ function RideDetailsView() {
             )}
 
 
-            {data.bookingStatus?.status === "BOOKED" && data.transactionDetails?.paymentStatus === "NOT PAID" && (
+            {/* {data.bookingStatus?.status === "BOOKED" && data.transactionDetails?.paymentStatus === "NOT PAID" && (
               <div className="text-center py-3 mt-3">
                 <button
                   onClick={handleClickPayNow}
@@ -1037,7 +1023,7 @@ function RideDetailsView() {
                   Pay Now
                 </button>
               </div>
-            )}
+            )} */}
 
             <div className="my-3 d-flex justify-content-center">
               {(data.bookingStatus?.status === "COMPLETED" ||

@@ -367,8 +367,8 @@ function Order() {
 
                         <div className="col-lg-2 col-md-6 col-12 p-3 d-flex flex-column justify-content-between">
                           <p className="pt-2 mb-0">
-                            <FaDollarSign />{" "}
-                            {item.transactionDetails?.txnAmount.toFixed(2) || "0.00"}
+                            {/* <FaDollarSign />{" "}
+                            {item.transactionDetails?.txnAmount.toFixed(2) || "0.00"} */}
                           </p>
                           <Link
                             to={`/ridedetailsview/${item.booking.bookingId}`}

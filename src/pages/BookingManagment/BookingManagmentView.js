@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Badge } from "antd";
 import { FaLink } from "react-icons/fa";
+import UpdateBokking from "./UpdateBokking";
 
 const validationSchema = Yup.object({
   driverId: Yup.string().required("*Driver is required"),
@@ -205,11 +206,10 @@ function BookingManagmentView() {
                       <div className="d-flex justify-content-end align-items-center">
                         <div className="w-25 me-3">
                           <select
-                            className={`form-select ${
-                              formik.touched.status && formik.errors.status
-                                ? "is-invalid"
-                                : ""
-                            }`}
+                            className={`form-select ${formik.touched.status && formik.errors.status
+                              ? "is-invalid"
+                              : ""
+                              }`}
                             name="driverId"
                             value={formik.values.driverId}
                             onChange={(e) => {
@@ -228,7 +228,7 @@ function BookingManagmentView() {
                               Select Driver
                             </option>
                             {Array.isArray(driversListData) &&
-                            driversListData.length > 0 ? (
+                              driversListData.length > 0 ? (
                               driversListData.map((driver) => (
                                 <option key={driver.id} value={driver.id}>
                                   {driver.driverName}
@@ -249,7 +249,7 @@ function BookingManagmentView() {
                         </div>
                         <button
                           type="submit"
-                          className="btn btn-sm btn-button"
+                          className="btn btn-sm btn-button me-3"
                           disabled={
                             spinner ||
                             !driversListData ||
@@ -266,6 +266,7 @@ function BookingManagmentView() {
                             <span>Assign</span>
                           )}
                         </button>
+                        <UpdateBokking />
                       </div>
                     </div>
                   </form>
@@ -641,6 +642,96 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 : {data?.booking?.vehicleName || ""}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Preferred Visit Date</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data?.booking?.date || ""}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Preferred Visit Time</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data?.booking?.time || ""}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Booking Status</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data?.booking?.bookingStatus || ""}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Upload Image</b>
+                              </p>
+                            </div>
+                            <div className="col-6 text-muted">
+                              {data.vehicleImage ? (
+                                <img
+                                  src={data?.booking?.vehicleImage}
+                                  alt="Driver"
+                                  style={{ width: "100px" }}
+                                />
+                              ) : (
+                                "N/A"
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Quoted Amount</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data?.booking?.quotedAmount || ""}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row mb-3">
+                            <div className="col-6 d-flex justify-content-start align-items-center">
+                              <p className="text-sm">
+                                <b>Remarks</b>
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data?.booking?.remarks || ""}{" "}
                               </p>
                             </div>
                           </div>
@@ -1170,92 +1261,92 @@ function BookingManagmentView() {
                   )}
                   {data.review.ratingByUser !==
                     "User rating not yet available." && (
-                    <>
-                      <div class="accordion-item">
-                        <h2 class="accordion-header">
-                          <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseSeven"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseSeven"
+                      <>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header">
+                            <button
+                              class="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#panelsStayOpen-collapseSeven"
+                              aria-expanded="false"
+                              aria-controls="panelsStayOpen-collapseSeven"
+                            >
+                              Review
+                            </button>
+                          </h2>
+                          <div
+                            id="panelsStayOpen-collapseSeven"
+                            class="accordion-collapse collapse"
                           >
-                            Review
-                          </button>
-                        </h2>
-                        <div
-                          id="panelsStayOpen-collapseSeven"
-                          class="accordion-collapse collapse"
-                        >
-                          <div class="accordion-body row mt-2 p-3">
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Rating By User</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    : {data?.review?.ratingByUser || ""}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-md-6 col-12 position-relative">
-                              {data.review.ratingByDriver !==
-                                "Driver rating not yet available." && (
+                            <div class="accordion-body row mt-2 p-3">
+                              <div className="col-md-6 col-12">
                                 <div className="row mb-3">
                                   <div className="col-6 d-flex justify-content-start align-items-center">
                                     <p className="text-sm">
-                                      <b>Rating By Driver</b>
+                                      <b>Rating By User</b>
                                     </p>
                                   </div>
                                   <div className="col-6">
                                     <p className="text-muted text-sm">
-                                      : {data?.review.ratingByDriver}
+                                      : {data?.review?.ratingByUser || ""}
                                     </p>
                                   </div>
                                 </div>
-                              )}
-                            </div>
-                            <div className="col-md-6 col-12">
-                              <div className="row mb-3">
-                                <div className="col-6 d-flex justify-content-start align-items-center">
-                                  <p className="text-sm">
-                                    <b>Review By User</b>
-                                  </p>
-                                </div>
-                                <div className="col-6">
-                                  <p className="text-muted text-sm">
-                                    :{data?.review?.reviewByUser || ""}
-                                  </p>
-                                </div>
                               </div>
-                            </div>
-                            <div className="col-md-6 col-12">
-                              {data.review.ratingByDriver !==
-                                "Driver rating not yet available." && (
+                              <div className="col-md-6 col-12 position-relative">
+                                {data.review.ratingByDriver !==
+                                  "Driver rating not yet available." && (
+                                    <div className="row mb-3">
+                                      <div className="col-6 d-flex justify-content-start align-items-center">
+                                        <p className="text-sm">
+                                          <b>Rating By Driver</b>
+                                        </p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p className="text-muted text-sm">
+                                          : {data?.review.ratingByDriver}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                              <div className="col-md-6 col-12">
                                 <div className="row mb-3">
                                   <div className="col-6 d-flex justify-content-start align-items-center">
                                     <p className="text-sm">
-                                      <b>Review By Driver</b>
+                                      <b>Review By User</b>
                                     </p>
                                   </div>
                                   <div className="col-6">
                                     <p className="text-muted text-sm">
-                                      :{data?.review?.reviewByDriver || ""}
+                                      :{data?.review?.reviewByUser || ""}
                                     </p>
                                   </div>
                                 </div>
-                              )}
+                              </div>
+                              <div className="col-md-6 col-12">
+                                {data.review.ratingByDriver !==
+                                  "Driver rating not yet available." && (
+                                    <div className="row mb-3">
+                                      <div className="col-6 d-flex justify-content-start align-items-center">
+                                        <p className="text-sm">
+                                          <b>Review By Driver</b>
+                                        </p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p className="text-muted text-sm">
+                                          :{data?.review?.reviewByDriver || ""}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </>
-                  )}
+                      </>
+                    )}
                 </div>
               </div>
             </div>
