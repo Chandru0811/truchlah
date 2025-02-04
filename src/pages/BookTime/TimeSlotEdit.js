@@ -11,6 +11,7 @@ import {
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 function TimeSlotEdit({ id, batchDay, batchTimes }) {
   const [show, setShow] = useState(false);
@@ -65,6 +66,7 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
   });
 
   const handleClose = () => {
+    formik.resetForm();
     setShow(false);
   };
 
@@ -100,7 +102,12 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
       </button>
       <Dialog
         open={show}
-        onClose={handleClose}
+        // onClose={handleClose}
+        onClose={(event, reason) => {
+          if (reason !== "backdropClick") {
+            handleClose(event, reason);
+          }
+        }}
         maxWidth="sm"
         fullWidth
         aria-labelledby="batch-time-edit-dialog"
@@ -112,6 +119,7 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
             onClick={handleClose}
             style={{ position: "absolute", right: 8, top: 8 }}
           >
+            <IoMdCloseCircleOutline />
           </IconButton>
         </DialogTitle>
         <form

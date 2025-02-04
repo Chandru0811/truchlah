@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
         location: Yup.string().required("Location is required"),
         address: Yup.string().required("Address is required"),
         typeOfProperty: Yup.string().required("Type of property is required"),
-        noOfBedrooms: Yup.string().required("No Of Bedrooms is required"),
+        sizeOfProperty: Yup.string().required("Size of property is required"),
         PropertyFloor: Yup.string().required("Property Floor is required"),
         elevator: Yup.string().required("Please select if there is an elevator"),
         contactName: Yup.string().required("Contact name is required"),
@@ -59,7 +59,7 @@ const validationSchema = Yup.object().shape({
     .min(2, "At least two locations are required"),
 });
 
-const HouseMap = forwardRef(
+const OfficeMap = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const { isLoaded } = useJsApiLoader({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -84,10 +84,10 @@ const HouseMap = forwardRef(
             location: "",
             address: "",
             typeOfProperty: "",
-            noOfBedrooms: "",
+            sizeOfProperty: "",
             PropertyFloor: "",
-            elevator: "",
             PropertyDetails: "",
+            elevator: "",
             contactName: "",
             countryCode: "",
             mobile: "",
@@ -99,10 +99,10 @@ const HouseMap = forwardRef(
             location: "",
             address: "",
             typeOfProperty: "",
-            noOfBedrooms: "",
+            sizeOfProperty: "",
             PropertyFloor: "",
-            elevator: "",
             PropertyDetails: "",
+            elevator: "",
             contactName: "",
             countryCode: "",
             mobile: "",
@@ -113,6 +113,7 @@ const HouseMap = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        console.log("new values", values)
         setLoadIndicators(true);
         if (values.estKm < 1 || !values.estKm) {
           toast.error("Invalid locations or distance too short for a ride.");
@@ -286,10 +287,9 @@ const HouseMap = forwardRef(
               location: "",
               address: "",
               typeOfProperty: "",
-              noOfBedrooms: "",
+              sizeOfProperty: "",
               PropertyFloor: "",
               elevator: "",
-              PropertyDetails: "",
               contactName: "",
               countryCode: 65,
               mobile: "",
@@ -299,10 +299,9 @@ const HouseMap = forwardRef(
               location: "",
               address: "",
               typeOfProperty: "",
-              noOfBedrooms: "",
+              sizeOfProperty: "",
               PropertyFloor: "",
               elevator: "",
-              PropertyDetails: "",
               contactName: "",
               countryCode: 65,
               mobile: "",
@@ -316,7 +315,7 @@ const HouseMap = forwardRef(
     }, []);
 
     useImperativeHandle(ref, () => ({
-      housemap: formik.handleSubmit,
+      officemap: formik.handleSubmit,
     }));
 
     // useEffect(() => {
@@ -475,7 +474,6 @@ const HouseMap = forwardRef(
                           <div
                             className="input-group"
                             style={{
-                              borderRadius: "10px",
                               overflow: "hidden",
                               height: "50px",
                             }}
@@ -519,7 +517,6 @@ const HouseMap = forwardRef(
                           <div
                             className="input-group"
                             style={{
-                              borderRadius: "10px",
                               overflow: "hidden",
                               height: "50px",
                             }}
@@ -590,9 +587,8 @@ const HouseMap = forwardRef(
                               onBlur={formik.handleBlur}
                             >
                               <option value="" className="text-muted">Select</option>
-                              <option value="Condominium">Condominium</option>
-                              <option value="Landed property">Landed property</option>
-                              <option value="HBK">HBK</option>
+                              <option value="Shophouse">Shophouse</option>
+                              <option value="Officebuilding">Office Building</option>
                               <option value="Other">Others</option>
                             </select>
                           </div>
@@ -603,35 +599,36 @@ const HouseMap = forwardRef(
                             </div>
                           ) : null}
                         </div>
-                        {(formik.values.locationDetail?.[index]?.typeOfProperty === "Condominium" ||
-                          formik.values.locationDetail?.[index]?.typeOfProperty === "HBK" ||
-                          formik.values.locationDetail?.[index]?.typeOfProperty === "Landed property") && (
+                        {(formik.values.locationDetail?.[index]?.typeOfProperty === "Shophouse" ||
+                          formik.values.locationDetail?.[index]?.typeOfProperty === "Officebuilding") && (
                             <div className="col-md-6 col-12">
                               <div className="rounded-pill pt-3">
-                                <span className="fw-bold">No. of bedrooms</span>
+                                <span className="fw-bold">Size of property</span>
                               </div>
                               <div className="input-group mt-3" style={{ overflow: "hidden", height: "50px" }}>
                                 <select
-                                  name={`locationDetail[${index}].noOfBedrooms`}
+                                  name={`locationDetail[${index}].sizeOfProperty`}
                                   className="form-select"
                                   value={
-                                    formik.values.locationDetail?.[index]?.noOfBedrooms || ""
+                                    formik.values.locationDetail?.[index]?.sizeOfProperty || ""
                                   }
                                   onChange={formik.handleChange}
                                   onBlur={formik.handleBlur}
                                 >
                                   <option value="">Select</option>
-                                  {[...Array(12)].map((_, index) => (
-                                    <option key={index + 1} value={index + 1}>
-                                      {index + 1}
-                                    </option>
-                                  ))}
+                                  <option value="700 - 800 sqft">700 - 800 sqft</option>
+                                  <option value="800 - 1000 sqft">800 - 1000 sqft</option>
+                                  <option value="1000 - 1200 sqft">1000 - 1200 sqft</option>
+                                  <option value="1200 - 1400 sqft">1200 - 1400 sqft</option>
+                                  <option value="1400 - 1600 sqft">1400 - 1600 sqft</option>
+                                  <option value="1600 - 1800 sqft">1600 - 1800 sqft</option>
+                                  <option value="1800 - 2000 sqft">1800 - 2000 sqft</option>
                                 </select>
                               </div>
-                              {formik.touched.locationDetail?.[index]?.noOfBedrooms &&
-                                formik.errors.locationDetail?.[index]?.noOfBedrooms ? (
+                              {formik.touched.locationDetail?.[index]?.sizeOfProperty &&
+                                formik.errors.locationDetail?.[index]?.sizeOfProperty ? (
                                 <div className="text-danger">
-                                  {formik.errors.locationDetail[index].noOfBedrooms}
+                                  {formik.errors.locationDetail[index].sizeOfProperty}
                                 </div>
                               ) : null}
                             </div>
@@ -640,9 +637,8 @@ const HouseMap = forwardRef(
                     </div>
 
                     {/* Show additional fields only if Type of Property is selected */}
-                    {(formik.values.locationDetail?.[index]?.typeOfProperty === "Condominium" ||
-                      formik.values.locationDetail?.[index]?.typeOfProperty === "HBK" ||
-                      formik.values.locationDetail?.[index]?.typeOfProperty === "Landed property") && (
+                    {(formik.values.locationDetail?.[index]?.typeOfProperty === "Shophouse" ||
+                      formik.values.locationDetail?.[index]?.typeOfProperty === "Officebuilding") && (
                         <div className="col-md-10 col-12">
                           <div className="row">
                             {/* Property Floor */}
@@ -750,54 +746,9 @@ const HouseMap = forwardRef(
                         </div>
                       </div>
                     )}
+
                   </div>
                 ))}
-
-                {/* Category Selection */}
-                <div className="rounded-pill pt-3">
-                  <span className="fw-bold">Select Category</span>
-                </div>
-                <div className="col-md-10 col-12 mb-3">
-                  <div
-                    className="input-group mt-3"
-                    style={{
-                      borderRadius: "10px",
-                      overflow: "hidden",
-                      height: "50px",
-                    }}
-                  >
-                    <select
-                      type="text"
-                      name="type"
-                      className="form-select"
-                      placeholder="Enter a drop-off address"
-                      value={formik.values.type}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    >
-                      <option value="" className="text-muted">
-                        Select
-                      </option>
-                      {categorys &&
-                        categorys.map((category) => (
-                          <option
-                            key={category.id}
-                            value={category.houseCategoryName}
-                          >
-                            {(
-                              category.houseCategoryName
-                                .charAt(0)
-                                .toUpperCase() +
-                              category.houseCategoryName.slice(1)
-                            ).replace("_", " ")}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                  {formik.touched.type && formik.errors.type ? (
-                    <div className="text-danger">{formik.errors.type}</div>
-                  ) : null}
-                </div>
               </div>
             </div>
 
@@ -821,10 +772,10 @@ const HouseMap = forwardRef(
               </div>
             </div>
           </div>
-        </form>
-      </div>
+        </form >
+      </div >
     );
   }
 );
 
-export default HouseMap;
+export default OfficeMap;

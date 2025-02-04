@@ -6,8 +6,6 @@ import truck from "../asset/Trucklah.png";
 import { Link } from "react-router-dom";
 
 function Shift() {
-  // const [type , setType] = useState({});
-
   const logType = (selectedType) => {
     localStorage.removeItem("shiftType");
     localStorage.setItem("shiftType", selectedType);
@@ -16,150 +14,91 @@ function Shift() {
   return (
     <div className="container-fluid" id="heros">
       <div className="row">
+        {/* Left Column - Service Selection */}
         <div className="col-md-6 col-12">
           <div className="row justify-content-center mb-3">
-            <div className="col-6 mt-4 mb-4 ps-1" style={{ minWidth: "70%" }}>
-              <h1
-                className="LoginSubHead text-start text-muted"
-                style={{ fontSize: "23px" }}
-              >
+            <div className="col-10 mt-4 mb-4">
+              <h1 className="LoginSubHead text-muted" style={{ fontSize: "23px" }}>
                 Trucklah Booking - Move Easy with Trucklah
               </h1>
             </div>
-            <div
-              className="col-6 justify-content-center card shadow-sm mb-5 card-hover1"
-              style={{ width: "70%" }}
-              onClick={() => logType("ITEM")}
-            >
-              <Link
-                to={{
-                  pathname: "/itemshift",
-                  // state: { logType: logType("ITEM") },
-                }}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <div className="row">
-                  <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
-                    <span className="fw-medium text-muted">
-                      PACKERS & MOVERS
-                    </span>
-                    {/* <h1 className="fw-small text-muted m-0" style={{fontSize:"16px"}}>Trucklah Booking - Move Easy with Trucklah</h1> */}
-                    <h3 style={{ color: "#525252" }}>Item Shifting</h3>
-                    <span className="fw-medium text-muted">
-                      Secure Item Shifting
-                    </span>
-                  </div>
-                  <div className="col-md-6 col-12 pe-0">
-                    <img src={item} alt="truck" className="img-fluid" />
-                  </div>
-                </div>
-              </Link>
-            </div>
 
-            <div
-              className="col-6 justify-content-center card shadow-sm card-hover2"
-              style={{ width: "70%" }}
-              onClick={() => logType("HOUSE")}
-            >
-              <Link
-                to={{
-                  pathname: "/housemoving",
-                  // state: { logType: logType("HOUSE") },
-                }}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <div className="row">
-                  <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
-                    <span className="fw-medium text-muted">
-                      PACKERS & MOVERS
-                    </span>
-                    <h3 style={{ color: "#525252" }}>House Moving</h3>
-                    {/* <div>
-                    <button type="button" class="px-2 btn-custom">
-                      Coming Soon
-                    </button>
-                  </div> */}
-                    <span className="fw-medium text-muted">
-                      House Moving Made Easy
-                    </span>
-                  </div>
-                  <div className="col-md-6 col-12 pe-0">
-                    <img src={house} alt="truck" className="img-fluid" />
+            {/* Services Cards */}
+            <div className="col-10">
+              <div className="row g-4">
+                {/* Item Shifting Card */}
+                <div className="col-md-6">
+                  <div className="card shadow-sm card-hover1 h-100" onClick={() => logType("ITEM")}>
+                    <Link
+                      to="/itemshift"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <div className="row g-0">
+                        <div className="col-md-7 p-3">
+                          <span className="fw-medium text-muted">PACKERS & MOVERS</span>
+                          <h5 style={{ color: "#525252" }}>Item Shifting</h5>
+                          <span className="fw-medium text-muted">Secure Item Shifting</span>
+                        </div>
+                        <div className="col-md-5 d-flex align-items-center">
+                          <img src={item} alt="Item shifting" className="img-fluid p-2" />
+                        </div>
+                      </div>
+                    </Link>
                   </div>
                 </div>
-              </Link>
+
+                {/* Office Moving Card */}
+                <div className="col-md-6">
+                  <div className="card shadow-sm card-hover1 h-100" onClick={() => logType("HOUSE")}>
+                    <Link
+                      to="/officemoving"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <div className="row g-0">
+                        <div className="col-md-7 p-3">
+                          <span className="fw-medium text-muted">PACKERS & MOVERS</span>
+                          <h5 style={{ color: "#525252" }}>Office Moving</h5>
+                          <span className="fw-medium text-muted"> House or commercial</span>
+                        </div>
+                        <div className="col-md-5 d-flex align-items-center">
+                          <img src={house} alt="House shifting" className="img-fluid p-2" />
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+                {/* House Moving Card */}
+                <div className="col-md-6">
+                  <div className="card shadow-sm card-hover1 h-100" onClick={() => logType("HOUSE")}>
+                    <Link
+                      to="/housemoving"
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <div className="row g-0">
+                        <div className="col-md-7 p-3">
+                          <span className="fw-medium text-muted">PACKERS & MOVERS</span>
+                          <h5 style={{ color: "#525252" }}>House Moving</h5>
+                          <span className="fw-medium text-muted">Safe House Relocation</span>
+                        </div>
+                        <div className="col-md-5 d-flex align-items-center">
+                          <img src={house} alt="House shifting" className="img-fluid p-2" />
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="col-md-6 col-12">
-          <img src={truck} alt="truck" className="img-fluid responsive-image" />
+        {/* Right Column - Truck Image */}
+        <div className="col-md-6 col-12 d-flex align-items-center">
+          <img src={truck} alt="Trucklah truck" className="img-fluid responsive-image" />
         </div>
       </div>
-
-      {/* <div className="col container-fluid container py-5 ">
-        <div className=" text-center row ">
-          <div className="col-lg-3 col-md-3 col-12"></div>
-          <div className="col-lg-6 col-md-6 col-12">
-            <Link
-              to={{ pathname: "/housemoving", state: { type: "houseShift" } }}
-            >
-              <button
-                type="button"
-                id="ShiftBtn"
-                style={{ width: "100%" }}
-                className="btn btn-outline-secondary btn-lg p-3 "
-                data-mdb-ripple-color="dark"
-                onClick={() => {
-                  logType("houseShift");
-                }}
-                // onClick={()=>{
-                //   logType("HOUSE");
-                // }}
-              >
-                {" "}
-                <img src={home} alt="house " className=" icon-img me-4"></img>
-                House Shifting
-              </button>
-            </Link>
-          </div>
-          <div className="col-lg-3 col-md-3 col-12"></div>
-        </div>
-      </div> */}
-
-      {/* <div className=" container-fluid container py-2">
-        <div className="text-center row pb-5">
-          <div className="col-lg-3 col-md-3 col-12"></div>
-          <div className="col-lg-6 col-md-6 col-12">
-            <Link
-              to={{
-                pathname: "/map",
-                state: { logType: logType("itemShift") },
-              }}
-            >
-              <button
-                type="button"
-                style={{ width: "100%" }}
-                className="btn btn-outline-secondary btn-lg p-3 "
-                data-mdb-ripple-color="dark"
-                id="ShiftBtn"
-                // onClick={() => {
-                //   logType("Item Shift");
-                // }}
-                onClick={() => {
-                  logType("ITEM");
-                }}
-              >
-                {" "}
-                <img src={item} alt="house " className=" icon-img me-4"></img>
-                Item Shifting
-              </button>
-            </Link>
-          </div>
-          <div className="col-lg-3 col-md-3 col-12"></div>
-        </div>
-      </div> */}
     </div>
   );
 }
+
 export default Shift;

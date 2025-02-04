@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { FaChevronRight } from "react-icons/fa";
 import DateandTime from "../ItemShiftNew/dateandtime";
-import HouseMap from "./HouseMap";
+import OfficeMap from "./OfficeMap";
 import ServiceNew from "../ItemShiftNew/ServiceNew";
 import ExtraService from "../ItemShiftNew/ExtraService";
 import BookingSummary from "../ItemShiftNew/BookingSummary";
@@ -18,7 +18,7 @@ const steps = [
   "Booking Summary",
 ];
 
-const HouseShiftSteps = () => {
+const OfficeShift = () => {
   const location = useLocation();
   const { id } = location.state || {};
   const form = {
@@ -32,10 +32,10 @@ const HouseShiftSteps = () => {
           location: "",
           address: "",
           typeOfProperty: "",
-          noOfBedrooms: "",
+          sizeOfProperty: "",
           PropertyFloor: "",
-          elevator: "",
           PropertyDetails: "",
+          elevator: "",
           contactName: "",
           countryCode: 65,
           mobile: "",
@@ -45,10 +45,10 @@ const HouseShiftSteps = () => {
           location: "",
           address: "",
           typeOfProperty: "",
-          noOfBedrooms: "",
+          sizeOfProperty: "",
           PropertyFloor: "",
-          elevator: "",
           PropertyDetails: "",
+          elevator: "",
           contactName: "",
           countryCode: 65,
           mobile: "",
@@ -103,7 +103,7 @@ const HouseShiftSteps = () => {
             result.push({
               address: firstLocation.pickupAddress || "",
               typeOfProperty: firstLocation.typeOfProperty,
-              noOfBedrooms: firstLocation.noOfBedrooms,
+              sizeOfProperty: firstLocation.sizeOfProperty,
               PropertyFloor: firstLocation.PropertyFloor,
               PropertyDetails: firstLocation.PropertyDetails,
               elevator: firstLocation.elevator,
@@ -122,7 +122,7 @@ const HouseShiftSteps = () => {
             result.push({
               address: lastLocation.dropoffAddress || "",
               typeOfProperty: lastLocation.typeOfProperty,
-              noOfBedrooms: lastLocation.noOfBedrooms,
+              sizeOfProperty: lastLocation.sizeOfProperty,
               PropertyFloor: lastLocation.PropertyFloor,
               PropertyDetails: lastLocation.PropertyDetails,
               elevator: lastLocation.elevator,
@@ -142,7 +142,7 @@ const HouseShiftSteps = () => {
               result.push({
                 address: location.dropoffAddress || "",
                 typeOfProperty: location.typeOfProperty,
-                noOfBedrooms: location.noOfBedrooms,
+                sizeOfProperty: location.sizeOfProperty,
                 PropertyFloor: location.PropertyFloor,
                 PropertyDetails: location.PropertyDetails,
                 elevator: location.elevator,
@@ -228,7 +228,7 @@ const HouseShiftSteps = () => {
     switch (activeStep.toString()) {
       case "0":
         if (childRef.current) {
-          childRef.current.housemap();
+          childRef.current.officemap();
         }
         break;
       case "1":
@@ -268,7 +268,7 @@ const HouseShiftSteps = () => {
           Booking Type <FaChevronRight size={"15"} />
         </p>
         <p style={{ fontSize: "20px", color: "#acff3b" }}>
-          &nbsp;&nbsp;House Moving
+          &nbsp;&nbsp;Office Moving
           {/* {shiftType} Sfifting */}
         </p>
       </span>
@@ -309,7 +309,7 @@ const HouseShiftSteps = () => {
         ) : (
           <React.Fragment>
             {activeStep === 0 && (
-              <HouseMap
+              <OfficeMap
                 formData={formData}
                 ref={childRef}
                 setFormData={setFormData}
@@ -412,4 +412,4 @@ const HouseShiftSteps = () => {
   );
 };
 
-export default HouseShiftSteps;
+export default OfficeShift;
