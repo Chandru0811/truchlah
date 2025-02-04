@@ -13,6 +13,10 @@ import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import Calendar from "react-calendar";
+import { Modal, Button } from "react-bootstrap";
+import "react-calendar/dist/Calendar.css";
+import { BiSolidTrash } from "react-icons/bi";
 
 const validationSchema = Yup.object().shape({
   visitingDate: Yup.string().required("*Date is required"),
@@ -30,11 +34,15 @@ const BookingSummary = forwardRef(
     const [expandedAccordion, setExpandedAccordion] = useState([]);
     const today = new Date().toISOString().split("T")[0];
     const bookingId = formData.bookingId;
+    const [show, setShow] = useState(false);
+    const [selectedDates, setSelectedDates] = useState([]);
+
     const handleAccordionToggle = (accordionKey) => {
-      setExpandedAccordion((prev) =>
-        prev.includes(accordionKey)
-          ? prev.filter((key) => key !== accordionKey) // Remove key if already expanded
-          : [...prev, accordionKey] // Add key to expanded list
+      setExpandedAccordion(
+        (prev) =>
+          prev.includes(accordionKey)
+            ? prev.filter((key) => key !== accordionKey) // Remove key if already expanded
+            : [...prev, accordionKey] // Add key to expanded list
       );
     };
     const [previews, setPreviews] = useState([]);
@@ -46,7 +54,6 @@ const BookingSummary = forwardRef(
       const newPreviews = files.map((file) => URL.createObjectURL(file));
       setPreviews(newPreviews);
     };
-
 
     const formik = useFormik({
       initialValues: {
@@ -71,11 +78,13 @@ const BookingSummary = forwardRef(
           formDatas.append("files", file);
         });
         try {
-          const response = await bookingApi.put(`booking/verification`, formDatas,
+          const response = await bookingApi.put(
+            `booking/verification`,
+            formDatas,
             {
               headers: {
-                "Content-Type": "multipart/form-data"
-              }
+                "Content-Type": "multipart/form-data",
+              },
             }
           );
           if (response.status === 200) {
@@ -146,7 +155,6 @@ const BookingSummary = forwardRef(
       TimeData(selectedDate); // Fetch times for the selected date
     };
 
-
     const maxDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
       .toISOString()
       .split("T")[0];
@@ -158,6 +166,48 @@ const BookingSummary = forwardRef(
       TimeData(today);
     }, []);
 
+    const handleDateModelChange = (date, event) => {
+      if (typeof date === "string") {
+        const dateString = date;
+        const time = event.target.value || "";
+        let updatedDates = [...selectedDates];
+        const dateIndex = updatedDates.findIndex((d) => d.sdate === dateString);
+        if (dateIndex !== -1) {
+          if (updatedDates[dateIndex].sTime === "" || time) {
+            updatedDates[dateIndex].sTime = time;
+          }
+        } else {
+          updatedDates.push({ sdate: dateString, sTime: time });
+        }
+        setSelectedDates(updatedDates);
+      } else {
+        const dateString = date.toDateString();
+        let updatedDates = [...selectedDates];
+
+        if (updatedDates.some((d) => d.sdate === dateString)) {
+          updatedDates = updatedDates.filter((d) => d.sdate !== dateString);
+        } else {
+          updatedDates.push({ sdate: dateString, sTime: "" });
+        }
+        setSelectedDates(updatedDates);
+      }
+    };
+    useEffect(() => {
+      const label = document.querySelector(
+        ".react-calendar__navigation__label"
+      );
+      if (label) {
+        label.setAttribute("disabled", "true");
+      }
+    }, []);
+    useEffect(() => {
+      console.log("Selected Dates:", selectedDates);
+    }, [selectedDates]);
+    const handleDateDalete = (index) => {
+      let updatedDates = [...selectedDates];
+      updatedDates = updatedDates.filter((d, i) => i !== index);
+      setSelectedDates(updatedDates);
+    };
     return (
       <div className="container my-4">
         <form onSubmit={formik.handleSubmit}>
@@ -198,10 +248,11 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingOne">
                             <button
-                              className={`accordion-button ${expandedAccordion === "Pickup"
-                                ? ""
-                                : "collapsed"
-                                }`}
+                              className={`accordion-button ${
+                                expandedAccordion === "Pickup"
+                                  ? ""
+                                  : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseOne"
@@ -214,8 +265,9 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseOne"
-                            className={`accordion-collapse collapse ${expandedAccordion === "Pickup" ? "show" : ""
-                              }`}
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Pickup" ? "show" : ""
+                            }`}
                             aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample"
                           >
@@ -262,10 +314,11 @@ const BookingSummary = forwardRef(
                                 id={`heading${index}`}
                               >
                                 <button
-                                  className={`accordion-button ${expandedAccordion === `stop${index}`
-                                    ? ""
-                                    : "collapsed"
-                                    }`}
+                                  className={`accordion-button ${
+                                    expandedAccordion === `stop${index}`
+                                      ? ""
+                                      : "collapsed"
+                                  }`}
                                   type="button"
                                   data-bs-toggle="collapse"
                                   data-bs-target={`#collapse${index}`}
@@ -282,10 +335,11 @@ const BookingSummary = forwardRef(
                               </h2>
                               <div
                                 id={`collapse${index}`}
-                                className={`accordion-collapse collapse ${expandedAccordion === `stop${index}`
-                                  ? "show"
-                                  : ""
-                                  }`}
+                                className={`accordion-collapse collapse ${
+                                  expandedAccordion === `stop${index}`
+                                    ? "show"
+                                    : ""
+                                }`}
                                 aria-labelledby={`heading${index}`}
                                 data-bs-parent={`#accordionExample${index}`}
                               >
@@ -327,8 +381,9 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingTwo">
                             <button
-                              className={`accordion-button ${expandedAccordion === "Drop" ? "" : "collapsed"
-                                }`}
+                              className={`accordion-button ${
+                                expandedAccordion === "Drop" ? "" : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseTwo"
@@ -341,8 +396,9 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseTwo"
-                            className={`accordion-collapse collapse ${expandedAccordion === "Drop" ? "show" : ""
-                              }`}
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Drop" ? "show" : ""
+                            }`}
                             aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample1"
                           >
@@ -530,30 +586,40 @@ const BookingSummary = forwardRef(
                 </div> */}
 
                 <div className="card-body">
-                  <h4 className="mt-3 mb-3">Our Scheduled Visit for Inspection and Quote</h4>
-                  <div className="mt-4" >
-                    <h6 className="mb-3">Preferred Visit Date
+                  <h4 className="mt-3 mb-3">
+                    Our Scheduled Visit for Inspection and Quote
+                  </h4>
+                  <div className="mt-4 ">
+                    <h6 className="mb-1">
+                      Preferred Visit Date
                       <span class="text-danger">*</span>
                     </h6>
-                    <input
-                      type="date"
-                      className="date-field form-control text-muted"
-                      min={today}
-                      style={{ minHeight: "50px" }}
-                      {...formik.getFieldProps("visitingDate")}
-                      name="visitingDate"
-                      onChange={handleDateChange}
-                      max={maxDate}
-                    />
+                    <div
+                      className="card d-flex flex-row justify-content-start py-2 ps-2"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setShow(true)}
+                    >
+                      {selectedDates.length > 0 ? selectedDates.map((data, i) => (
+                        <span key={i} className=" ps-2">
+                          {`${new Date(data.sdate).getDate()} ${new Date(
+                            data.sdate
+                          ).toLocaleString("default", { month: "short" })},`}
+                        </span>
+                      )):<span className=" ps-2">Select the Date</span>}
+                    </div>
                   </div>
                   <div className="p-1">
-                    {formik.touched.visitingDate && formik.errors.visitingDate && (
-                      <div className="mb-2 text-danger">{formik.errors.visitingDate}</div>
-                    )}
+                    {formik.touched.visitingDate &&
+                      formik.errors.visitingDate && (
+                        <div className="mb-2 text-danger">
+                          {formik.errors.visitingDate}
+                        </div>
+                      )}
                   </div>
 
-                  <div className="mb-3 mt-4">
-                    <h6 className="mb-3">Preferred Visit Time
+                  {/* <div className="mb-3 mt-4">
+                    <h6 className="mb-3">
+                      Preferred Visit Time
                       <span class="text-danger">*</span>
                     </h6>
                     <select
@@ -565,11 +631,14 @@ const BookingSummary = forwardRef(
                       {availableTimes.length > 0 ? (
                         availableTimes.map((time) => (
                           <option key={time} value={time}>
-                            {new Date(`1970-01-01T${time}`).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: true,
-                            })}
+                            {new Date(`1970-01-01T${time}`).toLocaleTimeString(
+                              [],
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
                           </option>
                         ))
                       ) : (
@@ -578,12 +647,17 @@ const BookingSummary = forwardRef(
                     </select>
                   </div>
                   <div className="p-1">
-                    {formik.touched.visitingTime && formik.errors.visitingTime && (
-                      <div className="mb-2 text-danger">{formik.errors.visitingTime}</div>
-                    )}
-                  </div>
-                  <div className="mt-3 mb-3" >
-                    <h6 className="mb-3">Upload images of goods / space expected for transit</h6>
+                    {formik.touched.visitingTime &&
+                      formik.errors.visitingTime && (
+                        <div className="mb-2 text-danger">
+                          {formik.errors.visitingTime}
+                        </div>
+                      )}
+                  </div> */}
+                  <div className="mt-3 mb-3">
+                    <h6 className="mb-3">
+                      Upload images of goods / space expected for transit
+                    </h6>
                     <input
                       type="file"
                       className="date-field form-control text-muted"
@@ -591,7 +665,7 @@ const BookingSummary = forwardRef(
                       accept="image/*"
                       multiple
                       onChange={handleImageChange}
-                    // {...formik.getFieldProps("files")}
+                      // {...formik.getFieldProps("files")}
                     />
                   </div>
                   {previews?.length > 0 && (
@@ -713,7 +787,7 @@ const BookingSummary = forwardRef(
                       background: "#acff3b",
                     }}
                     className="btn btn-sm fw-bold mt-5"
-                  disabled={loadIndicator}
+                    disabled={loadIndicator}
                   >
                     {loadIndicator && (
                       <span
@@ -728,6 +802,89 @@ const BookingSummary = forwardRef(
             </div>
           </div>
         </form>
+        <Modal show={show} onHide={() => setShow(false)} centered size="lg">
+          <Modal.Header closeButton>
+            <Modal.Title>Inspection Date & Time</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div
+              style={{
+                // maxWidth: "400px",
+                margin: "auto",
+                padding: "20px",
+              }}
+            >
+              <div className="row">
+                <div className="col-md-7 col-12">
+                  <h5 className="mb-4">
+                    You can select multiple preferred dates.
+                  </h5>
+                  <Calendar
+                    onClickDay={handleDateModelChange}
+                    tileClassName={({ date }) =>
+                      selectedDates.some((d) => d.sdate === date.toDateString())
+                        ? "selected-date"
+                        : ""
+                    }
+                    tileDisabled={({ date }) =>
+                      date <= new Date(new Date().setHours(0, 0, 0, 0))
+                    }
+                  />
+                </div>
+                <div className="col-md-5 col-12 mt-lg-5">
+                  <p>Select Times:</p>
+                  <div>
+                    {selectedDates.map((date, index) => (
+                      <div
+                        key={index}
+                        className="d-flex justify-content-around align-items-center mb-2"
+                      >
+                        <p className="mb-0">{`${new Date(
+                          date.sdate
+                        ).getDate()} ${new Date(date.sdate).toLocaleString(
+                          "default",
+                          { month: "short" }
+                        )}`}</p>
+                        <div className="d-flex justify-content-between gap-2 align-items-center">
+                          <select
+                            className="form-select"
+                            value={date.sTime}
+                            onChange={(event) =>
+                              handleDateModelChange(date.sdate, event)
+                            }
+                          >
+                            <option value="">Select Time</option>
+                            <option value="Any Time">Any Time</option>
+                            <option value="8:00AM - 1:00PM">
+                              8:00AM - 1:00PM
+                            </option>
+                            <option value="1:00PM - 8:00PM">
+                              1:00PM - 8:00PM
+                            </option>
+                          </select>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => handleDateDalete(index)}
+                          >
+                            <BiSolidTrash />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShow(false)}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => setShow(false)}>
+              submit
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

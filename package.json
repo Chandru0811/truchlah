@@ -27,6 +27,7 @@
     "mdb-react-ui-kit": "^6.1.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
+    "react-calendar": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^5.0.8",
     "react-hot-toast": "^2.4.1",

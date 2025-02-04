@@ -2476,3 +2476,37 @@ body {
   background-color: white;
   padding: 5px;
 }
+
+
+/* ==== Summary calander === */
+.react-calendar {
+  width: 400px;
+  border: none !important;
+  line-height:inherit !important;
+}
+.react-calendar__tile--now {
+  border: 2px solid #78b229 !important;
+  background: #ffffff !important;
+}
+.react-calendar__tile {
+  /* margin: 1px 1px !important; */
+}
+.react-calendar__tile--active {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+abbr[title] {
+  text-decoration: none !important;
+}
+.react-calendar__navigation__next2-button ,.react-calendar__navigation__prev2-button {
+  display: none;
+}
+.react-calendar__navigation__label:disabled {
+  background-color: #ffffff !important;
+}
+
+.selected-date {
+  background: #007bff !important;
+  color: white !important;
+  border-radius: 50%;
+}
