@@ -46,6 +46,7 @@ import ResetPassword from "../pages/authorization/ResetPassword";
 import MailOTP from "../pages/authorization/MailOTP";
 // import SseComponent from "../pages/SseComponent";
 import ItemShift from "../pages/item_shift/ItemShift";
+import OfficeShift from "../pages/office_shift/OfficeShift";
 import HouseShiftSteps from "../pages/house_shift/HouseShiftSteps";
 import VehicleOffer from "../pages/common_pages/VehicleOffer";
 // import BookingSSE from "../pages/BookingSSE";
@@ -127,6 +128,7 @@ function UserLayout({
             <>
               <Route path="/map" element={<Map />} />
               <Route path="/Itemshift" element={<ItemShift />} />
+              <Route path="/Officemoving" element={<OfficeShift />} />
               <Route path="/housemoving" element={<HouseShiftSteps />} />
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/notification" element={<Notification />} />
