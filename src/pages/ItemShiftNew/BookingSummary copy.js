@@ -15,10 +15,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  visitingDate: Yup.string().required("*Date is required"),
-  visitingTime: Yup.string().required("*Time is required"),
-  // paymentType: Yup.string().required("Please choose a payment type"),
-  isAgreed: Yup.bool().oneOf([true], "*Please agree the terms and conditions"),
+  paymentType: Yup.string().required("Please choose a payment type"),
+  isAgreed: Yup.bool().oneOf([true], "Please agree the terms and conditions"),
 });
 
 const BookingSummary = forwardRef(
@@ -28,8 +26,6 @@ const BookingSummary = forwardRef(
     const navigate = useNavigate();
     const [loadIndicator, setLoadIndicator] = useState(false);
     const [expandedAccordion, setExpandedAccordion] = useState([]);
-    const today = new Date().toISOString().split("T")[0];
-    const bookingId = formData.bookingId;
     const handleAccordionToggle = (accordionKey) => {
       setExpandedAccordion((prev) =>
         prev.includes(accordionKey)
@@ -37,82 +33,91 @@ const BookingSummary = forwardRef(
           : [...prev, accordionKey] // Add key to expanded list
       );
     };
-    const [previews, setPreviews] = useState([]);
-
-    const handleImageChange = (event) => {
-      const files = Array.from(event.target.files);
-      formik.setFieldValue("files", files);
-      previews.forEach((url) => URL.revokeObjectURL(url));
-      const newPreviews = files.map((file) => URL.createObjectURL(file));
-      setPreviews(newPreviews);
-    };
-
 
     const formik = useFormik({
       initialValues: {
-        bookingId: bookingId,
+        paymentType: formData?.form4?.paymentType,
         isAgreed: false,
-        visitingDate: today,
-        visitingTime: "",
-        files: [],
       },
       validationSchema: validationSchema,
 
       onSubmit: async (values) => {
-        console.log("Form Values:", values);
         setLoadIndicators(true);
         setLoadIndicator(true);
-
-        const formDatas = new FormData();
-        formDatas.append("bookingId", values.bookingId);
-        formDatas.append("visitingDate", values.visitingDate);
-        formDatas.append("visitingTime", values.visitingTime);
-        values.files.forEach((file) => {
-          formDatas.append("files", file);
-        });
-        try {
-          const response = await bookingApi.put(`booking/verification`, formDatas,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data"
-              }
-            }
-          );
-          if (response.status === 200) {
-            toast.success(response.data.message);
-            // navigate(`/successful?type=${data?.booking?.bookingType}`);
-            navigate(
-              `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=success`
+        setFormData((prev) => ({
+          ...prev,
+          form4: { ...values },
+        }));
+        if (values.paymentType === "CASH") {
+          try {
+            const response = await bookingApi.post(
+              `booking/cashPayment/${formData.bookingId}`
             );
-            localStorage.removeItem("shiftType");
-          } else {
+            if (response.status === 200) {
+              // navigate(`/successful?type=${data?.booking?.bookingType}`);
+              navigate(
+                `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=success`
+              );
+              localStorage.removeItem("shiftType");
+            } else {
+              navigate(
+                `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
+              );
+            }
+          } catch (error) {
+            toast.error("Error Fetching Data: " + error.message);
             navigate(
               `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
             );
+          } finally {
+            setLoadIndicators(false);
           }
-        } catch (error) {
-          toast.error("Error Fetching Data: " + error.message);
-          navigate(
-            `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
-          );
-        } finally {
-          setLoadIndicators(false);
+        } else {
+          try {
+            const response = await bookingApi.post(
+              `booking/generateCardTransactionPaymentLink?bookingId=${formData.bookingId}`
+            );
+            if (response.status === (201 || 200)) {
+              const paymentLink = response.data.paymentLink.replace("?", "&");
+              window.open(paymentLink, "_self");
+              // toast.success("Payment successful!");
+              // navigate(`/successful?type=${data?.booking?.bookingType}&bookingId=${bookingId}`);
+              localStorage.removeItem("shiftType");
+            } else {
+              toast.error("Payment failed, please try again.");
+              navigate(
+                `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
+              );
+            }
+          } catch (error) {
+            console.error("Payment error: " + error.message);
+            navigate(
+              `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=error`
+            );
+          } finally {
+            setLoadIndicators(false);
+            setLoadIndicator(false);
+          }
         }
       },
     });
 
-    // useEffect(() => {
-    //   if (formData.form4.paymentType && formData.form4.isAgreed) {
-    //     formik.setFieldValue("paymentType", formData.form4.paymentType);
-    //     formik.setFieldValue("isAgreed", formData.form4.isAgreed);
-    //   }
-    //   console.log("form4", formData);
-    //   window.scrollTo({ top: 0, behavior: "smooth" });
-    // }, []);
+    useEffect(() => {
+      if (formData.form4.paymentType && formData.form4.isAgreed) {
+        formik.setFieldValue("paymentType", formData.form4.paymentType);
+        formik.setFieldValue("isAgreed", formData.form4.isAgreed);
+      }
+      console.log("form4", formData);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
 
     const bookingTripLocations = formData?.form1?.locationDetail || [];
     const firstLocation = bookingTripLocations[0] || {};
     const lastLocation = bookingTripLocations[1] || {};
+
+    useImperativeHandle(ref, () => ({
+      summary: formik.handleSubmit,
+    }));
 
     const fetchData = async () => {
       try {
@@ -125,37 +130,8 @@ const BookingSummary = forwardRef(
       }
     };
 
-    const [availableTimes, setAvailableTimes] = useState([]);
-
-    const TimeData = async (selectedDate) => {
-      if (!selectedDate) return;
-
-      try {
-        const response = await bookingApi.get(
-          `booking/getAvailableVisitingTime?visitingDate=${selectedDate}`
-        );
-        setAvailableTimes(response.data.responseBody);
-      } catch (error) {
-        toast.error("Error Fetching Data: " + error.message);
-      }
-    };
-
-    const handleDateChange = (e) => {
-      const selectedDate = e.target.value;
-      formik.setFieldValue("visitingDate", selectedDate);
-      TimeData(selectedDate); // Fetch times for the selected date
-    };
-
-
-    const maxDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
-      .toISOString()
-      .split("T")[0];
-
-    // console.log("date", maxDate);
-
     useEffect(() => {
       fetchData();
-      TimeData(today);
     }, []);
 
     return (
@@ -482,7 +458,7 @@ const BookingSummary = forwardRef(
             <div className="col-md-1 col-12"></div>
             <div className="col-md-6 col-12">
               <div style={{ position: "sticky", top: "67px", zIndex: "1" }}>
-                {/* <div className="card border-0">
+                <div className="card border-0">
                   <div className="card-body">
                     <h6 className="fw-bold mb-3">Payment</h6>
                     <div className="input-group mb-3">
@@ -527,97 +503,9 @@ const BookingSummary = forwardRef(
                       Please select your preferred payment method
                     </p>
                   </div>
-                </div> */}
-
-                <div className="card-body">
-                  <h4 className="mt-3 mb-3">Our Scheduled Visit for Inspection and Quote</h4>
-                  <div className="mt-4" >
-                    <h6 className="mb-3">Preferred Visit Date
-                      <span class="text-danger">*</span>
-                    </h6>
-                    <input
-                      type="date"
-                      className="date-field form-control text-muted"
-                      min={today}
-                      style={{ minHeight: "50px" }}
-                      {...formik.getFieldProps("visitingDate")}
-                      name="visitingDate"
-                      onChange={handleDateChange}
-                      max={maxDate}
-                    />
-                  </div>
-                  <div className="p-1">
-                    {formik.touched.visitingDate && formik.errors.visitingDate && (
-                      <div className="mb-2 text-danger">{formik.errors.visitingDate}</div>
-                    )}
-                  </div>
-
-                  <div className="mb-3 mt-4">
-                    <h6 className="mb-3">Preferred Visit Time
-                      <span class="text-danger">*</span>
-                    </h6>
-                    <select
-                      className="form-select text-muted"
-                      style={{ minHeight: "50px" }}
-                      {...formik.getFieldProps("visitingTime")}
-                    >
-                      <option value="">Select Time</option>
-                      {availableTimes.length > 0 ? (
-                        availableTimes.map((time) => (
-                          <option key={time} value={time}>
-                            {new Date(`1970-01-01T${time}`).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: true,
-                            })}
-                          </option>
-                        ))
-                      ) : (
-                        <option disabled>Service Unavailable</option>
-                      )}
-                    </select>
-                  </div>
-                  <div className="p-1">
-                    {formik.touched.visitingTime && formik.errors.visitingTime && (
-                      <div className="mb-2 text-danger">{formik.errors.visitingTime}</div>
-                    )}
-                  </div>
-                  <div className="mt-3 mb-3" >
-                    <h6 className="mb-3">Upload images of goods / space expected for transit</h6>
-                    <input
-                      type="file"
-                      className="date-field form-control text-muted"
-                      name="files"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageChange}
-                    // {...formik.getFieldProps("files")}
-                    />
-                  </div>
-                  {previews?.length > 0 && (
-                    <div className="mt-3">
-                      <div className="d-flex flex-wrap gap-2">
-                        {previews.map((src, index) => (
-                          <img
-                            key={index}
-                            src={src}
-                            alt={`Preview ${index + 1}`}
-                            style={{
-                              width: "100px",
-                              height: "100px",
-                              borderRadius: "8px",
-                              objectFit: "cover",
-                              border: "1px solid #ddd",
-                              padding: "5px",
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
                 <div className="card p-3 border-0">
-                  {/* <div className="row">
+                  <div className="row">
                     <div className="col-md-6 col-12 mb-3">
                       <div
                         className={`payment-option text-center p-4 ${formik.values.paymentType === "CASH" ? "active" : ""
@@ -686,7 +574,7 @@ const BookingSummary = forwardRef(
                         ? "Pay conveniently at your doorstep with cash on delivery."
                         : "Pay securely through online payment."}
                     </p>
-                  </div> */}
+                  </div>
                   <div className="form-check">
                     <input
                       type="checkbox"
@@ -708,12 +596,13 @@ const BookingSummary = forwardRef(
                   </div>
                   <button
                     type="submit"
+                    // onClick={handleButtonClick}
                     style={{
                       padding: "7px 25px",
                       background: "#acff3b",
                     }}
                     className="btn btn-sm fw-bold mt-5"
-                  disabled={loadIndicator}
+                    disabled={loadIndicator}
                   >
                     {loadIndicator && (
                       <span
