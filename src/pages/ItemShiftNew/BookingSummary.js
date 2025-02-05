@@ -16,13 +16,25 @@ import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
 import { Modal, Button } from "react-bootstrap";
 import "react-calendar/dist/Calendar.css";
-import { BiSolidTrash } from "react-icons/bi";
+import { FaChevronDown } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
-  visitingDate: Yup.string().required("*Date is required"),
-  visitingTime: Yup.string().required("*Time is required"),
+  // visitingDate: Yup.string().required("*Date is required"),
+  // visitingTime: Yup.string().required("*Time is required"),
   // paymentType: Yup.string().required("Please choose a payment type"),
   isAgreed: Yup.bool().oneOf([true], "*Please agree the terms and conditions"),
+  timeDate: Yup.array()
+    .of(
+      Yup.object().shape({
+        sdate: Yup.string().required("*Date is required"),
+        sTime: Yup.string().required("*Time is required"),
+      })
+    )
+    .min(1, "*Select the Date"),
+  about: Yup.string()
+    .max(255, "*About cannot exceed 255 characters.")
+    .notRequired(),
 });
 
 const BookingSummary = forwardRef(
@@ -62,9 +74,9 @@ const BookingSummary = forwardRef(
         visitingDate: today,
         visitingTime: "",
         files: [],
+        timeDate: [],
       },
       validationSchema: validationSchema,
-
       onSubmit: async (values) => {
         console.log("Form Values:", values);
         setLoadIndicators(true);
@@ -170,7 +182,7 @@ const BookingSummary = forwardRef(
       if (typeof date === "string") {
         const dateString = date;
         const time = event.target.value || "";
-        let updatedDates = [...selectedDates];
+        let updatedDates = [...formik.values.timeDate];
         const dateIndex = updatedDates.findIndex((d) => d.sdate === dateString);
         if (dateIndex !== -1) {
           if (updatedDates[dateIndex].sTime === "" || time) {
@@ -179,19 +191,22 @@ const BookingSummary = forwardRef(
         } else {
           updatedDates.push({ sdate: dateString, sTime: time });
         }
-        setSelectedDates(updatedDates);
+        // setSelectedDates(updatedDates);
+        formik.setFieldValue("timeDate", updatedDates);
       } else {
         const dateString = date.toDateString();
-        let updatedDates = [...selectedDates];
-
+        // let updatedDates = [...selectedDates];
+        let updatedDates = [...formik.values.timeDate];
         if (updatedDates.some((d) => d.sdate === dateString)) {
           updatedDates = updatedDates.filter((d) => d.sdate !== dateString);
         } else {
           updatedDates.push({ sdate: dateString, sTime: "" });
         }
-        setSelectedDates(updatedDates);
+        // setSelectedDates(updatedDates);
+        formik.setFieldValue("timeDate", updatedDates);
       }
     };
+
     useEffect(() => {
       const label = document.querySelector(
         ".react-calendar__navigation__label"
@@ -200,13 +215,27 @@ const BookingSummary = forwardRef(
         label.setAttribute("disabled", "true");
       }
     }, []);
+
     useEffect(() => {
-      console.log("Selected Dates:", selectedDates);
-    }, [selectedDates]);
+      console.log("Selected Dates:", formik.values.timeDate);
+    }, [formik.values.timeDate]);
+
     const handleDateDalete = (index) => {
-      let updatedDates = [...selectedDates];
+      let updatedDates = [...formik.values.timeDate];
       updatedDates = updatedDates.filter((d, i) => i !== index);
-      setSelectedDates(updatedDates);
+      // setSelectedDates(updatedDates);
+      formik.setFieldValue("timeDate", updatedDates);
+    };
+
+    const handleValidateClick = async () => {
+      const errors = await formik.validateForm();
+      if (!errors.timeDate) {
+        // if (Object.keys(errors.timeDate).length === 0) {
+        setShow(false);
+        // } else {
+        //   console.log("Form is invalid, cannot proceed.");
+        // }
+      }
     };
     return (
       <div className="container my-4">
@@ -425,10 +454,10 @@ const BookingSummary = forwardRef(
                           </div>
                         </div>
                       </div>
-                      <p className="text-center mt-2">
+                      {/* <p className="text-center mt-2">
                         <strong>Total Distance:</strong>{" "}
                         {formData?.form1?.estKm} KM
-                      </p>
+                      </p> */}
                     </li>
                   </ul>
                 </div>
@@ -586,35 +615,44 @@ const BookingSummary = forwardRef(
                 </div> */}
 
                 <div className="card-body">
-                  <h4 className="mt-3 mb-3">
-                    Our Scheduled Visit for Inspection and Quote
+                  <h4 className="mt-3 mb-2">
+                    Our scheduled Visit for On-Site Quote
                   </h4>
+                  <p className="mb-5">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ea
+                    nulla praesentium nihil adipisci distinctio dicta expedita
+                    necessitatibus! Atque, ex consequatur.
+                  </p>
                   <div className="mt-4 ">
                     <h6 className="mb-1">
                       Preferred Visit Date
                       <span class="text-danger">*</span>
                     </h6>
                     <div
-                      className="card d-flex flex-row justify-content-start py-2 ps-2"
+                      className="card d-flex flex-row justify-content-between py-2 ps-2 pe-3"
                       style={{ cursor: "pointer" }}
                       onClick={() => setShow(true)}
                     >
-                      {selectedDates.length > 0 ? selectedDates.map((data, i) => (
-                        <span key={i} className=" ps-2">
-                          {`${new Date(data.sdate).getDate()} ${new Date(
-                            data.sdate
-                          ).toLocaleString("default", { month: "short" })},`}
-                        </span>
-                      )):<span className=" ps-2">Select the Date</span>}
-                    </div>
-                  </div>
-                  <div className="p-1">
-                    {formik.touched.visitingDate &&
-                      formik.errors.visitingDate && (
-                        <div className="mb-2 text-danger">
-                          {formik.errors.visitingDate}
-                        </div>
+                      <div className="d-flex flex-row justify-content-start">
+                      {formik.values.timeDate.length > 0 ? (
+                        formik.values.timeDate.map((data, i) => (
+                          <span key={i} className=" ps-2">
+                            {`${new Date(data.sdate).getDate()} ${new Date(
+                              data.sdate
+                            ).toLocaleString("default", { month: "short" })},`}
+                          </span>
+                        ))
+                      ) : (
+                        <span className=" ps-2">Select the Date</span>
                       )}
+                      </div>
+                      <div className="text-muted"><FaChevronDown /></div>
+                    </div>
+                    {formik.errors.timeDate && formik.touched.timeDate && (
+                      <small className="text-danger">
+                        {formik.errors.timeDate}
+                      </small>
+                    )}
                   </div>
 
                   {/* <div className="mb-3 mt-4">
@@ -654,8 +692,8 @@ const BookingSummary = forwardRef(
                         </div>
                       )}
                   </div> */}
-                  <div className="mt-3 mb-3">
-                    <h6 className="mb-3">
+                  <div className="mt-4">
+                    <h6 className="mb-2">
                       Upload images of goods / space expected for transit
                     </h6>
                     <input
@@ -689,8 +727,23 @@ const BookingSummary = forwardRef(
                       </div>
                     </div>
                   )}
+                  <div className="mb-3 mt-4">
+                    <h6 className="mb-2">About Moving</h6>
+                    <textarea
+                      style={{ resize: "none" }}
+                      rows={5}
+                      className="form-control text-muted"
+                      {...formik.getFieldProps("about")}
+                    ></textarea>
+                    {formik.touched.about && formik.errors.about && (
+                      <small className="mb-2 text-danger">
+                        {formik.errors.about}
+                      </small>
+                    )}
+                  </div>
                 </div>
-                <div className="card p-3 border-0">
+
+                <div className="card py-3 border-0">
                   {/* <div className="row">
                     <div className="col-md-6 col-12 mb-3">
                       <div
@@ -786,7 +839,7 @@ const BookingSummary = forwardRef(
                       padding: "7px 25px",
                       background: "#acff3b",
                     }}
-                    className="btn btn-sm fw-bold mt-5"
+                    className="btn btn-sm fw-bold mt-5 "
                     disabled={loadIndicator}
                   >
                     {loadIndicator && (
@@ -803,7 +856,7 @@ const BookingSummary = forwardRef(
           </div>
         </form>
         <Modal show={show} onHide={() => setShow(false)} centered size="lg">
-          <Modal.Header closeButton>
+          <Modal.Header >
             <Modal.Title>Inspection Date & Time</Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -822,53 +875,71 @@ const BookingSummary = forwardRef(
                   <Calendar
                     onClickDay={handleDateModelChange}
                     tileClassName={({ date }) =>
-                      selectedDates.some((d) => d.sdate === date.toDateString())
+                      formik.values.timeDate.some(
+                        (d) => d.sdate === date.toDateString()
+                      )
                         ? "selected-date"
                         : ""
                     }
-                    tileDisabled={({ date }) =>
-                      date <= new Date(new Date().setHours(0, 0, 0, 0))
-                    }
+                    tileDisabled={({ date }) => {
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                    
+                      const tomorrow = new Date(today);
+                      tomorrow.setDate(today.getDate() + 1); // Tomorrow
+                    
+                      const maxDate = new Date(formData.form2.date); // Use form2.date as max limit
+                    
+                      return date < tomorrow || date > maxDate;
+                    }}
+                    
                   />
+                  {formik.errors.timeDate && formik.touched.timeDate && (
+                    <small className="text-danger">{formik.errors.timeDate}</small>
+                  )}
                 </div>
                 <div className="col-md-5 col-12 mt-lg-5">
                   <p>Select Times:</p>
                   <div>
-                    {selectedDates.map((date, index) => (
-                      <div
-                        key={index}
-                        className="d-flex justify-content-around align-items-center mb-2"
-                      >
-                        <p className="mb-0">{`${new Date(
-                          date.sdate
-                        ).getDate()} ${new Date(date.sdate).toLocaleString(
-                          "default",
-                          { month: "short" }
-                        )}`}</p>
-                        <div className="d-flex justify-content-between gap-2 align-items-center">
-                          <select
-                            className="form-select"
-                            value={date.sTime}
-                            onChange={(event) =>
-                              handleDateModelChange(date.sdate, event)
-                            }
-                          >
-                            <option value="">Select Time</option>
-                            <option value="Any Time">Any Time</option>
-                            <option value="8:00AM - 1:00PM">
-                              8:00AM - 1:00PM
-                            </option>
-                            <option value="1:00PM - 8:00PM">
-                              1:00PM - 8:00PM
-                            </option>
-                          </select>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleDateDalete(index)}
-                          >
-                            <BiSolidTrash />
-                          </button>
+                    {formik.values.timeDate.map((date, index) => (
+                      <div key={index}>
+                        <div className="d-flex justify-content-between align-items-center mb-2">
+                          <p className="mb-0">{`${new Date(
+                            date.sdate
+                          ).getDate()} ${new Date(date.sdate).toLocaleString(
+                            "default",
+                            { month: "short" }
+                          )}`}</p>
+                          <div className="d-flex justify-content-between gap-2 align-items-center">
+                            <select
+                              className="form-select"
+                              value={date.sTime || ""}
+                              onChange={(event) =>
+                                handleDateModelChange(date.sdate, event)
+                              }
+                            >
+                              <option value="">Select Time</option>
+                              <option value="Any Time">Any Time</option>
+                              <option value="8:00AM - 1:00PM">
+                                8:00AM - 1:00PM
+                              </option>
+                              <option value="1:00PM - 8:00PM">
+                                1:00PM - 8:00PM
+                              </option>
+                            </select>
+                            <button
+                              className="btn btn-sm"
+                              onClick={() => handleDateDalete(index)}
+                            >
+                              <FaRegTrashAlt />
+                            </button>
+                          </div>
                         </div>
+                        {formik.errors.timeDate?.[index]?.sTime && (
+                          <small className="text-danger ">
+                            {formik.errors.timeDate[index].sTime}
+                          </small>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -876,13 +947,18 @@ const BookingSummary = forwardRef(
               </div>
             </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShow(false)}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={() => setShow(false)}>
-              submit
-            </Button>
+          <Modal.Footer className="pe-4">
+            <button
+              type="submit"
+              style={{
+                padding: "7px 25px",
+                background: "#acff3b",
+              }}
+              onClick={handleValidateClick}
+              className="btn btn-sm fw-bold "
+            >
+              Submit
+            </button>
           </Modal.Footer>
         </Modal>
       </div>

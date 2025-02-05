@@ -64,7 +64,6 @@ const DateAndTime = forwardRef(
       onSubmit: async (values) => {
         const eligibleTime = new Date();
         eligibleTime.setHours(eligibleTime.getHours());
-
         // if (selectedDateTime >= eligibleTime) {
         const selectedOption = vehicle.find(
           (item) => item.vehicletypeId === selectedImage.vehicletypeId
@@ -121,10 +120,10 @@ const DateAndTime = forwardRef(
             const response = await userApi.get("vehicle/vehicleType");
             if (response.status === 200) {
               setVechicle(response.data.responseBody);
-              console.log(
-                "object",
-                response.data.responseBody[0]?.vehicletypeId
-              );
+              // console.log(
+              //   "object",
+              //   response.data.responseBody[0]?.vehicletypeId
+              // );
               setActiveIndex(
                 formData?.form2.vehicle?.vehicletypeId
                   ? formData.form2.vehicle.vehicletypeId
@@ -137,10 +136,10 @@ const DateAndTime = forwardRef(
             );
             if (response.status === 200) {
               setVechicle(response.data.responseBody);
-              console.log(
-                "object",
-                response.data.responseBody[0]?.vehicletypeId
-              );
+              // console.log(
+              //   "object",
+              //   response.data.responseBody[0]?.vehicletypeId
+              // );
               setActiveIndex(
                 formData?.form2.vehicle?.vehicletypeId
                   ? formData.form2.vehicle.vehicletypeId
@@ -153,9 +152,9 @@ const DateAndTime = forwardRef(
         }
       };
       getVechicle();
-      console.log("object", vehicle);
+      // console.log("object", vehicle);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      formik.setFieldValue("date", new Date().toISOString().split("T")[0]);
+      formik.setFieldValue("date", formik.values.date?formik.values.date: new Date(Date.now() + 86400000).toISOString().split("T")[0]);
     }, []);
 
     useEffect(() => {
@@ -169,10 +168,10 @@ const DateAndTime = forwardRef(
           (data) => data.vehicletypeId === activeIndex
         );
         setSelectedImage(selectedVehicle);
-        console.log("select", selectedVehicle);
+        // console.log("select", selectedVehicle);
       }
-      console.log("setSelectedImage", selectedImage);
-      console.log("active", activeIndex);
+      // console.log("setSelectedImage", selectedImage);
+      // console.log("active", activeIndex);
       console.log("form", formData);
     }, [vehicle, selectedImage]);
 
@@ -297,8 +296,6 @@ const DateAndTime = forwardRef(
       .toISOString()
       .split("T")[0];
 
-    console.log("date", maxDate);
-
     useImperativeHandle(ref, () => ({
       dateandtime: formik.handleSubmit,
     }));
@@ -317,7 +314,7 @@ const DateAndTime = forwardRef(
                   className="date-field form-control text-muted"
                   aria-label="Date"
                   aria-describedby="basic-addon1"
-                  min={new Date().toISOString().split("T")[0]}
+                  min={new Date(Date.now() + 86400000).toISOString().split("T")[0]} 
                   placeholder="Select date"
                   style={{ minHeight: "50px" }}
                   {...formik.getFieldProps("date")}
