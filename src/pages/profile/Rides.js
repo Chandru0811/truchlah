@@ -19,6 +19,7 @@ function Order() {
   const [completedCount, setCompletedCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
   const [showHouseShift, setShowHouseShift] = useState(true);
+  const [showOfficeShift, setShowOfficeShift] = useState(false);
   const [showItemShift, setShowItemShift] = useState(false);
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(true);
@@ -30,6 +31,15 @@ function Order() {
   const houseSection = () => {
     // setIsLoaded(true);
     setShowHouseShift(true);
+    setShowOfficeShift(false);
+    setShowItemShift(false);
+    // setIsLoaded(false)
+  };
+
+  const officeSection = () => {
+    // setIsLoaded(true);
+    setShowOfficeShift(true);
+    setShowHouseShift(false);
     setShowItemShift(false);
     // setIsLoaded(false)
   };
@@ -37,6 +47,7 @@ function Order() {
   const itemSection = () => {
     // setIsLoaded(true);
     setShowItemShift(true);
+    setShowOfficeShift(false);
     setShowHouseShift(false);
     // setIsLoaded(false)
   };
@@ -86,7 +97,7 @@ function Order() {
           ? "COMPLETED"
           : "CANCELLED";
 
-    const shiftType = showHouseShift ? "HOUSE" : "ITEM";
+    const shiftType = showHouseShift ? "HOUSE" : showOfficeShift ? "OFFICE" : "ITEM";
 
     // const fetchData = async () => {
     //   try {
@@ -151,10 +162,17 @@ function Order() {
       setShowItemShift(true);
       inprogressSection();
       setShowHouseShift(false);
-    } else {
+      setShowOfficeShift(false);
+    } else if (type === "HOUSE") {
       setShowItemShift(false);
       inprogressSection();
       setShowHouseShift(true);
+      setShowOfficeShift(false);
+    } else if (type === "OFFICE") {
+      setShowItemShift(false);
+      inprogressSection();
+      setShowHouseShift(false);
+      setShowOfficeShift(true);
     }
   }, [type]);
 
@@ -188,6 +206,14 @@ function Order() {
                 type="button"
               >
                 HOUSE MOVING
+              </button>
+              <button
+                className={`mx-3 ${showOfficeShift ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={officeSection}
+                type="button"
+              >
+                OFFICE MOVING
               </button>
               <button
                 className={`mx-3 ${showItemShift ? "underline" : ""}`}

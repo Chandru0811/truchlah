@@ -20,8 +20,8 @@ import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
 const libraries = ["places"];
 
 const validationSchema = Yup.object().shape({
-  type: Yup.string().required("Type is required"),
-  estKm: Yup.number().required("Estimated KM is required"),
+  // type: Yup.string().required("Type is required"),
+  // estKm: Yup.number().required("Estimated KM is required"),
   locationDetail: Yup.array()
     .of(
       Yup.object().shape({
@@ -113,12 +113,13 @@ const HouseMap = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        console.log("new values", values)
         setLoadIndicators(true);
-        if (values.estKm < 1 || !values.estKm) {
-          toast.error("Invalid locations or distance too short for a ride.");
-          setLoadIndicators(false);
-          return;
-        }
+        // if (values.estKm < 1 || !values.estKm) {
+        //   toast.error("Invalid locations or distance too short for a ride.");
+        //   setLoadIndicators(false);
+        //   return;
+        // }
         try {
           let response;
           if (formData.bookingId) {
@@ -182,82 +183,82 @@ const HouseMap = forwardRef(
       }
     };
 
-    const calculateDistance = () => {
-      return new Promise((resolve, reject) => {
-        const pickupLat = formik.values.locationDetail[0].latitude;
-        const pickupLng = formik.values.locationDetail[0].longitude;
-        const dropoffLat = formik.values.locationDetail[1].latitude;
-        const dropoffLng = formik.values.locationDetail[1].longitude;
+    // const calculateDistance = () => {
+    //   return new Promise((resolve, reject) => {
+    //     const pickupLat = formik.values.locationDetail[0].latitude;
+    //     const pickupLng = formik.values.locationDetail[0].longitude;
+    //     const dropoffLat = formik.values.locationDetail[1].latitude;
+    //     const dropoffLng = formik.values.locationDetail[1].longitude;
 
-        if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
-          const service = new window.google.maps.DistanceMatrixService();
+    //     if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
+    //       const service = new window.google.maps.DistanceMatrixService();
 
-          const origins = [
-            { lat: parseFloat(pickupLat), lng: parseFloat(pickupLng) },
-          ];
-          const destinations = [
-            { lat: parseFloat(dropoffLat), lng: parseFloat(dropoffLng) },
-          ];
+    //       const origins = [
+    //         { lat: parseFloat(pickupLat), lng: parseFloat(pickupLng) },
+    //       ];
+    //       const destinations = [
+    //         { lat: parseFloat(dropoffLat), lng: parseFloat(dropoffLng) },
+    //       ];
 
-          service.getDistanceMatrix(
-            {
-              origins: origins,
-              destinations: destinations,
-              travelMode: window.google.maps.TravelMode.DRIVING,
-            },
-            (response, status) => {
-              if (status === "OK") {
-                const distanceResult = response.rows[0].elements[0];
-                if (distanceResult.status === "OK") {
-                  const totalDistanceInMeters = distanceResult.distance.value; // Distance in meters
-                  const totalDistanceInKm = (
-                    totalDistanceInMeters / 1000
-                  ).toFixed(2); // Convert to km
+    //       service.getDistanceMatrix(
+    //         {
+    //           origins: origins,
+    //           destinations: destinations,
+    //           travelMode: window.google.maps.TravelMode.DRIVING,
+    //         },
+    //         (response, status) => {
+    //           if (status === "OK") {
+    //             const distanceResult = response.rows[0].elements[0];
+    //             if (distanceResult.status === "OK") {
+    //               const totalDistanceInMeters = distanceResult.distance.value; // Distance in meters
+    //               const totalDistanceInKm = (
+    //                 totalDistanceInMeters / 1000
+    //               ).toFixed(2); // Convert to km
 
-                  // Update Formik and state
-                  setDistance(`${totalDistanceInKm} km`);
-                  formik.setFieldValue("estKm", totalDistanceInKm);
+    //               // Update Formik and state
+    //               setDistance(`${totalDistanceInKm} km`);
+    //               formik.setFieldValue("estKm", totalDistanceInKm);
 
-                  resolve(totalDistanceInKm);
-                } else {
-                  console.error(
-                    `Error fetching distance: ${distanceResult.status}`
-                  );
-                  reject(`Error fetching distance: ${distanceResult.status}`);
-                }
-              } else {
-                console.error(`Distance Matrix request failed: ${status}`);
-                reject(`Distance Matrix request failed: ${status}`);
-              }
-            }
-          );
-        } else {
-          reject(
-            "Latitude or longitude is missing for pickup or dropoff location."
-          );
-          setLoadIndicators(false);
-        }
-      });
-    };
+    //               resolve(totalDistanceInKm);
+    //             } else {
+    //               console.error(
+    //                 `Error fetching distance: ${distanceResult.status}`
+    //               );
+    //               reject(`Error fetching distance: ${distanceResult.status}`);
+    //             }
+    //           } else {
+    //             console.error(`Distance Matrix request failed: ${status}`);
+    //             reject(`Distance Matrix request failed: ${status}`);
+    //           }
+    //         }
+    //       );
+    //     } else {
+    //       reject(
+    //         "Latitude or longitude is missing for pickup or dropoff location."
+    //       );
+    //       setLoadIndicators(false);
+    //     }
+    //   });
+    // };
 
-    useEffect(() => {
-      const pickupLat = formik.values.locationDetail[0].latitude;
-      const pickupLng = formik.values.locationDetail[0].longitude;
-      const dropoffLat = formik.values.locationDetail[1].latitude;
-      const dropoffLng = formik.values.locationDetail[1].longitude;
+    // useEffect(() => {
+    //   const pickupLat = formik.values.locationDetail[0].latitude;
+    //   const pickupLng = formik.values.locationDetail[0].longitude;
+    //   const dropoffLat = formik.values.locationDetail[1].latitude;
+    //   const dropoffLng = formik.values.locationDetail[1].longitude;
 
-      // Check if latitude and longitude for both pickup and dropoff are present
-      if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
-        calculateDistance();
-      }
+    //   // Check if latitude and longitude for both pickup and dropoff are present
+    //   if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
+    //     calculateDistance();
+    //   }
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-      formik.values.locationDetail[0].latitude,
-      formik.values.locationDetail[0].longitude,
-      formik.values.locationDetail[1].latitude,
-      formik.values.locationDetail[1].longitude,
-    ]);
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [
+    //   formik.values.locationDetail[0].latitude,
+    //   formik.values.locationDetail[0].longitude,
+    //   formik.values.locationDetail[1].latitude,
+    //   formik.values.locationDetail[1].longitude,
+    // ]);
 
     const fetchData = async () => {
       try {
@@ -576,10 +577,10 @@ const HouseMap = forwardRef(
                     <div className="col-md-10 col-12">
                       <div className="row">
                         <div className="col-md-6 col-12">
-                          <div className="rounded-pill pt-3">
-                            <span className="fw-bold">Type of property</span>
+                          <div className="rounded-pill">
+                            <span className="fw-medium">Type of property</span>
                           </div>
-                          <div className="input-group mt-3" style={{ overflow: "hidden", height: "50px" }}>
+                          <div className="input-group mt-1" style={{ overflow: "hidden", height: "50px" }}>
                             <select
                               name={`locationDetail[${index}].typeOfProperty`}
                               className="form-select"
@@ -590,10 +591,20 @@ const HouseMap = forwardRef(
                               onBlur={formik.handleBlur}
                             >
                               <option value="" className="text-muted">Select</option>
-                              <option value="Condominium">Condominium</option>
-                              <option value="Landed property">Landed property</option>
-                              <option value="HBK">HBK</option>
-                              <option value="Other">Others</option>
+                              {categorys &&
+                                categorys.map((category) => (
+                                  <option
+                                    key={category.id}
+                                    value={category.houseCategoryName}
+                                  >
+                                    {(
+                                      category.houseCategoryName
+                                        .charAt(0)
+                                        .toUpperCase() +
+                                      category.houseCategoryName.slice(1)
+                                    ).replace("_", " ")}
+                                  </option>
+                                ))}
                             </select>
                           </div>
                           {formik.touched.locationDetail?.[index]?.typeOfProperty &&
@@ -605,12 +616,12 @@ const HouseMap = forwardRef(
                         </div>
                         {(formik.values.locationDetail?.[index]?.typeOfProperty === "Condominium" ||
                           formik.values.locationDetail?.[index]?.typeOfProperty === "HBK" ||
-                          formik.values.locationDetail?.[index]?.typeOfProperty === "Landed property") && (
+                          formik.values.locationDetail?.[index]?.typeOfProperty === "Landed Property") && (
                             <div className="col-md-6 col-12">
-                              <div className="rounded-pill pt-3">
-                                <span className="fw-bold">No. of bedrooms</span>
+                              <div className="rounded-pill">
+                                <span className="fw-medium">No. of bedrooms</span>
                               </div>
-                              <div className="input-group mt-3" style={{ overflow: "hidden", height: "50px" }}>
+                              <div className="input-group mt-1" style={{ overflow: "hidden", height: "50px" }}>
                                 <select
                                   name={`locationDetail[${index}].noOfBedrooms`}
                                   className="form-select"
@@ -642,15 +653,15 @@ const HouseMap = forwardRef(
                     {/* Show additional fields only if Type of Property is selected */}
                     {(formik.values.locationDetail?.[index]?.typeOfProperty === "Condominium" ||
                       formik.values.locationDetail?.[index]?.typeOfProperty === "HBK" ||
-                      formik.values.locationDetail?.[index]?.typeOfProperty === "Landed property") && (
+                      formik.values.locationDetail?.[index]?.typeOfProperty === "Landed Property") && (
                         <div className="col-md-10 col-12">
                           <div className="row">
                             {/* Property Floor */}
                             <div className="col-md-6 col-12">
-                              <div className="rounded-pill pt-3">
-                                <span className="fw-bold">Property floor</span>
+                              <div className="rounded-pill pt-1">
+                                <span className="fw-medium">Property floor</span>
                               </div>
-                              <div className="input-group mt-3" style={{ overflow: "hidden", height: "50px" }}>
+                              <div className="input-group mt-1" style={{ overflow: "hidden", height: "50px" }}>
                                 <select
                                   name={`locationDetail[${index}].PropertyFloor`}
                                   className="form-select"
@@ -677,10 +688,10 @@ const HouseMap = forwardRef(
                             </div>
                             {/* Is there an elevator? */}
                             <div className="col-md-6 col-12">
-                              <div className="rounded-pill pt-3">
-                                <span className="fw-bold">Is there an elevator?</span>
+                              <div className="rounded-pill pt-1">
+                                <span className="fw-medium">Is there an elevator?</span>
                               </div>
-                              <div className="mt-3 d-flex justify-content-between" style={{ height: "50px" }}>
+                              <div className="mt-1 d-flex justify-content-between" style={{ height: "50px" }}>
                                 <button
                                   type="button"
                                   className="btn"
@@ -729,13 +740,13 @@ const HouseMap = forwardRef(
                         <div className="row">
                           {/* Property details */}
                           <div className="col-md-12 col-12">
-                            <div className="rounded-pill pt-3">
-                              <span className="fw-bold">Tell us your property details</span>
+                            <div className="rounded-pill pt-1">
+                              <span className="fw-medium">Tell us your property details</span>
                             </div>
                             <textarea
                               type="text"
                               name={`locationDetail[${index}].PropertyDetails`}
-                              className="form-control"
+                              className="form-control mt-1"
                               value={formik.values.locationDetail?.[index]?.PropertyDetails || ""}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
@@ -754,7 +765,7 @@ const HouseMap = forwardRef(
                 ))}
 
                 {/* Category Selection */}
-                <div className="rounded-pill pt-3">
+                {/* <div className="rounded-pill pt-3">
                   <span className="fw-bold">Select Category</span>
                 </div>
                 <div className="col-md-10 col-12 mb-3">
@@ -797,18 +808,18 @@ const HouseMap = forwardRef(
                   {formik.touched.type && formik.errors.type ? (
                     <div className="text-danger">{formik.errors.type}</div>
                   ) : null}
-                </div>
+                </div> */}
               </div>
             </div>
 
             <div className="col-md-6 col-12">
-              <span className="d-flex justify-content-center align-items-center py-3">
+              {/* <span className="d-flex justify-content-center align-items-center py-3">
                 {distance && (
                   <div>
                     <strong>Estimated Distance: </strong> {distance}
                   </div>
                 )}
-              </span>
+              </span> */}
               <div
                 className=" d-flex justify-content-center align-items-center"
                 style={{ position: "sticky", top: "67px", zIndex: "1" }}

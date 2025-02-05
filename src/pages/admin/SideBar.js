@@ -56,8 +56,19 @@ function SideBar({ onLogout }) {
                     <i className="bx bx-home pe-3"></i> House Category
                   </NavLink>
                 </li>
+
+                <li className="nav-item pt-2">
+                  <NavLink className="nav-link" to="/officecategorymanagement">
+                    <i className="bx bx-building pe-3"></i> Office Category
+                  </NavLink>
+                </li>
               </>
             )}
+            <li className="nav-item pt-2">
+              <NavLink className="nav-link" to="/timeSlot">
+                <i className="bx bx-stopwatch pe-3"></i> Time Slot Management
+              </NavLink>
+            </li>
             <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/supportteammanagement">
                 <i className="bx bx-support pe-3"></i> Support Team
@@ -76,11 +87,6 @@ function SideBar({ onLogout }) {
             <li className="nav-item pt-2">
               <NavLink className="nav-link" to="/bookingManagement">
                 <i className="bx bx-calendar pe-3"></i> Booking Management
-              </NavLink>
-            </li>
-            <li className="nav-item pt-2">
-              <NavLink className="nav-link" to="/timeSlot">
-                <i className="bx bx-stopwatch pe-3"></i> Time Slot Management
               </NavLink>
             </li>
             <li className="nav-item pt-2">

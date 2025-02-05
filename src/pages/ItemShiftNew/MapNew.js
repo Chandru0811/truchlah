@@ -100,14 +100,14 @@ const MapNew = forwardRef(
         setLoadIndicators(true);
         console.log("Formik values is ", values);
         try {
-          const totalEstKm = await calculateDistance();
-          console.log("Total KM ", totalEstKm);
+          // const totalEstKm = await calculateDistance();
+          // console.log("Total KM ", totalEstKm);
 
-          if (totalEstKm < 1 || !totalEstKm) {
-            toast.error("Invalid locations or distance too short for a ride.");
-            setLoadIndicators(false);
-            return;
-          }
+          // if (totalEstKm < 1 || !totalEstKm) {
+          //   toast.error("Invalid locations or distance too short for a ride.");
+          //   setLoadIndicators(false);
+          //   return;
+          // }
           const reformattedLocationDetail = [
             values.locationDetail[0],
             ...values.locationDetail.slice(2).map((item) => ({
@@ -117,7 +117,7 @@ const MapNew = forwardRef(
           ];
           const payload = {
             ...values,
-            estKm: totalEstKm,
+            // estKm: totalEstKm,
             locationDetail: reformattedLocationDetail,
           };
           let response;
@@ -132,7 +132,7 @@ const MapNew = forwardRef(
             const bookingId = response.data.responseBody.booking.bookingId;
             setFormData((prv) => ({
               ...prv,
-              form1: { ...values, estKm: totalEstKm },
+              // form1: { ...values, estKm: totalEstKm },
               bookingId: bookingId,
             }));
             handleNext();
@@ -205,87 +205,87 @@ const MapNew = forwardRef(
       }
     };
 
-    const calculateDistance = () => {
-      return new Promise((resolve, reject) => {
-        const pickup = formik.values.locationDetail[0];
-        const dropoff = formik.values.locationDetail[1];
+    // const calculateDistance = () => {
+    //   return new Promise((resolve, reject) => {
+    //     const pickup = formik.values.locationDetail[0];
+    //     const dropoff = formik.values.locationDetail[1];
 
-        if (
-          pickup.latitude &&
-          pickup.longitude &&
-          dropoff.latitude &&
-          dropoff.longitude
-        ) {
-          const service = new window.google.maps.DistanceMatrixService();
+    //     if (
+    //       pickup.latitude &&
+    //       pickup.longitude &&
+    //       dropoff.latitude &&
+    //       dropoff.longitude
+    //     ) {
+    //       const service = new window.google.maps.DistanceMatrixService();
 
-          const stopLocations = formik.values.locationDetail
-            .slice(2)
-            .filter((stop) => stop.latitude && stop.longitude)
-            .map(
-              (stop) =>
-                new window.google.maps.LatLng(stop.latitude, stop.longitude)
-            );
+    //       const stopLocations = formik.values.locationDetail
+    //         .slice(2)
+    //         .filter((stop) => stop.latitude && stop.longitude)
+    //         .map(
+    //           (stop) =>
+    //             new window.google.maps.LatLng(stop.latitude, stop.longitude)
+    //         );
 
-          const locations = [
-            new window.google.maps.LatLng(pickup.latitude, pickup.longitude),
-            ...stopLocations,
-            new window.google.maps.LatLng(dropoff.latitude, dropoff.longitude),
-          ];
+    //       const locations = [
+    //         new window.google.maps.LatLng(pickup.latitude, pickup.longitude),
+    //         ...stopLocations,
+    //         new window.google.maps.LatLng(dropoff.latitude, dropoff.longitude),
+    //       ];
 
-          const totalDistance = { value: 0, text: "" };
+    //       const totalDistance = { value: 0, text: "" };
 
-          const promises = locations.slice(0, -1).map((origin, index) => {
-            const destination = locations[index + 1];
-            return new Promise((resolveSegment, rejectSegment) => {
-              service.getDistanceMatrix(
-                {
-                  origins: [origin],
-                  destinations: [destination],
-                  travelMode: window.google.maps.TravelMode.DRIVING,
-                },
-                (response, status) => {
-                  if (status === "OK") {
-                    const distanceResult = response.rows[0].elements[0];
-                    if (distanceResult.status === "OK") {
-                      totalDistance.value += distanceResult.distance.value;
-                      resolveSegment();
-                    } else {
-                      rejectSegment(
-                        `Error fetching distance for segment: ${distanceResult.status}`
-                      );
-                    }
-                  } else {
-                    rejectSegment(`Distance Matrix request failed: ${status}`);
-                  }
-                }
-              );
-            });
-          });
+    //       const promises = locations.slice(0, -1).map((origin, index) => {
+    //         const destination = locations[index + 1];
+    //         return new Promise((resolveSegment, rejectSegment) => {
+    //           service.getDistanceMatrix(
+    //             {
+    //               origins: [origin],
+    //               destinations: [destination],
+    //               travelMode: window.google.maps.TravelMode.DRIVING,
+    //             },
+    //             (response, status) => {
+    //               if (status === "OK") {
+    //                 const distanceResult = response.rows[0].elements[0];
+    //                 if (distanceResult.status === "OK") {
+    //                   totalDistance.value += distanceResult.distance.value;
+    //                   resolveSegment();
+    //                 } else {
+    //                   rejectSegment(
+    //                     `Error fetching distance for segment: ${distanceResult.status}`
+    //                   );
+    //                 }
+    //               } else {
+    //                 rejectSegment(`Distance Matrix request failed: ${status}`);
+    //               }
+    //             }
+    //           );
+    //         });
+    //       });
 
-          // Resolve all distance calculations
-          Promise.all(promises)
-            .then(() => {
-              totalDistance.text = `${(totalDistance.value / 1000).toFixed(
-                2
-              )} km`;
-              const totalNumericKm = (totalDistance.value / 1000).toFixed(1);
+    //       // Resolve all distance calculations
+    //       Promise.all(promises)
+    //         .then(() => {
+    //           totalDistance.text = `${(totalDistance.value / 1000).toFixed(
+    //             2
+    //           )} km`;
+    //           const totalNumericKm = (totalDistance.value / 1000).toFixed(1);
 
-              // Update state and formik
-              setDistance(totalNumericKm);
-              formik.setFieldValue("estKm", totalNumericKm);
+    //           // Update state and formik
+    //           setDistance(totalNumericKm);
+    //           formik.setFieldValue("estKm", totalNumericKm);
 
-              console.log("Total Estimated Distance (km):", totalNumericKm);
-              resolve(totalNumericKm);
-            })
-            .catch((error) => {
-              console.error("Error calculating distance:", error);
-              reject(error);
-            });
-        } else {
-          reject("Pickup or dropoff place latitude/longitude is missing.");
-        }
-      });
-    };
+    //           console.log("Total Estimated Distance (km):", totalNumericKm);
+    //           resolve(totalNumericKm);
+    //         })
+    //         .catch((error) => {
+    //           console.error("Error calculating distance:", error);
+    //           reject(error);
+    //         });
+    //     } else {
+    //       reject("Pickup or dropoff place latitude/longitude is missing.");
+    //     }
+    //   });
+    // };
 
     // useEffect(() => {
     //   console.log("autocompletePickup",autocompletePickup)
@@ -659,13 +659,13 @@ const MapNew = forwardRef(
             </div>
 
             <div className="col-md-6 col-12">
-              <span className="d-flex justify-content-center align-items-center py-3">
+              {/* <span className="d-flex justify-content-center align-items-center py-3">
                 {distance && (
                   <div>
                     <strong>Estimated Distance: </strong> {distance}
                   </div>
                 )}
-              </span>
+              </span> */}
               <div
                 className=" d-flex justify-content-center align-items-center"
                 style={{ position: "sticky", top: "67px", zIndex: "1" }}

@@ -48,6 +48,10 @@ import BookingManagmentView from "../pages/BookingManagment/BookingManagmentView
 import ScrollToTop from "../pages/admin/ScrollToTop";
 import TimeSlot from "../pages/BookTime/TimeSlot";
 import TimeSlotEdit from "../pages/BookTime/TimeSlotEdit";
+import OfficeCategoryManagement from "../pages/OfficeCategoryManagement/HouseCategoryManagement";
+import OfficeCategoryManagementAdd from "../pages/OfficeCategoryManagement/HouseCategoryManagementAdd";
+import OfficeCategoryManagementEdit from "../pages/OfficeCategoryManagement/HouseCategoryManagementEdit";
+import OfficeCategoryManagementView from "../pages/OfficeCategoryManagement/HouseCategoryManagementView";
 
 function AdminLayout({ handleLogout }) {
   return (
@@ -58,7 +62,7 @@ function AdminLayout({ handleLogout }) {
         style={{ background: "#ECECEC" }}
       >
         <SideBar onLogout={handleLogout} />
-        <div className="flex-grow-1" style={{ minHeight: "100vh"}}>
+        <div className="flex-grow-1" style={{ minHeight: "100vh" }}>
           <main className="py-1" style={{ background: "#ECECEC" }}>
             <Routes>
               <Route path="/" element={<DashboardAdmin />} />
@@ -95,6 +99,24 @@ function AdminLayout({ handleLogout }) {
               <Route
                 path="/housecategorymanagement/view/:id"
                 element={<HouseCategoryManagementView />}
+              />
+
+              {/* Office Management */}
+              <Route
+                path="/officecategorymanagement"
+                element={<OfficeCategoryManagement />}
+              />
+              <Route
+                path="/officecategorymanagement/add"
+                element={<OfficeCategoryManagementAdd />}
+              />
+              <Route
+                path="/officecategorymanagement/edit/:id"
+                element={<OfficeCategoryManagementEdit />}
+              />
+              <Route
+                path="/officecategorymanagement/view/:id"
+                element={<OfficeCategoryManagementView />}
               />
 
               <Route

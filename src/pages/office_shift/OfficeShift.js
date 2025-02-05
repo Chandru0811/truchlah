@@ -24,7 +24,6 @@ const OfficeShift = () => {
   const form = {
     bookingId: null,
     form1: {
-      type: "",
       estKm: "",
       locationDetail: [
         {
@@ -169,7 +168,6 @@ const OfficeShift = () => {
             ...prev,
             bookingId: data?.booking?.bookingId,
             form1: {
-              type: data?.booking?.bookingType || "",
               estKm: data?.booking?.estKm || "",
               locationDetail: locationDetail,
             },

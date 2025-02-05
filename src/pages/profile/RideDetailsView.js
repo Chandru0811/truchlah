@@ -54,10 +54,14 @@ function RideDetailsView() {
   };
 
   const handleClick = () => {
-    if (bookingId.id && data.booking.bookingType === "ITEM") {
-      navigate(`/itemshift`, { state: { id: bookingId.id } });
-    } else {
-      navigate(`/housemoving`, { state: { id: bookingId.id } });
+    if (bookingId.id) {
+      if (data.booking.bookingType === "ITEM") {
+        navigate(`/itemshift`, { state: { id: bookingId.id } });
+      } else if (data.booking.bookingType === "OFFICE") {
+        navigate(`/officemoving`, { state: { id: bookingId.id } });
+      } else {
+        navigate(`/housemoving`, { state: { id: bookingId.id } });
+      }
     }
   };
 
@@ -643,7 +647,7 @@ function RideDetailsView() {
                       </>
                     )}
 
-                    <div className="row">
+                    {/* <div className="row">
                       <div className="col-md-6 col-12 ps-1">
                         <p className="lineh" style={{ color: "#1e1e1e" }}>
                           <b>Estimate km</b>
@@ -655,7 +659,7 @@ function RideDetailsView() {
                           {data.booking?.estKm || 0}
                         </p>
                       </div>
-                    </div>
+                    </div> */}
                     {/* <div className="row">
                       <div className="col-md-6 col-12 ps-1">
                         <p className="lineh" style={{ color: "#1e1e1e" }}>

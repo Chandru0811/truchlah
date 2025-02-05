@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ItemManagement from "./ItemManagement";
+import OfficeManagement from "./OfficeManagement";
 import HouseManagement from "./HouseManagement";
 
 const BookingManagment = () => {
@@ -28,9 +29,8 @@ const BookingManagment = () => {
           <ul className="nav nav-tabs mb-3" id="myTab" role="tablist">
             <li className="nav-item me-0 ms-4" role="presentation">
               <button
-                className={`nav-link tabNav px-4 py-2 fw-bold ${
-                  activeTab === "ITEM" ? "active" : ""
-                }`}
+                className={`nav-link tabNav px-4 py-2 fw-bold ${activeTab === "ITEM" ? "active" : ""
+                  }`}
                 id="profile-tab"
                 onClick={() => handleTabClick("ITEM")}
                 type="button"
@@ -39,11 +39,22 @@ const BookingManagment = () => {
                 ITEM
               </button>
             </li>
+            <li className="nav-item me-0 ms-4" role="presentation">
+              <button
+                className={`nav-link tabNav px-4 py-2 fw-bold ${activeTab === "OFFICE" ? "active" : ""
+                  }`}
+                id="profile-tab"
+                onClick={() => handleTabClick("OFFICE")}
+                type="button"
+                role="tab"
+              >
+                OFFFICE
+              </button>
+            </li>
             <li className="nav-item ms-0" role="presentation">
               <button
-                className={`nav-link tabNav px-4 py-2 fw-bold ${
-                  activeTab === "HOUSE" ? "active" : ""
-                }`}
+                className={`nav-link tabNav px-4 py-2 fw-bold ${activeTab === "HOUSE" ? "active" : ""
+                  }`}
                 id="home-tab"
                 onClick={() => handleTabClick("HOUSE")}
                 type="button"
@@ -54,9 +65,9 @@ const BookingManagment = () => {
             </li>
           </ul>
           {activeTab === "ITEM" ? (
-            <>
-              <ItemManagement />
-            </>
+            <ItemManagement />
+          ) : activeTab === "OFFICE" ? (
+            <OfficeManagement />
           ) : (
             <HouseManagement />
           )}
