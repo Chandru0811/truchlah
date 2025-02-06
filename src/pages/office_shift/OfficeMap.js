@@ -27,9 +27,24 @@ const validationSchema = Yup.object().shape({
         location: Yup.string().required("Location is required"),
         address: Yup.string().required("Address is required"),
         typeOfProperty: Yup.string().required("Type of property is required"),
-        sizeOfProperty: Yup.string().required("Size of property is required"),
-        PropertyFloor: Yup.string().required("Property Floor is required"),
-        elevator: Yup.string().required("Please select if there is an elevator"),
+        // sizeOfProperty: Yup.string().required("Size of property is required"),
+        // PropertyFloor: Yup.string().required("Property Floor is required"),
+        // elevator: Yup.string().required("Please select if there is an elevator"),
+        sizeOfProperty: Yup.string().when("typeOfProperty", {
+          is: (val) => ["Shophouse", "Officebuilding"].includes(val),
+          then: (schema) => schema.required("Size of Property is required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
+        PropertyFloor: Yup.string().when("typeOfProperty", {
+          is: (val) => ["Shophouse", "Officebuilding"].includes(val),
+          then: (schema) => schema.required("Property floor is required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
+        elevator: Yup.string().when("typeOfProperty", {
+          is: (val) => ["Shophouse", "Officebuilding"].includes(val),
+          then: (schema) => schema.required("Please select if there is an elevator"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
         contactName: Yup.string().required("Contact name is required"),
         countryCode: Yup.string().required("Country code is required"),
         mobile: Yup.string()

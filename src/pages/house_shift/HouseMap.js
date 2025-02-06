@@ -26,11 +26,26 @@ const validationSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         location: Yup.string().required("Location is required"),
-        address: Yup.string().required("Address is required"),
         typeOfProperty: Yup.string().required("Type of property is required"),
-        noOfBedrooms: Yup.string().required("No Of Bedrooms is required"),
-        PropertyFloor: Yup.string().required("Property Floor is required"),
-        elevator: Yup.string().required("Please select if there is an elevator"),
+        address: Yup.string().required("Address is required"),
+        // noOfBedrooms: Yup.string().required("No Of Bedrooms is required"),
+        // PropertyFloor: Yup.string().required("Property Floor is required"),
+        // elevator: Yup.string().required("Please select if there is an elevator"),
+        noOfBedrooms: Yup.string().when("typeOfProperty", {
+          is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
+          then: (schema) => schema.required("Number of bedrooms is required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
+        PropertyFloor: Yup.string().when("typeOfProperty", {
+          is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
+          then: (schema) => schema.required("Property floor is required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
+        elevator: Yup.string().when("typeOfProperty", {
+          is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
+          then: (schema) => schema.required("Please select if there is an elevator"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
         contactName: Yup.string().required("Contact name is required"),
         countryCode: Yup.string().required("Country code is required"),
         mobile: Yup.string()
@@ -183,82 +198,82 @@ const HouseMap = forwardRef(
       }
     };
 
-    // const calculateDistance = () => {
-    //   return new Promise((resolve, reject) => {
-    //     const pickupLat = formik.values.locationDetail[0].latitude;
-    //     const pickupLng = formik.values.locationDetail[0].longitude;
-    //     const dropoffLat = formik.values.locationDetail[1].latitude;
-    //     const dropoffLng = formik.values.locationDetail[1].longitude;
+    const calculateDistance = () => {
+      return new Promise((resolve, reject) => {
+        const pickupLat = formik.values.locationDetail[0].latitude;
+        const pickupLng = formik.values.locationDetail[0].longitude;
+        const dropoffLat = formik.values.locationDetail[1].latitude;
+        const dropoffLng = formik.values.locationDetail[1].longitude;
 
-    //     if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
-    //       const service = new window.google.maps.DistanceMatrixService();
+        if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
+          const service = new window.google.maps.DistanceMatrixService();
 
-    //       const origins = [
-    //         { lat: parseFloat(pickupLat), lng: parseFloat(pickupLng) },
-    //       ];
-    //       const destinations = [
-    //         { lat: parseFloat(dropoffLat), lng: parseFloat(dropoffLng) },
-    //       ];
+          const origins = [
+            { lat: parseFloat(pickupLat), lng: parseFloat(pickupLng) },
+          ];
+          const destinations = [
+            { lat: parseFloat(dropoffLat), lng: parseFloat(dropoffLng) },
+          ];
 
-    //       service.getDistanceMatrix(
-    //         {
-    //           origins: origins,
-    //           destinations: destinations,
-    //           travelMode: window.google.maps.TravelMode.DRIVING,
-    //         },
-    //         (response, status) => {
-    //           if (status === "OK") {
-    //             const distanceResult = response.rows[0].elements[0];
-    //             if (distanceResult.status === "OK") {
-    //               const totalDistanceInMeters = distanceResult.distance.value; // Distance in meters
-    //               const totalDistanceInKm = (
-    //                 totalDistanceInMeters / 1000
-    //               ).toFixed(2); // Convert to km
+          service.getDistanceMatrix(
+            {
+              origins: origins,
+              destinations: destinations,
+              travelMode: window.google.maps.TravelMode.DRIVING,
+            },
+            (response, status) => {
+              if (status === "OK") {
+                const distanceResult = response.rows[0].elements[0];
+                if (distanceResult.status === "OK") {
+                  const totalDistanceInMeters = distanceResult.distance.value; // Distance in meters
+                  const totalDistanceInKm = (
+                    totalDistanceInMeters / 1000
+                  ).toFixed(2); // Convert to km
 
-    //               // Update Formik and state
-    //               setDistance(`${totalDistanceInKm} km`);
-    //               formik.setFieldValue("estKm", totalDistanceInKm);
+                  // Update Formik and state
+                  setDistance(`${totalDistanceInKm} km`);
+                  formik.setFieldValue("estKm", totalDistanceInKm);
 
-    //               resolve(totalDistanceInKm);
-    //             } else {
-    //               console.error(
-    //                 `Error fetching distance: ${distanceResult.status}`
-    //               );
-    //               reject(`Error fetching distance: ${distanceResult.status}`);
-    //             }
-    //           } else {
-    //             console.error(`Distance Matrix request failed: ${status}`);
-    //             reject(`Distance Matrix request failed: ${status}`);
-    //           }
-    //         }
-    //       );
-    //     } else {
-    //       reject(
-    //         "Latitude or longitude is missing for pickup or dropoff location."
-    //       );
-    //       setLoadIndicators(false);
-    //     }
-    //   });
-    // };
+                  resolve(totalDistanceInKm);
+                } else {
+                  console.error(
+                    `Error fetching distance: ${distanceResult.status}`
+                  );
+                  reject(`Error fetching distance: ${distanceResult.status}`);
+                }
+              } else {
+                console.error(`Distance Matrix request failed: ${status}`);
+                reject(`Distance Matrix request failed: ${status}`);
+              }
+            }
+          );
+        } else {
+          reject(
+            "Latitude or longitude is missing for pickup or dropoff location."
+          );
+          setLoadIndicators(false);
+        }
+      });
+    };
 
-    // useEffect(() => {
-    //   const pickupLat = formik.values.locationDetail[0].latitude;
-    //   const pickupLng = formik.values.locationDetail[0].longitude;
-    //   const dropoffLat = formik.values.locationDetail[1].latitude;
-    //   const dropoffLng = formik.values.locationDetail[1].longitude;
+    useEffect(() => {
+      const pickupLat = formik.values.locationDetail[0].latitude;
+      const pickupLng = formik.values.locationDetail[0].longitude;
+      const dropoffLat = formik.values.locationDetail[1].latitude;
+      const dropoffLng = formik.values.locationDetail[1].longitude;
 
-    //   // Check if latitude and longitude for both pickup and dropoff are present
-    //   if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
-    //     calculateDistance();
-    //   }
+      // Check if latitude and longitude for both pickup and dropoff are present
+      if (pickupLat && pickupLng && dropoffLat && dropoffLng) {
+        calculateDistance();
+      }
 
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [
-    //   formik.values.locationDetail[0].latitude,
-    //   formik.values.locationDetail[0].longitude,
-    //   formik.values.locationDetail[1].latitude,
-    //   formik.values.locationDetail[1].longitude,
-    // ]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      formik.values.locationDetail[0].latitude,
+      formik.values.locationDetail[0].longitude,
+      formik.values.locationDetail[1].latitude,
+      formik.values.locationDetail[1].longitude,
+    ]);
 
     const fetchData = async () => {
       try {
@@ -591,20 +606,11 @@ const HouseMap = forwardRef(
                               onBlur={formik.handleBlur}
                             >
                               <option value="" className="text-muted">Select</option>
-                              {categorys &&
-                                categorys.map((category) => (
-                                  <option
-                                    key={category.id}
-                                    value={category.houseCategoryName}
-                                  >
-                                    {(
-                                      category.houseCategoryName
-                                        .charAt(0)
-                                        .toUpperCase() +
-                                      category.houseCategoryName.slice(1)
-                                    ).replace("_", " ")}
-                                  </option>
-                                ))}
+                              {categorys?.map((category) => (
+                                <option key={category.id} value={category.houseCategoryName}>
+                                  {category.houseCategoryName.charAt(0).toUpperCase() + category.houseCategoryName.slice(1).replace("_", " ")}
+                                </option>
+                              ))}
                             </select>
                           </div>
                           {formik.touched.locationDetail?.[index]?.typeOfProperty &&
@@ -735,7 +741,7 @@ const HouseMap = forwardRef(
                       )}
 
                     {/* Others"*/}
-                    {formik.values.locationDetail?.[index]?.typeOfProperty === "Other" && (
+                    {formik.values.locationDetail?.[index]?.typeOfProperty === "Others" && (
                       <div className="col-md-10 col-12">
                         <div className="row">
                           {/* Property details */}
