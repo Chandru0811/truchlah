@@ -50,7 +50,7 @@ const OfficeCategoryManagement = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await bookingApi.get("getAllHouseShifting");
+      const response = await bookingApi.get("getAllCommercialShifting");
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
@@ -63,7 +63,7 @@ const OfficeCategoryManagement = () => {
   useEffect(() => {
     const getItemData = async () => {
       try {
-        const resposnse = await bookingApi.get("getAllHouseShifting");
+        const resposnse = await bookingApi.get("getAllCommercialShifting");
         setDatas(resposnse.data);
       } catch (error) {
         toast.error("Error fetching data: ", error?.response?.data?.message);
@@ -74,8 +74,8 @@ const OfficeCategoryManagement = () => {
     getItemData();
   }, []);
 
-  const funDelete = (houseTypeId) => {
-    return bookingApi.delete(`/deleteHouseShifting/${houseTypeId}`)
+  const funDelete = (id) => {
+    return bookingApi.delete(`/deleteCommercialShifting/${id}`)
   }
 
   return (
@@ -142,10 +142,10 @@ const OfficeCategoryManagement = () => {
                   {datas.map((data, index) => (
                     <tr>
                       <td className="text-center">{index + 1}</td>
-                      <td className="text-center">{data.houseCategoryName}</td>
+                      <td className="text-center">{data.commercialCategoryName}</td>
                       <td className="text-center">{data.price}</td>
                       <td className="text-center">
-                        {data.houseStatus === "ACTIVE" ? (
+                        {data.commercialStatus === "ACTIVE" ? (
                           <span className="badge active">Active</span>
                         ) : (
                           <span className="badge badges-Red inactive">
@@ -157,14 +157,14 @@ const OfficeCategoryManagement = () => {
                       <td className="text-center">
                         <div className="gap-2">
                           <Link
-                            to={`/officecategorymanagement/view/${data.houseSftId}`}
+                            to={`/officecategorymanagement/view/${data.id}`}
                           >
                             <button className="btn btn-light btn-sm  shadow-none border-none">
                               View
                             </button>
                           </Link>
                           <Link
-                            to={`/officecategorymanagement/edit/${data.houseSftId}`}
+                            to={`/officecategorymanagement/edit/${data.id}`}
                             className="px-2"
                           >
                             <button className="btn btn-light  btn-sm shadow-none border-none">
@@ -173,7 +173,7 @@ const OfficeCategoryManagement = () => {
                           </Link>
                           <DeleteModel
                             onSuccess={refreshData}
-                            onDelete={() => funDelete(data.houseSftId)}
+                            onDelete={() => funDelete(data.id)}
                             // path={`deleteMstrItem/${data.id}`}
                             style={{ display: "inline-block" }}
                           />
