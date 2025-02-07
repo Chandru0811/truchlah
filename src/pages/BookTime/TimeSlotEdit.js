@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
 import {
@@ -12,58 +12,81 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { bookingApi } from "../../config/URL";
 
-function TimeSlotEdit({ id, batchDay, batchTimes }) {
+function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("tmsuserName");
   const [isModified, setIsModified] = useState(false);
+  const [loader, setLoader] = useState(true);
+  const [data, setData] = useState();
   const [fields, setFields] = useState([]); // No default field
 
   const validationSchema = Yup.object({
-    batchTimes: Yup.array()
+    visitingTimes: Yup.array()
       .of(Yup.string().required("Batch time is required"))
       .min(1, "At least one batch time is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      batchDay: batchDay,
-      batchTimes: [],
+      day: day,
+      visitingTimes: [],
       updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      // try {
-      //   const response = await api.put(`/updateBatchDays/${id}`, values, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 200) {
-      //     onSuccess();
-      //     toast.success(response.data.message);
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   if (error?.response?.status === 409) {
-      //     toast.warning(error?.response?.data?.message);
-      //   } else if (error?.response?.status === 404) {
-      //     toast.warning(error?.response?.data?.message);
-      //   } else {
-      //     toast.error(error?.response?.data?.message);
-      //   }
-      // } finally {
-      //   handleClose();
-      //   setLoadIndicator(false);
-      // }
+      try {
+        const response = await bookingApi.put(
+          `/updateVisitingDayWithTime/${id}`,
+          values,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 200) {
+          onSuccess();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        if (error?.response?.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else if (error?.response?.status === 404) {
+          toast.warning(error?.response?.data?.message);
+        } else {
+          toast.error(error?.response?.data?.message);
+        }
+      } finally {
+        handleClose();
+        setLoadIndicator(false);
+      }
     },
-    enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
   });
+  const getData = async () => {
+    try {
+      const response = await bookingApi.get(`/getVisitingDayWithTime/${id}`);
+      const fetchedData = response.data.responseBody;
+      console.log("first", response.data);
+      formik.setValues({
+        day: fetchedData.day,
+        visitingTimes: fetchedData.visitingTimes,
+      });
+
+      const updatedFields = fetchedData.visitingTimes.map((time) => ({
+        id: Math.random(),
+        visitingTimes: time,
+      }));
+      setFields(updatedFields);
+    } catch (error) {
+      console.error("Error fetching data", error?.message);
+    }
+  };
 
   const handleClose = () => {
     formik.resetForm();
@@ -73,14 +96,14 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
   const handleShow = () => {
     setShow(true);
     setIsModified(false);
-    // getData();
+    getData();
   };
 
   const addFields = () => {
-    setFields([...fields, { id: null, batchTimes: "" }]);
+    setFields([...fields, { id: null, visitingTimes: "" }]);
 
     // Update Formik state
-    formik.setFieldValue("batchTimes", [...formik.values.batchTimes, ""]);
+    formik.setFieldValue("visitingTimes", [...formik.values.visitingTimes, ""]);
   };
 
   const deleteFields = (index) => {
@@ -88,16 +111,18 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
     setFields(updatedFields);
 
     // Update Formik state
-    const updatedBatchTimes = formik.values.batchTimes.filter((_, i) => i !== index);
-    formik.setFieldValue("batchTimes", updatedBatchTimes);
+    const updatedvisitingTimes = formik.values.visitingTimes.filter(
+      (_, i) => i !== index
+    );
+    formik.setFieldValue("visitingTimes", updatedvisitingTimes);
   };
-
-
 
   return (
     <>
-      <button className="btn btn-light btn-sm shadow-none border-none me-2"
-        onClick={handleShow}>
+      <button
+        className="btn btn-light btn-sm shadow-none border-none me-2"
+        onClick={handleShow}
+      >
         Edit
       </button>
       <Dialog
@@ -140,17 +165,16 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control  ${formik.touched.batchDay && formik.errors.batchDay
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    {...formik.getFieldProps("batchDay")}
+                    className={`form-control  ${
+                      formik.touched.day && formik.errors.day
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("day")}
                     readOnly
                   />
-                  {formik.touched.batchDay && formik.errors.batchDay && (
-                    <div className="invalid-feedback">
-                      {formik.errors.batchDay}
-                    </div>
+                  {formik.touched.day && formik.errors.day && (
+                    <div className="invalid-feedback">{formik.errors.day}</div>
                   )}
                 </div>
 
@@ -177,15 +201,25 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
                       </div>
                       <input
                         type="time"
-                        className={`form-control ${formik.touched.batchTimes?.[index] && formik.errors.batchTimes?.[index] ? "is-invalid" : ""}`}
-                        value={formik.values.batchTimes[index] || ""}
-                        onChange={(e) => formik.setFieldValue(`batchTimes[${index}]`, e.target.value)}
+                        className={`form-control ${
+                          formik.touched.visitingTimes?.[index] &&
+                          formik.errors.visitingTimes?.[index]
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        value={formik.values.visitingTimes[index] || ""}
+                        onChange={(e) =>
+                          formik.setFieldValue(
+                            `visitingTimes[${index}]`,
+                            e.target.value
+                          )
+                        }
                       />
 
-                      {formik.touched.batchTimes?.[index] &&
-                        formik.errors.batchTimes?.[index] && (
+                      {formik.touched.visitingTimes?.[index] &&
+                        formik.errors.visitingTimes?.[index] && (
                           <div className="invalid-feedback">
-                            {formik.errors.batchTimes[index]}
+                            {formik.errors.visitingTimes[index]}
                           </div>
                         )}
                     </div>
@@ -213,7 +247,7 @@ function TimeSlotEdit({ id, batchDay, batchTimes }) {
             <Button
               type="submit"
               className="btn btn-button btn-sm"
-            // disabled={loadIndicator}
+              // disabled={loadIndicator}
             >
               {/* {loadIndicator && (
                 <span
