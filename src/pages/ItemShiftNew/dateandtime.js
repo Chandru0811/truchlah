@@ -82,7 +82,6 @@ const DateAndTime = forwardRef(
           type: formData.form1.type,
           locationDetail: formData.form1.locationDetail,
           bookingId: formData.bookingId,
-          estKm: formData.form1.estKm,
           scheduledDate: `${values.date}T${values.time}.000Z`,
           deliveryDate: deliveryDate,
           vehicleType: selectedOption.type,
