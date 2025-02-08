@@ -86,10 +86,10 @@ const TimeSlot = () => {
                       S.NO
                     </th>
                     <th scope="col" className="text-center">
-                      Batch Day
+                      Day
                     </th>
                     <th scope="col" className="text-center">
-                      Batch Times
+                      Times
                     </th>
                     <th
                       scope="col"

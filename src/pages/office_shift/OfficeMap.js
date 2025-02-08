@@ -711,7 +711,7 @@ const OfficeMap = forwardRef(
                                   style={{
                                     backgroundColor: formik.values.locationDetail?.[index]?.isElevator === true ? "#acff3b" : "transparent",
                                     border: "1px solid #acff3b",
-                                    color: formik.values.locationDetail?.[index]?.isElevator === true ? "#fff" : "#000",
+                                    color: "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",
@@ -727,7 +727,7 @@ const OfficeMap = forwardRef(
                                   style={{
                                     backgroundColor: formik.values.locationDetail?.[index]?.isElevator === false ? "#acff3b" : "transparent",
                                     border: "1px solid #acff3b",
-                                    color: formik.values.locationDetail?.[index]?.isElevator === false ? "#fff" : "#000",
+                                    color: "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",

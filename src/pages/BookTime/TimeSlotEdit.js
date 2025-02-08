@@ -138,7 +138,7 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
         aria-labelledby="batch-time-edit-dialog"
       >
         <DialogTitle className="headColor">
-          Batch Time Edit{" "}
+          Time Edit{" "}
           <IconButton
             aria-label="close"
             onClick={handleClose}
@@ -165,11 +165,10 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.day && formik.errors.day
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.day && formik.errors.day
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("day")}
                     readOnly
                   />
@@ -184,7 +183,7 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
                       <div className="d-flex justify-content-between mt-3">
                         <span>
                           <label className="form-label">
-                            Batch Time<span className="text-danger">*</span>
+                            Time<span className="text-danger">*</span>
                           </label>
                         </span>
                         <span>
@@ -201,12 +200,11 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
                       </div>
                       <input
                         type="time"
-                        className={`form-control ${
-                          formik.touched.visitingTimes?.[index] &&
+                        className={`form-control ${formik.touched.visitingTimes?.[index] &&
                           formik.errors.visitingTimes?.[index]
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         value={formik.values.visitingTimes[index] || ""}
                         onChange={(e) =>
                           formik.setFieldValue(
@@ -247,7 +245,7 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
             <Button
               type="submit"
               className="btn btn-button btn-sm"
-              // disabled={loadIndicator}
+            // disabled={loadIndicator}
             >
               {/* {loadIndicator && (
                 <span

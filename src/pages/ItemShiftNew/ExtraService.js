@@ -63,7 +63,7 @@ const ExtraService = forwardRef(
         scheduledDate: `${formData?.form2.date}T${formData?.form2.time}.000Z`,
         vehicleType: formData?.form2.vehicle?.type,
         quantity: formData?.form3.quantity,
-        msgToDriver: formData?.form3.msgToDriver,
+        msgToDriver: formData?.form3.messageToDriver,
         noOfPieces: formData?.form3.noOfPieces,
         helper: formData?.form3.helper === "Y" ? "Y" : "N",
         extraHelper: formData?.form3.extraHelper === "Y" ? "Y" : "N",
