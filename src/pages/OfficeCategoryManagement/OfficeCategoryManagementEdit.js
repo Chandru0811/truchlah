@@ -12,8 +12,8 @@ function OfficeCategoryManagementEdit() {
   const { id } = useParams();
   const [data, setData] = useState();
   const validationSchema = Yup.object({
-    houseCategoryName: Yup.string().required("*Name is required"),
-    houseStatus: Yup.string().required("*Status is required"),
+    commercialCategoryName: Yup.string().required("*Name is required"),
+    commercialStatus: Yup.string().required("*Status is required"),
     price: Yup.number()
       .typeError("*must be a digit")
       .required("*Price is required"),
@@ -21,24 +21,24 @@ function OfficeCategoryManagementEdit() {
 
   const formik = useFormik({
     initialValues: {
-      houseCategoryName: "",
-      houseStatus: "",
+      commercialCategoryName: "",
+      commercialStatus: "",
       price: "",
-      houseImage: null,
+      commercialImage: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // console.log("additems:", values);
       setLoading(true);
       const formdata = new FormData();
-      formdata.append("houseCategoryName", values.houseCategoryName);
+      formdata.append("commercialCategoryName", values.commercialCategoryName);
       formdata.append("price", values.price);
-      formdata.append("status", values.houseStatus);
-      if (values.houseImage) formdata.append("houseImage", values.houseImage);
+      formdata.append("commercialStatus", values.commercialStatus);
+      if (values.commercialImage) formdata.append("commercialImage", values.commercialImage);
 
       try {
         const response = await bookingApi.put(
-          `updateHouseShifting/${id}`,
+          `updateCommercialShifting/${id}`,
           formdata
         );
         console.log(response);
@@ -62,16 +62,16 @@ function OfficeCategoryManagementEdit() {
       setLoader(true);
       try {
         const response = await bookingApi.get(
-          `getAllHouseShifting/${id}?id=${id}`
+          `getCommercialShiftingById/${id}?id=${id}`
         );
         setData(response.data);
 
         if (response.status === 200) {
           formik.setFieldValue(
-            "houseCategoryName",
-            response.data.houseCategoryName
+            "commercialCategoryName",
+            response.data.commercialCategoryName
           );
-          formik.setFieldValue("houseStatus", response.data.houseStatus);
+          formik.setFieldValue("commercialStatus", response.data.commercialStatus);
           formik.setFieldValue("price", response.data.price);
         }
       } catch (error) {
@@ -138,18 +138,18 @@ function OfficeCategoryManagementEdit() {
                   <div className="mb-3">
                     <input
                       type="text"
-                      name="houseCategoryName"
-                      className={`form-control ${formik.touched.houseCategoryName &&
-                        formik.errors.houseCategoryName
+                      name="commercialCategoryName"
+                      className={`form-control ${formik.touched.commercialCategoryName &&
+                        formik.errors.commercialCategoryName
                         ? "is-invalid"
                         : ""
                         }`}
-                      {...formik.getFieldProps("houseCategoryName")}
+                      {...formik.getFieldProps("commercialCategoryName")}
                     />
-                    {formik.touched.houseCategoryName &&
-                      formik.errors.houseCategoryName && (
+                    {formik.touched.commercialCategoryName &&
+                      formik.errors.commercialCategoryName && (
                         <div className="invalid-feedback">
-                          {formik.errors.houseCategoryName}
+                          {formik.errors.commercialCategoryName}
                         </div>
                       )}
                   </div>
@@ -182,21 +182,21 @@ function OfficeCategoryManagementEdit() {
                   <div className="mt-2 mb-3">
                     <select
                       type="text"
-                      name="houseStatus"
-                      className={`form-select ${formik.touched.houseStatus && formik.errors.houseStatus
+                      name="commercialStatus"
+                      className={`form-select ${formik.touched.commercialStatus && formik.errors.commercialStatus
                         ? "is-invalid"
                         : ""
                         }`}
-                      {...formik.getFieldProps("houseStatus")}
+                      {...formik.getFieldProps("commercialStatus")}
                     >
                       <option value={""}></option>
                       <option value={"ACTIVE"}>Active</option>
                       <option value={"INACTIVE"}>InActive</option>
                     </select>
-                    {formik.touched.houseStatus &&
-                      formik.errors.houseStatus && (
+                    {formik.touched.status &&
+                      formik.errors.status && (
                         <div className="invalid-feedback">
-                          {formik.errors.houseStatus}
+                          {formik.errors.status}
                         </div>
                       )}
                   </div>
@@ -206,29 +206,29 @@ function OfficeCategoryManagementEdit() {
                   <div className="mb-3">
                     <input
                       type="file"
-                      name="houseImage"
-                      className={`form-control ${formik.touched.houseImage && formik.errors.houseImage
+                      name="commercialImage"
+                      className={`form-control ${formik.touched.commercialImage && formik.errors.commercialImage
                         ? "is-invalid"
                         : ""
                         }`}
                       onChange={(event) => {
                         const file = event.currentTarget.files[0];
-                        formik.setFieldValue("houseImage", file);
+                        formik.setFieldValue("commercialImage", file);
                       }}
                     />
-                    {formik.touched.houseImage && formik.errors.houseImage && (
+                    {formik.touched.commercialImage && formik.errors.commercialImage && (
                       <div className="invalid-feedback">
-                        {formik.errors.houseImage}
+                        {formik.errors.commercialImage}
                       </div>
                     )}
                   </div>
-                  {(data?.houseImage || formik.values.houseImage) && (
+                  {(data?.commercialImage || formik.values.commercialImage) && (
                     <div>
                       <img
                         src={
-                          formik.values.houseImage
-                            ? URL.createObjectURL(formik.values.houseImage)
-                            : data.houseImage
+                          formik.values.commercialImage
+                            ? URL.createObjectURL(formik.values.commercialImage)
+                            : data.commercialImage
                         }
                         alt="Vehicle"
                         className="img-fluid"

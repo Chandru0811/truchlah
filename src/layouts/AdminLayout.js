@@ -48,10 +48,10 @@ import BookingManagmentView from "../pages/BookingManagment/BookingManagmentView
 import ScrollToTop from "../pages/admin/ScrollToTop";
 import TimeSlot from "../pages/BookTime/TimeSlot";
 import TimeSlotEdit from "../pages/BookTime/TimeSlotEdit";
-import OfficeCategoryManagement from "../pages/OfficeCategoryManagement/HouseCategoryManagement";
-import OfficeCategoryManagementAdd from "../pages/OfficeCategoryManagement/HouseCategoryManagementAdd";
-import OfficeCategoryManagementEdit from "../pages/OfficeCategoryManagement/HouseCategoryManagementEdit";
-import OfficeCategoryManagementView from "../pages/OfficeCategoryManagement/HouseCategoryManagementView";
+import OfficeCategoryManagement from "../pages/OfficeCategoryManagement/OfficeCategoryManagement";
+import OfficeCategoryManagementAdd from "../pages/OfficeCategoryManagement/OfficeCategoryManagementAdd";
+import OfficeCategoryManagementEdit from "../pages/OfficeCategoryManagement/OfficeCategoryManagementEdit";
+import OfficeCategoryManagementView from "../pages/OfficeCategoryManagement/OfficeCategoryManagementView";
 
 function AdminLayout({ handleLogout }) {
   return (

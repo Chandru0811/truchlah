@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import HouseCategoryManagement from "./HouseCategoryManagement";
 import { bookingApi } from "../../config/URL";
 import { toast } from "react-toastify";
 // import api from "../../config/URL";
@@ -15,7 +14,7 @@ function OfficeCategoryManagementView() {
     const getData = async () => {
       setLoader(true);
       try {
-        const response = await bookingApi.get(`getAllHouseShifting/${id}?id=${id}`);
+        const response = await bookingApi.get(`getCommercialShiftingById/${id}`);
         if (response.status === 200) {
           setData(response.data);
         }
@@ -76,7 +75,7 @@ function OfficeCategoryManagementView() {
                       </div>
                       <div className="col-6">
                         <p className="text-muted text-sm">
-                          : {data.houseCategoryName || ""}
+                          : {data.commercialCategoryName || ""}
                         </p>
                       </div>
                     </div>
@@ -104,7 +103,7 @@ function OfficeCategoryManagementView() {
                       </div>
                       <div className="col-6">
                         <p className="text-muted text-sm">
-                          : {data.houseStatus || ""}
+                          : {data.commercialStatus || ""}
                         </p>
                       </div>
                     </div>
@@ -117,9 +116,9 @@ function OfficeCategoryManagementView() {
                         </p>
                       </div>
                       <div className="col-6 text-muted">
-                        {data.houseImage ? (
+                        {data.commercialImage ? (
                           <img
-                            src={data.houseImage}
+                            src={data.commercialImage}
                             alt="Driver"
                             style={{ width: "100px" }}
                           />

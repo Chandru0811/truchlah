@@ -128,7 +128,7 @@ function Shift() {
 
         <div className="col-md-6 col-12">
           <img src={truck}
-            style={{ position: "sticky", top: "0"}} alt="truck" className="img-fluid responsive-image" />
+            style={{ position: "sticky", top: "66px"}} alt="truck" className="img-fluid responsive-image" />
         </div>
       </div>
 
