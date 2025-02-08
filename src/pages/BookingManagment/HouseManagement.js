@@ -11,7 +11,7 @@ import WebSocketService from "../../config/WebSocketService";
 
 const HouseManagement = () => {
   const tableRef = useRef(null);
-  const [count,setCount]=useState(0)
+  const [count, setCount] = useState(0)
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +32,7 @@ const HouseManagement = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   useEffect(() => {
     if (!loading) {
       initializeDataTable();
@@ -171,9 +171,9 @@ const HouseManagement = () => {
                       <span className="badge" style={{ background: "#17e540" }}>
                         Completed
                       </span>
-                    ) : data.status === "ASSIGNED" ? (
+                    ) : data.status === "VISIT_CONFIRMED" ? (
                       <span className="badge" style={{ background: "#28d8b7" }}>
-                        Assigned
+                        Visit Confirmed
                       </span>
                     ) : (
                       <span className="badge" style={{ background: "#6d736e" }}>

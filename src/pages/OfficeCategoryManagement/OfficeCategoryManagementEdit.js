@@ -33,7 +33,7 @@ function OfficeCategoryManagementEdit() {
       const formdata = new FormData();
       formdata.append("commercialCategoryName", values.commercialCategoryName);
       formdata.append("price", values.price);
-      formdata.append("commercialStatus", values.commercialStatus);
+      formdata.append("status", values.commercialStatus);
       if (values.commercialImage) formdata.append("commercialImage", values.commercialImage);
 
       try {
