@@ -23,7 +23,7 @@ import { FaRegStar } from "react-icons/fa6";
 function RideDetailsView() {
   const [show, setShow] = useState(false);
   const [data, setData] = useState({});
-  console.log("dataaaa", data)
+  console.log("dataaaa", data);
   const [locationDetail, setLocationDetail] = useState([]);
   const bookingId = useParams();
   // console.log("bookingId", bookingId);
@@ -93,27 +93,21 @@ function RideDetailsView() {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, []);
 
   const validationSchema = Yup.object().shape({
     cancelReason: Yup.string().required("*Please select a reason"),
-    comments: Yup.string().max(
-      255,
-      "Message cannot exceed 255 characters"
-    ).test(
-      "is-required-if-others",
-      "*Message is required",
-      function (value) {
+    comments: Yup.string()
+      .max(255, "Message cannot exceed 255 characters")
+      .test("is-required-if-others", "*Message is required", function (value) {
         const { cancelReason } = this.parent;
         if (cancelReason === "Others") {
           return !!value;
         }
         return true;
-      }
-    ),
+      }),
   });
 
   const formik = useFormik({
@@ -238,6 +232,11 @@ function RideDetailsView() {
           text: "Assigned",
           backgroundColor: "#28d8b7", // Success color (example)
         };
+      case "VISIT_CONFIRMED":
+        return {
+          text: "Visit_Confirmed",
+          backgroundColor: "#28d8b7", // Success color (example)
+        };
       default:
         return {
           text: "Unknown",
@@ -292,10 +291,10 @@ function RideDetailsView() {
           <center>
             <div className="vehicleImages-card">
               <Badge.Ribbon
-                text={bookingStatus}
+                text={data.bookingStatus?.status}
                 style={{
                   backgroundColor: backgroundColor,
-                  color: "#fff", // Text color for better contrast
+                  color: "#28d8b7", // Text color for better contrast
                 }}
               />
               <img
@@ -515,8 +514,8 @@ function RideDetailsView() {
                               data.bookingStatus?.status === "CANCELLED"
                                 ? "red" // Red color for CANCELLED
                                 : data.bookingStatus?.status === "COMPLETED"
-                                  ? "green" // Green color for COMPLETED
-                                  : "blue", // Orange color for other statuses
+                                ? "green" // Green color for COMPLETED
+                                : "blue", // Orange color for other statuses
                           }}
                         >
                           {data.bookingStatus?.status || "--"}
@@ -756,7 +755,6 @@ function RideDetailsView() {
                   </div>
                   <div className="col-lg-3 col-md-3 col-12"></div>
                 </div> */}
-
               </>
             )}
 
@@ -841,9 +839,9 @@ function RideDetailsView() {
                                 ? data.bookingStatus.comments.includes("Others")
                                   ? "No Comments"
                                   : data.bookingStatus.comments.replace(
-                                    "UserCancellation-",
-                                    ""
-                                  )
+                                      "UserCancellation-",
+                                      ""
+                                    )
                                 : " "}
                             </p>
                           </div>
@@ -858,31 +856,31 @@ function RideDetailsView() {
 
             {(data?.bookingStatus?.reviewByUser ||
               data?.bookingStatus?.ratingByUser) && (
-                <>
-                  <div className="row">
-                    <div className="col-lg-3 col-md-3 col-12"></div>
-                    <div className="col-lg-6 col-md-6 col-12">
-                      <p className="mt-5 ps-2">
-                        <b>Review By User:</b>
-                      </p>
-                      <div className="card ms-2">
-                        <div className="card-body py-0">
-                          <div className="row">
-                            <div className="col-md-6 col-12 ps-1">
-                              <div>
-                                <p className="mt-2" style={{ color: "#1e1e1e" }}>
-                                  <b>Rating By User</b>
-                                </p>
-                              </div>
+              <>
+                <div className="row">
+                  <div className="col-lg-3 col-md-3 col-12"></div>
+                  <div className="col-lg-6 col-md-6 col-12">
+                    <p className="mt-5 ps-2">
+                      <b>Review By User:</b>
+                    </p>
+                    <div className="card ms-2">
+                      <div className="card-body py-0">
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div>
+                              <p className="mt-2" style={{ color: "#1e1e1e" }}>
+                                <b>Rating By User</b>
+                              </p>
                             </div>
-                            <div
-                              className="col-md-6 col-12 ps-1"
-                              id="drop"
-                              style={{ borderBottom: "1px solid #e4e2e2" }}
-                            >
-                              <p className="mt-2" style={{ color: "#494949" }}>
-                                {data?.bookingStatus?.ratingByUser !== undefined
-                                  ? Array.from({ length: 5 }).map((_, index) =>
+                          </div>
+                          <div
+                            className="col-md-6 col-12 ps-1"
+                            id="drop"
+                            style={{ borderBottom: "1px solid #e4e2e2" }}
+                          >
+                            <p className="mt-2" style={{ color: "#494949" }}>
+                              {data?.bookingStatus?.ratingByUser !== undefined
+                                ? Array.from({ length: 5 }).map((_, index) =>
                                     index < data.bookingStatus.ratingByUser ? (
                                       <GoStarFill
                                         key={index}
@@ -895,33 +893,33 @@ function RideDetailsView() {
                                       />
                                     )
                                   )
-                                  : "--"}
+                                : "--"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                              <p className="mt-2" style={{ color: "#1e1e1e" }}>
+                                <b>Comments</b>
                               </p>
                             </div>
                           </div>
-                          <div className="row">
-                            <div className="col-md-6 col-12 ps-1">
-                              <div style={{ borderTop: "1px solid #e4e2e2" }}>
-                                <p className="mt-2" style={{ color: "#1e1e1e" }}>
-                                  <b>Comments</b>
-                                </p>
-                              </div>
-                            </div>
-                            <div className="col-md-12 col-12 ps-1">
-                              <p style={{ color: "#4949491" }}>
-                                {data?.bookingStatus?.reviewByUser
-                                  ? data.bookingStatus.reviewByUser
-                                  : " "}
-                              </p>
-                            </div>
+                          <div className="col-md-12 col-12 ps-1">
+                            <p style={{ color: "#4949491" }}>
+                              {data?.bookingStatus?.reviewByUser
+                                ? data.bookingStatus.reviewByUser
+                                : " "}
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-3 col-md-3 col-12"></div>
                   </div>
-                </>
-              )}
+                  <div className="col-lg-3 col-md-3 col-12"></div>
+                </div>
+              </>
+            )}
 
             {data.bookingStatus?.reviewByDriver &&
               data.bookingStatus?.ratingByDriver && (
@@ -952,21 +950,21 @@ function RideDetailsView() {
                             >
                               <p className="mt-2" style={{ color: "#494949" }}>
                                 {data?.bookingStatus?.ratingByDriver !==
-                                  undefined
+                                undefined
                                   ? Array.from({ length: 5 }).map((_, index) =>
-                                    index <
+                                      index <
                                       data.bookingStatus.ratingByDriver ? (
-                                      <GoStarFill
-                                        key={index}
-                                        className="text-warning"
-                                      />
-                                    ) : (
-                                      <FaRegStar
-                                        key={index}
-                                        className="text-warning"
-                                      />
+                                        <GoStarFill
+                                          key={index}
+                                          className="text-warning"
+                                        />
+                                      ) : (
+                                        <FaRegStar
+                                          key={index}
+                                          className="text-warning"
+                                        />
+                                      )
                                     )
-                                  )
                                   : "--"}
                               </p>
                             </div>
@@ -1008,7 +1006,6 @@ function RideDetailsView() {
                 </button>
               </div>
             )}
-
 
             {/* {data.bookingStatus?.status === "BOOKED" && data.transactionDetails?.paymentStatus === "NOT PAID" && (
               <div className="text-center py-3 mt-3">
@@ -1128,10 +1125,11 @@ function RideDetailsView() {
                     {formik.values.cancelReason === "Others" && (
                       <>
                         <textarea
-                          className={`form-control mt-3 ${formik.touched.comments && formik.errors.comments
-                            ? "is-invalid"
-                            : ""
-                            }`}
+                          className={`form-control mt-3 ${
+                            formik.touched.comments && formik.errors.comments
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           placeholder="Please write your reason here..."
                           {...formik.getFieldProps("comments")}
                         ></textarea>

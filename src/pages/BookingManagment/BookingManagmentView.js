@@ -110,9 +110,9 @@ function BookingManagmentView() {
           text: "Completed",
           backgroundColor: "#17e540", // Success color (example)
         };
-      case "ASSIGNED":
+      case "VISIT_CONFIRMED":
         return {
-          text: "Assigned",
+          text: "Visit Confirmed",
           backgroundColor: "#28d8b7", // Success color (example)
         };
       default:
@@ -650,26 +650,29 @@ function BookingManagmentView() {
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Preferred Visit Date</b>
+                                <b>Preferred Visit Date & Time</b>
                               </p>
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.booking?.date || ""}{" "}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Preferred Visit Time</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data?.booking?.time || ""}{" "}
+                                : {data?.booking?.visitingDate?.length > 0 &&
+                                  data?.booking?.visitingTime?.length > 0 ? (
+                                  data.booking.visitingDate.map((date, index) => {
+                                    const time24 = data.booking.visitingTime[index];
+                                    const [hour, minute] = time24.split(":");
+                                    const hour12 = hour % 12 || 12;
+                                    const ampm = hour >= 12 ? "PM" : "AM";
+                                    const formattedTime = `${hour12}:${minute} ${ampm}`;
+                                    return (
+                                      <span key={index}>
+                                        {index > 0 && <br />}
+                                        {date} - {formattedTime}
+                                      </span>
+                                    );
+                                  })
+                                ) : (
+                                  "N/A"
+                                )}
                               </p>
                             </div>
                           </div>
@@ -682,12 +685,15 @@ function BookingManagmentView() {
                               </p>
                             </div>
                             <div className="col-6 text-muted">
-                              {data.vehicleImage ? (
-                                <img
-                                  src={data?.booking?.vehicleImage}
-                                  alt="Driver"
-                                  style={{ width: "100px" }}
-                                />
+                              {data?.booking?.fileAttachments?.length > 0 ? (
+                                data.booking.fileAttachments.map((image, index) => (
+                                  <img
+                                    key={index}
+                                    src={image}
+                                    alt={`Uploaded ${index + 1}`}
+                                    style={{ width: "100px", marginRight: "5px" }}
+                                  />
+                                ))
                               ) : (
                                 "N/A"
                               )}

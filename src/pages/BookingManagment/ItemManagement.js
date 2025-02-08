@@ -86,7 +86,7 @@ const ItemManagement = () => {
     //   subscription.unsubscribe();
     // };
   }, []);
-  
+
   useEffect(() => {
     refreshData();
   }, [count]);
@@ -171,9 +171,9 @@ const ItemManagement = () => {
                       <span className="badge" style={{ background: "#17e540" }}>
                         Completed
                       </span>
-                    ) : data.status === "ASSIGNED" ? (
+                    ) : data.status === "VISIT_CONFIRMED" ? (
                       <span className="badge" style={{ background: "#28d8b7" }}>
-                        Assigned
+                        Visit Confirmed
                       </span>
                     ) : (
                       <span className="badge" style={{ background: "#6d736e" }}>

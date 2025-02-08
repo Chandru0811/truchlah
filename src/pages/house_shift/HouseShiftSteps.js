@@ -9,6 +9,7 @@ import BookingSummary from "../ItemShiftNew/BookingSummary";
 import { useLocation } from "react-router-dom";
 import { bookingApi } from "../../config/URL";
 import { toast } from "react-toastify";
+import { type } from "jquery";
 
 const steps = [
   "Pickup / Dropoff",
@@ -24,7 +25,7 @@ const HouseShiftSteps = () => {
   const form = {
     bookingId: null,
     form1: {
-      estKm: "",
+      type:"HOUSE",
       locationDetail: [
         {
           type: "pickup",
@@ -32,9 +33,9 @@ const HouseShiftSteps = () => {
           address: "",
           typeOfProperty: "",
           noOfBedrooms: "",
-          PropertyFloor: "",
-          elevator: "",
-          PropertyDetails: "",
+          propertyFloor: "",
+          isElevator: "",
+          propertyDescription: "",
           contactName: "",
           countryCode: 65,
           mobile: "",
@@ -45,9 +46,9 @@ const HouseShiftSteps = () => {
           address: "",
           typeOfProperty: "",
           noOfBedrooms: "",
-          PropertyFloor: "",
-          elevator: "",
-          PropertyDetails: "",
+          propertyFloor: "",
+          isElevator: "",
+          propertyDescription: "",
           contactName: "",
           countryCode: 65,
           mobile: "",
@@ -103,9 +104,9 @@ const HouseShiftSteps = () => {
               address: firstLocation.pickupAddress || "",
               typeOfProperty: firstLocation.typeOfProperty,
               noOfBedrooms: firstLocation.noOfBedrooms,
-              PropertyFloor: firstLocation.PropertyFloor,
-              PropertyDetails: firstLocation.PropertyDetails,
-              elevator: firstLocation.elevator,
+              propertyFloor: firstLocation.propertyFloor,
+              propertyDescription: firstLocation.propertyDescription,
+              isElevator: firstLocation.isElevator,
               contactName: firstLocation.pickupContactName || "",
               countryCode: firstLocation.pickupCountryCode || "",
               location: firstLocation.pickup || "",
@@ -122,9 +123,9 @@ const HouseShiftSteps = () => {
               address: lastLocation.dropoffAddress || "",
               typeOfProperty: lastLocation.typeOfProperty,
               noOfBedrooms: lastLocation.noOfBedrooms,
-              PropertyFloor: lastLocation.PropertyFloor,
-              PropertyDetails: lastLocation.PropertyDetails,
-              elevator: lastLocation.elevator,
+              propertyFloor: lastLocation.propertyFloor,
+              propertyDescription: lastLocation.propertyDescription,
+              isElevator: lastLocation.isElevator,
               contactName: lastLocation.dropoffContactName || "",
               countryCode: lastLocation.dropoffCountryCode || "",
               location: lastLocation.dropoff || "",
@@ -142,9 +143,9 @@ const HouseShiftSteps = () => {
                 address: location.dropoffAddress || "",
                 typeOfProperty: location.typeOfProperty,
                 noOfBedrooms: location.noOfBedrooms,
-                PropertyFloor: location.PropertyFloor,
-                PropertyDetails: location.PropertyDetails,
-                elevator: location.elevator,
+                propertyFloor: location.propertyFloor,
+                propertyDescription: location.propertyDescription,
+                isElevator: location.isElevator,
                 contactName: location.dropoffContactName || "",
                 countryCode: location.dropoffCountryCode || "",
                 location: location.dropoff || "",

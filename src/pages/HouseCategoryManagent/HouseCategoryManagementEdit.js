@@ -33,7 +33,7 @@ function HouseCategoryManagementEdit() {
       const formdata = new FormData();
       formdata.append("houseCategoryName", values.houseCategoryName);
       formdata.append("price", values.price);
-      formdata.append("houseStatus", values.houseStatus);
+      formdata.append("status", values.houseStatus);
       if (values.houseImage) formdata.append("houseImage", values.houseImage);
 
       try {
