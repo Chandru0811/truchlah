@@ -28,7 +28,11 @@ const validationSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         sdate: Yup.string().required("*Date is required"),
-        sTime: Yup.string().required("*Time is required"),
+        sTime: Yup.string().when("sdate", {
+          is: (val) => !!val,
+          then: (schema) => schema.required("*Time is required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
       })
     )
     .min(1, "*Select the Date"),
@@ -192,7 +196,7 @@ const BookingSummary = forwardRef(
         let updatedDates = [...formik.values.timeDate];
         let response;
         const yyyy = new Date(date).getFullYear();
-        const mm = String(new Date(date).getMonth() + 1).padStart(2, "0"); 
+        const mm = String(new Date(date).getMonth() + 1).padStart(2, "0");
         const dd = String(new Date(date).getDate()).padStart(2, "0");
 
         const formattedDate = `${yyyy}-${mm}-${dd}`;
@@ -206,13 +210,15 @@ const BookingSummary = forwardRef(
             updatedDates.push({
               sdate: dateString,
               sTime: "",
-              option: response.data?.responseBody?response.data.responseBody:[],
+              option: response.data?.responseBody
+                ? response.data.responseBody
+                : [],
             });
           }
         } catch (error) {
           toast.error(error.response.data.message);
         }
-        
+
         // setSelectedDates(updatedDates);
         formik.setFieldValue("timeDate", updatedDates);
       }
@@ -229,6 +235,7 @@ const BookingSummary = forwardRef(
 
     useEffect(() => {
       console.log("Selected Dates:", formik.values.timeDate);
+      console.log("object", formik.errors);
     }, [formik.values.timeDate]);
 
     const handleDateDalete = (index) => {
@@ -240,6 +247,7 @@ const BookingSummary = forwardRef(
 
     const handleValidateClick = async () => {
       const errors = await formik.validateForm();
+      console.log("object", errors);
       if (!errors.timeDate) {
         // if (Object.keys(errors.timeDate).length === 0) {
         setShow(false);
@@ -254,8 +262,8 @@ const BookingSummary = forwardRef(
       const formattedHours = hours % 12 || 12; // Convert 0 to 12
       return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
     };
-    
 
+    console.log("formik.errors.timeDate:", formik.errors.timeDate);
     return (
       <div className="container my-4">
         <form onSubmit={formik.handleSubmit}>
@@ -671,7 +679,8 @@ const BookingSummary = forwardRef(
                         <FaChevronDown />
                       </div>
                     </div>
-                    {formik.errors.timeDate && formik.touched.timeDate && (
+                    {Array.isArray(formik.errors.timeDate)?null:
+                    formik.errors.timeDate && formik.touched.timeDate && (
                       <small className="text-danger">
                         {formik.errors.timeDate}
                       </small>
@@ -724,7 +733,7 @@ const BookingSummary = forwardRef(
                       className="date-field form-control text-muted"
                       name="files"
                       accept="image/*"
-                      multiple={true} 
+                      multiple={true}
                       onChange={handleImageChange}
                       // {...formik.getFieldProps("files")}
                     />
@@ -922,11 +931,12 @@ const BookingSummary = forwardRef(
                       return date < tomorrow || date > maxDate;
                     }}
                   />
-                  {formik.errors.timeDate && formik.touched.timeDate && (
-                    <small className="text-danger">
-                      {formik.errors.timeDate}
-                    </small>
-                  )}
+                  {Array.isArray(formik.errors.timeDate)?null:
+                    formik.errors.timeDate && formik.touched.timeDate && (
+                      <small className="text-danger">
+                        {formik.errors.timeDate}
+                      </small>
+                    )}
                 </div>
                 <div className="col-md-5 col-12 mt-lg-5">
                   <p>Select Times:</p>
@@ -948,10 +958,20 @@ const BookingSummary = forwardRef(
                                 handleDateModelChange(date.sdate, event)
                               }
                             >
-                              {date?.option.length >0 ?(<>
-                              <option value="">Select Time</option>
-                              {date?.option.map((t,i)=><option value={t}>{convertTo12HourFormat(t)}</option>)}</>)
-                            :<option value="" disabled>Unavailable</option>}
+                              {date?.option.length > 0 ? (
+                                <>
+                                  <option value="">Select Time</option>
+                                  {date?.option.map((t, i) => (
+                                    <option value={t}>
+                                      {convertTo12HourFormat(t)}
+                                    </option>
+                                  ))}
+                                </>
+                              ) : (
+                                <option value="" disabled>
+                                  Unavailable
+                                </option>
+                              )}
                             </select>
                             <button
                               className="btn btn-sm"
@@ -962,7 +982,7 @@ const BookingSummary = forwardRef(
                           </div>
                         </div>
                         {formik.errors.timeDate?.[index]?.sTime && (
-                          <small className="text-danger ">
+                          <small className="text-danger">
                             {formik.errors.timeDate[index].sTime}
                           </small>
                         )}
