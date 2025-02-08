@@ -102,11 +102,11 @@ const OfficeShift = () => {
             const firstLocation = locations[0];
             result.push({
               address: firstLocation.pickupAddress || "",
-              typeOfProperty: firstLocation.typeOfProperty,
-              sizeOfProperty: firstLocation.sizeOfProperty,
-              propertyFloor: firstLocation.propertyFloor,
-              propertyDescription: firstLocation.propertyDescription,
-              isElevator: firstLocation.isElevator,
+              typeOfProperty: firstLocation.pickupTypeOfProperty,
+              sizeOfProperty: firstLocation.pickupSizeOfProperty,
+              propertyFloor: firstLocation.pickupPropertyFloor,
+              propertyDescription: firstLocation.pickupPropertyDescription,
+              isElevator: firstLocation.pickupIsElevator,
               contactName: firstLocation.pickupContactName || "",
               countryCode: firstLocation.pickupCountryCode || "",
               location: firstLocation.pickup || "",
@@ -121,11 +121,11 @@ const OfficeShift = () => {
             const lastLocation = locations[locations.length - 1];
             result.push({
               address: lastLocation.dropoffAddress || "",
-              typeOfProperty: lastLocation.typeOfProperty,
-              sizeOfProperty: lastLocation.sizeOfProperty,
-              propertyFloor: lastLocation.propertyFloor,
-              propertyDescription: lastLocation.propertyDescription,
-              isElevator: lastLocation.isElevator,
+              typeOfProperty: lastLocation.dropoffTypeOfProperty,
+              sizeOfProperty: lastLocation.dropoffSizeOfProperty,
+              propertyFloor: lastLocation.dropoffPropertyFloor,
+              propertyDescription: lastLocation.dropoffPropertyDescription,
+              isElevator: lastLocation.dropoffIsElevator,
               contactName: lastLocation.dropoffContactName || "",
               countryCode: lastLocation.dropoffCountryCode || "",
               location: lastLocation.dropoff || "",
@@ -141,11 +141,6 @@ const OfficeShift = () => {
               const location = locations[i];
               result.push({
                 address: location.dropoffAddress || "",
-                // typeOfProperty: location.typeOfProperty,
-                // sizeOfProperty: location.sizeOfProperty,
-                // PropertyFloor: location.PropertyFloor,
-                // PropertyDetails: location.PropertyDetails,
-                // elevator: location.elevator,
                 contactName: location.dropoffContactName || "",
                 countryCode: location.dropoffCountryCode || "",
                 location: location.dropoff || "",
@@ -169,7 +164,7 @@ const OfficeShift = () => {
             ...prev,
             bookingId: data?.booking?.bookingId,
             form1: {
-              estKm: data?.booking?.estKm || "",
+              type: "OFFICE",
               locationDetail: locationDetail,
             },
             form2: {

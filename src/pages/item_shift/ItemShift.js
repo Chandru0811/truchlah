@@ -141,7 +141,6 @@ const ItemShift = () => {
             bookingId: data?.booking?.bookingId,
             form1: {
               type: "ITEM",
-              estKm: data?.booking?.estKm || "",
               locationDetail: locationDetail,
             },
             form2: {

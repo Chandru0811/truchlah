@@ -27,9 +27,6 @@ const validationSchema = Yup.object().shape({
         location: Yup.string().required("*Location is required"),
         address: Yup.string().required("*Address is required"),
         typeOfProperty: Yup.string().required("*Type of property is required"),
-        // sizeOfProperty: Yup.string().required("Size of property is required"),
-        // propertyFloor: Yup.string().required("Property Floor is required"),
-        // isElevator: Yup.string().required("Please select if there is an isElevator"),
         sizeOfProperty: Yup.string().when("typeOfProperty", {
           is: (val) => ["Shophouse", "Officebuilding"].includes(val),
           then: (schema) => schema.required("*Size of Property is required"),
@@ -620,7 +617,7 @@ const OfficeMap = forwardRef(
                                     ).replace("_", " ")}
                                   </option>
                                 ))}
-                                <option value="Others">Others</option>
+                              <option value="Others">Others</option>
                             </select>
                           </div>
                           {formik.touched.locationDetail?.[index]?.typeOfProperty &&
@@ -702,7 +699,7 @@ const OfficeMap = forwardRef(
                                 </small>
                               ) : null}
                             </div>
-                            {/* Is there an isElevator? */}
+                            {/* Is there an Elevator? */}
                             <div className="col-md-6 col-12">
                               <div className="rounded-pill pt-1">
                                 <span className="fw-medium">Is there is an Elevator?</span>
@@ -712,15 +709,15 @@ const OfficeMap = forwardRef(
                                   type="button"
                                   className="btn"
                                   style={{
-                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === "yes" ? "#acff3b" : "transparent",
+                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === true ? "#acff3b" : "transparent",
                                     border: "1px solid #acff3b",
-                                    color: formik.values.locationDetail?.[index]?.isElevator === "yes" ? "#fff" : "#000",
+                                    color: formik.values.locationDetail?.[index]?.isElevator === true ? "#fff" : "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",
                                     width: "95px"
                                   }}
-                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, "yes")}
+                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, true)}
                                 >
                                   Yes
                                 </button>
@@ -728,15 +725,15 @@ const OfficeMap = forwardRef(
                                   type="button"
                                   className="btn"
                                   style={{
-                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === "no" ? "#acff3b" : "transparent",
+                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === false ? "#acff3b" : "transparent",
                                     border: "1px solid #acff3b",
-                                    color: formik.values.locationDetail?.[index]?.isElevator === "no" ? "#fff" : "#000",
+                                    color: formik.values.locationDetail?.[index]?.isElevator === false ? "#fff" : "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",
                                     width: "95px"
                                   }}
-                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, "no")}
+                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, false)}
                                 >
                                   No
                                 </button>
