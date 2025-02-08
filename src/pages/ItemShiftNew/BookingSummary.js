@@ -71,21 +71,22 @@ const BookingSummary = forwardRef(
       initialValues: {
         bookingId: bookingId,
         isAgreed: false,
-        visitingDate: today,
-        visitingTime: "",
         files: [],
         timeDate: [],
+        about: "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         console.log("Form Values:", values);
         setLoadIndicators(true);
         setLoadIndicator(true);
-
+        const visitingDate = values.timeDate.map((data) => data.sdate);
+        const visitingTime = values.timeDate.map((data) => data.sTime);
         const formDatas = new FormData();
         formDatas.append("bookingId", values.bookingId);
-        formDatas.append("visitingDate", values.visitingDate);
-        formDatas.append("visitingTime", values.visitingTime);
+        formDatas.append("visitingDate", visitingDate);
+        formDatas.append("visitingTime", visitingTime);
+        formDatas.append("visitingDescription", values.about);
         values.files.forEach((file) => {
           formDatas.append("files", file);
         });
@@ -146,30 +147,21 @@ const BookingSummary = forwardRef(
       }
     };
 
-    const [availableTimes, setAvailableTimes] = useState([]);
+    // const [availableTimes, setAvailableTimes] = useState([]);
 
     const TimeData = async (selectedDate) => {
       if (!selectedDate) return;
-
-      try {
-        const response = await bookingApi.get(
-          `booking/getAvailableVisitingTime?visitingDate=${selectedDate}`
-        );
-        setAvailableTimes(response.data.responseBody);
-      } catch (error) {
-        toast.error("Error Fetching Data: " + error.message);
-      }
     };
 
-    const handleDateChange = (e) => {
-      const selectedDate = e.target.value;
-      formik.setFieldValue("visitingDate", selectedDate);
-      TimeData(selectedDate); // Fetch times for the selected date
-    };
+    // const handleDateChange = (e) => {
+    //   const selectedDate = e.target.value;
+    //   formik.setFieldValue("visitingDate", selectedDate);
+    //   TimeData(selectedDate); // Fetch times for the selected date
+    // };
 
-    const maxDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
-      .toISOString()
-      .split("T")[0];
+    // const maxDate = new Date(new Date().setMonth(new Date().getMonth() + 3))
+    //   .toISOString()
+    //   .split("T")[0];
 
     // console.log("date", maxDate);
 
@@ -178,11 +170,12 @@ const BookingSummary = forwardRef(
       TimeData(today);
     }, []);
 
-    const handleDateModelChange = (date, event) => {
+    const handleDateModelChange = async (date, event) => {
       if (typeof date === "string") {
         const dateString = date;
         const time = event.target.value || "";
         let updatedDates = [...formik.values.timeDate];
+
         const dateIndex = updatedDates.findIndex((d) => d.sdate === dateString);
         if (dateIndex !== -1) {
           if (updatedDates[dateIndex].sTime === "" || time) {
@@ -197,11 +190,29 @@ const BookingSummary = forwardRef(
         const dateString = date.toDateString();
         // let updatedDates = [...selectedDates];
         let updatedDates = [...formik.values.timeDate];
-        if (updatedDates.some((d) => d.sdate === dateString)) {
-          updatedDates = updatedDates.filter((d) => d.sdate !== dateString);
-        } else {
-          updatedDates.push({ sdate: dateString, sTime: "" });
+        let response;
+        const yyyy = new Date(date).getFullYear();
+        const mm = String(new Date(date).getMonth() + 1).padStart(2, "0"); 
+        const dd = String(new Date(date).getDate()).padStart(2, "0");
+
+        const formattedDate = `${yyyy}-${mm}-${dd}`;
+        try {
+          response = await bookingApi.get(
+            `booking/getAvailableVisitingTime?visitingDate=${formattedDate}`
+          );
+          if (updatedDates.some((d) => d.sdate === dateString)) {
+            updatedDates = updatedDates.filter((d) => d.sdate !== dateString);
+          } else {
+            updatedDates.push({
+              sdate: dateString,
+              sTime: "",
+              option: response.data?.responseBody?response.data.responseBody:[],
+            });
+          }
+        } catch (error) {
+          toast.error(error.response.data.message);
         }
+        
         // setSelectedDates(updatedDates);
         formik.setFieldValue("timeDate", updatedDates);
       }
@@ -237,6 +248,14 @@ const BookingSummary = forwardRef(
         // }
       }
     };
+    const convertTo12HourFormat = (time) => {
+      const [hours, minutes] = time.split(":").map(Number);
+      const ampm = hours >= 12 ? "PM" : "AM";
+      const formattedHours = hours % 12 || 12; // Convert 0 to 12
+      return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+    };
+    
+
     return (
       <div className="container my-4">
         <form onSubmit={formik.handleSubmit}>
@@ -615,15 +634,15 @@ const BookingSummary = forwardRef(
                 </div> */}
 
                 <div className="card-body">
-                  <h4 className="mt-3 mb-2">
+                  <h4 className="mt-3 mb-2 ">
                     Our scheduled Visit for On-Site Quote
                   </h4>
-                  <p className="mb-5">
+                  <p className="mb-4">
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ea
                     nulla praesentium nihil adipisci distinctio dicta expedita
                     necessitatibus! Atque, ex consequatur.
                   </p>
-                  <div className="mt-4 ">
+                  <div className="">
                     <h6 className="mb-1">
                       Preferred Visit Date
                       <span class="text-danger">*</span>
@@ -634,19 +653,23 @@ const BookingSummary = forwardRef(
                       onClick={() => setShow(true)}
                     >
                       <div className="d-flex flex-row justify-content-start">
-                      {formik.values.timeDate.length > 0 ? (
-                        formik.values.timeDate.map((data, i) => (
-                          <span key={i} className=" ps-2">
-                            {`${new Date(data.sdate).getDate()} ${new Date(
-                              data.sdate
-                            ).toLocaleString("default", { month: "short" })},`}
-                          </span>
-                        ))
-                      ) : (
-                        <span className=" ps-2">Select the Date</span>
-                      )}
+                        {formik.values.timeDate.length > 0 ? (
+                          formik.values.timeDate.map((data, i) => (
+                            <span key={i} className=" ps-2">
+                              {`${new Date(data.sdate).getDate()} ${new Date(
+                                data.sdate
+                              ).toLocaleString("default", {
+                                month: "short",
+                              })},`}
+                            </span>
+                          ))
+                        ) : (
+                          <span className=" ps-2">Select the Date</span>
+                        )}
                       </div>
-                      <div className="text-muted"><FaChevronDown /></div>
+                      <div className="text-muted">
+                        <FaChevronDown />
+                      </div>
                     </div>
                     {formik.errors.timeDate && formik.touched.timeDate && (
                       <small className="text-danger">
@@ -701,7 +724,7 @@ const BookingSummary = forwardRef(
                       className="date-field form-control text-muted"
                       name="files"
                       accept="image/*"
-                      multiple
+                      multiple={true} 
                       onChange={handleImageChange}
                       // {...formik.getFieldProps("files")}
                     />
@@ -855,8 +878,14 @@ const BookingSummary = forwardRef(
             </div>
           </div>
         </form>
-        <Modal show={show} onHide={() => setShow(false)} centered size="lg">
-          <Modal.Header >
+        <Modal
+          show={show}
+          onHide={() => setShow(false)}
+          centered
+          size="lg"
+          backdrop={"static"}
+        >
+          <Modal.Header>
             <Modal.Title>Inspection Date & Time</Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -884,18 +913,19 @@ const BookingSummary = forwardRef(
                     tileDisabled={({ date }) => {
                       const today = new Date();
                       today.setHours(0, 0, 0, 0);
-                    
+
                       const tomorrow = new Date(today);
                       tomorrow.setDate(today.getDate() + 1); // Tomorrow
-                    
+
                       const maxDate = new Date(formData.form2.date); // Use form2.date as max limit
-                    
+
                       return date < tomorrow || date > maxDate;
                     }}
-                    
                   />
                   {formik.errors.timeDate && formik.touched.timeDate && (
-                    <small className="text-danger">{formik.errors.timeDate}</small>
+                    <small className="text-danger">
+                      {formik.errors.timeDate}
+                    </small>
                   )}
                 </div>
                 <div className="col-md-5 col-12 mt-lg-5">
@@ -918,14 +948,10 @@ const BookingSummary = forwardRef(
                                 handleDateModelChange(date.sdate, event)
                               }
                             >
+                              {date?.option.length >0 ?(<>
                               <option value="">Select Time</option>
-                              <option value="Any Time">Any Time</option>
-                              <option value="8:00AM - 1:00PM">
-                                8:00AM - 1:00PM
-                              </option>
-                              <option value="1:00PM - 8:00PM">
-                                1:00PM - 8:00PM
-                              </option>
+                              {date?.option.map((t,i)=><option value={t}>{convertTo12HourFormat(t)}</option>)}</>)
+                            :<option value="" disabled>Unavailable</option>}
                             </select>
                             <button
                               className="btn btn-sm"

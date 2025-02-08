@@ -14,8 +14,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { bookingApi } from "../../config/URL";
-import fetchAllCategorysWithIds from "../Lists/CategoryList";
 import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
+import OfficeCategoryList from "../Lists/OfficeCategoryList";
 
 const libraries = ["places"];
 
@@ -24,53 +24,58 @@ const validationSchema = Yup.object().shape({
   locationDetail: Yup.array()
     .of(
       Yup.object().shape({
-        location: Yup.string().required("Location is required"),
-        address: Yup.string().required("Address is required"),
-        typeOfProperty: Yup.string().required("Type of property is required"),
+        location: Yup.string().required("*Location is required"),
+        address: Yup.string().required("*Address is required"),
+        typeOfProperty: Yup.string().required("*Type of property is required"),
         // sizeOfProperty: Yup.string().required("Size of property is required"),
-        // PropertyFloor: Yup.string().required("Property Floor is required"),
-        // elevator: Yup.string().required("Please select if there is an elevator"),
+        // propertyFloor: Yup.string().required("Property Floor is required"),
+        // isElevator: Yup.string().required("Please select if there is an isElevator"),
         sizeOfProperty: Yup.string().when("typeOfProperty", {
           is: (val) => ["Shophouse", "Officebuilding"].includes(val),
-          then: (schema) => schema.required("Size of Property is required"),
+          then: (schema) => schema.required("*Size of Property is required"),
           otherwise: (schema) => schema.notRequired(),
         }),
-        PropertyFloor: Yup.string().when("typeOfProperty", {
+        propertyFloor: Yup.string().when("typeOfProperty", {
           is: (val) => ["Shophouse", "Officebuilding"].includes(val),
-          then: (schema) => schema.required("Property floor is required"),
+          then: (schema) => schema.required("*Property floor is required"),
           otherwise: (schema) => schema.notRequired(),
         }),
-        elevator: Yup.string().when("typeOfProperty", {
+        isElevator: Yup.string().when("typeOfProperty", {
           is: (val) => ["Shophouse", "Officebuilding"].includes(val),
-          then: (schema) => schema.required("Please select if there is an elevator"),
+          then: (schema) => schema.required("*Please select if there is an Elevator"),
           otherwise: (schema) => schema.notRequired(),
         }),
-        contactName: Yup.string().required("Contact name is required"),
-        countryCode: Yup.string().required("Country code is required"),
+        propertyDescription: Yup.string().when("typeOfProperty", {
+          is: (val) => ["Others"].includes(val),
+          then: (schema) => schema.max(255, "*Details cannot exceed 255 characters").required("*Details is Required"),
+          otherwise: (schema) => schema.notRequired(),
+        }),
+        contactName: Yup.string().required("*Contact name is required"),
+        countryCode: Yup.string().required("*Country code is required"),
         mobile: Yup.string()
-          .required("Mobile number is required")
-          .matches(/^\d+$/, "Mobile number must contain only digits")
+          .required("*Mobile number is required")
+          .matches(/^\d+$/, "*Mobile number must contain only digits")
           .test("phone-length", function (value) {
             const { countryCode } = this.parent;
             if (countryCode === "65") {
               return value && value.length === 8
                 ? true
                 : this.createError({
-                  message: "Phone number must be 8 digits only",
+                  message: "*Phone number must be 8 digits only",
                 });
             }
             if (countryCode === "91") {
               return value && value.length === 10
                 ? true
                 : this.createError({
-                  message: "Phone number must be 10 digits only",
+                  message: "*Phone number must be 10 digits only",
                 });
             }
             return true;
           }),
       })
     )
-    .min(2, "At least two locations are required"),
+    .min(2, "*At least two locations are required"),
 });
 
 const OfficeMap = forwardRef(
@@ -90,7 +95,6 @@ const OfficeMap = forwardRef(
     const formik = useFormik({
       initialValues: {
         userId: userId,
-        estKm: "",
         locationDetail: [
           {
             type: "pickup",
@@ -98,9 +102,9 @@ const OfficeMap = forwardRef(
             address: "",
             typeOfProperty: "",
             sizeOfProperty: "",
-            PropertyFloor: "",
-            PropertyDetails: "",
-            elevator: "",
+            propertyFloor: "",
+            propertyDescription: "",
+            isElevator: "",
             contactName: "",
             countryCode: "",
             mobile: "",
@@ -113,9 +117,9 @@ const OfficeMap = forwardRef(
             address: "",
             typeOfProperty: "",
             sizeOfProperty: "",
-            PropertyFloor: "",
-            PropertyDetails: "",
-            elevator: "",
+            propertyFloor: "",
+            propertyDescription: "",
+            isElevator: "",
             contactName: "",
             countryCode: "",
             mobile: "",
@@ -275,7 +279,7 @@ const OfficeMap = forwardRef(
 
     const fetchData = async () => {
       try {
-        const categorys = await fetchAllCategorysWithIds();
+        const categorys = await OfficeCategoryList();
         setCategoryData(categorys);
       } catch (error) {
         toast.error(error);
@@ -301,9 +305,9 @@ const OfficeMap = forwardRef(
               address: "",
               typeOfProperty: "",
               sizeOfProperty: "",
-              PropertyFloor: "",
-              PropertyDetails: "",
-              elevator: "",
+              propertyFloor: "",
+              propertyDescription: "",
+              isElevator: "",
               contactName: "",
               countryCode: 65,
               mobile: "",
@@ -314,9 +318,9 @@ const OfficeMap = forwardRef(
               address: "",
               typeOfProperty: "",
               sizeOfProperty: "",
-              PropertyFloor: "",
-              PropertyDetails: "",
-              elevator: "",
+              propertyFloor: "",
+              propertyDescription: "",
+              isElevator: "",
               contactName: "",
               countryCode: 65,
               mobile: "",
@@ -431,9 +435,9 @@ const OfficeMap = forwardRef(
                       </Autocomplete>
                       {formik.touched.locationDetail?.[index]?.location &&
                         formik.errors.locationDetail?.[index]?.location ? (
-                        <div className="text-danger">
+                        <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
-                        </div>
+                        </small>
                       ) : null}
                     </div>
 
@@ -476,9 +480,9 @@ const OfficeMap = forwardRef(
                       </div>
                       {formik.touched.locationDetail?.[index]?.address &&
                         formik.errors.locationDetail?.[index]?.address ? (
-                        <div className="text-danger">
+                        <small className="text-danger">
                           {formik.errors.locationDetail[index].address}
-                        </div>
+                        </small>
                       ) : null}
                     </div>
 
@@ -522,9 +526,9 @@ const OfficeMap = forwardRef(
                           {formik.touched.locationDetail?.[index]
                             ?.contactName &&
                             formik.errors.locationDetail?.[index]?.contactName ? (
-                            <div className="text-danger">
+                            <small className="text-danger">
                               {formik.errors.locationDetail[index].contactName}
-                            </div>
+                            </small>
                           ) : null}
                         </div>
 
@@ -576,9 +580,9 @@ const OfficeMap = forwardRef(
                           </div>
                           {formik.touched.locationDetail?.[index]?.mobile &&
                             formik.errors.locationDetail?.[index]?.mobile ? (
-                            <div className="text-danger">
+                            <small className="text-danger">
                               {formik.errors.locationDetail[index].mobile}
-                            </div>
+                            </small>
                           ) : null}
                         </div>
                       </div>
@@ -602,29 +606,28 @@ const OfficeMap = forwardRef(
                               onBlur={formik.handleBlur}
                             >
                               <option value="" className="text-muted">Select</option>
-                              <option value="Shophouse">Shophouse</option>
-                              <option value="Officebuilding">Office Building</option>
                               {categorys &&
                                 categorys.map((category) => (
                                   <option
                                     key={category.id}
-                                    value={category.houseCategoryName}
+                                    value={category.commercialCategoryName}
                                   >
                                     {(
-                                      category.houseCategoryName
-                                        .charAt(0)
+                                      category.commercialCategoryName
+                                        ?.charAt(0)
                                         .toUpperCase() +
-                                      category.houseCategoryName.slice(1)
+                                      category.commercialCategoryName?.slice(1)
                                     ).replace("_", " ")}
                                   </option>
                                 ))}
+                                <option value="Others">Others</option>
                             </select>
                           </div>
                           {formik.touched.locationDetail?.[index]?.typeOfProperty &&
                             formik.errors.locationDetail?.[index]?.typeOfProperty ? (
-                            <div className="text-danger">
+                            <small className="text-danger">
                               {formik.errors.locationDetail[index].typeOfProperty}
-                            </div>
+                            </small>
                           ) : null}
                         </div>
                         {(formik.values.locationDetail?.[index]?.typeOfProperty === "Shophouse" ||
@@ -655,9 +658,9 @@ const OfficeMap = forwardRef(
                               </div>
                               {formik.touched.locationDetail?.[index]?.sizeOfProperty &&
                                 formik.errors.locationDetail?.[index]?.sizeOfProperty ? (
-                                <div className="text-danger">
+                                <small className="text-danger">
                                   {formik.errors.locationDetail[index].sizeOfProperty}
-                                </div>
+                                </small>
                               ) : null}
                             </div>
                           )}
@@ -676,10 +679,10 @@ const OfficeMap = forwardRef(
                               </div>
                               <div className="input-group mt-1" style={{ overflow: "hidden", height: "50px" }}>
                                 <select
-                                  name={`locationDetail[${index}].PropertyFloor`}
+                                  name={`locationDetail[${index}].propertyFloor`}
                                   className="form-select"
                                   value={
-                                    formik.values.locationDetail?.[index]?.PropertyFloor || ""
+                                    formik.values.locationDetail?.[index]?.propertyFloor || ""
                                   }
                                   onChange={formik.handleChange}
                                   onBlur={formik.handleBlur}
@@ -692,32 +695,32 @@ const OfficeMap = forwardRef(
                                   ))}
                                 </select>
                               </div>
-                              {formik.touched.locationDetail?.[index]?.PropertyFloor &&
-                                formik.errors.locationDetail?.[index]?.PropertyFloor ? (
-                                <div className="text-danger">
-                                  {formik.errors.locationDetail[index].PropertyFloor}
-                                </div>
+                              {formik.touched.locationDetail?.[index]?.propertyFloor &&
+                                formik.errors.locationDetail?.[index]?.propertyFloor ? (
+                                <small className="text-danger">
+                                  {formik.errors.locationDetail[index].propertyFloor}
+                                </small>
                               ) : null}
                             </div>
-                            {/* Is there an elevator? */}
+                            {/* Is there an isElevator? */}
                             <div className="col-md-6 col-12">
                               <div className="rounded-pill pt-1">
-                                <span className="fw-medium">Is there an elevator?</span>
+                                <span className="fw-medium">Is there is an Elevator?</span>
                               </div>
                               <div className="mt-1 d-flex justify-content-between" style={{ height: "50px" }}>
                                 <button
                                   type="button"
                                   className="btn"
                                   style={{
-                                    backgroundColor: formik.values.locationDetail?.[index]?.elevator === "yes" ? "#acff3b" : "transparent",
+                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === "yes" ? "#acff3b" : "transparent",
                                     border: "1px solid #acff3b",
-                                    color: formik.values.locationDetail?.[index]?.elevator === "yes" ? "#fff" : "#000",
+                                    color: formik.values.locationDetail?.[index]?.isElevator === "yes" ? "#fff" : "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",
                                     width: "95px"
                                   }}
-                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].elevator`, "yes")}
+                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, "yes")}
                                 >
                                   Yes
                                 </button>
@@ -725,22 +728,22 @@ const OfficeMap = forwardRef(
                                   type="button"
                                   className="btn"
                                   style={{
-                                    backgroundColor: formik.values.locationDetail?.[index]?.elevator === "no" ? "#acff3b" : "transparent",
+                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === "no" ? "#acff3b" : "transparent",
                                     border: "1px solid #acff3b",
-                                    color: formik.values.locationDetail?.[index]?.elevator === "no" ? "#fff" : "#000",
+                                    color: formik.values.locationDetail?.[index]?.isElevator === "no" ? "#fff" : "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",
                                     width: "95px"
                                   }}
-                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].elevator`, "no")}
+                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, "no")}
                                 >
                                   No
                                 </button>
                               </div>
-                              {formik.touched.locationDetail?.[index]?.elevator &&
-                                formik.errors.locationDetail?.[index]?.elevator && (
-                                  <div className="text-danger">{formik.errors.locationDetail[index].elevator}</div>
+                              {formik.touched.locationDetail?.[index]?.isElevator &&
+                                formik.errors.locationDetail?.[index]?.isElevator && (
+                                  <small className="text-danger">{formik.errors.locationDetail[index].isElevator}</small>
                                 )}
                             </div>
                           </div>
@@ -758,17 +761,17 @@ const OfficeMap = forwardRef(
                             </div>
                             <textarea
                               type="text"
-                              name={`locationDetail[${index}].PropertyDetails`}
+                              name={`locationDetail[${index}].propertyDescription`}
                               className="form-control mt-1"
-                              value={formik.values.locationDetail?.[index]?.PropertyDetails || ""}
+                              value={formik.values.locationDetail?.[index]?.propertyDescription || ""}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                             />
-                            {formik.touched.locationDetail?.[index]?.PropertyDetails &&
-                              formik.errors.locationDetail?.[index]?.PropertyDetails && (
-                                <div className="text-danger">
-                                  {formik.errors.locationDetail[index].PropertyDetails}
-                                </div>
+                            {formik.touched.locationDetail?.[index]?.propertyDescription &&
+                              formik.errors.locationDetail?.[index]?.propertyDescription && (
+                                <small className="text-danger">
+                                  {formik.errors.locationDetail[index].propertyDescription}
+                                </small>
                               )}
                           </div>
                         </div>

@@ -155,6 +155,7 @@ const DateAndTime = forwardRef(
       // console.log("object", vehicle);
       window.scrollTo({ top: 0, behavior: "smooth" });
       formik.setFieldValue("date", formik.values.date?formik.values.date: new Date(Date.now() + 86400000).toISOString().split("T")[0]);
+      formik.setFieldValue("time",formData.form2.time);
     }, []);
 
     useEffect(() => {
@@ -339,6 +340,7 @@ const DateAndTime = forwardRef(
                   style={{
                     minHeight: "50px",
                   }}
+                  value={formData.form2.time || ""}
                   {...formik.getFieldProps("time")}
                 >
                   <option selected>Select Time</option>

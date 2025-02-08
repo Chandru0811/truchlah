@@ -25,34 +25,34 @@ const validationSchema = Yup.object().shape({
   locationDetail: Yup.array()
     .of(
       Yup.object().shape({
-        location: Yup.string().required("Location is required"),
-        address: Yup.string().required("Address is required"),
-        contactName: Yup.string().required("Contact name is required"),
-        countryCode: Yup.string().required("Country code is required"),
+        location: Yup.string().required("*Location is required"),
+        address: Yup.string().required("*Address is required"),
+        contactName: Yup.string().required("*Contact name is required"),
+        countryCode: Yup.string().required("*Country code is required"),
         mobile: Yup.string()
-          .required("Mobile number is required")
-          .matches(/^\d+$/, "Mobile number must contain only digits")
+          .required("*Mobile number is required")
+          .matches(/^\d+$/, "*Mobile number must contain only digits")
           .test("phone-length", function (value) {
             const { countryCode } = this.parent;
             if (countryCode === "65") {
               return value && value.length === 8
                 ? true
                 : this.createError({
-                    message: "Phone number must be 8 digits only",
+                    message: "*Phone number must be 8 digits only",
                   });
             }
             if (countryCode === "91") {
               return value && value.length === 10
                 ? true
                 : this.createError({
-                    message: "Phone number must be 10 digits only",
+                    message: "*Phone number must be 10 digits only",
                   });
             }
             return true;
           }),
       })
     )
-    .min(2, "At least two locations are required"),
+    .min(2, "*At least two locations are required"),
 });
 
 const MapNew = forwardRef(
@@ -478,9 +478,9 @@ const MapNew = forwardRef(
                       </Autocomplete>
                       {formik.touched.locationDetail?.[index]?.location &&
                       formik.errors.locationDetail?.[index]?.location ? (
-                        <div className="text-danger">
+                        <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
-                        </div>
+                        </small>
                       ) : null}
                     </div>
 
@@ -524,9 +524,9 @@ const MapNew = forwardRef(
                       </div>
                       {formik.touched.locationDetail?.[index]?.address &&
                       formik.errors.locationDetail?.[index]?.address ? (
-                        <div className="text-danger">
+                        <small className="text-danger">
                           {formik.errors.locationDetail[index].address}
-                        </div>
+                        </small>
                       ) : null}
                     </div>
 
@@ -572,9 +572,9 @@ const MapNew = forwardRef(
                           {formik.touched.locationDetail?.[index]
                             ?.contactName &&
                           formik.errors.locationDetail?.[index]?.contactName ? (
-                            <div className="text-danger">
+                            <small className="text-danger">
                               {formik.errors.locationDetail[index].contactName}
-                            </div>
+                            </small>
                           ) : null}
                         </div>
 
@@ -628,9 +628,9 @@ const MapNew = forwardRef(
                           </div>
                           {formik.touched.locationDetail?.[index]?.mobile &&
                           formik.errors.locationDetail?.[index]?.mobile ? (
-                            <div className="text-danger">
+                            <small className="text-danger">
                               {formik.errors.locationDetail[index].mobile}
-                            </div>
+                            </small>
                           ) : null}
                         </div>
                       </div>
