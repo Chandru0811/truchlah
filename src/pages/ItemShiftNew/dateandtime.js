@@ -273,7 +273,7 @@ const DateAndTime = forwardRef(
     useEffect(() => {
       // Filter available times for today's date
       const timesAfterFilter = allTimes.filter(
-        (time) => localTimeToMinutes(time) > localTimeToMinutes(currentTime)
+        (time) => localTimeToMinutes(time)
       );
       setAvailableTimes(timesAfterFilter);
     }, []); // Empty dependency array ensures this runs only on initial render.
@@ -284,7 +284,7 @@ const DateAndTime = forwardRef(
 
       if (selectedDate === today) {
         const timesAfterFilter = allTimes.filter(
-          (time) => localTimeToMinutes(time) > localTimeToMinutes(currentTime)
+          (time) => localTimeToMinutes(time)
         );
         setAvailableTimes(timesAfterFilter);
       } else {
@@ -339,7 +339,7 @@ const DateAndTime = forwardRef(
                   style={{
                     minHeight: "50px",
                   }}
-                  value={formData.form2.time || ""}
+                  // value={formData.form2.time || ""}
                   {...formik.getFieldProps("time")}
                 >
                   <option selected>Select Time</option>

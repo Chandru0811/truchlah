@@ -325,7 +325,7 @@ function Order() {
                                 "0.00"}
                               <br />
                             </p> */}
-                          <p>{item.booking.type || "Unknown Vehicle"}</p>
+                          <p>{item.booking.type?.replace(/_/g, " ") || "Unknown Vehicle"}</p>
                           <p
                             className="fw-bold"
                             style={{
@@ -348,7 +348,7 @@ function Order() {
                                   : showCompletedSection
                                     ? "COMPLETED"
                                     : "CANCELLED"} */}
-                            {item.bookingStatus.status}
+                            {item.bookingStatus.status.replace(/_/g, " ")}
                           </p>
 
                           {/* <p style={{ marginTop: "0", marginBottom: "0" }}>

@@ -19,6 +19,7 @@ import * as Yup from "yup";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { GoStarFill } from "react-icons/go";
 import { FaRegStar } from "react-icons/fa6";
+import { saveAs } from "file-saver";
 
 function RideDetailsView() {
   const [show, setShow] = useState(false);
@@ -250,6 +251,12 @@ function RideDetailsView() {
     data?.bookingStatus?.status || "Unknown"
   );
 
+  const handleDownload = (imageUrl) => {
+    // Extract filename from URL
+    const filename = imageUrl.split("/").pop();
+    saveAs(imageUrl, filename);
+  };
+
   return (
     <section
       className="summary container-fluid"
@@ -291,7 +298,7 @@ function RideDetailsView() {
           <center>
             <div className="vehicleImages-card">
               <Badge.Ribbon
-                text={data.bookingStatus?.status}
+                text={data.bookingStatus?.status.replace(/_/g, " ")}
                 style={{
                   backgroundColor: backgroundColor,
                   color: "#28d8b7", // Text color for better contrast
@@ -307,7 +314,7 @@ function RideDetailsView() {
             </div>
 
             <p className="mt-3">
-              {data.booking?.vehicleName?.split("_").join(" ")}
+              {data.booking?.vehicleName?.replace(/_/g, " ")}
             </p>
             {/* {vechicle &&
               vechicle.map((vechicles) =>
@@ -315,7 +322,7 @@ function RideDetailsView() {
                   ? vechicles.types || "--"
                   : ""
               )} */}
-            <p>{data.transactionDetails?.txnRef}</p>
+            <p>{data.transactionDetails?.txnRef.replace(/_/g, " ")}</p>
           </center>
           <div className="row">
             <div className="row">
@@ -362,6 +369,79 @@ function RideDetailsView() {
                               {firstLocation.pickupMobile || "--"}
                             </span>
                           </p>
+                          <p>
+                            <span style={{ color: "#1e1e1e" }}>
+                              <b>Type of Property:</b>{" "}
+                            </span>
+                            <span style={{ color: "#494949" }}>
+                              {firstLocation.pickupTypeOfProperty || "--"}
+                            </span>
+                          </p>
+                          {firstLocation.pickupNoOfBedrooms ?
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>No of Bedrooms:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {firstLocation.pickupNoOfBedrooms || "--"}
+                                </span>
+                              </p>
+                            </>
+                            : (<></>
+                            )}
+                          {firstLocation.pickupSizeOfProperty ?
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>Size of property:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {firstLocation.pickupSizeOfProperty || "--"}
+                                </span>
+                              </p>
+                            </>
+                            : (<></>
+                            )}
+                          {firstLocation.pickupTypeOfProperty === "Others" ?
+                            <></> : (
+                              <>
+                                <p>
+                                  <span style={{ color: "#1e1e1e" }}>
+                                    <b>Property Floor:</b>{" "}
+                                  </span>
+                                  <span style={{ color: "#494949" }}>
+                                    {firstLocation.pickupPropertyFloor || "--"}
+                                  </span>
+                                </p>
+                              </>
+                            )}
+                          {firstLocation.pickupSizeOfProperty === "Others" ?
+                            <></> : (
+                              <>
+                                <p>
+                                  <span style={{ color: "#1e1e1e" }}>
+                                    <b>Elevator:</b>{" "}
+                                  </span>
+                                  <span style={{ color: "#494949" }}>
+                                    {firstLocation.pickupIsElevator ? "Yes" : "No"}
+                                  </span>
+                                </p>
+                              </>
+                            )}
+                          {firstLocation.pickupTypeOfProperty === "Others" ?
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>Property Description:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {firstLocation.pickupPropertyDescription || "--"}
+                                </span>
+                              </p>
+                            </>
+                            : (<></>
+                            )}
                         </div>
                       </div>
                       <div className="col-md-6 col-12 ps-1" id="drop">
@@ -397,6 +477,79 @@ function RideDetailsView() {
                             {lastLocation.dropoffMobile || "--"}
                           </span>
                         </p>
+                        <p>
+                          <span style={{ color: "#1e1e1e" }}>
+                            <b>Type of Property:</b>{" "}
+                          </span>
+                          <span style={{ color: "#494949" }}>
+                            {lastLocation.dropoffTypeOfProperty || "--"}
+                          </span>
+                        </p>
+                        {lastLocation.dropoffNoOfBedrooms ?
+                          <>
+                            <p>
+                              <span style={{ color: "#1e1e1e" }}>
+                                <b>No of Bedrooms:</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {lastLocation.dropoffNoOfBedrooms || "--"}
+                              </span>
+                            </p>
+                          </>
+                          : (<></>
+                          )}
+                        {lastLocation.dropoffSizeOfProperty ?
+                          <>
+                            <p>
+                              <span style={{ color: "#1e1e1e" }}>
+                                <b>Size of property:</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {lastLocation.dropoffSizeOfProperty || "--"}
+                              </span>
+                            </p>
+                          </>
+                          : (<></>
+                          )}
+                        {lastLocation.dropoffTypeOfProperty === "Others" ?
+                          <></> : (
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>Property Floor:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {lastLocation.dropoffPropertyFloor || "--"}
+                                </span>
+                              </p>
+                            </>
+                          )}
+                        {lastLocation.dropoffTypeOfProperty === "Others" ?
+                          <></> : (
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>Elevator:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {lastLocation.dropoffIsElevator ? "Yes" : "No"}
+                                </span>
+                              </p>
+                            </>
+                          )}
+                        {lastLocation.dropoffTypeOfProperty === "Others" ?
+                          <>
+                            <p>
+                              <span style={{ color: "#1e1e1e" }}>
+                                <b>Property Description:</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {lastLocation.dropoffPropertyDescription || "--"}
+                              </span>
+                            </p>
+                          </>
+                          : (<></>
+                          )}
                       </div>
                     </div>
 
@@ -514,11 +667,11 @@ function RideDetailsView() {
                               data.bookingStatus?.status === "CANCELLED"
                                 ? "red" // Red color for CANCELLED
                                 : data.bookingStatus?.status === "COMPLETED"
-                                ? "green" // Green color for COMPLETED
-                                : "blue", // Orange color for other statuses
+                                  ? "green" // Green color for COMPLETED
+                                  : "blue", // Orange color for other statuses
                           }}
                         >
-                          {data.bookingStatus?.status || "--"}
+                          {data.bookingStatus?.status.replace(/_/g, " ")}
                         </p>
                       </div>
                     </div>
@@ -700,11 +853,11 @@ function RideDetailsView() {
               <></>
             ) : (
               <>
-                {/* <div className="row">
+                <div className="row">
                   <div className="col-lg-3 col-md-3 col-12"></div>
                   <div className="col-lg-6 col-md-6 col-12">
                     <p className="mt-5 ps-2">
-                      <b>Payment Detail:</b>
+                      <b>Visiting Detail:</b>
                     </p>
                     <div className="card w-md-100 ms-2">
                       <div className="card-body">
@@ -712,13 +865,66 @@ function RideDetailsView() {
                           <div className="col-md-6 col-12 ps-1">
                             <div>
                               <p className="" style={{ color: "#1e1e1e" }}>
-                                <b>Transaction Amount</b>
+                                <b>Date&Time</b>
                               </p>
                             </div>
                           </div>
                           <div className="col-md-6 col-12 ps-1" id="drop">
-                            <p className="mb-0" style={{ color: "#494949" }}>
-                              $ {data?.transactionDetails?.txnAmount || "0.0"}
+                            <ul className="mb-0" style={{ color: "#494949", paddingLeft: "15px" }}>
+                              {data?.booking?.visitingDate?.length > 0 &&
+                                data?.booking?.visitingTime?.length > 0 ? (
+                                data.booking.visitingDate.map((date, index) => {
+                                  const time24 = data.booking.visitingTime[index];
+                                  const [hour, minute] = time24.split(":");
+                                  const hour12 = hour % 12 || 12;
+                                  const ampm = hour >= 12 ? "PM" : "AM";
+                                  const formattedTime = `${hour12}:${minute} ${ampm}`;
+
+                                  return (
+                                    <li className="mb-0" key={index}>
+                                      {date} - {formattedTime}
+                                    </li>
+                                  );
+                                })
+                              ) : (
+                                <li>N/A</li>
+                              )}
+                            </ul>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 ps-1">
+                            <div>
+                              <p className="lineh" style={{ color: "#1e1e1e" }}>
+                                <b>File Attachments</b>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 ps-1" id="drop">
+                            <p className="line p-1" style={{ color: "#494949" }}>
+                              {data?.booking?.fileAttachments?.length > 0 ? (
+                                data.booking.fileAttachments.map((image, index) => (
+                                  <img
+                                    key={index}
+                                    src={image}
+                                    alt={`Uploaded ${index + 1}`}
+                                    title="Click to Download"
+                                    style={{
+                                      width: "70px",
+                                      height: "70px",
+                                      borderRadius: "8px",
+                                      objectFit: "cover",
+                                      border: "1px solid #ddd",
+                                      padding: "5px",
+                                      cursor: "pointer",
+                                      marginRight: "5px"
+                                    }}
+                                    onClick={() => handleDownload(image)}
+                                  />
+                                ))
+                              ) : (
+                                "N/A"
+                              )}
                             </p>
                           </div>
                         </div>
@@ -726,27 +932,13 @@ function RideDetailsView() {
                           <div className="col-md-6 col-12 ps-1">
                             <div>
                               <p className="lineh" style={{ color: "#1e1e1e" }}>
-                                <b>Payment Mode</b>
+                                <b>About Moving</b>
                               </p>
                             </div>
                           </div>
                           <div className="col-md-6 col-12 ps-1" id="drop">
                             <p className="line" style={{ color: "#494949" }}>
-                              {data?.transactionDetails?.paymentMode || "--"}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 ps-1">
-                            <div>
-                              <p className="lineh" style={{ color: "#1e1e1e" }}>
-                                <b>Payment Status</b>
-                              </p>
-                            </div>
-                          </div>
-                          <div className="col-md-6 col-12 ps-1" id="drop">
-                            <p className="line" style={{ color: "#494949" }}>
-                              {data?.transactionDetails?.paymentStatus || "--"}
+                              {data?.booking?.visitingDescription}
                             </p>
                           </div>
                         </div>
@@ -754,7 +946,7 @@ function RideDetailsView() {
                     </div>
                   </div>
                   <div className="col-lg-3 col-md-3 col-12"></div>
-                </div> */}
+                </div>
               </>
             )}
 
@@ -839,9 +1031,9 @@ function RideDetailsView() {
                                 ? data.bookingStatus.comments.includes("Others")
                                   ? "No Comments"
                                   : data.bookingStatus.comments.replace(
-                                      "UserCancellation-",
-                                      ""
-                                    )
+                                    "UserCancellation-",
+                                    ""
+                                  )
                                 : " "}
                             </p>
                           </div>
@@ -856,31 +1048,31 @@ function RideDetailsView() {
 
             {(data?.bookingStatus?.reviewByUser ||
               data?.bookingStatus?.ratingByUser) && (
-              <>
-                <div className="row">
-                  <div className="col-lg-3 col-md-3 col-12"></div>
-                  <div className="col-lg-6 col-md-6 col-12">
-                    <p className="mt-5 ps-2">
-                      <b>Review By User:</b>
-                    </p>
-                    <div className="card ms-2">
-                      <div className="card-body py-0">
-                        <div className="row">
-                          <div className="col-md-6 col-12 ps-1">
-                            <div>
-                              <p className="mt-2" style={{ color: "#1e1e1e" }}>
-                                <b>Rating By User</b>
-                              </p>
+                <>
+                  <div className="row">
+                    <div className="col-lg-3 col-md-3 col-12"></div>
+                    <div className="col-lg-6 col-md-6 col-12">
+                      <p className="mt-5 ps-2">
+                        <b>Review By User:</b>
+                      </p>
+                      <div className="card ms-2">
+                        <div className="card-body py-0">
+                          <div className="row">
+                            <div className="col-md-6 col-12 ps-1">
+                              <div>
+                                <p className="mt-2" style={{ color: "#1e1e1e" }}>
+                                  <b>Rating By User</b>
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                          <div
-                            className="col-md-6 col-12 ps-1"
-                            id="drop"
-                            style={{ borderBottom: "1px solid #e4e2e2" }}
-                          >
-                            <p className="mt-2" style={{ color: "#494949" }}>
-                              {data?.bookingStatus?.ratingByUser !== undefined
-                                ? Array.from({ length: 5 }).map((_, index) =>
+                            <div
+                              className="col-md-6 col-12 ps-1"
+                              id="drop"
+                              style={{ borderBottom: "1px solid #e4e2e2" }}
+                            >
+                              <p className="mt-2" style={{ color: "#494949" }}>
+                                {data?.bookingStatus?.ratingByUser !== undefined
+                                  ? Array.from({ length: 5 }).map((_, index) =>
                                     index < data.bookingStatus.ratingByUser ? (
                                       <GoStarFill
                                         key={index}
@@ -893,33 +1085,33 @@ function RideDetailsView() {
                                       />
                                     )
                                   )
-                                : "--"}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 ps-1">
-                            <div style={{ borderTop: "1px solid #e4e2e2" }}>
-                              <p className="mt-2" style={{ color: "#1e1e1e" }}>
-                                <b>Comments</b>
+                                  : "--"}
                               </p>
                             </div>
                           </div>
-                          <div className="col-md-12 col-12 ps-1">
-                            <p style={{ color: "#4949491" }}>
-                              {data?.bookingStatus?.reviewByUser
-                                ? data.bookingStatus.reviewByUser
-                                : " "}
-                            </p>
+                          <div className="row">
+                            <div className="col-md-6 col-12 ps-1">
+                              <div style={{ borderTop: "1px solid #e4e2e2" }}>
+                                <p className="mt-2" style={{ color: "#1e1e1e" }}>
+                                  <b>Comments</b>
+                                </p>
+                              </div>
+                            </div>
+                            <div className="col-md-12 col-12 ps-1">
+                              <p style={{ color: "#4949491" }}>
+                                {data?.bookingStatus?.reviewByUser
+                                  ? data.bookingStatus.reviewByUser
+                                  : " "}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <div className="col-lg-3 col-md-3 col-12"></div>
                   </div>
-                  <div className="col-lg-3 col-md-3 col-12"></div>
-                </div>
-              </>
-            )}
+                </>
+              )}
 
             {data.bookingStatus?.reviewByDriver &&
               data.bookingStatus?.ratingByDriver && (
@@ -950,21 +1142,21 @@ function RideDetailsView() {
                             >
                               <p className="mt-2" style={{ color: "#494949" }}>
                                 {data?.bookingStatus?.ratingByDriver !==
-                                undefined
+                                  undefined
                                   ? Array.from({ length: 5 }).map((_, index) =>
-                                      index <
+                                    index <
                                       data.bookingStatus.ratingByDriver ? (
-                                        <GoStarFill
-                                          key={index}
-                                          className="text-warning"
-                                        />
-                                      ) : (
-                                        <FaRegStar
-                                          key={index}
-                                          className="text-warning"
-                                        />
-                                      )
+                                      <GoStarFill
+                                        key={index}
+                                        className="text-warning"
+                                      />
+                                    ) : (
+                                      <FaRegStar
+                                        key={index}
+                                        className="text-warning"
+                                      />
                                     )
+                                  )
                                   : "--"}
                               </p>
                             </div>
@@ -1040,33 +1232,31 @@ function RideDetailsView() {
                 )}
             </div>
 
-            {data.transactionDetails?.paymentMode === "CASH" &&
-              data.bookingStatus?.status !== "COMPLETED" &&
-              data.bookingStatus?.status !== "CANCELLED" && (
-                <div
-                  className="container-fluid py-4"
-                  style={{ background: "#ffffff" }}
-                >
-                  <div className="container">
-                    <div className="d-flex justify-content-between align-items-center p-3 mt-3">
-                      <span className="d-flex align-item-center">
-                        <p className="mb-0">
-                          <b>Want to cancel your order?</b>
-                        </p>
-                      </span>
-                      <span>
-                        <button
-                          className="btn btn-outline-danger px-5"
-                          onClick={handleShow}
-                          style={{ borderRadius: "20px" }}
-                        >
-                          Cancel
-                        </button>
-                      </span>
-                    </div>
+            {data.bookingStatus?.status === "VISIT_CONFIRMED" && (
+              <div
+                className="container-fluid py-4"
+                style={{ background: "#ffffff" }}
+              >
+                <div className="container">
+                  <div className="d-flex justify-content-between align-items-center p-3 mt-3">
+                    <span className="d-flex align-item-center">
+                      <p className="mb-0">
+                        <b>Want to cancel your order?</b>
+                      </p>
+                    </span>
+                    <span>
+                      <button
+                        className="btn btn-outline-danger px-5"
+                        onClick={handleShow}
+                        style={{ borderRadius: "20px" }}
+                      >
+                        Cancel
+                      </button>
+                    </span>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
             <Modal
               show={show}
@@ -1125,11 +1315,10 @@ function RideDetailsView() {
                     {formik.values.cancelReason === "Others" && (
                       <>
                         <textarea
-                          className={`form-control mt-3 ${
-                            formik.touched.comments && formik.errors.comments
-                              ? "is-invalid"
-                              : ""
-                          }`}
+                          className={`form-control mt-3 ${formik.touched.comments && formik.errors.comments
+                            ? "is-invalid"
+                            : ""
+                            }`}
                           placeholder="Please write your reason here..."
                           {...formik.getFieldProps("comments")}
                         ></textarea>

@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { Badge } from "antd";
 import { FaLink } from "react-icons/fa";
 import UpdateBokking from "./UpdateBokking";
+import { Modal, Button } from "react-bootstrap";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const validationSchema = Yup.object({
   driverId: Yup.string().required("*Driver is required"),
@@ -16,12 +18,35 @@ function BookingManagmentView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [driversListData, setDriversListData] = useState([]);
-  console.log("Driver List Data:", driversListData);
+  console.log("Get datas", data);
 
   const [loading, setLoading] = useState(true);
   const [spinner, setSpinner] = useState(false);
 
   const vehicleTypeId = data?.booking?.vehicletypeId;
+
+  const [selectedImage, setSelectedImage] = useState(null); // For storing selected image URL
+  const [showModal, setShowModal] = useState(false); // To show or hide the modal
+
+  // Function to handle image click and open modal
+  const handleImageClick = (image) => {
+    setSelectedImage(image); // Store selected image
+    setShowModal(true); // Open modal
+  };
+
+  // Function to handle image download
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = selectedImage; // Set the link to the selected image
+    link.download = selectedImage.split("/").pop(); // Extract filename from URL
+    link.click(); // Trigger download
+  };
+
+  // Function to handle modal close
+  const handleClose = () => {
+    setShowModal(false);
+    setSelectedImage(null);
+  };
 
   const getBookingById = async () => {
     setLoading(true);
@@ -384,7 +409,7 @@ function BookingManagmentView() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                :{data?.booking?.bookingRef || ""}{" "}
+                                :{data?.booking?.bookingRef.replace(/_/g, " ")}{" "}
                               </p>
                             </div>
                           </div>
@@ -655,21 +680,23 @@ function BookingManagmentView() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.booking?.visitingDate?.length > 0 &&
+                                {data?.booking?.visitingDate?.length > 0 &&
                                   data?.booking?.visitingTime?.length > 0 ? (
-                                  data.booking.visitingDate.map((date, index) => {
-                                    const time24 = data.booking.visitingTime[index];
-                                    const [hour, minute] = time24.split(":");
-                                    const hour12 = hour % 12 || 12;
-                                    const ampm = hour >= 12 ? "PM" : "AM";
-                                    const formattedTime = `${hour12}:${minute} ${ampm}`;
-                                    return (
-                                      <span key={index}>
-                                        {index > 0 && <br />}
-                                        {date} - {formattedTime}
-                                      </span>
-                                    );
-                                  })
+                                  <ul style={{ paddingLeft: "20px", marginBottom: 0 }}>
+                                    {data.booking.visitingDate.map((date, index) => {
+                                      const time24 = data.booking.visitingTime[index];
+                                      const [hour, minute] = time24.split(":");
+                                      const hour12 = hour % 12 || 12;
+                                      const ampm = hour >= 12 ? "PM" : "AM";
+                                      const formattedTime = `${hour12}:${minute} ${ampm}`;
+
+                                      return (
+                                        <li key={index}>
+                                          {date} - {formattedTime}
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
                                 ) : (
                                   "N/A"
                                 )}
@@ -677,21 +704,31 @@ function BookingManagmentView() {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6 col-12">
+                        <div className="col-md-12 col-12">
                           <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
+                            <div className="col-3 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
                                 <b>Upload Image</b>
                               </p>
                             </div>
-                            <div className="col-6 text-muted">
+                            <div className="col-9 text-muted">
                               {data?.booking?.fileAttachments?.length > 0 ? (
                                 data.booking.fileAttachments.map((image, index) => (
                                   <img
                                     key={index}
                                     src={image}
+                                    className="me-3 mb-3"
                                     alt={`Uploaded ${index + 1}`}
-                                    style={{ width: "100px", marginRight: "5px" }}
+                                    style={{
+                                      width: "200px",
+                                      height: "200px",
+                                      borderRadius: "8px",
+                                      objectFit: "cover",
+                                      border: "1px solid #ddd",
+                                      padding: "5px",
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() => handleImageClick(image)}
                                   />
                                 ))
                               ) : (
@@ -700,48 +737,55 @@ function BookingManagmentView() {
                             </div>
                           </div>
                         </div>
-                        {/* <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Booking Status</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data?.booking?.bookingStatus || ""}{" "}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+
+                        {/* Modal for image preview */}
+                        <Modal
+                          centered
+                          show={showModal}
+                          onHide={handleClose}
+                          size="md"
+                        >
+                          <Modal.Header closeButton>
+                            <Modal.Title>Image</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <img
+                              src={selectedImage}
+                              alt="Selected"
+                              style={{
+                                width: "100%",
+                                height: "80vh",
+                                borderRadius: "8px",
+                                objectFit: "cover",
+                                padding: "5px",
+                              }}
+                            />
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <button className="btn btn-sm btn-light" onClick={handleClose}>
+                              Close
+                            </button>
+                            <button className="btn btn-sm btn-button" onClick={handleDownload}>
+                              {/* <MdOutlineDownloadForOffline /> */}
+                              Download
+                            </button>
+                          </Modal.Footer>
+                        </Modal>
+
                         <div className="col-md-6 col-12">
                           <div className="row mb-3">
                             <div className="col-6 d-flex justify-content-start align-items-center">
                               <p className="text-sm">
-                                <b>Quoted Amount</b>
+                                <b>About Moving</b>
                               </p>
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.booking?.quotedAmount || ""}{" "}
+                                : {data?.booking?.visitingDescription || ""}{" "}
                               </p>
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-3">
-                            <div className="col-6 d-flex justify-content-start align-items-center">
-                              <p className="text-sm">
-                                <b>Remarks</b>
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data?.booking?.remarks || ""}{" "}
-                              </p>
-                            </div>
-                          </div>
-                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -823,6 +867,115 @@ function BookingManagmentView() {
                                 </div>
                               </div>
                             </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Type of Property</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    : {location.pickupTypeOfProperty || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            {location.pickupNoOfBedrooms ?
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>No of Bedrooms</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.pickupNoOfBedrooms || ""}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                              : (<></>
+                              )}
+                            {location.pickupSizeOfProperty ?
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Size of Property</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.pickupSizeOfProperty || ""}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                              : (<></>
+                              )}
+                            {location.pickupTypeOfProperty === "Others" ?
+                              <></> : (
+                                <>
+                                  <div className="col-md-6 col-12">
+                                    <div className="row mb-3">
+                                      <div className="col-6 d-flex justify-content-start align-items-center">
+                                        <p className="text-sm">
+                                          <b>Property Floor</b>
+                                        </p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p className="text-muted text-sm">
+                                          : {location.pickupPropertyFloor || ""}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
+                            {location.pickupTypeOfProperty === "Others" ?
+                              <></> : (
+                                <>
+                                  <div className="col-md-6 col-12">
+                                    <div className="row mb-3">
+                                      <div className="col-6 d-flex justify-content-start align-items-center">
+                                        <p className="text-sm">
+                                          <b>Elevator</b>
+                                        </p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p className="text-muted text-sm">
+                                          : {location.pickupIsElevator ? "Yes" : "No"}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
+                            {location.pickupTypeOfProperty === "Others" ?
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Description</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.pickupPropertyDescription || "--"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                              : (<></>
+                              )}
                             <div className="row my-3"></div>
                             <div className="col-md-6 col-12">
                               <div className="row mb-3">
@@ -881,6 +1034,115 @@ function BookingManagmentView() {
                                 </div>
                               </div>
                             </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Type of Property</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    : {location.dropoffTypeOfProperty || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            {location.dropoffNoOfBedrooms ?
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>No of Bedrooms</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.dropoffNoOfBedrooms || ""}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                              : (<></>
+                              )}
+                            {location.dropoffSizeOfProperty ?
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Size of Property</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.dropoffSizeOfProperty || ""}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                              : (<></>
+                              )}
+                            {location.dropoffTypeOfProperty === "Others" ?
+                              <></> : (
+                                <>
+                                  <div className="col-md-6 col-12">
+                                    <div className="row mb-3">
+                                      <div className="col-6 d-flex justify-content-start align-items-center">
+                                        <p className="text-sm">
+                                          <b>Property Floor</b>
+                                        </p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p className="text-muted text-sm">
+                                          : {location.dropoffPropertyFloor || ""}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
+                            {location.dropoffTypeOfProperty === "Others" ?
+                              <></> : (
+                                <>
+                                  <div className="col-md-6 col-12">
+                                    <div className="row mb-3">
+                                      <div className="col-6 d-flex justify-content-start align-items-center">
+                                        <p className="text-sm">
+                                          <b>Elevator</b>
+                                        </p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p className="text-muted text-sm">
+                                          : {location.dropoffIsElevator ? "Yes" : "No"}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
+                            {location.dropoffTypeOfProperty === "Others" ?
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Description</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.dropoffPropertyDescription || "--"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                              : (<></>
+                              )}
                             <div className="row my-2"></div>
                             <div className="col-md-6 col-12">
                               <div className="row mb-3">
@@ -989,7 +1251,7 @@ function BookingManagmentView() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.transactionDetails?.txnRef || ""}
+                                : {data?.transactionDetails?.txnRef.replace(/_/g, " ")}
                               </p>
                             </div>
                           </div>
