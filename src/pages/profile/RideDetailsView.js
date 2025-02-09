@@ -916,10 +916,10 @@ function RideDetailsView() {
                                       objectFit: "cover",
                                       border: "1px solid #ddd",
                                       padding: "5px",
-                                      cursor: "pointer",
+                                      // cursor: "pointer",
                                       marginRight: "5px"
                                     }}
-                                    onClick={() => handleDownload(image)}
+                                    // onClick={() => handleDownload(image)}
                                   />
                                 ))
                               ) : (
