@@ -2,12 +2,9 @@ import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from "react";
-import { FaTruck, FaWeightHanging } from "react-icons/fa";
-import Image1 from "../../asset/24FT_LORRY.png";
-import Cash from "../../asset/Cash.png";
-import OnlinePayment from "../../asset/OnlinePayment.png";
 import { bookingApi } from "../../config/URL";
 import toast from "react-hot-toast";
 import { useFormik } from "formik";
@@ -18,6 +15,7 @@ import { Modal, Button } from "react-bootstrap";
 import "react-calendar/dist/Calendar.css";
 import { FaChevronDown } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
   // visitingDate: Yup.string().required("*Date is required"),
@@ -62,13 +60,35 @@ const BookingSummary = forwardRef(
       );
     };
     const [previews, setPreviews] = useState([]);
+    const [files, setFiles] = useState([]);
+    const fileInputRef = useRef(null);
 
     const handleImageChange = (event) => {
-      const files = Array.from(event.target.files);
-      formik.setFieldValue("files", files);
+      const selectedFiles = Array.from(event.target.files);
+      formik.setFieldValue("files", selectedFiles);
+
+      // Revoke previous preview URLs
       previews.forEach((url) => URL.revokeObjectURL(url));
-      const newPreviews = files.map((file) => URL.createObjectURL(file));
+
+      // Create new previews
+      const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
       setPreviews(newPreviews);
+      setFiles(selectedFiles);
+    };
+
+    // Function to remove a specific image
+    const removeImage = (index) => {
+      const updatedPreviews = previews.filter((_, i) => i !== index);
+      const updatedFiles = files.filter((_, i) => i !== index);
+
+      setPreviews(updatedPreviews);
+      setFiles(updatedFiles);
+      formik.setFieldValue("files", updatedFiles);
+
+      // If no images remain, reset file input
+      if (updatedFiles.length === 0) {
+        fileInputRef.current.value = ""; // Reset file input
+      }
     };
 
     const formik = useFormik({
@@ -104,7 +124,7 @@ const BookingSummary = forwardRef(
             }
           );
           if (response.status === 200) {
-            toast.success(response.data.message);
+            // toast.success(response.data.message);
             // navigate(`/successful?type=${data?.booking?.bookingType}`);
             navigate(
               `/paymentstatus?type=${formData?.form1?.type}&bookingId=${formData.bookingId}?result=success`
@@ -339,14 +359,19 @@ const BookingSummary = forwardRef(
                                     {firstLocation.mobile}
                                   </p>
                                 </div>
-                                <div className="col-6">
-                                  <p>Type of Property:</p>
-                                </div>
-                                <div className="col-6">
-                                  <p>
-                                    {firstLocation.typeOfProperty}
-                                  </p>
-                                </div>
+                                {firstLocation.typeOfProperty ?
+                                  <>
+                                    <div className="col-6">
+                                      <p>Type of Property:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>
+                                        {firstLocation.typeOfProperty}
+                                      </p>
+                                    </div>
+                                  </>
+                                  : (<></>
+                                  )}
                                 {firstLocation.noOfBedrooms ?
                                   <>
                                     <div className="col-6">
@@ -373,29 +398,29 @@ const BookingSummary = forwardRef(
                                   </>
                                   : (<></>
                                   )}
-                                {firstLocation.typeOfProperty === "Others" ?
-                                  <></> : (
-                                    <>
-                                      <div className="col-6">
-                                        <p>Property Floor:</p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p>
-                                          {firstLocation.propertyFloor}
-                                        </p>
-                                      </div>
-                                    </>
+                                {firstLocation.propertyFloor ?
+                                  <>
+                                    <div className="col-6">
+                                      <p>Property Floor:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>
+                                        {firstLocation.propertyFloor}
+                                      </p>
+                                    </div>
+                                  </>
+                                  : (<></>
                                   )}
-                                {firstLocation.typeOfProperty === "Others" ?
-                                  <></> : (
-                                    <>
-                                      <div className="col-6">
-                                        <p>Elevator:</p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p>{firstLocation.isElevator ? "Yes" : "No"}</p>
-                                      </div>
-                                    </>
+                                {firstLocation.isElevator ?
+                                  <>
+                                    <div className="col-6">
+                                      <p>Elevator:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>{firstLocation.isElevator ? "Yes" : "No"}</p>
+                                    </div>
+                                  </>
+                                  : (<></>
                                   )}
                                 {firstLocation.typeOfProperty === "Others" ?
                                   <>
@@ -535,14 +560,19 @@ const BookingSummary = forwardRef(
                                     {lastLocation.mobile}
                                   </p>
                                 </div>
-                                <div className="col-6">
-                                  <p>Type of Property:</p>
-                                </div>
-                                <div className="col-6">
-                                  <p>
-                                    {lastLocation.typeOfProperty}
-                                  </p>
-                                </div>
+                                {lastLocation.typeOfProperty ?
+                                  <>
+                                    <div className="col-6">
+                                      <p>Type of Property:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>
+                                        {lastLocation.typeOfProperty}
+                                      </p>
+                                    </div>
+                                  </>
+                                  : (<></>
+                                  )}
                                 {lastLocation.noOfBedrooms ?
                                   <>
                                     <div className="col-6">
@@ -569,29 +599,29 @@ const BookingSummary = forwardRef(
                                   </>
                                   : (<></>
                                   )}
-                                {lastLocation.typeOfProperty === "Others" ?
-                                  <></> : (
-                                    <>
-                                      <div className="col-6">
-                                        <p>Property Floor:</p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p>
-                                          {lastLocation.propertyFloor}
-                                        </p>
-                                      </div>
-                                    </>
+                                {lastLocation.propertyFloor ?
+                                  <>
+                                    <div className="col-6">
+                                      <p>Property Floor:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>
+                                        {lastLocation.propertyFloor}
+                                      </p>
+                                    </div>
+                                  </>
+                                  : (<></>
                                   )}
-                                {lastLocation.typeOfProperty === "Others" ?
-                                  <></> : (
-                                    <>
-                                      <div className="col-6">
-                                        <p>Elevator:</p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p>{lastLocation.isElevator ? "Yes" : "No"}</p>
-                                      </div>
-                                    </>
+                                {lastLocation.isElevator ?
+                                  <>
+                                    <div className="col-6">
+                                      <p>Elevator:</p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p>{lastLocation.isElevator ? "Yes" : "No"}</p>
+                                    </div>
+                                  </>
+                                  : (<></>
                                   )}
                                 {lastLocation.typeOfProperty === "Others" ?
                                   <>
@@ -771,12 +801,13 @@ const BookingSummary = forwardRef(
 
                 <div className="card-body">
                   <h4 className="mt-3 mb-2 ">
-                    Our scheduled Visit for On-Site Quote
+                    Our scheduled visit for on-site quote
                   </h4>
                   <p className="mb-4">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ea
-                    nulla praesentium nihil adipisci distinctio dicta expedita
-                    necessitatibus! Atque, ex consequatur.
+                    To avoid inaccurate quotes, our team of experts will manually visit
+                    and inspect your site / goods. Once completed, you will be offered t
+                    he best and lowest price in the market for moving your goods and items
+                    in the safest way possible without any damage.
                   </p>
                   <div className="">
                     <h6 className="mb-1">
@@ -791,16 +822,14 @@ const BookingSummary = forwardRef(
                       <div className="d-flex flex-row justify-content-start">
                         {formik.values.timeDate.length > 0 ? (
                           formik.values.timeDate.map((data, i) => (
-                            <span key={i} className=" ps-2">
-                              {`${new Date(data.sdate).getDate()} ${new Date(
-                                data.sdate
-                              ).toLocaleString("default", {
+                            <span key={i} className="ps-2">
+                              {`${new Date(data.sdate).getDate()} ${new Date(data.sdate).toLocaleString("default", {
                                 month: "short",
-                              })},`}
+                              })}${i < formik.values.timeDate.length - 1 ? "," : ""}`}
                             </span>
                           ))
                         ) : (
-                          <span className=" ps-2">Select the Date</span>
+                          <span className="ps-2">Select the Date</span>
                         )}
                       </div>
                       <div className="text-muted">
@@ -856,6 +885,9 @@ const BookingSummary = forwardRef(
                     <h6 className="mb-2">
                       Upload images of goods / space expected for transit
                     </h6>
+                    <p className="text-muted">
+                      This will help us evaluate the moving process
+                    </p>
                     <input
                       type="file"
                       className="date-field form-control text-muted"
@@ -863,26 +895,49 @@ const BookingSummary = forwardRef(
                       accept="image/*"
                       multiple={true}
                       onChange={handleImageChange}
-                    // {...formik.getFieldProps("files")}
+                      ref={fileInputRef}
                     />
                   </div>
-                  {previews?.length > 0 && (
+                  {previews.length > 0 && (
                     <div className="mt-3">
                       <div className="d-flex flex-wrap gap-2">
                         {previews.map((src, index) => (
-                          <img
-                            key={index}
-                            src={src}
-                            alt={`Preview ${index + 1}`}
-                            style={{
-                              width: "100px",
-                              height: "100px",
-                              borderRadius: "8px",
-                              objectFit: "cover",
-                              border: "1px solid #ddd",
-                              padding: "5px",
-                            }}
-                          />
+                          <div key={index} style={{ position: "relative", display: "inline-block" }}>
+                            <button
+                              onClick={() => removeImage(index)}
+                              style={{
+                                position: "absolute",
+                                top: "-5px",
+                                right: "-5px",
+                                background: "red",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "50%",
+                                width: "15px",
+                                height: "15px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <FaTimes size={12} />
+                            </button>
+
+                            {/* Image preview */}
+                            <img
+                              src={src}
+                              alt={`Preview ${index + 1}`}
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "8px",
+                                objectFit: "cover",
+                                border: "1px solid #ddd",
+                                padding: "5px",
+                              }}
+                            />
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -1021,23 +1076,22 @@ const BookingSummary = forwardRef(
           centered
           size="lg"
           backdrop={"static"}
+          style={{ overflow: "hidden" }}
         >
-          <Modal.Header>
+          <Modal.Header closeButton>
             <Modal.Title>Inspection Date & Time</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div
               style={{
+                overflow: "auto",
                 // maxWidth: "400px",
                 margin: "auto",
                 padding: "20px",
               }}
             >
               <div className="row">
-                <div className="col-md-7 col-12">
-                  <h5 className="mb-4">
-                    You can select multiple preferred dates.
-                  </h5>
+                <div className="col-md-6 col-12 mt-4">
                   <Calendar
                     onClickDay={handleDateModelChange}
                     tileClassName={({ date }) =>
@@ -1066,8 +1120,11 @@ const BookingSummary = forwardRef(
                       </small>
                     )}
                 </div>
-                <div className="col-md-5 col-12 mt-lg-5">
-                  <p>Select Times:</p>
+                <div className="col-md-6 col-12">
+                  <h5 className="mb-4 text-center">
+                    You can select multiple preferred dates.
+                  </h5>
+                  <p>Select Slots:</p>
                   <div>
                     {formik.values.timeDate.map((date, index) => (
                       <div key={index}>

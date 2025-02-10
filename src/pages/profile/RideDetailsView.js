@@ -369,14 +369,19 @@ function RideDetailsView() {
                               {firstLocation.pickupMobile || "--"}
                             </span>
                           </p>
-                          <p>
-                            <span style={{ color: "#1e1e1e" }}>
-                              <b>Type of Property:</b>{" "}
-                            </span>
-                            <span style={{ color: "#494949" }}>
-                              {firstLocation.pickupTypeOfProperty || "--"}
-                            </span>
-                          </p>
+                          {firstLocation.pickupTypeOfProperty ?
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>Type of Property:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {firstLocation.pickupTypeOfProperty || "--"}
+                                </span>
+                              </p>
+                            </>
+                            : (<></>
+                            )}
                           {firstLocation.pickupNoOfBedrooms ?
                             <>
                               <p>
@@ -403,31 +408,31 @@ function RideDetailsView() {
                             </>
                             : (<></>
                             )}
-                          {firstLocation.pickupTypeOfProperty === "Others" ?
-                            <></> : (
-                              <>
-                                <p>
-                                  <span style={{ color: "#1e1e1e" }}>
-                                    <b>Property Floor:</b>{" "}
-                                  </span>
-                                  <span style={{ color: "#494949" }}>
-                                    {firstLocation.pickupPropertyFloor || "--"}
-                                  </span>
-                                </p>
-                              </>
+                          {firstLocation.pickupPropertyFloor ?
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>Property Floor:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {firstLocation.pickupPropertyFloor || "--"}
+                                </span>
+                              </p>
+                            </>
+                            : (<></>
                             )}
-                          {firstLocation.pickupSizeOfProperty === "Others" ?
-                            <></> : (
-                              <>
-                                <p>
-                                  <span style={{ color: "#1e1e1e" }}>
-                                    <b>Elevator:</b>{" "}
-                                  </span>
-                                  <span style={{ color: "#494949" }}>
-                                    {firstLocation.pickupIsElevator ? "Yes" : "No"}
-                                  </span>
-                                </p>
-                              </>
+                          {firstLocation.pickupIsElevator ?
+                            <>
+                              <p>
+                                <span style={{ color: "#1e1e1e" }}>
+                                  <b>Elevator:</b>{" "}
+                                </span>
+                                <span style={{ color: "#494949" }}>
+                                  {firstLocation.pickupIsElevator ? "Yes" : "No"}
+                                </span>
+                              </p>
+                            </>
+                            : (<></>
                             )}
                           {firstLocation.pickupTypeOfProperty === "Others" ?
                             <>
@@ -477,14 +482,19 @@ function RideDetailsView() {
                             {lastLocation.dropoffMobile || "--"}
                           </span>
                         </p>
-                        <p>
-                          <span style={{ color: "#1e1e1e" }}>
-                            <b>Type of Property:</b>{" "}
-                          </span>
-                          <span style={{ color: "#494949" }}>
-                            {lastLocation.dropoffTypeOfProperty || "--"}
-                          </span>
-                        </p>
+                        {lastLocation.dropoffTypeOfProperty ?
+                          <>
+                            <p>
+                              <span style={{ color: "#1e1e1e" }}>
+                                <b>Type of Property:</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {lastLocation.dropoffTypeOfProperty || "--"}
+                              </span>
+                            </p>
+                          </>
+                          : (<></>
+                          )}
                         {lastLocation.dropoffNoOfBedrooms ?
                           <>
                             <p>
@@ -511,31 +521,31 @@ function RideDetailsView() {
                           </>
                           : (<></>
                           )}
-                        {lastLocation.dropoffTypeOfProperty === "Others" ?
-                          <></> : (
-                            <>
-                              <p>
-                                <span style={{ color: "#1e1e1e" }}>
-                                  <b>Property Floor:</b>{" "}
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {lastLocation.dropoffPropertyFloor || "--"}
-                                </span>
-                              </p>
-                            </>
+                        {lastLocation.dropoffPropertyFloor ?
+                          <>
+                            <p>
+                              <span style={{ color: "#1e1e1e" }}>
+                                <b>Property Floor:</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {lastLocation.dropoffPropertyFloor || "--"}
+                              </span>
+                            </p>
+                          </>
+                          : (<></>
                           )}
-                        {lastLocation.dropoffTypeOfProperty === "Others" ?
-                          <></> : (
-                            <>
-                              <p>
-                                <span style={{ color: "#1e1e1e" }}>
-                                  <b>Elevator:</b>{" "}
-                                </span>
-                                <span style={{ color: "#494949" }}>
-                                  {lastLocation.dropoffIsElevator ? "Yes" : "No"}
-                                </span>
-                              </p>
-                            </>
+                        {lastLocation.dropoffIsElevator ?
+                          <>
+                            <p>
+                              <span style={{ color: "#1e1e1e" }}>
+                                <b>Elevator:</b>{" "}
+                              </span>
+                              <span style={{ color: "#494949" }}>
+                                {lastLocation.dropoffIsElevator ? "Yes" : "No"}
+                              </span>
+                            </p>
+                          </> : (
+                            <></>
                           )}
                         {lastLocation.dropoffTypeOfProperty === "Others" ?
                           <>
@@ -908,7 +918,7 @@ function RideDetailsView() {
                                     key={index}
                                     src={image}
                                     alt={`Uploaded ${index + 1}`}
-                                    title="Click to Download"
+                                    // title="Click to Download"
                                     style={{
                                       width: "70px",
                                       height: "70px",
@@ -919,7 +929,7 @@ function RideDetailsView() {
                                       // cursor: "pointer",
                                       marginRight: "5px"
                                     }}
-                                    // onClick={() => handleDownload(image)}
+                                  // onClick={() => handleDownload(image)}
                                   />
                                 ))
                               ) : (

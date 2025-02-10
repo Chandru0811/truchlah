@@ -152,10 +152,10 @@ const ItemShift = () => {
                 : "",
               vehicle: data.booking?.vehicletypeId
                 ? {
-                    vehicletypeId: data.booking?.vehicletypeId || "",
-                    type: data.booking?.vehicleName || "",
-                    vehicleImage: data.booking?.vehicleImage || "",
-                  }
+                  vehicletypeId: data.booking?.vehicletypeId || "",
+                  type: data.booking?.vehicleName || "",
+                  vehicleImage: data.booking?.vehicleImage || "",
+                }
                 : null,
             },
             form3: {
@@ -259,7 +259,7 @@ const ItemShift = () => {
       </Stepper>
       <div
         className="text-centerborder-0 mb-4"
-        //   style={{ minHeight: "70vh", }}
+      //   style={{ minHeight: "70vh", }}
       >
         {loader ? (
           <p>loding...</p>
@@ -330,7 +330,16 @@ const ItemShift = () => {
 
             )} */}
 
-            <div className="container-fluid p-5 py-3">
+            <div className="container-fluid p-5 py-3"
+              style={{
+                position: 'sticky',
+                bottom: "35px",
+                backgroundColor: 'white',
+                bottom: 0,
+                left: 0,
+                right: 0,
+              }}
+            >
               <div className="row">
                 <div className="col-md-6 col-12 d-flex align-items-center justify-content-between pt-4">
                   {activeStep !== 0 ? (

@@ -25,7 +25,7 @@ const HouseShiftSteps = () => {
   const form = {
     bookingId: null,
     form1: {
-      type:"HOUSE",
+      type: "HOUSE",
       locationDetail: [
         {
           type: "pickup",
@@ -362,7 +362,16 @@ const HouseShiftSteps = () => {
             />
           )} */}
 
-            <div className="container-fluid p-5 py-3">
+            <div className="container-fluid p-5 py-3"
+              style={{
+                position: 'sticky',
+                bottom: "35px",
+                backgroundColor: 'white',
+                bottom: 0,
+                left: 0,
+                right: 0,
+              }}
+            >
               <div className="row">
                 <div className="col-md-6 col-12 d-flex align-items-center justify-content-between pt-4">
                   {activeStep !== 0 ? (
