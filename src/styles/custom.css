@@ -2504,7 +2504,8 @@ body {
   background: #ffffff !important;
 }
 .react-calendar__tile {
-  margin: 2px 0px !important;
+  margin: 2px 2px !important;
+  flex: 0 0 13% !important;
 }
 .react-calendar__tile--active {
   background: #ffffff !important;
