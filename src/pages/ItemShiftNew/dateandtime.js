@@ -39,13 +39,15 @@ const DateAndTime = forwardRef(
     const [selectedImage, setSelectedImage] = useState(
       formData?.form2?.vehicle?.vehicletypeId
         ? vehicle.find(
-          (data) =>
-            data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
-        )
+            (data) =>
+              data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
+          )
         : null
     );
     const [showModal, setShowModal] = useState(
-      formData.form1.type !== "ITEM" ? true : false
+      formData.form1.type !== "ITEM" && formData.form2.date === ""
+        ? true
+        : false
     );
     const handleShow = () => setShowModal(true);
     const handleClose = () => {
@@ -153,8 +155,13 @@ const DateAndTime = forwardRef(
       getVechicle();
       // console.log("object", vehicle);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      formik.setFieldValue("date", formik.values.date?formik.values.date: new Date(Date.now() + 86400000).toISOString().split("T")[0]);
-      formik.setFieldValue("time",formData.form2.time);
+      formik.setFieldValue(
+        "date",
+        formik.values.date
+          ? formik.values.date
+          : new Date(Date.now() + 86400000).toISOString().split("T")[0]
+      );
+      formik.setFieldValue("time", formData.form2.time);
     }, []);
 
     useEffect(() => {
@@ -257,12 +264,35 @@ const DateAndTime = forwardRef(
     const today = new Date().toISOString().split("T")[0];
 
     const allTimes = [
-      "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00",
-      "10:30:00", "11:00:00", "11:30:00", "12:00:00", "12:30:00",
-      "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00",
-      "15:30:00", "17:00:00", "17:30:00", "18:00:00", "18:30:00",
-      "19:00:00", "19:30:00", "20:00:00", "20:30:00", "21:00:00",
-      "21:30:00", "22:00:00", "22:30:00", "23:00:00",
+      "08:00:00",
+      "08:30:00",
+      "09:00:00",
+      "09:30:00",
+      "10:00:00",
+      "10:30:00",
+      "11:00:00",
+      "11:30:00",
+      "12:00:00",
+      "12:30:00",
+      "13:00:00",
+      "13:30:00",
+      "14:00:00",
+      "14:30:00",
+      "15:00:00",
+      "15:30:00",
+      "17:00:00",
+      "17:30:00",
+      "18:00:00",
+      "18:30:00",
+      "19:00:00",
+      "19:30:00",
+      "20:00:00",
+      "20:30:00",
+      "21:00:00",
+      "21:30:00",
+      "22:00:00",
+      "22:30:00",
+      "23:00:00",
     ];
 
     const localTimeToMinutes = (time) => {
@@ -272,8 +302,8 @@ const DateAndTime = forwardRef(
 
     useEffect(() => {
       // Filter available times for today's date
-      const timesAfterFilter = allTimes.filter(
-        (time) => localTimeToMinutes(time)
+      const timesAfterFilter = allTimes.filter((time) =>
+        localTimeToMinutes(time)
       );
       setAvailableTimes(timesAfterFilter);
     }, []); // Empty dependency array ensures this runs only on initial render.
@@ -283,8 +313,8 @@ const DateAndTime = forwardRef(
       formik.setFieldValue("date", selectedDate);
 
       if (selectedDate === today) {
-        const timesAfterFilter = allTimes.filter(
-          (time) => localTimeToMinutes(time)
+        const timesAfterFilter = allTimes.filter((time) =>
+          localTimeToMinutes(time)
         );
         setAvailableTimes(timesAfterFilter);
       } else {
@@ -307,14 +337,16 @@ const DateAndTime = forwardRef(
             <div className="col-md-6 col-12">
               <div
                 className="mt-4"
-              // style={{ borderRadius: "50px", overflow: "hidden" }}
+                // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <input
                   type="date"
                   className="date-field form-control text-muted"
                   aria-label="Date"
                   aria-describedby="basic-addon1"
-                  min={new Date(Date.now() + 86400000).toISOString().split("T")[0]} 
+                  min={
+                    new Date(Date.now() + 86400000).toISOString().split("T")[0]
+                  }
                   placeholder="Select date"
                   style={{ minHeight: "50px" }}
                   {...formik.getFieldProps("date")}
@@ -331,7 +363,7 @@ const DateAndTime = forwardRef(
 
               <div
                 className="mb-3 mt-5"
-              // style={{ borderRadius: "50px", overflow: "hidden" }}
+                // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <select
                   className="form-select text-muted"
@@ -412,8 +444,9 @@ const DateAndTime = forwardRef(
                       <div
                         key={overallIndex}
                         onClick={() => handleCarouselClick(image, index)}
-                        className={`card p-2 border-0 ${activeIndex === overallIndex ? "active" : ""
-                          }`}
+                        className={`card p-2 border-0 ${
+                          activeIndex === overallIndex ? "active" : ""
+                        }`}
                         style={{
                           cursor: "pointer",
                           maxWidth: "30%",
@@ -425,8 +458,9 @@ const DateAndTime = forwardRef(
                           <img
                             src={image?.vehicleImage}
                             alt={image?.type}
-                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${activeIndex === overallIndex ? "active" : ""
-                              }`}
+                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${
+                              activeIndex === overallIndex ? "active" : ""
+                            }`}
                             style={{
                               borderRadius: "20px",
                               transition: "border-color 0.3s",
@@ -481,31 +515,7 @@ const DateAndTime = forwardRef(
                     keyboard={isModified ? false : true}
                     centered
                   >
-                    <Modal.Body>
-                      <div
-                        onClick={handleClose}
-                        className="position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center"
-                        style={{
-                          cursor: "pointer",
-                          fontWeight: "bold",
-                          fontSize: "1.2rem",
-                          border: "1px solid #ededed",
-                          borderRadius: "50%",
-                          width: "30px",
-                          height: "30px",
-                          backgroundColor: "#fff",
-                        }}
-                        aria-label="Close"
-                      >
-                        <IoClose
-                          style={{
-                            fontSize: "1.2rem",
-                            color: "black",
-                          }}
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </Modal.Body>
+                    <Modal.Header closeButton></Modal.Header>
 
                     <Modal.Body onClick={(e) => e.stopPropagation()}>
                       <VehicleOffer
@@ -536,15 +546,15 @@ const DateAndTime = forwardRef(
                   <span className="text-muted">Capacity : </span>
                   {selectedImage?.vehicleCapacity} Kg
                 </h5>
-                <h5 className="mt-2">
+                {/* <h5 className="mt-2">
                   <span className="text-muted">Base fare : </span>
                   SGD {selectedImage?.baseFare}
-                </h5>
+                </h5> */}
               </div>
             </div>
           </div>
-        </form >
-      </div >
+        </form>
+      </div>
     );
   }
 );

@@ -11,7 +11,7 @@ import WebSocketService from "../../config/WebSocketService";
 
 const HouseManagement = () => {
   const tableRef = useRef(null);
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -81,13 +81,11 @@ const HouseManagement = () => {
   };
 
   useEffect(() => {
-    const subscription = WebSocketService.subscribeToBookingUpdates(
-      (data) => {
-        if (data === true) {
-          setCount((prevCount) => prevCount + 1);
-        }
+    const subscription = WebSocketService.subscribeToBookingUpdates((data) => {
+      if (data === true) {
+        setCount((prevCount) => prevCount + 1);
       }
-    );
+    });
 
     // return () => {
     //   subscription.unsubscribe();
@@ -114,12 +112,12 @@ const HouseManagement = () => {
                 <th scope="col" className="text-center">
                   Booking Date & Time
                 </th>
-                <th scope="col" className="text-center">
+                {/* <th scope="col" className="text-center">
                   Est Km
                 </th>
                 <th scope="col" className="text-center">
                   Amount
-                </th>
+                </th> */}
                 <th scope="col" className="text-center">
                   Status
                 </th>
@@ -152,8 +150,8 @@ const HouseManagement = () => {
                       " "
                     )}
                   </td>
-                  <td className="text-center">{data.estKm || ""}</td>
-                  <td className="text-center">{data.totalAmount || "0.0"}</td>
+                  {/* <td className="text-center">{data.estKm || ""}</td>
+                  <td className="text-center">{data.totalAmount || "0.0"}</td> */}
                   <td className="text-center">
                     {data.status === "DRAFT_BOOKING" ? (
                       <span className="badge" style={{ background: "#fcd162" }}>
