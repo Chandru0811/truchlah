@@ -165,10 +165,11 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
                   <input
                     onKeyDown={(e) => e.stopPropagation()}
                     type="text"
-                    className={`form-control  ${formik.touched.day && formik.errors.day
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.day && formik.errors.day
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("day")}
                     readOnly
                   />
@@ -199,12 +200,13 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
                         </span>
                       </div>
                       <input
-                        type="time"
-                        className={`form-control ${formik.touched.visitingTimes?.[index] &&
+                        type="text"
+                        className={`form-control ${
+                          formik.touched.visitingTimes?.[index] &&
                           formik.errors.visitingTimes?.[index]
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         value={formik.values.visitingTimes[index] || ""}
                         onChange={(e) =>
                           formik.setFieldValue(
@@ -245,7 +247,7 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
             <Button
               type="submit"
               className="btn btn-button btn-sm"
-            // disabled={loadIndicator}
+              // disabled={loadIndicator}
             >
               {/* {loadIndicator && (
                 <span

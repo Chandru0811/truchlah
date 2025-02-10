@@ -11,7 +11,7 @@ import WebSocketService from "../../config/WebSocketService";
 
 const HouseManagement = () => {
   const tableRef = useRef(null);
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,7 @@ const HouseManagement = () => {
         "booking/getAllOfficeBookingDetailsByAdmin"
       );
       setDatas(response.data);
-      console.log("Response: ", response.data);
+      console.log("Response:of ", response.data);
     } catch (error) {
       toast.error("Error fetching data: ", error?.response?.data?.message);
     } finally {
@@ -81,19 +81,16 @@ const HouseManagement = () => {
   };
 
   useEffect(() => {
-    const subscription = WebSocketService.subscribeToBookingUpdates(
-      (data) => {
-        if (data === true) {
-          setCount((prevCount) => prevCount + 1);
-        }
+    const subscription = WebSocketService.subscribeToBookingUpdates((data) => {
+      if (data === true) {
+        setCount((prevCount) => prevCount + 1);
       }
-    );
+    });
 
     // return () => {
     //   subscription.unsubscribe();
     // };
   }, []);
-
   return (
     <div>
       {loading ? (

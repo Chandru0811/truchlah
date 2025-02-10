@@ -22,58 +22,61 @@ const libraries = ["places"];
 const validationSchema = Yup.object().shape({
   // type: Yup.string().required("Type is required"),
   // estKm: Yup.number().required("Estimated KM is required"),
-  locationDetail: Yup.array()
-    .of(
-      Yup.object().shape({
-        location: Yup.string().required("*Location is required"),
-        typeOfProperty: Yup.string().required("*Type of property is required"),
-        address: Yup.string().required("*Address is required"),
-        noOfBedrooms: Yup.string().when("typeOfProperty", {
-          is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
-          then: (schema) => schema.required("*Number of bedrooms is required"),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        propertyFloor: Yup.string().when("typeOfProperty", {
-          is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
-          then: (schema) => schema.required("*Property floor is required"),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        isElevator: Yup.string().when("typeOfProperty", {
-          is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
-          then: (schema) => schema.required("*Please select if there is an elevator"),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        propertyDescription: Yup.string().when("typeOfProperty", {
-          is: (val) => ["Others"].includes(val),
-          then: (schema) => schema.max(255, "*Details cannot exceed 255 characters").required("*Details is Required"),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        contactName: Yup.string().required("*Contact name is required"),
-        countryCode: Yup.string().required("*Country code is required"),
-        mobile: Yup.string()
-          .required("*Mobile number is required")
-          .matches(/^\d+$/, "*Mobile number must contain only digits")
-          .test("phone-length", function (value) {
-            const { countryCode } = this.parent;
-            if (countryCode === "65") {
-              return value && value.length === 8
-                ? true
-                : this.createError({
-                  message: "*Phone number must be 8 digits only",
-                });
-            }
-            if (countryCode === "91") {
-              return value && value.length === 10
-                ? true
-                : this.createError({
-                  message: "*Phone number must be 10 digits only",
-                });
-            }
-            return true;
-          }),
-      })
-    )
-    .min(2, "At least two locations are required"),
+  locationDetail: Yup.array().of(
+    Yup.object().shape({
+      location: Yup.string().required("*Location is required"),
+      typeOfProperty: Yup.string().required("*Type of property is required"),
+      // address: Yup.string().required("*Address is required"),
+      // noOfBedrooms: Yup.string().when("typeOfProperty", {
+      //   is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
+      //   then: (schema) => schema.required("*Number of bedrooms is required"),
+      //   otherwise: (schema) => schema.notRequired(),
+      // }),
+      // propertyFloor: Yup.string().when("typeOfProperty", {
+      //   is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
+      //   then: (schema) => schema.required("*Property floor is required"),
+      //   otherwise: (schema) => schema.notRequired(),
+      // }),
+      // isElevator: Yup.string().when("typeOfProperty", {
+      //   is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
+      //   then: (schema) =>
+      //     schema.required("*Please select if there is an elevator"),
+      //   otherwise: (schema) => schema.notRequired(),
+      // }),
+      // propertyDescription: Yup.string().when("typeOfProperty", {
+      //   is: (val) => ["Others"].includes(val),
+      //   then: (schema) =>
+      //     schema
+      //       .max(255, "*Details cannot exceed 255 characters")
+      //       .required("*Details is Required"),
+      //   otherwise: (schema) => schema.notRequired(),
+      // }),
+      // contactName: Yup.string().required("*Contact name is required"),
+      // countryCode: Yup.string().required("*Country code is required"),
+      // mobile: Yup.string()
+      //   .required("*Mobile number is required")
+      //   .matches(/^\d+$/, "*Mobile number must contain only digits")
+      //   .test("phone-length", function (value) {
+      //     const { countryCode } = this.parent;
+      //     if (countryCode === "65") {
+      //       return value && value.length === 8
+      //         ? true
+      //         : this.createError({
+      //             message: "*Phone number must be 8 digits only",
+      //           });
+      //     }
+      //     if (countryCode === "91") {
+      //       return value && value.length === 10
+      //         ? true
+      //         : this.createError({
+      //             message: "*Phone number must be 10 digits only",
+      //           });
+      //     }
+      //     return true;
+      //   }),
+    })
+  ),
+  // .min(2, "At least two locations are required"),
 });
 
 const HouseMap = forwardRef(
@@ -129,7 +132,7 @@ const HouseMap = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("new values", values)
+        console.log("new values", values);
         setLoadIndicators(true);
         try {
           let response;
@@ -334,8 +337,9 @@ const HouseMap = forwardRef(
                           <input
                             type="text"
                             name={`locationDetail[${index}].location`}
-                            placeholder={`Enter ${location.type === "pickup" ? "Pickup" : "Dropoff"
-                              } Location`}
+                            placeholder={`Enter ${
+                              location.type === "pickup" ? "Pickup" : "Dropoff"
+                            } Location`}
                             className="form-control"
                             value={
                               formik.values.locationDetail?.[index]?.location ||
@@ -351,7 +355,7 @@ const HouseMap = forwardRef(
                         </div>
                       </Autocomplete>
                       {formik.touched.locationDetail?.[index]?.location &&
-                        formik.errors.locationDetail?.[index]?.location ? (
+                      formik.errors.locationDetail?.[index]?.location ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
                         </small>
@@ -384,8 +388,9 @@ const HouseMap = forwardRef(
                           value={
                             formik.values.locationDetail?.[index]?.address || ""
                           }
-                          placeholder={`Enter ${location.type === "pickup" ? "Pickup" : "Dropoff"
-                            } Address`}
+                          placeholder={`Enter ${
+                            location.type === "pickup" ? "Pickup" : "Dropoff"
+                          } Address`}
                           className="form-control"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
@@ -396,7 +401,7 @@ const HouseMap = forwardRef(
                         />
                       </div>
                       {formik.touched.locationDetail?.[index]?.address &&
-                        formik.errors.locationDetail?.[index]?.address ? (
+                      formik.errors.locationDetail?.[index]?.address ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].address}
                         </small>
@@ -428,10 +433,11 @@ const HouseMap = forwardRef(
                             <input
                               type="text"
                               name={`locationDetail[${index}].contactName`}
-                              placeholder={`Enter ${location.type === "pickup"
-                                ? "Pickup"
-                                : "Dropoff"
-                                } Contact Name`}
+                              placeholder={`Enter ${
+                                location.type === "pickup"
+                                  ? "Pickup"
+                                  : "Dropoff"
+                              } Contact Name`}
                               className="form-control"
                               value={
                                 formik.values.locationDetail?.[index]
@@ -443,7 +449,7 @@ const HouseMap = forwardRef(
                           </div>
                           {formik.touched.locationDetail?.[index]
                             ?.contactName &&
-                            formik.errors.locationDetail?.[index]?.contactName ? (
+                          formik.errors.locationDetail?.[index]?.contactName ? (
                             <small className="text-danger">
                               {formik.errors.locationDetail[index].contactName}
                             </small>
@@ -488,17 +494,18 @@ const HouseMap = forwardRef(
                                 formik.values.locationDetail?.[index]?.mobile ||
                                 ""
                               }
-                              placeholder={`Enter ${location.type === "pickup"
-                                ? "Pickup"
-                                : "Dropoff"
-                                } Contact Number`}
+                              placeholder={`Enter ${
+                                location.type === "pickup"
+                                  ? "Pickup"
+                                  : "Dropoff"
+                              } Contact Number`}
                               className="form-control"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                             />
                           </div>
                           {formik.touched.locationDetail?.[index]?.mobile &&
-                            formik.errors.locationDetail?.[index]?.mobile ? (
+                          formik.errors.locationDetail?.[index]?.mobile ? (
                             <small className="text-danger">
                               {formik.errors.locationDetail[index].mobile}
                             </small>
@@ -514,45 +521,90 @@ const HouseMap = forwardRef(
                           <div className="rounded-pill">
                             <span className="fw-medium">Type of property</span>
                           </div>
-                          <div className="input-group mt-1" style={{ overflow: "hidden", height: "50px" }}>
+                          <div
+                            className="input-group mt-1"
+                            style={{ overflow: "hidden", height: "50px" }}
+                          >
                             <select
                               name={`locationDetail[${index}].typeOfProperty`}
                               className="form-select"
                               value={
-                                formik.values.locationDetail?.[index]?.typeOfProperty || ""
+                                formik.values.locationDetail?.[index]
+                                  ?.typeOfProperty || ""
                               }
-                              onChange={formik.handleChange}
+                              onChange={(e) => {
+                                const selectedValue = e.target.value;
+
+                                formik.setValues({
+                                  ...formik.values,
+                                  locationDetail:
+                                    formik.values.locationDetail.map(
+                                      (item, i) =>
+                                        i === index
+                                          ? {
+                                              ...item,
+                                              typeOfProperty: selectedValue,
+                                              noOfBedrooms: "", // Reset No. of Bedrooms
+                                              propertyFloor: "", // Reset Property Floor
+                                              isElevator: null, // Reset Elevator field
+                                            }
+                                          : item
+                                    ),
+                                });
+                              }}
                               onBlur={formik.handleBlur}
                             >
-                              <option value="" className="text-muted">Select</option>
+                              <option value="" className="text-muted">
+                                Select
+                              </option>
                               {categorys?.map((category) => (
-                                <option key={category.id} value={category.houseCategoryName}>
-                                  {category.houseCategoryName.charAt(0).toUpperCase() + category.houseCategoryName.slice(1).replace("_", " ")}
+                                <option
+                                  key={category.id}
+                                  value={category.houseCategoryName}
+                                >
+                                  {category.houseCategoryName
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    category.houseCategoryName
+                                      .slice(1)
+                                      .replace("_", " ")}
                                 </option>
                               ))}
-                              <option value="Others" className="">Others</option>
+                              <option value="Others">Others</option>
                             </select>
                           </div>
-                          {formik.touched.locationDetail?.[index]?.typeOfProperty &&
-                            formik.errors.locationDetail?.[index]?.typeOfProperty ? (
+                          {formik.touched.locationDetail?.[index]
+                            ?.typeOfProperty &&
+                          formik.errors.locationDetail?.[index]
+                            ?.typeOfProperty ? (
                             <small className="text-danger">
-                              {formik.errors.locationDetail[index].typeOfProperty}
+                              {
+                                formik.errors.locationDetail[index]
+                                  .typeOfProperty
+                              }
                             </small>
                           ) : null}
                         </div>
-                        {(formik.values.locationDetail?.[index]?.typeOfProperty === "Condominium" ||
-                          formik.values.locationDetail?.[index]?.typeOfProperty === "HBK" ||
-                          formik.values.locationDetail?.[index]?.typeOfProperty === "Landed Property") && (
+                        {formik.values.locationDetail?.[index]
+                          ?.typeOfProperty &&
+                          formik.values.locationDetail[index].typeOfProperty !==
+                            "Others" && (
                             <div className="col-md-6 col-12">
                               <div className="rounded-pill">
-                                <span className="fw-medium">No. of bedrooms</span>
+                                <span className="fw-medium">
+                                  No. of bedrooms
+                                </span>
                               </div>
-                              <div className="input-group mt-1" style={{ overflow: "hidden", height: "50px" }}>
+                              <div
+                                className="input-group mt-1"
+                                style={{ overflow: "hidden", height: "50px" }}
+                              >
                                 <select
                                   name={`locationDetail[${index}].noOfBedrooms`}
                                   className="form-select"
                                   value={
-                                    formik.values.locationDetail?.[index]?.noOfBedrooms || ""
+                                    formik.values.locationDetail?.[index]
+                                      ?.noOfBedrooms || ""
                                   }
                                   onChange={formik.handleChange}
                                   onBlur={formik.handleBlur}
@@ -565,10 +617,15 @@ const HouseMap = forwardRef(
                                   ))}
                                 </select>
                               </div>
-                              {formik.touched.locationDetail?.[index]?.noOfBedrooms &&
-                                formik.errors.locationDetail?.[index]?.noOfBedrooms ? (
+                              {formik.touched.locationDetail?.[index]
+                                ?.noOfBedrooms &&
+                              formik.errors.locationDetail?.[index]
+                                ?.noOfBedrooms ? (
                                 <small className="text-danger">
-                                  {formik.errors.locationDetail[index].noOfBedrooms}
+                                  {
+                                    formik.errors.locationDetail[index]
+                                      .noOfBedrooms
+                                  }
                                 </small>
                               ) : null}
                             </div>
@@ -577,22 +634,28 @@ const HouseMap = forwardRef(
                     </div>
 
                     {/* Show additional fields only if Type of Property is selected */}
-                    {(formik.values.locationDetail?.[index]?.typeOfProperty === "Condominium" ||
-                      formik.values.locationDetail?.[index]?.typeOfProperty === "HBK" ||
-                      formik.values.locationDetail?.[index]?.typeOfProperty === "Landed Property") && (
+                    {formik.values.locationDetail?.[index]?.typeOfProperty &&
+                      formik.values.locationDetail[index].typeOfProperty !==
+                        "Others" && (
                         <div className="col-md-10 col-12">
                           <div className="row">
                             {/* Property Floor */}
                             <div className="col-md-6 col-12">
                               <div className="rounded-pill pt-1">
-                                <span className="fw-medium">Property floor</span>
+                                <span className="fw-medium">
+                                  Property floor
+                                </span>
                               </div>
-                              <div className="input-group mt-1" style={{ overflow: "hidden", height: "50px" }}>
+                              <div
+                                className="input-group mt-1"
+                                style={{ overflow: "hidden", height: "50px" }}
+                              >
                                 <select
                                   name={`locationDetail[${index}].propertyFloor`}
                                   className="form-select"
                                   value={
-                                    formik.values.locationDetail?.[index]?.propertyFloor || ""
+                                    formik.values.locationDetail?.[index]
+                                      ?.propertyFloor || ""
                                   }
                                   onChange={formik.handleChange}
                                   onBlur={formik.handleBlur}
@@ -605,32 +668,51 @@ const HouseMap = forwardRef(
                                   ))}
                                 </select>
                               </div>
-                              {formik.touched.locationDetail?.[index]?.propertyFloor &&
-                                formik.errors.locationDetail?.[index]?.propertyFloor ? (
+                              {formik.touched.locationDetail?.[index]
+                                ?.propertyFloor &&
+                              formik.errors.locationDetail?.[index]
+                                ?.propertyFloor ? (
                                 <small className="text-danger">
-                                  {formik.errors.locationDetail[index].propertyFloor}
+                                  {
+                                    formik.errors.locationDetail[index]
+                                      .propertyFloor
+                                  }
                                 </small>
                               ) : null}
                             </div>
                             {/* Is there an elevator? */}
                             <div className="col-md-6 col-12">
                               <div className="rounded-pill pt-1">
-                                <span className="fw-medium">Is there an elevator?</span>
+                                <span className="fw-medium">
+                                  Is there an elevator?
+                                </span>
                               </div>
-                              <div className="mt-1 d-flex justify-content-between" style={{ height: "50px" }}>
+                              <div
+                                className="mt-1 d-flex justify-content-between"
+                                style={{ height: "50px" }}
+                              >
                                 <button
                                   type="button"
                                   className="btn"
                                   style={{
-                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === true ? "#acff3b" : "transparent",
+                                    backgroundColor:
+                                      formik.values.locationDetail?.[index]
+                                        ?.isElevator === true
+                                        ? "#acff3b"
+                                        : "transparent",
                                     border: "1px solid #acff3b",
                                     color: "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",
-                                    width: "95px"
+                                    width: "95px",
                                   }}
-                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, true)}
+                                  onClick={() =>
+                                    formik.setFieldValue(
+                                      `locationDetail[${index}].isElevator`,
+                                      true
+                                    )
+                                  }
                                 >
                                   Yes
                                 </button>
@@ -638,22 +720,38 @@ const HouseMap = forwardRef(
                                   type="button"
                                   className="btn"
                                   style={{
-                                    backgroundColor: formik.values.locationDetail?.[index]?.isElevator === false ? "#acff3b" : "transparent",
+                                    backgroundColor:
+                                      formik.values.locationDetail?.[index]
+                                        ?.isElevator === false
+                                        ? "#acff3b"
+                                        : "transparent",
                                     border: "1px solid #acff3b",
                                     color: "#000",
                                     fontWeight: "bold",
                                     padding: "8px 20px",
                                     borderRadius: "5px",
-                                    width: "95px"
+                                    width: "95px",
                                   }}
-                                  onClick={() => formik.setFieldValue(`locationDetail[${index}].isElevator`, false)}
+                                  onClick={() =>
+                                    formik.setFieldValue(
+                                      `locationDetail[${index}].isElevator`,
+                                      false
+                                    )
+                                  }
                                 >
                                   No
                                 </button>
                               </div>
-                              {formik.touched.locationDetail?.[index]?.isElevator &&
-                                formik.errors.locationDetail?.[index]?.isElevator && (
-                                  <small className="text-danger">{formik.errors.locationDetail[index].isElevator}</small>
+                              {formik.touched.locationDetail?.[index]
+                                ?.isElevator &&
+                                formik.errors.locationDetail?.[index]
+                                  ?.isElevator && (
+                                  <small className="text-danger">
+                                    {
+                                      formik.errors.locationDetail[index]
+                                        .isElevator
+                                    }
+                                  </small>
                                 )}
                             </div>
                           </div>
@@ -661,26 +759,37 @@ const HouseMap = forwardRef(
                       )}
 
                     {/* Others"*/}
-                    {formik.values.locationDetail?.[index]?.typeOfProperty === "Others" && (
+                    {formik.values.locationDetail?.[index]?.typeOfProperty ===
+                      "Others" && (
                       <div className="col-md-10 col-12">
                         <div className="row">
                           {/* Property details */}
                           <div className="col-md-12 col-12">
                             <div className="rounded-pill pt-1">
-                              <span className="fw-medium">Tell us your property details</span>
+                              <span className="fw-medium">
+                                Tell us your property details
+                              </span>
                             </div>
                             <textarea
                               type="text"
                               name={`locationDetail[${index}].propertyDescription`}
                               className="form-control mt-1"
-                              value={formik.values.locationDetail?.[index]?.propertyDescription || ""}
+                              value={
+                                formik.values.locationDetail?.[index]
+                                  ?.propertyDescription || ""
+                              }
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                             />
-                            {formik.touched.locationDetail?.[index]?.propertyDescription &&
-                              formik.errors.locationDetail?.[index]?.propertyDescription && (
+                            {formik.touched.locationDetail?.[index]
+                              ?.propertyDescription &&
+                              formik.errors.locationDetail?.[index]
+                                ?.propertyDescription && (
                                 <small className="text-danger">
-                                  {formik.errors.locationDetail[index].propertyDescription}
+                                  {
+                                    formik.errors.locationDetail[index]
+                                      .propertyDescription
+                                  }
                                 </small>
                               )}
                           </div>
