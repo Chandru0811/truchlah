@@ -258,10 +258,10 @@ const BookingSummary = forwardRef(
 
     useEffect(() => {}, [formik.values.timeDate]);
 
-    const handleDateDalete = (index) => {
-      let updatedDates = [...formik.values.timeDate];
-      updatedDates = updatedDates.filter((d, i) => i !== index);
-      // setSelectedDates(updatedDates);
+    const handleDateDelete = (sdate) => {
+      const updatedDates = formik.values.timeDate.filter(
+        (date) => date.sdate !== sdate
+      );
       formik.setFieldValue("timeDate", updatedDates);
     };
 
@@ -284,6 +284,7 @@ const BookingSummary = forwardRef(
         ?.toString()
         .padStart(2, "0")} ${ampm}`;
     };
+
     useEffect(() => {
       if (Array.isArray(formik.errors.timeDate)) {
         setIsError(true);
@@ -291,7 +292,6 @@ const BookingSummary = forwardRef(
         setIsError(false);
       }
     }, [formik.errors.timeDate]);
-    console.log("object",isError)
     return (
       <div className="container my-4">
         <form onSubmit={formik.handleSubmit}>
@@ -861,15 +861,14 @@ const BookingSummary = forwardRef(
                         <FaChevronDown />
                       </div>
                     </div>
-                    {Array.isArray(formik.errors.timeDate) ? null
-                     : (
-                      formik.errors.timeDate &&
-                      formik.touched.timeDate && (
-                        <small className="text-danger">
-                          {formik.errors.timeDate}
-                        </small>
-                      )
-                    )}
+                    {Array.isArray(formik.errors.timeDate)
+                      ? null
+                      : formik.errors.timeDate &&
+                        formik.touched.timeDate && (
+                          <small className="text-danger">
+                            {formik.errors.timeDate}
+                          </small>
+                        )}
                   </div>
 
                   {/* <div className="mb-3 mt-4">
@@ -977,7 +976,7 @@ const BookingSummary = forwardRef(
                     </div>
                   )}
                   <div className="mb-3 mt-4">
-                  <h6 className="mb-2">
+                    <h6 className="mb-2">
                       Additional Info{" "}
                       <span className="text-muted ms-1">(Optional)</span>
                     </h6>
@@ -1087,7 +1086,9 @@ const BookingSummary = forwardRef(
                   </div>
                   <button
                     type="button"
-                    onClick={()=>isError?setShow(true):formik.handleSubmit()}
+                    onClick={() =>
+                      isError ? setShow(true) : formik.handleSubmit()
+                    }
                     style={{
                       padding: "7px 25px",
                       background: "#acff3b",
@@ -1122,10 +1123,10 @@ const BookingSummary = forwardRef(
           <Modal.Body>
             <div
               style={{
-                overflow: "auto",
+                // overflow: "auto",
                 // maxWidth: "400px",
                 margin: "auto",
-                padding: "20px",
+                padding: "10px ",
               }}
             >
               <div className="row">
@@ -1165,54 +1166,61 @@ const BookingSummary = forwardRef(
                     You can select multiple preferred dates.
                   </h5>
                   <p>Select Slots:</p>
-                  <div>
-                    {formik.values.timeDate.map((date, index) => (
-                      <div key={index}>
-                        <div className="d-flex justify-content-between align-items-center mb-2">
-                          <p className="mb-0">{`${new Date(
-                            date.sdate
-                          ).getDate()} ${new Date(date.sdate).toLocaleString(
-                            "default",
-                            { month: "short" }
-                          )}`}</p>
-                          <div className="d-flex justify-content-between gap-2 align-items-center">
-                            <select
-                              className="form-select"
-                              value={date.sTime || ""}
-                              onChange={(event) =>
-                                handleDateModelChange(date.sdate, event)
-                              }
-                            >
-                              {date?.option.length > 0 ? (
-                                <>
-                                  <option value="">Select Time</option>
-                                  {date?.option.map((t, i) => (
-                                    <option value={t}>
-                                      {t}
+                  <div className="pt-2 custom-scrollbar" style={{height:"280px",overflow:"auto"}}>
+                    {formik.values.timeDate
+                      .slice()
+                      .sort((a, b) => new Date(a.sdate) - new Date(b.sdate))
+                      .map((date,index) => {
+                        // No need to use index
+                        const parsedDate = new Date(date.sdate);
+                        return (
+                          <div key={date.sdate}>
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                              <p className="mb-0">
+                                {`${parsedDate.getDate()} ${parsedDate.toLocaleString(
+                                  "default",
+                                  { month: "short" }
+                                )}`}
+                              </p>
+                              <div className="d-flex justify-content-between gap-2 align-items-center">
+                                <select
+                                  className="form-select"
+                                  value={date.sTime || ""}
+                                  onChange={(event) =>
+                                    handleDateModelChange(date.sdate, event)
+                                  }
+                                >
+                                  {date?.option.length > 0 ? (
+                                    <>
+                                      <option value="">Select Time</option>
+                                      {date?.option.map((t, i) => (
+                                        <option key={i} value={t}>
+                                          {t}
+                                        </option>
+                                      ))}
+                                    </>
+                                  ) : (
+                                    <option value="" disabled>
+                                      Unavailable
                                     </option>
-                                  ))}
-                                </>
-                              ) : (
-                                <option value="" disabled>
-                                  Unavailable
-                                </option>
-                              )}
-                            </select>
-                            <button
-                              className="btn btn-sm"
-                              onClick={() => handleDateDalete(index)}
-                            >
-                              <FaRegTrashAlt />
-                            </button>
-                          </div>
-                        </div>
-                        {formik.errors.timeDate?.[index]?.sTime && (
+                                  )}
+                                </select>
+                                <button
+                                  className="btn btn-sm"
+                                  onClick={() => handleDateDelete(date.sdate)}
+                                >
+                                  <FaRegTrashAlt />
+                                </button>
+                              </div>
+                            </div>
+                            {formik.errors.timeDate?.[index]?.sTime && (
                           <small className="text-danger">
                             {formik.errors.timeDate[index].sTime}
                           </small>
                         )}
-                      </div>
-                    ))}
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               </div>
