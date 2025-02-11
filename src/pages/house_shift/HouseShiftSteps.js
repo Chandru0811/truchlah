@@ -362,7 +362,7 @@ const HouseShiftSteps = () => {
             />
           )} */}
 
-            <div className="container-fluid p-5 py-3"
+            <div className="container-fluid py-3"
               style={{
                 position: 'sticky',
                 bottom: "35px",
@@ -373,7 +373,7 @@ const HouseShiftSteps = () => {
               }}
             >
               <div className="row">
-                <div className="col-md-6 col-12 d-flex align-items-center justify-content-between pt-4">
+                <div className="col-md-6 col-12 d-flex align-items-center justify-content-between">
                   {activeStep !== 0 ? (
                     <button
                       className="btn btn-secondary btn-sm border-0 fw-bold"

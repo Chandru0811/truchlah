@@ -26,33 +26,33 @@ const validationSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         location: Yup.string().required("*Location is required"),
-        address: Yup.string().required("*Address is required"),
-        contactName: Yup.string().required("*Contact name is required"),
-        countryCode: Yup.string().required("*Country code is required"),
-        mobile: Yup.string()
-          .required("*Mobile number is required")
-          .matches(/^\d+$/, "*Mobile number must contain only digits")
-          .test("phone-length", function (value) {
-            const { countryCode } = this.parent;
-            if (countryCode === "65") {
-              return value && value.length === 8
-                ? true
-                : this.createError({
-                    message: "*Phone number must be 8 digits only",
-                  });
-            }
-            if (countryCode === "91") {
-              return value && value.length === 10
-                ? true
-                : this.createError({
-                    message: "*Phone number must be 10 digits only",
-                  });
-            }
-            return true;
-          }),
+        // address: Yup.string().required("*Address is required"),
+        // contactName: Yup.string().required("*Contact name is required"),
+        // countryCode: Yup.string().required("*Country code is required"),
+        // mobile: Yup.string()
+        //   .required("*Mobile number is required")
+        //   .matches(/^\d+$/, "*Mobile number must contain only digits")
+        //   .test("phone-length", function (value) {
+        //     const { countryCode } = this.parent;
+        //     if (countryCode === "65") {
+        //       return value && value.length === 8
+        //         ? true
+        //         : this.createError({
+        //             message: "*Phone number must be 8 digits only",
+        //           });
+        //     }
+        //     if (countryCode === "91") {
+        //       return value && value.length === 10
+        //         ? true
+        //         : this.createError({
+        //             message: "*Phone number must be 10 digits only",
+        //           });
+        //     }
+        //     return true;
+        //   }),
       })
     )
-    .min(2, "*At least two locations are required"),
+    // .min(2, "*At least two locations are required"),
 });
 
 const MapNew = forwardRef(
@@ -367,7 +367,7 @@ const MapNew = forwardRef(
     return (
       <div className="container">
         <form onSubmit={formik.handleSubmit}>
-          <div className="row mt-5">
+          <div className="row mt-3">
             <div className=" col-md-6 col-12">
               <div className="row">
                 {/* Loop through pickup and dropoff locations */}
@@ -537,7 +537,6 @@ const MapNew = forwardRef(
                           <div
                             className="input-group"
                             style={{
-                              borderRadius: "10px",
                               overflow: "hidden",
                               height: "50px",
                             }}
@@ -582,7 +581,6 @@ const MapNew = forwardRef(
                           <div
                             className="input-group"
                             style={{
-                              borderRadius: "10px",
                               overflow: "hidden",
                               height: "50px",
                             }}

@@ -39,9 +39,9 @@ const DateAndTime = forwardRef(
     const [selectedImage, setSelectedImage] = useState(
       formData?.form2?.vehicle?.vehicletypeId
         ? vehicle.find(
-            (data) =>
-              data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
-          )
+          (data) =>
+            data.vehicletypeId === formData?.form2.vehicle.vehicletypeId
+        )
         : null
     );
     const [showModal, setShowModal] = useState(
@@ -159,7 +159,9 @@ const DateAndTime = forwardRef(
         "date",
         formik.values.date
           ? formik.values.date
-          : new Date(Date.now() + 86400000).toISOString().split("T")[0]
+          :
+          // ""
+          new Date(Date.now() + 2 * 86400000).toISOString().split("T")[0]
       );
       formik.setFieldValue("time", formData.form2.time);
     }, []);
@@ -337,16 +339,14 @@ const DateAndTime = forwardRef(
             <div className="col-md-6 col-12">
               <div
                 className="mt-4"
-                // style={{ borderRadius: "50px", overflow: "hidden" }}
+              // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <input
                   type="date"
                   className="date-field form-control text-muted"
                   aria-label="Date"
                   aria-describedby="basic-addon1"
-                  min={
-                    new Date(Date.now() + 86400000).toISOString().split("T")[0]
-                  }
+                  min={new Date(Date.now() + 2 * 86400000).toISOString().split("T")[0]}
                   placeholder="Select date"
                   style={{ minHeight: "50px" }}
                   {...formik.getFieldProps("date")}
@@ -363,7 +363,7 @@ const DateAndTime = forwardRef(
 
               <div
                 className="mb-3 mt-5"
-                // style={{ borderRadius: "50px", overflow: "hidden" }}
+              // style={{ borderRadius: "50px", overflow: "hidden" }}
               >
                 <select
                   className="form-select text-muted"
@@ -444,9 +444,8 @@ const DateAndTime = forwardRef(
                       <div
                         key={overallIndex}
                         onClick={() => handleCarouselClick(image, index)}
-                        className={`card p-2 border-0 ${
-                          activeIndex === overallIndex ? "active" : ""
-                        }`}
+                        className={`card p-2 border-0 ${activeIndex === overallIndex ? "active" : ""
+                          }`}
                         style={{
                           cursor: "pointer",
                           maxWidth: "30%",
@@ -458,9 +457,8 @@ const DateAndTime = forwardRef(
                           <img
                             src={image?.vehicleImage}
                             alt={image?.type}
-                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${
-                              activeIndex === overallIndex ? "active" : ""
-                            }`}
+                            className={`img-fluid shadow flex-grow-1 hover-card-img hover-card ${activeIndex === overallIndex ? "active" : ""
+                              }`}
                             style={{
                               borderRadius: "20px",
                               transition: "border-color 0.3s",
@@ -505,7 +503,7 @@ const DateAndTime = forwardRef(
               </div>
 
               {/* Add the More Details button here */}
-              <div className="text-end mt-3">
+              <div className="text-end">
                 <div>
                   <Modal
                     show={showModal}
@@ -513,11 +511,14 @@ const DateAndTime = forwardRef(
                     size="xl"
                     backdrop={isModified ? "static" : false}
                     keyboard={isModified ? false : true}
-                    centered
+                    scrollable
                   >
                     <Modal.Header closeButton></Modal.Header>
 
-                    <Modal.Body onClick={(e) => e.stopPropagation()}>
+                    <Modal.Body
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ maxHeight: "86vh", overflowY: "auto" }}
+                    >
                       <VehicleOffer
                         setActiveIndex={setActiveIndex}
                         setIsModified={setIsModified}
@@ -525,6 +526,7 @@ const DateAndTime = forwardRef(
                         selectedImage={selectedImage}
                         setSelectedImage={setSelectedImage}
                         vehicle={vehicle}
+                        centered
                       />
                     </Modal.Body>
                   </Modal>

@@ -68,29 +68,27 @@ const BookingSummary = forwardRef(
       const selectedFiles = Array.from(event.target.files);
       formik.setFieldValue("files", selectedFiles);
 
-      // Revoke previous preview URLs
       previews.forEach((url) => URL.revokeObjectURL(url));
 
-      // Create new previews
-      const newPreviews = selectedFiles.map((file) =>
-        URL.createObjectURL(file)
-      );
+      const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
       setPreviews(newPreviews);
       setFiles(selectedFiles);
     };
 
-    // Function to remove a specific image
     const removeImage = (index) => {
-      const updatedPreviews = previews.filter((_, i) => i !== index);
       const updatedFiles = files.filter((_, i) => i !== index);
+      const updatedPreviews = previews.filter((_, i) => i !== index);
 
-      setPreviews(updatedPreviews);
       setFiles(updatedFiles);
+      setPreviews(updatedPreviews);
       formik.setFieldValue("files", updatedFiles);
 
-      // If no images remain, reset file input
-      if (updatedFiles.length === 0) {
-        fileInputRef.current.value = ""; // Reset file input
+      if (updatedFiles.length > 0) {
+        const dataTransfer = new DataTransfer();
+        updatedFiles.forEach((file) => dataTransfer.items.add(file));
+        fileInputRef.current.files = dataTransfer.files;
+      } else {
+        fileInputRef.current.value = "";
       }
     };
 
@@ -256,7 +254,7 @@ const BookingSummary = forwardRef(
       }
     }, [show]);
 
-    useEffect(() => {}, [formik.values.timeDate]);
+    useEffect(() => { }, [formik.values.timeDate]);
 
     const handleDateDelete = (sdate) => {
       const updatedDates = formik.values.timeDate.filter(
@@ -332,11 +330,10 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingOne">
                             <button
-                              className={`accordion-button ${
-                                expandedAccordion === "Pickup"
-                                  ? ""
-                                  : "collapsed"
-                              }`}
+                              className={`accordion-button ${expandedAccordion === "Pickup"
+                                ? ""
+                                : "collapsed"
+                                }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseOne"
@@ -349,9 +346,8 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseOne"
-                            className={`accordion-collapse collapse ${
-                              expandedAccordion === "Pickup" ? "show" : ""
-                            }`}
+                            className={`accordion-collapse collapse ${expandedAccordion === "Pickup" ? "show" : ""
+                              }`}
                             aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample"
                           >
@@ -385,7 +381,7 @@ const BookingSummary = forwardRef(
                                 ) : (
                                   <></>
                                 )}
-                                {firstLocation.noOfBedrooms ? (
+                                {firstLocation.typeOfProperty !== "Others" && firstLocation.noOfBedrooms && (
                                   <>
                                     <div className="col-6">
                                       <p>No of Bedrooms:</p>
@@ -394,10 +390,8 @@ const BookingSummary = forwardRef(
                                       <p>{firstLocation.noOfBedrooms}</p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
-                                {firstLocation.sizeOfProperty ? (
+                                {firstLocation.typeOfProperty !== "Others" && firstLocation.sizeOfProperty && (
                                   <>
                                     <div className="col-6">
                                       <p>Size of property:</p>
@@ -406,10 +400,8 @@ const BookingSummary = forwardRef(
                                       <p>{firstLocation.sizeOfProperty}</p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
-                                {firstLocation.propertyFloor ? (
+                                {firstLocation.typeOfProperty !== "Others" && firstLocation.propertyFloor && (
                                   <>
                                     <div className="col-6">
                                       <p>Property Floor:</p>
@@ -418,10 +410,10 @@ const BookingSummary = forwardRef(
                                       <p>{firstLocation.propertyFloor}</p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
-                                {firstLocation.isElevator ? (
+                                {firstLocation.typeOfProperty === "Others" ? (
+                                  <></>
+                                ) : (
                                   <>
                                     <div className="col-6">
                                       <p>Elevator:</p>
@@ -434,8 +426,6 @@ const BookingSummary = forwardRef(
                                       </p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
                                 {firstLocation.typeOfProperty === "Others" ? (
                                   <>
@@ -474,11 +464,10 @@ const BookingSummary = forwardRef(
                                 id={`heading${index}`}
                               >
                                 <button
-                                  className={`accordion-button ${
-                                    expandedAccordion === `stop${index}`
-                                      ? ""
-                                      : "collapsed"
-                                  }`}
+                                  className={`accordion-button ${expandedAccordion === `stop${index}`
+                                    ? ""
+                                    : "collapsed"
+                                    }`}
                                   type="button"
                                   data-bs-toggle="collapse"
                                   data-bs-target={`#collapse${index}`}
@@ -495,11 +484,10 @@ const BookingSummary = forwardRef(
                               </h2>
                               <div
                                 id={`collapse${index}`}
-                                className={`accordion-collapse collapse ${
-                                  expandedAccordion === `stop${index}`
-                                    ? "show"
-                                    : ""
-                                }`}
+                                className={`accordion-collapse collapse ${expandedAccordion === `stop${index}`
+                                  ? "show"
+                                  : ""
+                                  }`}
                                 aria-labelledby={`heading${index}`}
                                 data-bs-parent={`#accordionExample${index}`}
                               >
@@ -541,9 +529,8 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingTwo">
                             <button
-                              className={`accordion-button ${
-                                expandedAccordion === "Drop" ? "" : "collapsed"
-                              }`}
+                              className={`accordion-button ${expandedAccordion === "Drop" ? "" : "collapsed"
+                                }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseTwo"
@@ -556,9 +543,8 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseTwo"
-                            className={`accordion-collapse collapse ${
-                              expandedAccordion === "Drop" ? "show" : ""
-                            }`}
+                            className={`accordion-collapse collapse ${expandedAccordion === "Drop" ? "show" : ""
+                              }`}
                             aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample1"
                           >
@@ -592,7 +578,7 @@ const BookingSummary = forwardRef(
                                 ) : (
                                   <></>
                                 )}
-                                {lastLocation.noOfBedrooms ? (
+                                {lastLocation.typeOfProperty !== "Others" && lastLocation.noOfBedrooms && (
                                   <>
                                     <div className="col-6">
                                       <p>No of Bedrooms:</p>
@@ -601,10 +587,8 @@ const BookingSummary = forwardRef(
                                       <p>{lastLocation.noOfBedrooms}</p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
-                                {lastLocation.sizeOfProperty ? (
+                                {lastLocation.typeOfProperty !== "Others" && lastLocation.sizeOfProperty && (
                                   <>
                                     <div className="col-6">
                                       <p>Size of property:</p>
@@ -613,10 +597,8 @@ const BookingSummary = forwardRef(
                                       <p>{lastLocation.sizeOfProperty}</p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
-                                {lastLocation.propertyFloor ? (
+                                {lastLocation.typeOfProperty !== "Others" && lastLocation.propertyFloor && (
                                   <>
                                     <div className="col-6">
                                       <p>Property Floor:</p>
@@ -625,22 +607,22 @@ const BookingSummary = forwardRef(
                                       <p>{lastLocation.propertyFloor}</p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
-                                {lastLocation.isElevator ? (
+                                {lastLocation.typeOfProperty === "Others" ? (
+                                  <></>
+                                ) : (
                                   <>
                                     <div className="col-6">
                                       <p>Elevator:</p>
                                     </div>
                                     <div className="col-6">
                                       <p>
-                                        {lastLocation.isElevator ? "Yes" : "No"}
+                                        {lastLocation.isElevator
+                                          ? "Yes"
+                                          : "No"}
                                       </p>
                                     </div>
                                   </>
-                                ) : (
-                                  <></>
                                 )}
                                 {lastLocation.typeOfProperty === "Others" ? (
                                   <>
@@ -848,9 +830,8 @@ const BookingSummary = forwardRef(
                                 data.sdate
                               ).toLocaleString("default", {
                                 month: "short",
-                              })}${
-                                i < formik.values.timeDate.length - 1 ? "," : ""
-                              }`}
+                              })}${i < formik.values.timeDate.length - 1 ? "," : ""
+                                }`}
                             </span>
                           ))
                         ) : (
@@ -864,11 +845,11 @@ const BookingSummary = forwardRef(
                     {Array.isArray(formik.errors.timeDate)
                       ? null
                       : formik.errors.timeDate &&
-                        formik.touched.timeDate && (
-                          <small className="text-danger">
-                            {formik.errors.timeDate}
-                          </small>
-                        )}
+                      formik.touched.timeDate && (
+                        <small className="text-danger">
+                          {formik.errors.timeDate}
+                        </small>
+                      )}
                   </div>
 
                   {/* <div className="mb-3 mt-4">
@@ -937,7 +918,11 @@ const BookingSummary = forwardRef(
                             }}
                           >
                             <button
-                              onClick={() => removeImage(index)}
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeImage(index);
+                              }}
                               style={{
                                 position: "absolute",
                                 top: "-5px",
@@ -1115,7 +1100,7 @@ const BookingSummary = forwardRef(
           centered
           size="lg"
           backdrop={"static"}
-          // style={{ overflow: "hidden" }}
+        // style={{ overflow: "hidden" }}
         >
           <Modal.Header closeButton>
             <Modal.Title>Inspection Date & Time</Modal.Title>
@@ -1143,34 +1128,32 @@ const BookingSummary = forwardRef(
                     tileDisabled={({ date }) => {
                       const today = new Date();
                       today.setHours(0, 0, 0, 0);
-
                       const tomorrow = new Date(today);
                       tomorrow.setDate(today.getDate() + 1); // Tomorrow
-
-                      const maxDate = new Date(formData.form2.date); // Use form2.date as max limit
-
+                      let maxDate = new Date(formData.form2.date);
+                      maxDate.setDate(maxDate.getDate() - 1); // Set max date to one day before form2.date
                       return date < tomorrow || date > maxDate;
                     }}
                   />
                   {Array.isArray(formik.errors.timeDate)
                     ? null
                     : formik.errors.timeDate &&
-                      formik.touched.timeDate && (
-                        <small className="text-danger">
-                          {formik.errors.timeDate}
-                        </small>
-                      )}
+                    formik.touched.timeDate && (
+                      <small className="text-danger">
+                        {formik.errors.timeDate}
+                      </small>
+                    )}
                 </div>
                 <div className="col-md-6 col-12">
                   <h5 className="mb-4 text-center">
                     You can select multiple preferred dates.
                   </h5>
                   <p>Select Slots:</p>
-                  <div className="pt-2 custom-scrollbar" style={{height:"280px",overflow:"auto"}}>
+                  <div className="pt-2 custom-scrollbar" style={{ height: "280px", overflow: "auto" }}>
                     {formik.values.timeDate
                       .slice()
                       .sort((a, b) => new Date(a.sdate) - new Date(b.sdate))
-                      .map((date,index) => {
+                      .map((date, index) => {
                         // No need to use index
                         const parsedDate = new Date(date.sdate);
                         return (
@@ -1192,7 +1175,7 @@ const BookingSummary = forwardRef(
                                 >
                                   {date?.option.length > 0 ? (
                                     <>
-                                      <option value="">Select Time</option>
+                                      <option value="">Selected slots</option>
                                       {date?.option.map((t, i) => (
                                         <option key={i} value={t}>
                                           {t}
@@ -1214,10 +1197,10 @@ const BookingSummary = forwardRef(
                               </div>
                             </div>
                             {formik.errors.timeDate?.[index]?.sTime && (
-                          <small className="text-danger">
-                            {formik.errors.timeDate[index].sTime}
-                          </small>
-                        )}
+                              <small className="text-danger">
+                                {formik.errors.timeDate[index].sTime}
+                              </small>
+                            )}
                           </div>
                         );
                       })}

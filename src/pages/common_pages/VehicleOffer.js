@@ -45,7 +45,7 @@ const VehicleOffer = ({
   };
 
   return (
-    <div className="container-fluid top-0" style={{ minHeight: "86vh" }}>
+    <div className="container-fluid top-0" style={{ maxHeight: "80vh" }}>
       {isCarouselVisible && (
         <Carousel
           responsive={responsive}
@@ -53,7 +53,7 @@ const VehicleOffer = ({
           showDots={false}
           arrows={isArrowVisible}
           autoPlay={false}
-          className="py-4"
+          className=""
           containerClass="carousel-container"
           itemClass="carousel-item-padding-40-px"
           customLeftArrow={
@@ -78,7 +78,7 @@ const VehicleOffer = ({
                 style={{ backgroundColor: "#e6ffe4" }}
               >
                 <div className="card border-0 mt-2 mx-2 pt-3 text-center d-block flex-grow-1">
-                  <h5 className="card-title">{data?.suitableHouseType}</h5>
+                  {/* <h5 className="card-title">{data?.suitableHouseType}</h5> */}
                   <img
                     style={{ width: "13rem" }}
                     className="card-img-top img-fluid"
@@ -122,7 +122,7 @@ const VehicleOffer = ({
               </div>
               <button
                 type="button"
-                className={`choose-vehicle py-2 px-3 mt-3 ${
+                className={`choose-vehicle py-2 px-3 mt-3 mb-3 ${
                   selectedImage?.vehicletypeId === data.vehicletypeId
                     ? "active"
                     : ""
