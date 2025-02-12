@@ -112,12 +112,6 @@ const HouseManagement = () => {
                 <th scope="col" className="text-center">
                   Booking Date & Time
                 </th>
-                {/* <th scope="col" className="text-center">
-                  Est Km
-                </th>
-                <th scope="col" className="text-center">
-                  Amount
-                </th> */}
                 <th scope="col" className="text-center">
                   Status
                 </th>
@@ -150,8 +144,6 @@ const HouseManagement = () => {
                       " "
                     )}
                   </td>
-                  {/* <td className="text-center">{data.estKm || ""}</td>
-                  <td className="text-center">{data.totalAmount || "0.0"}</td> */}
                   <td className="text-center">
                     {data.status === "DRAFT_BOOKING" ? (
                       <span className="badge" style={{ background: "#fcd162" }}>

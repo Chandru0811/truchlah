@@ -77,16 +77,16 @@ const VehicleOffer = ({
                 className="card text-center h-100 d-flex flex-column"
                 style={{ backgroundColor: "#e6ffe4" }}
               >
-                <div className="card border-0 mt-2 mx-2 pt-3 text-center d-block flex-grow-1">
+                <div className="card border-0 mt-2 mx-2 pt-3 text-center d-flex justify-content-center align-items-center">
                   {/* <h5 className="card-title">{data?.suitableHouseType}</h5> */}
                   <img
                     style={{ width: "13rem" }}
-                    className="card-img-top img-fluid"
+                    className="card-img-top img-fluid flex-grow-1"
                     src={data?.vehicleImage}
                     alt={data?.vehicleType}
                   />
                 </div>
-                <div className="mt-3 px-3 flex-grow-1">
+                <div className="mt-3 px-3 ">
                   <h5 className="card-title my-1">
                     {data?.type?.split("_").join(" ")}
                   </h5>

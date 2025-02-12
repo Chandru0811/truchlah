@@ -373,7 +373,7 @@ const OfficeMap = forwardRef(
                         {location.type === "pickup"
                           ? "Pick Up Location"
                           : "Dropoff Location"}
-                      </span>
+                      </span><span className="text-danger">*</span>
                     </div>
 
                     {/* Location Input */}
@@ -592,7 +592,7 @@ const OfficeMap = forwardRef(
                       <div className="row">
                         <div className="col-md-6 col-12">
                           <div className="rounded-pill">
-                            <span className="fw-medium">Type of property</span>
+                            <span className="fw-medium">Type of property</span><span className="text-danger">*</span>
                           </div>
                           <div
                             className="input-group mt-1"

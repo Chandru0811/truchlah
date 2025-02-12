@@ -393,7 +393,7 @@ const MapNew = forwardRef(
                             : location.type === "dropoff"
                             ? "Dropoff Location"
                             : `Intermediate Location ${index - 1}`}
-                        </span>
+                        </span><span className="text-danger">*</span>
                       </div>
                       {location.type !== "pickup" &&
                         location.type !== "dropoff" && (

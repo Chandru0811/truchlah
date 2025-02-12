@@ -411,9 +411,7 @@ const BookingSummary = forwardRef(
                                     </div>
                                   </>
                                 )}
-                                {firstLocation.typeOfProperty === "Others" ? (
-                                  <></>
-                                ) : (
+                                {firstLocation.typeOfProperty === "Others" && firstLocation.propertyFloor && (
                                   <>
                                     <div className="col-6">
                                       <p>Elevator:</p>
@@ -608,9 +606,7 @@ const BookingSummary = forwardRef(
                                     </div>
                                   </>
                                 )}
-                                {lastLocation.typeOfProperty === "Others" ? (
-                                  <></>
-                                ) : (
+                                {lastLocation.typeOfProperty === "Others" && lastLocation.propertyFloor && (
                                   <>
                                     <div className="col-6">
                                       <p>Elevator:</p>
@@ -1129,7 +1125,7 @@ const BookingSummary = forwardRef(
                       const today = new Date();
                       today.setHours(0, 0, 0, 0);
                       const tomorrow = new Date(today);
-                      tomorrow.setDate(today.getDate() + 1); // Tomorrow
+                      tomorrow.setDate(today.getDate() ); // Tomorrow
                       let maxDate = new Date(formData.form2.date);
                       maxDate.setDate(maxDate.getDate() - 1); // Set max date to one day before form2.date
                       return date < tomorrow || date > maxDate;
@@ -1148,7 +1144,7 @@ const BookingSummary = forwardRef(
                   <h5 className="mb-4 text-center">
                     You can select multiple preferred dates.
                   </h5>
-                  <p>Select Slots:</p>
+                  <p>Selected Slots:</p>
                   <div className="pt-2 custom-scrollbar" style={{ height: "280px", overflow: "auto" }}>
                     {formik.values.timeDate
                       .slice()
@@ -1175,7 +1171,7 @@ const BookingSummary = forwardRef(
                                 >
                                   {date?.option.length > 0 ? (
                                     <>
-                                      <option value="">Selected slots</option>
+                                      <option value="">Select slots</option>
                                       {date?.option.map((t, i) => (
                                         <option key={i} value={t}>
                                           {t}

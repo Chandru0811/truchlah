@@ -383,7 +383,7 @@ function RideDetailsView() {
                           ) : (
                             <></>
                           )}
-                          {firstLocation.pickupTypeOfProperty !== "Others" && lastLocation.pickupNoOfBedrooms && (
+                          {firstLocation.pickupTypeOfProperty !== "Others" && firstLocation.pickupNoOfBedrooms && (
                             <>
                               <p>
                                 <span style={{ color: "#1e1e1e" }}>
@@ -395,7 +395,7 @@ function RideDetailsView() {
                               </p>
                             </>
                           )}
-                          {firstLocation.pickupTypeOfProperty !== "Others" && lastLocation.pickupSizeOfProperty && (
+                          {firstLocation.pickupTypeOfProperty !== "Others" && firstLocation.pickupSizeOfProperty && (
                             <>
                               <p>
                                 <span style={{ color: "#1e1e1e" }}>
@@ -407,7 +407,7 @@ function RideDetailsView() {
                               </p>
                             </>
                           )}
-                          {firstLocation.pickupTypeOfProperty !== "Others" && lastLocation.pickupPropertyFloor && (
+                          {firstLocation.pickupTypeOfProperty !== "Others" && firstLocation.pickupPropertyFloor && (
                             <>
                               <p>
                                 <span style={{ color: "#1e1e1e" }}>
@@ -419,9 +419,7 @@ function RideDetailsView() {
                               </p>
                             </>
                           )}
-                          {firstLocation.pickupTypeOfProperty === "Others" ? (
-                            <></>
-                          ) : (
+                          {firstLocation.pickupTypeOfProperty === "Others" && firstLocation.pickupIsElevator && (
                             <>
                               <p>
                                 <span style={{ color: "#1e1e1e" }}>
@@ -534,9 +532,7 @@ function RideDetailsView() {
                             </p>
                           </>
                         )}
-                        {lastLocation.dropoffTypeOfProperty === "Others" ? (
-                          <></>
-                        ) : (
+                        {lastLocation.dropoffTypeOfProperty === "Others" && lastLocation.pickupIsElevator && (
                           <>
                             <p>
                               <span style={{ color: "#1e1e1e" }}>
@@ -1344,8 +1340,8 @@ function RideDetailsView() {
                       <>
                         <textarea
                           className={`form-control mt-3 ${formik.touched.comments && formik.errors.comments
-                              ? "is-invalid"
-                              : ""
+                            ? "is-invalid"
+                            : ""
                             }`}
                           placeholder="Please write your reason here..."
                           {...formik.getFieldProps("comments")}
