@@ -181,9 +181,9 @@ function Order() {
 
 
       <div id="shift-bg">
-        <div className="container-fluid mt-3 ordersback">
-          <div className="row align-items-center">
-            <div className="col d-flex align-items-center orderMargin">
+        <div className="container-fluid pt-3 ordersback">
+          <div className="row py-2">
+            <div className="col-2 d-flex align-items-center ">
               <div
                 onClick={() => navigate(-1)}
                 data-toggle="tooltip"
@@ -196,9 +196,7 @@ function Order() {
               </div>
               <h2 style={{ color: "#1e1e1e", marginBottom: "0" }}>ORDERS</h2>
             </div>
-          </div>
-          <div className="row mt-3">
-            <div className="col-12 d-flex justify-content-center">
+            <div className="col-md-8 col-10 d-flex justify-content-center">
               <button
                 className={`mx-3 ${showHouseShift ? "underline" : ""}`}
                 id="shift-btn"
@@ -231,7 +229,7 @@ function Order() {
           </div>
         ) : (
           <>
-            <div className="col-12 d-flex justify-content-center mt-5 py-3 flex-wrap">
+            <div className="col-12 d-flex justify-content-center mt-3 py-3 flex-wrap">
 
               <button
                 className={`mx-3 ${showInprogressSection ? "underline" : ""}`}

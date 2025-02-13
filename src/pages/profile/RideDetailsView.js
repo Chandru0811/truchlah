@@ -267,27 +267,31 @@ function RideDetailsView() {
           <div class="loader"></div>
         </div>
       ) : (
-        <div className="container-fluid" id="Ace">
-          <div className="backsticky">
-            <div
-              onClick={() => navigate(-1)}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title="Back"
-              className="me-3 orderMargin"
-              style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
-            >
-              <IoArrowBackCircleOutline size={30} />
+        <div className="" id="Ace">
+          <div className="row pt-4 backsticky">
+            <div className="col-3 mt-2 mt-md-0 ps-2">
+              <div
+                onClick={() => navigate(-1)}
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Back"
+                className="me-3 orderMargin"
+                style={{ cursor: "pointer", color: "rgb(16, 110, 234)" }}
+              >
+                <IoArrowBackCircleOutline size={30} />
+              </div>
             </div>
-            <center>
-              <h3 style={{ color: "#1e1e1e" }}>SUMMARY</h3>
-            </center>
+            <div className="col-6 mt-2 mt-md-0 d-flex justify-content-center">
+              <center>
+                <h3 style={{ color: "#1e1e1e" }} className="mb-0">SUMMARY</h3>
+              </center>
+            </div>
           </div>
 
-          <div className="row">
+          <div className="row m-0">
             <div className="col-lg-3"></div>
             <div className="col-lg-6">
-              <p className="mt-5 ps-2">
+              <p className="mt-4 ps-2">
                 <div className="d-flex justify-content-between">
                   <b>Vehicle :</b>
                 </div>
@@ -324,14 +328,14 @@ function RideDetailsView() {
               )} */}
             <p>{data.transactionDetails?.txnRef.replace(/_/g, " ")}</p>
           </center>
-          <div className="row">
-            <div className="row">
+          <div className="row m-0">
+            <div className="row m-0">
               <div className="col-lg-3 col-md-3 col-12"></div>
               <div className="col-lg-6 col-md-6 col-12">
                 <p className="mt-5 ps-2">
                   <b>Moving Information :</b>
                 </p>
-                <div className="card ms-2">
+                <div className="card ms-md-2">
                   <div className="card-body">
                     <div className="row">
                       <div className="col-md-6 col-12 ps-1">
@@ -350,7 +354,7 @@ function RideDetailsView() {
                             </span>
                             <span style={{ color: "#494949" }}>
                               {/* {data.pickupAddress} */}
-                              {firstLocation.pickupContactName || "-"}
+                              {firstLocation.pickupContactName || "--"}
                             </span>
                           </p>
                           <p>
@@ -863,13 +867,13 @@ function RideDetailsView() {
               <></>
             ) : (
               <>
-                <div className="row">
+                <div className="row m-0">
                   <div className="col-lg-3 col-md-3 col-12"></div>
                   <div className="col-lg-6 col-md-6 col-12">
                     <p className="mt-5 ps-2">
                       <b>Visiting Detail:</b>
                     </p>
-                    <div className="card w-md-100 ms-2">
+                    <div className="card w-md-100 ms-md-2">
                       <div className="card-body">
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
@@ -883,25 +887,27 @@ function RideDetailsView() {
                             <ul className="mb-0" style={{ color: "#494949", paddingLeft: "15px" }}>
                               {data?.booking?.visitingDate?.length > 0 &&
                                 data?.booking?.visitingTime?.length > 0 ? (
-                                data.booking.visitingDate.map((date, index) => {
-                                  const time24 = data.booking.visitingTime[index];
-                                  if (time24 === "Any Time") {
+                                [...data.booking.visitingDate]
+                                  .map((date, index) => ({ date, time: data.booking.visitingTime[index] }))
+                                  .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sorting dates in ascending order
+                                  .map(({ date, time }, index) => {
+                                    const formattedDate = new Date(date).toLocaleDateString("en-US", {
+                                      weekday: "short",
+                                      month: "short",
+                                      day: "2-digit",
+                                      year: "numeric",
+                                    }).replace(",", "");
+
+                                    // Format date as "Thu (Feb 13 2025)"
+                                    const dateParts = formattedDate.split(" ");
+                                    const finalDate = `${dateParts[0]} (${dateParts[1]} ${dateParts[2]} ${dateParts[3]})`;
+
                                     return (
                                       <li className="mb-0" key={index}>
-                                        {date} - {time24}
+                                        {finalDate} - {time}
                                       </li>
                                     );
-                                  }
-                                  const [hour, minute] = time24.split(":");
-                                  const hour12 = hour % 12 || 12;
-                                  const ampm = hour >= 12 ? "PM" : "AM";
-                                  const formattedTime = `${hour12}:${minute} ${ampm}`;
-                                  return (
-                                    <li className="mb-0" key={index}>
-                                      {date} - {formattedTime}
-                                    </li>
-                                  );
-                                })
+                                  })
                               ) : (
                                 <li>N/A</li>
                               )}
@@ -976,13 +982,13 @@ function RideDetailsView() {
 
             {data.bookingStatus?.status === "CANCELLED" && (
               <>
-                <div className="row">
+                <div className="row m-0">
                   <div className="col-lg-3 col-md-3 col-12"></div>
                   <div className="col-lg-6 col-md-6 col-12">
                     <p className="mt-5 ps-2">
                       <b>Cancelled Detail:</b>
                     </p>
-                    <div className="card ms-2">
+                    <div className="card ms-md-2">
                       <div className="card-body py-0">
                         <div className="row">
                           <div className="col-md-6 col-12 ps-1">
@@ -1073,13 +1079,13 @@ function RideDetailsView() {
             {(data?.bookingStatus?.reviewByUser ||
               data?.bookingStatus?.ratingByUser) && (
                 <>
-                  <div className="row">
+                  <div className="row m-0">
                     <div className="col-lg-3 col-md-3 col-12"></div>
                     <div className="col-lg-6 col-md-6 col-12">
                       <p className="mt-5 ps-2">
                         <b>Review By User:</b>
                       </p>
-                      <div className="card ms-2">
+                      <div className="card ms-md-2">
                         <div className="card-body py-0">
                           <div className="row">
                             <div className="col-md-6 col-12 ps-1">
@@ -1140,13 +1146,13 @@ function RideDetailsView() {
             {data.bookingStatus?.reviewByDriver &&
               data.bookingStatus?.ratingByDriver && (
                 <>
-                  <div className="row">
+                  <div className="row m-0">
                     <div className="col-lg-3 col-md-3 col-12"></div>
                     <div className="col-lg-6 col-md-6 col-12">
                       <p className="mt-5 ps-2">
                         <b>Review By Driver:</b>
                       </p>
-                      <div className="card ms-2">
+                      <div className="card ms-md-2">
                         <div className="card-body py-0">
                           <div className="row">
                             <div className="col-md-6 col-12 ps-1">

@@ -1631,7 +1631,7 @@ body {
 #shift-btn {
   border: none;
   background: none;
-  padding: 10px;
+  padding: 10px 3px 3px 3px;
   cursor: pointer;
 }
 
@@ -2250,12 +2250,12 @@ body {
 
 /* orderMargin */
 .orderMargin {
-  margin-top: 2rem !important;
+  /* margin-top: 2rem !important; */
 }
 
 @media (max-width: 991px) {
   .orderMargin {
-    margin-top: 4rem !important;
+    /* margin-top: 1rem !important; */
   }
 }
 

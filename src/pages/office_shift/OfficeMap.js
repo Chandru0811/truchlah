@@ -308,7 +308,7 @@ const OfficeMap = forwardRef(
               propertyDescription: "",
               isElevator: "",
               contactName: "",
-              countryCode: 65,
+              countryCode: "",
               mobile: "",
             },
             {
@@ -321,7 +321,7 @@ const OfficeMap = forwardRef(
               propertyDescription: "",
               isElevator: "",
               contactName: "",
-              countryCode: 65,
+              countryCode: "",
               mobile: "",
             },
           ],
@@ -354,7 +354,7 @@ const OfficeMap = forwardRef(
     }
 
     return (
-      <div className="container">
+      <div className="container pb-3">
         <form onSubmit={formik.handleSubmit}>
           <div className="row mt-5">
             <div className=" col-md-6 col-12">

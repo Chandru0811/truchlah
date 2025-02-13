@@ -37,7 +37,7 @@ const HouseShiftSteps = () => {
           isElevator: "",
           propertyDescription: "",
           contactName: "",
-          countryCode: 65,
+          countryCode: "",
           mobile: "",
         },
         {
@@ -50,7 +50,7 @@ const HouseShiftSteps = () => {
           isElevator: "",
           propertyDescription: "",
           contactName: "",
-          countryCode: 65,
+          countryCode: "",
           mobile: "",
         },
       ],

@@ -314,7 +314,7 @@ const MapNew = forwardRef(
               location: "",
               address: "",
               contactName: "",
-              countryCode: 65,
+              countryCode: "",
               mobile: "",
             },
             {
@@ -322,7 +322,7 @@ const MapNew = forwardRef(
               location: "",
               address: "",
               contactName: "",
-              countryCode: 65,
+              countryCode: "",
               mobile: "",
             },
           ],
@@ -339,7 +339,7 @@ const MapNew = forwardRef(
           location: "",
           address: "",
           contactName: "",
-          countryCode: 65,
+          countryCode: "",
           mobile: "",
           coordinates: { lat: null, lng: null },
         },
@@ -365,7 +365,7 @@ const MapNew = forwardRef(
     }
 
     return (
-      <div className="container">
+      <div className="container ">
         <form onSubmit={formik.handleSubmit}>
           <div className="row mt-3">
             <div className=" col-md-6 col-12">

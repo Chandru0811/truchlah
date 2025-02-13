@@ -682,20 +682,33 @@ function BookingManagmentView() {
                               <p className="text-muted text-sm">
                                 {data?.booking?.visitingDate?.length > 0 &&
                                   data?.booking?.visitingTime?.length > 0 ? (
-                                  <ul style={{ paddingLeft: "20px", marginBottom: 0 }}>
-                                    {data.booking.visitingDate.map((date, index) => {
-                                      const time24 = data.booking.visitingTime[index];
-                                      const [hour, minute] = time24.split(":");
-                                      const hour12 = hour % 12 || 12;
-                                      const ampm = hour >= 12 ? "PM" : "AM";
-                                      const formattedTime = `${hour12}:${minute} ${ampm}`;
+                                  <ul className="mb-0" style={{ color: "#494949", paddingLeft: "15px" }}>
+                                    {data?.booking?.visitingDate?.length > 0 &&
+                                      data?.booking?.visitingTime?.length > 0 ? (
+                                      [...data.booking.visitingDate]
+                                        .map((date, index) => ({ date, time: data.booking.visitingTime[index] }))
+                                        .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sorting dates in ascending order
+                                        .map(({ date, time }, index) => {
+                                          const formattedDate = new Date(date).toLocaleDateString("en-US", {
+                                            weekday: "short",
+                                            month: "short",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                          }).replace(",", "");
 
-                                      return (
-                                        <li key={index}>
-                                          {date} - {formattedTime}
-                                        </li>
-                                      );
-                                    })}
+                                          // Format date as "Thu (Feb 13 2025)"
+                                          const dateParts = formattedDate.split(" ");
+                                          const finalDate = `${dateParts[0]} (${dateParts[1]} ${dateParts[2]} ${dateParts[3]})`;
+
+                                          return (
+                                            <li className="mb-0" key={index}>
+                                              {finalDate} - {time}
+                                            </li>
+                                          );
+                                        })
+                                    ) : (
+                                      <li>N/A</li>
+                                    )}
                                   </ul>
                                 ) : (
                                   "N/A"

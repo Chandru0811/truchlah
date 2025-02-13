@@ -31,7 +31,7 @@ const ItemShift = () => {
           location: "",
           address: "",
           contactName: "",
-          countryCode: 65,
+          countryCode: "",
           mobile: "",
         },
         {
@@ -39,7 +39,7 @@ const ItemShift = () => {
           location: "",
           address: "",
           contactName: "",
-          countryCode: 65,
+          countryCode: "",
           mobile: "",
         },
       ],

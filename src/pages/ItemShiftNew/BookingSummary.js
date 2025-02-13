@@ -60,19 +60,32 @@ const BookingSummary = forwardRef(
             : [...prev, accordionKey] // Add key to expanded list
       );
     };
+    
     const [previews, setPreviews] = useState([]);
     const [files, setFiles] = useState([]);
     const fileInputRef = useRef(null);
 
     const handleImageChange = (event) => {
       const selectedFiles = Array.from(event.target.files);
-      formik.setFieldValue("files", selectedFiles);
+      console.log("Newly selected images:", selectedFiles);
 
+      // Merge new files with existing ones
+      const mergedFiles = [...files, ...selectedFiles];
+      formik.setFieldValue("files", mergedFiles);
+
+      // Revoke previous object URLs to prevent memory leaks
       previews.forEach((url) => URL.revokeObjectURL(url));
 
-      const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
+      // Generate new preview URLs
+      const newPreviews = mergedFiles.map((file) => URL.createObjectURL(file));
+
+      setFiles(mergedFiles);
       setPreviews(newPreviews);
-      setFiles(selectedFiles);
+
+      // Update file input manually
+      const dataTransfer = new DataTransfer();
+      mergedFiles.forEach((file) => dataTransfer.items.add(file));
+      fileInputRef.current.files = dataTransfer.files;
     };
 
     const removeImage = (index) => {
@@ -83,13 +96,9 @@ const BookingSummary = forwardRef(
       setPreviews(updatedPreviews);
       formik.setFieldValue("files", updatedFiles);
 
-      if (updatedFiles.length > 0) {
-        const dataTransfer = new DataTransfer();
-        updatedFiles.forEach((file) => dataTransfer.items.add(file));
-        fileInputRef.current.files = dataTransfer.files;
-      } else {
-        fileInputRef.current.value = "";
-      }
+      const dataTransfer = new DataTransfer();
+      updatedFiles.forEach((file) => dataTransfer.items.add(file));
+      fileInputRef.current.files = dataTransfer.files;
     };
 
     const formik = useFormik({
@@ -364,9 +373,10 @@ const BookingSummary = forwardRef(
                                 </div>
                                 <div className="col-6">
                                   <p>
-                                    {firstLocation.contactName} | +
-                                    {firstLocation.countryCode}{" "}
-                                    {firstLocation.mobile}
+                                    {firstLocation.contactName ? `${firstLocation.contactName} |` : ""}
+                                    {firstLocation.countryCode ? `+${firstLocation.countryCode}` : ""}
+                                    {firstLocation.mobile ? ` ${firstLocation.mobile}` : ""}
+                                    {!firstLocation.contactName && !firstLocation.countryCode && !firstLocation.mobile ? "--" : ""}
                                   </p>
                                 </div>
                                 {firstLocation.typeOfProperty ? (
@@ -559,9 +569,10 @@ const BookingSummary = forwardRef(
                                 </div>
                                 <div className="col-6">
                                   <p>
-                                    {lastLocation.contactName} | +
-                                    {lastLocation.countryCode}{" "}
-                                    {lastLocation.mobile}
+                                    {lastLocation.contactName ? `${lastLocation.contactName} |` : ""}
+                                    {lastLocation.countryCode ? `+${lastLocation.countryCode}` : ""}
+                                    {lastLocation.mobile ? ` ${lastLocation.mobile}` : ""}
+                                    {!lastLocation.contactName && !lastLocation.countryCode && !lastLocation.mobile ? "--" : ""}
                                   </p>
                                 </div>
                                 {lastLocation.typeOfProperty ? (
@@ -1125,7 +1136,7 @@ const BookingSummary = forwardRef(
                       const today = new Date();
                       today.setHours(0, 0, 0, 0);
                       const tomorrow = new Date(today);
-                      tomorrow.setDate(today.getDate() ); // Tomorrow
+                      tomorrow.setDate(today.getDate()); // Tomorrow
                       let maxDate = new Date(formData.form2.date);
                       maxDate.setDate(maxDate.getDate() - 1); // Set max date to one day before form2.date
                       return date < tomorrow || date > maxDate;

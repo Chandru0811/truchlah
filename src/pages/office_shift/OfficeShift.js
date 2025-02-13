@@ -32,7 +32,7 @@ const OfficeShift = () => {
           location: "",
           address: "",
           contactName: "",
-          countryCode: 65,
+          countryCode: "",
           mobile: "",
           typeOfProperty: "",
           sizeOfProperty: "",
@@ -45,7 +45,7 @@ const OfficeShift = () => {
           location: "",
           address: "",
           contactName: "",
-          countryCode: 65,
+          countryCode: "",
           mobile: "",
           typeOfProperty: "",
           sizeOfProperty: "",
@@ -256,7 +256,7 @@ const OfficeShift = () => {
   };
 
   return (
-    <section className="container">
+    <section className="container pb-3">
       <span className="d-flex fw-bold py-4">
         <p style={{ fontSize: "20px" }}>
           Booking Type <FaChevronRight size={"15"} />
