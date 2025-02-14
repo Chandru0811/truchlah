@@ -56,42 +56,8 @@ function Shift() {
                 </div>
               </Link>
             </div>
-
             <div
-              className="col-6 justify-content-center card shadow-sm mb-5 card-hover2"
-              style={{ width: "70%" }}
-              onClick={() => logType("OFFICE")}
-            >
-              <Link
-                to={{
-                  pathname: "/officemoving",
-                  // state: { logType: logType("OFFICE") },
-                }}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <div className="row">
-                  <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
-                    <span className="fw-medium text-muted">
-                      PACKERS & MOVERS
-                    </span>
-                    <h3 style={{ color: "#525252" }}>Office Moving</h3>
-                    {/* <div>
-                    <button type="button" class="px-2 btn-custom">
-                      Coming Soon
-                    </button>
-                  </div> */}
-                    <span className="fw-medium text-muted">
-                      Office Moving Safe and Secure
-                    </span>
-                  </div>
-                  <div className="col-md-6 col-12 pe-0">
-                    <img src={office} alt="truck" className="img-fluid" />
-                  </div>
-                </div>
-              </Link>
-            </div>
-            <div
-              className="col-6 justify-content-center card shadow-sm card-hover3"
+              className="col-6 justify-content-center card mb-5 shadow-sm card-hover3"
               style={{ width: "70%" }}
               onClick={() => logType("HOUSE")}
             >
@@ -123,12 +89,45 @@ function Shift() {
                 </div>
               </Link>
             </div>
+            <div
+              className="col-6 justify-content-center card shadow-sm card-hover2"
+              style={{ width: "70%" }}
+              onClick={() => logType("OFFICE")}
+            >
+              <Link
+                to={{
+                  pathname: "/officemoving",
+                  // state: { logType: logType("OFFICE") },
+                }}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div className="row">
+                  <div className="col-md-6 col-12 d-flex flex-column p-3 justify-content-center">
+                    <span className="fw-medium text-muted">
+                      PACKERS & MOVERS
+                    </span>
+                    <h3 style={{ color: "#525252" }}>Office Moving</h3>
+                    {/* <div>
+                    <button type="button" class="px-2 btn-custom">
+                      Coming Soon
+                    </button>
+                  </div> */}
+                    <span className="fw-medium text-muted">
+                      Office Moving Safe and Secure
+                    </span>
+                  </div>
+                  <div className="col-md-6 col-12 pe-0">
+                    <img src={office} alt="truck" className="img-fluid" />
+                  </div>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
 
         <div className="col-md-6 col-12">
           <img src={truck}
-            style={{ position: "sticky", top: "66px"}} alt="truck" className="img-fluid responsive-image" />
+            style={{ position: "sticky", top: "66px" }} alt="truck" className="img-fluid responsive-image" />
         </div>
       </div>
 

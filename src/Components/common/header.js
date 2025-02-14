@@ -232,6 +232,7 @@ function OffcanvasExample({ isAuthenticate, handleLogout }) {
                                     {location.pathname !== "/shift" &&
                                       location.pathname !== "/auth/shift" &&
                                       location.pathname !== "/itemshift" &&
+                                      location.pathname !== "/officemoving" &&
                                       location.pathname !== "/housemoving" && (
                                         <li className="nav-item">
                                           <Link to="/shift">

@@ -169,13 +169,19 @@ const HouseMap = forwardRef(
         if (place.geometry && place.formatted_address) {
           const latitude = place.geometry.location.lat();
           const longitude = place.geometry.location.lng();
-
+          let pincode = "";
+          place.address_components.forEach((component) => {
+            if (component.types.includes("postal_code")) {
+              pincode = component.long_name;
+            }
+          });
           formik.setFieldValue(
             "locationDetail[0].location",
             place.formatted_address
           );
           formik.setFieldValue("locationDetail[0].latitude", latitude);
           formik.setFieldValue("locationDetail[0].longitude", longitude);
+          formik.setFieldValue("locationDetail[0].pincode", pincode);
         } else {
           console.error("No sufficient details available for input:", place);
         }
@@ -184,13 +190,19 @@ const HouseMap = forwardRef(
         if (place.geometry && place.formatted_address) {
           const latitude = place.geometry.location.lat();
           const longitude = place.geometry.location.lng();
-
+          let pincode = "";
+          place.address_components.forEach((component) => {
+            if (component.types.includes("postal_code")) {
+              pincode = component.long_name;
+            }
+          });
           formik.setFieldValue(
             "locationDetail[1].location",
             place.formatted_address
           );
           formik.setFieldValue("locationDetail[1].latitude", latitude);
           formik.setFieldValue("locationDetail[1].longitude", longitude);
+          formik.setFieldValue("locationDetail[1].pincode", pincode);
         } else {
           console.error("No sufficient details available for input:", place);
         }
@@ -311,9 +323,9 @@ const HouseMap = forwardRef(
                           )
                         }
                         options={{
-                          types: ["establishment"],
+                          types: ["establishment", "geocode"],
                           componentRestrictions: { country: "SG" },
-                          fields: ["formatted_address", "geometry"],
+                          fields: ["formatted_address", "geometry", "address_components"],
                         }}
                       >
                         <div
@@ -337,8 +349,7 @@ const HouseMap = forwardRef(
                           <input
                             type="text"
                             name={`locationDetail[${index}].location`}
-                            placeholder={`Enter ${location.type === "pickup" ? "Pickup" : "Dropoff"
-                              } Location`}
+                            placeholder="Enter Location"
                             className="form-control"
                             value={
                               formik.values.locationDetail?.[index]?.location ||
@@ -387,8 +398,7 @@ const HouseMap = forwardRef(
                           value={
                             formik.values.locationDetail?.[index]?.address || ""
                           }
-                          placeholder={`Enter ${location.type === "pickup" ? "Pickup" : "Dropoff"
-                            } Address`}
+                          placeholder="Enter Address"
                           className="form-control"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
@@ -430,10 +440,7 @@ const HouseMap = forwardRef(
                             <input
                               type="text"
                               name={`locationDetail[${index}].contactName`}
-                              placeholder={`Enter ${location.type === "pickup"
-                                ? "Pickup"
-                                : "Dropoff"
-                                } Contact Name`}
+                              placeholder="Contact Name"
                               className="form-control"
                               value={
                                 formik.values.locationDetail?.[index]
@@ -489,10 +496,7 @@ const HouseMap = forwardRef(
                                 formik.values.locationDetail?.[index]?.mobile ||
                                 ""
                               }
-                              placeholder={`Enter ${location.type === "pickup"
-                                ? "Pickup"
-                                : "Dropoff"
-                                } Contact Number`}
+                              placeholder="Contact Number"
                               className="form-control"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
@@ -529,7 +533,6 @@ const HouseMap = forwardRef(
                               }
                               onChange={(e) => {
                                 const selectedValue = e.target.value;
-
                                 formik.setValues({
                                   ...formik.values,
                                   locationDetail:
@@ -539,9 +542,10 @@ const HouseMap = forwardRef(
                                           ? {
                                             ...item,
                                             typeOfProperty: selectedValue,
-                                            noOfBedrooms: "", // Reset No. of Bedrooms
-                                            propertyFloor: "", // Reset Property Floor
-                                            isElevator: null, // Reset Elevator field
+                                            noOfBedrooms: "",
+                                            propertyFloor: "",
+                                            isElevator: null,
+                                            propertyDescription: "",
                                           }
                                           : item
                                     ),

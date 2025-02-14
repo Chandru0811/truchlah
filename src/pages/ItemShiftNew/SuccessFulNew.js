@@ -14,7 +14,7 @@ import { GiCancel } from "react-icons/gi";
 const SuccessfullNew=forwardRef(
     ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const [searchParams] = useSearchParams();
-    const type = formData.type ==="ITEM" ?"ITEM":"HOUSE";
+    const type = formData.type === "ITEM" ? "ITEM" : (formData.type === "HOUSE" ? "HOUSE" : "OFFICE");
     const bookingId = formData.bookingId;
 
     // const bookingIdString = window.location.href.split("bookingId=")[1];

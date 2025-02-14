@@ -18,9 +18,9 @@ function Order() {
   const [inprogressCount, setInprogressCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
-  const [showHouseShift, setShowHouseShift] = useState(true);
+  const [showItemShift, setShowItemShift] = useState(true);
+  const [showHouseShift, setShowHouseShift] = useState(false);
   const [showOfficeShift, setShowOfficeShift] = useState(false);
-  const [showItemShift, setShowItemShift] = useState(false);
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(true);
   console.log("Data is ", data);
@@ -198,6 +198,13 @@ function Order() {
             </div>
             <div className="col-md-8 col-10 d-flex justify-content-center">
               <button
+                className={`mx-3 ${showItemShift ? "underline" : ""}`}
+                id="shift-btn"
+                onClick={itemSection}
+              >
+                ITEM SHIFT
+              </button>
+              <button
                 className={`mx-3 ${showHouseShift ? "underline" : ""}`}
                 id="shift-btn"
                 onClick={houseSection}
@@ -212,13 +219,6 @@ function Order() {
                 type="button"
               >
                 OFFICE MOVING
-              </button>
-              <button
-                className={`mx-3 ${showItemShift ? "underline" : ""}`}
-                id="shift-btn"
-                onClick={itemSection}
-              >
-                ITEM SHIFT
               </button>
             </div>
           </div>

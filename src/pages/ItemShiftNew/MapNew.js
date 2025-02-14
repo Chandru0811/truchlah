@@ -52,7 +52,7 @@ const validationSchema = Yup.object().shape({
         //   }),
       })
     )
-    // .min(2, "*At least two locations are required"),
+  // .min(2, "*At least two locations are required"),
 });
 
 const MapNew = forwardRef(
@@ -151,6 +151,12 @@ const MapNew = forwardRef(
       if (type === "pickup" && autocompletePickup) {
         const place = autocompletePickup.getPlace();
         if (place.geometry && place.formatted_address) {
+          let pincode = "";
+          place.address_components.forEach((component) => {
+            if (component.types.includes("postal_code")) {
+              pincode = component.long_name;
+            }
+          });
           formik.setFieldValue(
             "locationDetail[0].location",
             place.formatted_address
@@ -163,12 +169,19 @@ const MapNew = forwardRef(
             "locationDetail[0].longitude",
             place.geometry.location.lng()
           );
+          formik.setFieldValue("locationDetail[0].pincode", pincode);
         } else {
           console.error("No sufficient details available for input:", place);
         }
       } else if (type === "dropoff" && autocompleteDropoff) {
         const place = autocompleteDropoff.getPlace();
         if (place.geometry && place.formatted_address) {
+          let pincode = "";
+          place.address_components.forEach((component) => {
+            if (component.types.includes("postal_code")) {
+              pincode = component.long_name;
+            }
+          });
           formik.setFieldValue(
             "locationDetail[1].location",
             place.formatted_address
@@ -181,12 +194,19 @@ const MapNew = forwardRef(
             "locationDetail[1].longitude",
             place.geometry.location.lng()
           );
+          formik.setFieldValue("locationDetail[1].pincode", pincode);
         } else {
           console.error("No sufficient details available for input:", place);
         }
       } else if (type === "stop" && autocompleteStop) {
         const place = autocompleteStop.getPlace();
         if (place.geometry && place.formatted_address) {
+          let pincode = "";
+          place.address_components.forEach((component) => {
+            if (component.types.includes("postal_code")) {
+              pincode = component.long_name;
+            }
+          });
           formik.setFieldValue(
             `locationDetail[${index}].location`,
             place.formatted_address
@@ -199,6 +219,7 @@ const MapNew = forwardRef(
             `locationDetail[${index}].longitude`,
             place.geometry.location.lng()
           );
+          formik.setFieldValue(`locationDetail[${index}].pincode`, pincode);
         } else {
           console.error("No sufficient details available for input:", place);
         }
@@ -380,8 +401,8 @@ const MapNew = forwardRef(
                             location.type === "pickup"
                               ? red
                               : location.type === "dropoff"
-                              ? Green
-                              : yellow
+                                ? Green
+                                : yellow
                           }
                           style={{ width: "20px" }}
                           alt="house"
@@ -391,8 +412,8 @@ const MapNew = forwardRef(
                           {location.type === "pickup"
                             ? "Pick Up Location"
                             : location.type === "dropoff"
-                            ? "Dropoff Location"
-                            : `Intermediate Location ${index - 1}`}
+                              ? "Dropoff Location"
+                              : `Intermediate Location ${index - 1}`}
                         </span><span className="text-danger">*</span>
                       </div>
                       {location.type !== "pickup" &&
@@ -419,23 +440,23 @@ const MapNew = forwardRef(
                           location.type === "pickup"
                             ? setAutocompletePickup(autoC)
                             : location.type === "dropoff"
-                            ? setAutocompleteDropoff(autoC)
-                            : setAutocompleteStop(autoC);
+                              ? setAutocompleteDropoff(autoC)
+                              : setAutocompleteStop(autoC);
                         }}
                         onPlaceChanged={() =>
                           onPlaceChanged(
                             location.type === "pickup"
                               ? "pickup"
                               : location.type === "dropoff"
-                              ? "dropoff"
-                              : `stop`,
+                                ? "dropoff"
+                                : `stop`,
                             index
                           )
                         }
                         options={{
-                          types: ["establishment"],
+                          types: ["establishment", "geocode"],
                           componentRestrictions: { country: "SG" },
-                          fields: ["formatted_address", "geometry"],
+                          fields: ["formatted_address", "geometry", "address_components"],
                         }}
                       >
                         <div
@@ -459,9 +480,7 @@ const MapNew = forwardRef(
                           <input
                             type="text"
                             name={`locationDetail[${index}].location`}
-                            placeholder={`Enter ${
-                              location.type === "pickup" ? "Pickup" : "Dropoff"
-                            } Location`}
+                            placeholder="Enter Location"
                             className="form-control"
                             value={
                               formik.values.locationDetail?.[index]?.location ||
@@ -477,7 +496,7 @@ const MapNew = forwardRef(
                         </div>
                       </Autocomplete>
                       {formik.touched.locationDetail?.[index]?.location &&
-                      formik.errors.locationDetail?.[index]?.location ? (
+                        formik.errors.locationDetail?.[index]?.location ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
                         </small>
@@ -510,9 +529,7 @@ const MapNew = forwardRef(
                           value={
                             formik.values.locationDetail?.[index]?.address || ""
                           }
-                          placeholder={`Enter ${
-                            location.type === "pickup" ? "Pickup" : "Dropoff"
-                          } Address`}
+                          placeholder="Enter Address"
                           className="form-control"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
@@ -523,7 +540,7 @@ const MapNew = forwardRef(
                         />
                       </div>
                       {formik.touched.locationDetail?.[index]?.address &&
-                      formik.errors.locationDetail?.[index]?.address ? (
+                        formik.errors.locationDetail?.[index]?.address ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].address}
                         </small>
@@ -554,11 +571,7 @@ const MapNew = forwardRef(
                             <input
                               type="text"
                               name={`locationDetail[${index}].contactName`}
-                              placeholder={`Enter ${
-                                location.type === "pickup"
-                                  ? "Pickup"
-                                  : "Dropoff"
-                              } Contact Name`}
+                              placeholder="Contact Name"
                               className="form-control"
                               value={
                                 formik.values.locationDetail?.[index]
@@ -570,7 +583,7 @@ const MapNew = forwardRef(
                           </div>
                           {formik.touched.locationDetail?.[index]
                             ?.contactName &&
-                          formik.errors.locationDetail?.[index]?.contactName ? (
+                            formik.errors.locationDetail?.[index]?.contactName ? (
                             <small className="text-danger">
                               {formik.errors.locationDetail[index].contactName}
                             </small>
@@ -614,18 +627,14 @@ const MapNew = forwardRef(
                                 formik.values.locationDetail?.[index]?.mobile ||
                                 ""
                               }
-                              placeholder={`Enter ${
-                                location.type === "pickup"
-                                  ? "Pickup"
-                                  : "Dropoff"
-                              } Contact Number`}
+                              placeholder="Contact Number"
                               className="form-control"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                             />
                           </div>
                           {formik.touched.locationDetail?.[index]?.mobile &&
-                          formik.errors.locationDetail?.[index]?.mobile ? (
+                            formik.errors.locationDetail?.[index]?.mobile ? (
                             <small className="text-danger">
                               {formik.errors.locationDetail[index].mobile}
                             </small>
