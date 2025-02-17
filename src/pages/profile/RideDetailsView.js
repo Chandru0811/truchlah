@@ -342,7 +342,7 @@ function RideDetailsView() {
                         <div>
                           <p style={{ color: "#1e1e1e" }}>
                             <span style={{ color: "#1e1e1e" }}>
-                              <b>Pickup Address : </b>
+                              <b>Pickup Postal Code : </b>
                             </span>
                             <span style={{ color: "#494949" }}>
                               {firstLocation.pickup || "-"}
@@ -456,7 +456,7 @@ function RideDetailsView() {
                       <div className="col-md-6 col-12 ps-1" id="drop">
                         <p style={{ color: "#1e1e1e" }}>
                           <span className="col-6" style={{ color: "#1e1e1e" }}>
-                            <b>Drop Address : </b>
+                            <b>Drop Postal Code : </b>
                           </span>
                           <span className="col-6" style={{ color: "#494949" }}>
                             {lastLocation.dropoff || "-"}
@@ -587,7 +587,7 @@ function RideDetailsView() {
                               <div className="col-md-6 col-12 ps-1" id="drop">
                                 <p className="line">
                                   <span style={{ color: "#1e1e1e" }}>
-                                    <b>Location: </b>
+                                    <b>Stop Postal Code : </b>
                                   </span>
                                   <span style={{ color: "#494949" }}>
                                     {stop.dropoff || "N/A"}

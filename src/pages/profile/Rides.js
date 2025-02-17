@@ -359,9 +359,9 @@ function Order() {
                           {item.bookingTripLocations?.map((location, index) => (
                             <div key={index}>
                               {index === 0 && (
-                                <p style={{ marginTop: "0", marginBottom: "0" }}>
+                                <p style={{ marginTop: "", marginBottom: "0" }}>
                                   <span className="dot1"></span>
-                                  &nbsp;&nbsp;&nbsp;{location.pickup}
+                                  &nbsp;&nbsp;&nbsp;{`${location.pickupAddress}, ${location.pickup}`}
                                   <br />
                                   <span className="line"></span>
                                 </p>
@@ -381,7 +381,7 @@ function Order() {
                                         index === item.bookingTripLocations.length - 1 ? "#048c4c" : "#acff3b",
                                     }}
                                   ></span>
-                                  &nbsp;&nbsp;&nbsp;{location.dropoff}
+                                  &nbsp;&nbsp;&nbsp;{`${location.pickupAddress}, ${location.dropoff}`}
                                 </p>
                               </div>
                             </div>

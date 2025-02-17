@@ -283,14 +283,6 @@ const BookingSummary = forwardRef(
         // }
       }
     };
-    const convertTo12HourFormat = (time) => {
-      const [hours, minutes] = time.split(":").map(Number);
-      const ampm = hours >= 12 ? "PM" : "AM";
-      const formattedHours = hours % 12 || 12; // Convert 0 to 12
-      return `${formattedHours}:${minutes
-        ?.toString()
-        .padStart(2, "0")} ${ampm}`;
-    };
 
     useEffect(() => {
       if (Array.isArray(formik.errors.timeDate)) {
@@ -350,7 +342,7 @@ const BookingSummary = forwardRef(
                               aria-controls="collapseOne"
                               onClick={() => handleAccordionToggle("Pickup")}
                             >
-                              {firstLocation.location}
+                              {firstLocation.address}
                             </button>
                           </h2>
                           <div
@@ -362,12 +354,12 @@ const BookingSummary = forwardRef(
                           >
                             <div className="accordion-body">
                               <div className="row">
-                                <div className="col-6">
+                                {/* <div className="col-6">
                                   <p>Address Info:</p>
                                 </div>
                                 <div className="col-6">
                                   <p>{firstLocation.address}</p>
-                                </div>
+                                </div> */}
                                 <div className="col-6">
                                   <p>Contact Details:</p>
                                 </div>
@@ -487,7 +479,7 @@ const BookingSummary = forwardRef(
                                     handleAccordionToggle(`stop${index}`)
                                   }
                                 >
-                                  {stop.location}
+                                  {stop.address}
                                 </button>
                               </h2>
                               <div
@@ -501,12 +493,12 @@ const BookingSummary = forwardRef(
                               >
                                 <div className="accordion-body">
                                   <div className="row">
-                                    <div className="col-6">
+                                    {/* <div className="col-6">
                                       <p>Address Info:</p>
                                     </div>
                                     <div className="col-6">
                                       <p>{stop.address}</p>
-                                    </div>
+                                    </div> */}
                                     <div className="col-6">
                                       <p>Contact Details:</p>
                                     </div>
@@ -546,7 +538,7 @@ const BookingSummary = forwardRef(
                               aria-controls="collapseTwo"
                               onClick={() => handleAccordionToggle("Drop")}
                             >
-                              {lastLocation.location}
+                              {lastLocation.address}
                             </button>
                           </h2>
                           <div
@@ -558,12 +550,12 @@ const BookingSummary = forwardRef(
                           >
                             <div className="accordion-body">
                               <div className="row">
-                                <div className="col-6">
+                                {/* <div className="col-6">
                                   <p>Address Info:</p>
                                 </div>
                                 <div className="col-6">
                                   <p>{lastLocation.address}</p>
-                                </div>
+                                </div> */}
                                 <div className="col-6">
                                   <p>Contact Details:</p>
                                 </div>

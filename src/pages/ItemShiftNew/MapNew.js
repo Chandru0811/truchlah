@@ -22,36 +22,35 @@ const libraries = ["places"];
 const validationSchema = Yup.object().shape({
   type: Yup.string().required("Type is required"),
   // estKm: Yup.number().required("Estimated KM is required"),
-  locationDetail: Yup.array()
-    .of(
-      Yup.object().shape({
-        location: Yup.string().required("*Location is required"),
-        // address: Yup.string().required("*Address is required"),
-        // contactName: Yup.string().required("*Contact name is required"),
-        // countryCode: Yup.string().required("*Country code is required"),
-        // mobile: Yup.string()
-        //   .required("*Mobile number is required")
-        //   .matches(/^\d+$/, "*Mobile number must contain only digits")
-        //   .test("phone-length", function (value) {
-        //     const { countryCode } = this.parent;
-        //     if (countryCode === "65") {
-        //       return value && value.length === 8
-        //         ? true
-        //         : this.createError({
-        //             message: "*Phone number must be 8 digits only",
-        //           });
-        //     }
-        //     if (countryCode === "91") {
-        //       return value && value.length === 10
-        //         ? true
-        //         : this.createError({
-        //             message: "*Phone number must be 10 digits only",
-        //           });
-        //     }
-        //     return true;
-        //   }),
-      })
-    )
+  locationDetail: Yup.array().of(
+    Yup.object().shape({
+      location: Yup.string().required("*Location is required").length(6, "*Location must be exactly 6 characters"),
+      // address: Yup.string().required("*Address is required"),
+      // contactName: Yup.string().required("*Contact name is required"),
+      // countryCode: Yup.string().required("*Country code is required"),
+      // mobile: Yup.string()
+      //   .required("*Mobile number is required")
+      //   .matches(/^\d+$/, "*Mobile number must contain only digits")
+      //   .test("phone-length", function (value) {
+      //     const { countryCode } = this.parent;
+      //     if (countryCode === "65") {
+      //       return value && value.length === 8
+      //         ? true
+      //         : this.createError({
+      //             message: "*Phone number must be 8 digits only",
+      //           });
+      //     }
+      //     if (countryCode === "91") {
+      //       return value && value.length === 10
+      //         ? true
+      //         : this.createError({
+      //             message: "*Phone number must be 10 digits only",
+      //           });
+      //     }
+      //     return true;
+      //   }),
+    })
+  ),
   // .min(2, "*At least two locations are required"),
 });
 
@@ -64,7 +63,6 @@ const MapNew = forwardRef(
     const [autocompletePickup, setAutocompletePickup] = useState(null);
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
     const [autocompleteStop, setAutocompleteStop] = useState(null);
-    const [distance, setDistance] = useState(null);
     const userId = localStorage.getItem("userId");
     const shiftingType = localStorage.getItem("shiftType");
     const formik = useFormik({
@@ -100,8 +98,8 @@ const MapNew = forwardRef(
         setLoadIndicators(true);
         console.log("Formik values is ", values);
         try {
-          const totalEstKm = await calculateDistance();
-          console.log("Total KM ", totalEstKm);
+          // const totalEstKm = await calculateDistance();
+          // console.log("Total KM ", totalEstKm);
 
           // if (totalEstKm < 1 || !totalEstKm) {
           //   toast.error("Invalid locations or distance too short for a ride.");
@@ -117,7 +115,7 @@ const MapNew = forwardRef(
           ];
           const payload = {
             ...values,
-            estKm: totalEstKm,
+            estKm: 0,
             locationDetail: reformattedLocationDetail,
           };
           let response;
@@ -132,7 +130,7 @@ const MapNew = forwardRef(
             const bookingId = response.data.responseBody.booking.bookingId;
             setFormData((prv) => ({
               ...prv,
-              form1: { ...values, estKm: totalEstKm },
+              form1: { ...values, estKm: 0 },
               bookingId: bookingId,
             }));
             handleNext();
@@ -226,87 +224,87 @@ const MapNew = forwardRef(
       }
     };
 
-    const calculateDistance = () => {
-      return new Promise((resolve, reject) => {
-        const pickup = formik.values.locationDetail[0];
-        const dropoff = formik.values.locationDetail[1];
+    // const calculateDistance = () => {
+    //   return new Promise((resolve, reject) => {
+    //     const pickup = formik.values.locationDetail[0];
+    //     const dropoff = formik.values.locationDetail[1];
 
-        if (
-          pickup.latitude &&
-          pickup.longitude &&
-          dropoff.latitude &&
-          dropoff.longitude
-        ) {
-          const service = new window.google.maps.DistanceMatrixService();
+    //     if (
+    //       pickup.latitude &&
+    //       pickup.longitude &&
+    //       dropoff.latitude &&
+    //       dropoff.longitude
+    //     ) {
+    //       const service = new window.google.maps.DistanceMatrixService();
 
-          const stopLocations = formik.values.locationDetail
-            .slice(2)
-            .filter((stop) => stop.latitude && stop.longitude)
-            .map(
-              (stop) =>
-                new window.google.maps.LatLng(stop.latitude, stop.longitude)
-            );
+    //       const stopLocations = formik.values.locationDetail
+    //         .slice(2)
+    //         .filter((stop) => stop.latitude && stop.longitude)
+    //         .map(
+    //           (stop) =>
+    //             new window.google.maps.LatLng(stop.latitude, stop.longitude)
+    //         );
 
-          const locations = [
-            new window.google.maps.LatLng(pickup.latitude, pickup.longitude),
-            ...stopLocations,
-            new window.google.maps.LatLng(dropoff.latitude, dropoff.longitude),
-          ];
+    //       const locations = [
+    //         new window.google.maps.LatLng(pickup.latitude, pickup.longitude),
+    //         ...stopLocations,
+    //         new window.google.maps.LatLng(dropoff.latitude, dropoff.longitude),
+    //       ];
 
-          const totalDistance = { value: 0, text: "" };
+    //       const totalDistance = { value: 0, text: "" };
 
-          const promises = locations.slice(0, -1).map((origin, index) => {
-            const destination = locations[index + 1];
-            return new Promise((resolveSegment, rejectSegment) => {
-              service.getDistanceMatrix(
-                {
-                  origins: [origin],
-                  destinations: [destination],
-                  travelMode: window.google.maps.TravelMode.DRIVING,
-                },
-                (response, status) => {
-                  if (status === "OK") {
-                    const distanceResult = response.rows[0].elements[0];
-                    if (distanceResult.status === "OK") {
-                      totalDistance.value += distanceResult.distance.value;
-                      resolveSegment();
-                    } else {
-                      rejectSegment(
-                        `Error fetching distance for segment: ${distanceResult.status}`
-                      );
-                    }
-                  } else {
-                    rejectSegment(`Distance Matrix request failed: ${status}`);
-                  }
-                }
-              );
-            });
-          });
+    //       const promises = locations.slice(0, -1).map((origin, index) => {
+    //         const destination = locations[index + 1];
+    //         return new Promise((resolveSegment, rejectSegment) => {
+    //           service.getDistanceMatrix(
+    //             {
+    //               origins: [origin],
+    //               destinations: [destination],
+    //               travelMode: window.google.maps.TravelMode.DRIVING,
+    //             },
+    //             (response, status) => {
+    //               if (status === "OK") {
+    //                 const distanceResult = response.rows[0].elements[0];
+    //                 if (distanceResult.status === "OK") {
+    //                   totalDistance.value += distanceResult.distance.value;
+    //                   resolveSegment();
+    //                 } else {
+    //                   rejectSegment(
+    //                     `Error fetching distance for segment: ${distanceResult.status}`
+    //                   );
+    //                 }
+    //               } else {
+    //                 rejectSegment(`Distance Matrix request failed: ${status}`);
+    //               }
+    //             }
+    //           );
+    //         });
+    //       });
 
-          // Resolve all distance calculations
-          Promise.all(promises)
-            .then(() => {
-              totalDistance.text = `${(totalDistance.value / 1000).toFixed(
-                2
-              )} km`;
-              const totalNumericKm = (totalDistance.value / 1000).toFixed(1);
+    //       // Resolve all distance calculations
+    //       Promise.all(promises)
+    //         .then(() => {
+    //           totalDistance.text = `${(totalDistance.value / 1000).toFixed(
+    //             2
+    //           )} km`;
+    //           const totalNumericKm = (totalDistance.value / 1000).toFixed(1);
 
-              // Update state and formik
-              setDistance(totalNumericKm);
-              formik.setFieldValue("estKm", totalNumericKm);
+    //           // Update state and formik
+    //           setDistance(totalNumericKm);
+    //           formik.setFieldValue("estKm", totalNumericKm);
 
-              console.log("Total Estimated Distance (km):", totalNumericKm);
-              resolve(totalNumericKm);
-            })
-            .catch((error) => {
-              console.error("Error calculating distance:", error);
-              reject(error);
-            });
-        } else {
-          reject("Pickup or dropoff place latitude/longitude is missing.");
-        }
-      });
-    };
+    //           console.log("Total Estimated Distance (km):", totalNumericKm);
+    //           resolve(totalNumericKm);
+    //         })
+    //         .catch((error) => {
+    //           console.error("Error calculating distance:", error);
+    //           reject(error);
+    //         });
+    //     } else {
+    //       reject("Pickup or dropoff place latitude/longitude is missing.");
+    //     }
+    //   });
+    // };
 
     // useEffect(() => {
     //   console.log("autocompletePickup",autocompletePickup)
@@ -362,7 +360,6 @@ const MapNew = forwardRef(
           contactName: "",
           countryCode: "",
           mobile: "",
-          coordinates: { lat: null, lng: null },
         },
       ]);
     };
@@ -371,6 +368,90 @@ const MapNew = forwardRef(
       const newDropoffSections = [...formik.values.locationDetail];
       newDropoffSections.splice(index, 1);
       formik.setFieldValue("locationDetail", newDropoffSections);
+    };
+
+    const fetchCoordinates = async (postalCode,type,index) => {
+      if (!postalCode) return;
+
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode},SG&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.status === "OK") {
+          const { lat, lng } = data.results[0].geometry.location;
+          console.log({ lat, lng });
+          if (!lat || !lng) return;
+          const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+          try {
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log("Details:",postalCode,type,index)
+            if (data.status === "OK") {
+              console.log("locate",data)
+              if (type === "pickup" ) {
+                  formik.setFieldValue(
+                    "locationDetail[0].location",
+                    postalCode
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[0].address",
+                    data.results[0].formatted_address?.split(" ").slice(0, -1).join(" ")
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[0].latitude",lat
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[0].longitude",lng
+                  );
+                  // formik.setFieldValue("locationDetail[0].pincode", pincode);
+
+              } else if (type === "dropoff" ) {
+                  formik.setFieldValue(
+                    "locationDetail[1].location",
+                    postalCode
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[1].address",
+                    data.results[0].formatted_address?.split(" ").slice(0, -1).join(" ")
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[1].latitude",lat
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[1].longitude",lng
+                  );
+              } else if (type === "stop" ) {
+                  formik.setFieldValue(
+                    `locationDetail[${index}].location`,
+                    postalCode
+                  );
+                  formik.setFieldValue(
+                    `locationDetail[${index}].address`,
+                    data.results[0].formatted_address?.split(" ").slice(0, -1).join(" ")
+                  );
+                  formik.setFieldValue(
+                    `locationDetail[${index}].latitude`,lat
+                  );
+                  formik.setFieldValue(
+                    `locationDetail[${index}].longitude`,lng
+                  );
+              } else {
+                console.error("Unable to find the address");
+              }
+            } else {
+              console.log("No address found");
+            }
+          } catch (error) {
+            console.error("Error fetching address:", error);
+          }
+        } else {
+          console.log("Invalid postal code or no results found.");
+        }
+      } catch (error) {
+        console.error("Error fetching coordinates:", error);
+      }
     };
 
     useImperativeHandle(ref, () => ({
@@ -401,8 +482,8 @@ const MapNew = forwardRef(
                             location.type === "pickup"
                               ? red
                               : location.type === "dropoff"
-                                ? Green
-                                : yellow
+                              ? Green
+                              : yellow
                           }
                           style={{ width: "20px" }}
                           alt="house"
@@ -412,9 +493,10 @@ const MapNew = forwardRef(
                           {location.type === "pickup"
                             ? "Pick Up Location"
                             : location.type === "dropoff"
-                              ? "Dropoff Location"
-                              : `Intermediate Location ${index - 1}`}
-                        </span><span className="text-danger">*</span>
+                            ? "Dropoff Location"
+                            : `Intermediate Location ${index - 1}`}
+                        </span>
+                        <span className="text-danger">*</span>
                       </div>
                       {location.type !== "pickup" &&
                         location.type !== "dropoff" && (
@@ -435,7 +517,7 @@ const MapNew = forwardRef(
                     </div>
                     {/* Location Input */}
                     <div className="col-md-10 col-12 mb-3">
-                      <Autocomplete
+                      {/* <Autocomplete
                         onLoad={(autoC) => {
                           location.type === "pickup"
                             ? setAutocompletePickup(autoC)
@@ -458,45 +540,50 @@ const MapNew = forwardRef(
                           componentRestrictions: { country: "SG" },
                           fields: ["formatted_address", "geometry", "address_components"],
                         }}
+                      > */}
+                      <div
+                        className="input-group"
+                        style={{
+                          borderRadius: "10px",
+                          overflow: "hidden",
+                          height: "50px",
+                        }}
                       >
-                        <div
-                          className="input-group"
+                        <span
+                          className="input-group-text"
                           style={{
-                            borderRadius: "10px",
-                            overflow: "hidden",
-                            height: "50px",
+                            borderRight: "none",
+                            backgroundColor: "#fff",
+                            borderRadius: "10px 0 0 10px",
                           }}
                         >
-                          <span
-                            className="input-group-text"
-                            style={{
-                              borderRight: "none",
-                              backgroundColor: "#fff",
-                              borderRadius: "10px 0 0 10px",
-                            }}
-                          >
-                            <IoLocationSharp />
-                          </span>
-                          <input
-                            type="text"
-                            name={`locationDetail[${index}].location`}
-                            placeholder="Enter Location"
-                            className="form-control"
-                            value={
-                              formik.values.locationDetail?.[index]?.location ||
-                              ""
+                          <IoLocationSharp />
+                        </span>
+                        <input
+                          type="text"
+                          name={`locationDetail[${index}].location`}
+                          placeholder="Enter Location"
+                          className="form-control"
+                          value={
+                            formik.values.locationDetail?.[index]?.location ||
+                            ""
+                          }
+                          onChange={(e) => {
+                            formik.handleChange(e);
+                            if (e.target.value.length === 6) {
+                              fetchCoordinates(e.target.value,location.type,index);
                             }
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            style={{
-                              borderLeft: "none",
-                              borderRadius: "0 10px 10px 0",
-                            }}
-                          />
-                        </div>
-                      </Autocomplete>
+                          }}
+                          onBlur={formik.handleBlur}
+                          style={{
+                            borderLeft: "none",
+                            borderRadius: "0 10px 10px 0",
+                          }}
+                        />
+                      </div>
+                      {/* </Autocomplete> */}
                       {formik.touched.locationDetail?.[index]?.location &&
-                        formik.errors.locationDetail?.[index]?.location ? (
+                      formik.errors.locationDetail?.[index]?.location ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
                         </small>
@@ -529,6 +616,7 @@ const MapNew = forwardRef(
                           value={
                             formik.values.locationDetail?.[index]?.address || ""
                           }
+                          readOnly
                           placeholder="Enter Address"
                           className="form-control"
                           onChange={formik.handleChange}
@@ -540,7 +628,7 @@ const MapNew = forwardRef(
                         />
                       </div>
                       {formik.touched.locationDetail?.[index]?.address &&
-                        formik.errors.locationDetail?.[index]?.address ? (
+                      formik.errors.locationDetail?.[index]?.address ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].address}
                         </small>
@@ -583,7 +671,7 @@ const MapNew = forwardRef(
                           </div>
                           {formik.touched.locationDetail?.[index]
                             ?.contactName &&
-                            formik.errors.locationDetail?.[index]?.contactName ? (
+                          formik.errors.locationDetail?.[index]?.contactName ? (
                             <small className="text-danger">
                               {formik.errors.locationDetail[index].contactName}
                             </small>
@@ -634,7 +722,7 @@ const MapNew = forwardRef(
                             />
                           </div>
                           {formik.touched.locationDetail?.[index]?.mobile &&
-                            formik.errors.locationDetail?.[index]?.mobile ? (
+                          formik.errors.locationDetail?.[index]?.mobile ? (
                             <small className="text-danger">
                               {formik.errors.locationDetail[index].mobile}
                             </small>

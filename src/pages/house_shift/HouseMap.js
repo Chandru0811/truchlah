@@ -264,6 +264,74 @@ const HouseMap = forwardRef(
       console.log("formik", formik.values);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const fetchCoordinates = async (postalCode,type,index) => {
+      if (!postalCode) return;
+
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode},SG&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.status === "OK") {
+          const { lat, lng } = data.results[0].geometry.location;
+          console.log({ lat, lng });
+          if (!lat || !lng) return;
+          const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+          try {
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log("Details:",postalCode,type,index)
+            if (data.status === "OK") {
+              console.log("locate",data)
+              if (type === "pickup" ) {
+                  formik.setFieldValue(
+                    "locationDetail[0].location",
+                    postalCode
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[0].address",
+                    data.results[0].formatted_address
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[0].latitude",lat
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[0].longitude",lng
+                  );
+                  // formik.setFieldValue("locationDetail[0].pincode", pincode);
+
+              } else if (type === "dropoff" ) {
+                  formik.setFieldValue(
+                    "locationDetail[1].location",
+                    postalCode
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[1].address",
+                    data.results[0].formatted_address
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[1].latitude",lat
+                  );
+                  formik.setFieldValue(
+                    "locationDetail[1].longitude",lng
+                  );
+              } else {
+                console.error("Unable to find the address");
+              }
+            } else {
+              console.log("No address found");
+            }
+          } catch (error) {
+            console.error("Error fetching address:", error);
+          }
+        } else {
+          console.log("Invalid postal code or no results found.");
+        }
+      } catch (error) {
+        console.error("Error fetching coordinates:", error);
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       housemap: formik.handleSubmit,
@@ -311,7 +379,7 @@ const HouseMap = forwardRef(
 
                     {/* Location Input */}
                     <div className="col-md-10 col-12 mb-3">
-                      <Autocomplete
+                      {/* <Autocomplete
                         onLoad={(autoC) => {
                           location.type === "pickup"
                             ? setAutocompletePickup(autoC)
@@ -327,7 +395,7 @@ const HouseMap = forwardRef(
                           componentRestrictions: { country: "SG" },
                           fields: ["formatted_address", "geometry", "address_components"],
                         }}
-                      >
+                      > */}
                         <div
                           className="input-group"
                           style={{
@@ -355,7 +423,12 @@ const HouseMap = forwardRef(
                               formik.values.locationDetail?.[index]?.location ||
                               ""
                             }
-                            onChange={formik.handleChange}
+                            onChange={(e) => {
+                              formik.handleChange(e);
+                              if (e.target.value.length === 6) {
+                                fetchCoordinates(e.target.value,location.type,index);
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                             style={{
                               borderLeft: "none",
@@ -363,7 +436,7 @@ const HouseMap = forwardRef(
                             }}
                           />
                         </div>
-                      </Autocomplete>
+                      {/* </Autocomplete> */}
                       {formik.touched.locationDetail?.[index]?.location &&
                         formik.errors.locationDetail?.[index]?.location ? (
                         <small className="text-danger">
@@ -392,7 +465,7 @@ const HouseMap = forwardRef(
                         >
                           <FaAddressCard />
                         </span>
-                        <input
+                        <input readOnly 
                           type="text"
                           name={`locationDetail[${index}].address`}
                           value={
