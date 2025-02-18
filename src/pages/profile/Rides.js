@@ -18,7 +18,9 @@ function Order() {
   const [inprogressCount, setInprogressCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
-  const [showItemShift, setShowItemShift] = useState(true);
+  const [showItemShift, setShowItemShift] = useState(
+    type === "ITEM" ? true : false
+  );
   const [showHouseShift, setShowHouseShift] = useState(false);
   const [showOfficeShift, setShowOfficeShift] = useState(false);
   const [data, setData] = useState([]);
@@ -92,12 +94,10 @@ function Order() {
     const status = showDraftSection
       ? "DRAFT_BOOKING"
       : showInprogressSection
-        ? "INPROGRESS"
-        : showCompletedSection
-          ? "COMPLETED"
-          : "CANCELLED";
-
-    const shiftType = showHouseShift ? "HOUSE" : showOfficeShift ? "OFFICE" : "ITEM";
+      ? "INPROGRESS"
+      : showCompletedSection
+      ? "COMPLETED"
+      : "CANCELLED";
 
     // const fetchData = async () => {
     //   try {
@@ -116,24 +116,34 @@ function Order() {
     // };
 
     const fetchData = async () => {
-      setIsLoaded(true);
-      try {
-        const response = await bookingApi.get(
-          `fetchBookingDetailsByUser/${userId}?bookingType=${shiftType}`
-        );
-        if (response.status === 200) {
-          const responseData = response.data.responseBody;
-          setData(responseData[status]);
-          // Update badge counts
-          setDraftCount(responseData["DRAFT_BOOKING"]?.length || 0);
-          setInprogressCount(responseData["INPROGRESS"]?.length || 0);
-          setCompletedCount(responseData["COMPLETED"]?.length || 0);
-          setCanceledCount(responseData["CANCELLED"]?.length || 0);
+      const shiftType = showHouseShift
+        ? "HOUSE"
+        : showOfficeShift
+        ? "OFFICE"
+        : showItemShift === "ITEM"
+        ? "ITEM"
+        : false;
+      console.log("object", shiftType);
+      if (shiftType) {
+        setIsLoaded(true);
+        try {
+          const response = await bookingApi.get(
+            `fetchBookingDetailsByUser/${userId}?bookingType=${shiftType}`
+          );
+          if (response.status === 200) {
+            const responseData = response.data.responseBody;
+            setData(responseData[status]);
+            // Update badge counts
+            setDraftCount(responseData["DRAFT_BOOKING"]?.length || 0);
+            setInprogressCount(responseData["INPROGRESS"]?.length || 0);
+            setCompletedCount(responseData["COMPLETED"]?.length || 0);
+            setCanceledCount(responseData["CANCELLED"]?.length || 0);
+          }
+        } catch (error) {
+          toast.error(error.message);
+        } finally {
+          setIsLoaded(false);
         }
-      } catch (error) {
-        toast.error(error.message);
-      } finally {
-        setIsLoaded(false);
       }
     };
 
@@ -145,6 +155,7 @@ function Order() {
     showCanceledSection,
     showHouseShift,
     showItemShift,
+    showOfficeShift,
     userId,
   ]);
 
@@ -174,12 +185,13 @@ function Order() {
       setShowHouseShift(false);
       setShowOfficeShift(true);
     }
-  }, [type]);
+    console.log("showItemShift", showItemShift);
+    console.log("showHouseShift", showHouseShift);
+    console.log("showOfficeShift", showOfficeShift);
+  }, [type, showOfficeShift, showHouseShift, showItemShift]);
 
   return (
     <section className="order">
-
-
       <div id="shift-bg">
         <div className="container-fluid pt-3 ordersback">
           <div className="row py-2">
@@ -230,7 +242,6 @@ function Order() {
         ) : (
           <>
             <div className="col-12 d-flex justify-content-center mt-3 py-3 flex-wrap">
-
               <button
                 className={`mx-3 ${showInprogressSection ? "underline" : ""}`}
                 id="shift-btn"
@@ -323,7 +334,10 @@ function Order() {
                                 "0.00"}
                               <br />
                             </p> */}
-                          <p>{item.booking.type?.replace(/_/g, " ") || "Unknown Vehicle"}</p>
+                          <p>
+                            {item.booking.type?.replace(/_/g, " ") ||
+                              "Unknown Vehicle"}
+                          </p>
                           <p
                             className="fw-bold"
                             style={{
@@ -331,12 +345,12 @@ function Order() {
                               color: showDraftSection
                                 ? "orange"
                                 : showInprogressSection
-                                  ? "orange"
-                                  : showCompletedSection
-                                    ? "green"
-                                    : showCanceledSection
-                                      ? "red"
-                                      : "#28d8b7",
+                                ? "orange"
+                                : showCompletedSection
+                                ? "green"
+                                : showCanceledSection
+                                ? "red"
+                                : "#28d8b7",
                             }}
                           >
                             {/* {showDraftSection
@@ -361,7 +375,8 @@ function Order() {
                               {index === 0 && (
                                 <p style={{ marginTop: "", marginBottom: "0" }}>
                                   <span className="dot1"></span>
-                                  &nbsp;&nbsp;&nbsp;{`${location.pickupAddress}, ${location.pickup}`}
+                                  &nbsp;&nbsp;&nbsp;
+                                  {`${location.pickupAddress}, ${location.pickup}`}
                                   <br />
                                   <span className="line"></span>
                                 </p>
@@ -378,15 +393,18 @@ function Order() {
                                     className="dot2"
                                     style={{
                                       backgroundColor:
-                                        index === item.bookingTripLocations.length - 1 ? "#048c4c" : "#acff3b",
+                                        index ===
+                                        item.bookingTripLocations.length - 1
+                                          ? "#048c4c"
+                                          : "#acff3b",
                                     }}
                                   ></span>
-                                  &nbsp;&nbsp;&nbsp;{`${location.pickupAddress}, ${location.dropoff}`}
+                                  &nbsp;&nbsp;&nbsp;
+                                  {`${location.dropoffAddress}, ${location.dropoff}`}
                                 </p>
                               </div>
                             </div>
                           ))}
-
                         </div>
 
                         <div className="col-lg-2 col-md-6 col-12 p-3 d-flex flex-column justify-content-between">

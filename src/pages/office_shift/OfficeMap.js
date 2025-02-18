@@ -23,7 +23,22 @@ const validationSchema = Yup.object().shape({
   // estKm: Yup.number().required("Estimated KM is required"),
   locationDetail: Yup.array().of(
     Yup.object().shape({
-      location: Yup.string().required("*Location is required"),
+      location: Yup.string()
+                .required("*Postal Code is required")
+                .length(6, "*Postal Code must be exactly 6 digits")
+                .test(
+                  "unique-location",
+                  "*Postal Code could not be same",
+                  function (value) {
+                    const { locationDetail } = this.options.context;
+                    if (!value) return true; 
+                    const occurrences = locationDetail.filter(
+                      (item) => item.location === value
+                    ).length;
+      
+                    return occurrences === 1; 
+                  }
+                ),
       // address: Yup.string().required("*Address is required"),
       typeOfProperty: Yup.string().required("*Type of property is required"),
       // sizeOfProperty: Yup.string().when("typeOfProperty", {
@@ -165,51 +180,51 @@ const OfficeMap = forwardRef(
       },
     });
 
-    const onPlaceChanged = (type) => {
-      if (type === "pickup" && autocompletePickup) {
-        const place = autocompletePickup.getPlace();
-        if (place.geometry && place.formatted_address) {
-          const latitude = place.geometry.location.lat();
-          const longitude = place.geometry.location.lng();
-          let pincode = "";
-          place.address_components.forEach((component) => {
-            if (component.types.includes("postal_code")) {
-              pincode = component.long_name;
-            }
-          });
-          formik.setFieldValue(
-            "locationDetail[0].location",
-            place.formatted_address
-          );
-          formik.setFieldValue("locationDetail[0].latitude", latitude);
-          formik.setFieldValue("locationDetail[0].longitude", longitude);
-          formik.setFieldValue("locationDetail[0].pincode", pincode);
-        } else {
-          console.error("No sufficient details available for input:", place);
-        }
-      } else if (type === "dropoff" && autocompleteDropoff) {
-        const place = autocompleteDropoff.getPlace();
-        if (place.geometry && place.formatted_address) {
-          const latitude = place.geometry.location.lat();
-          const longitude = place.geometry.location.lng();
-          let pincode = "";
-          place.address_components.forEach((component) => {
-            if (component.types.includes("postal_code")) {
-              pincode = component.long_name;
-            }
-          });
-          formik.setFieldValue(
-            "locationDetail[1].location",
-            place.formatted_address
-          );
-          formik.setFieldValue("locationDetail[1].latitude", latitude);
-          formik.setFieldValue("locationDetail[1].longitude", longitude);
-          formik.setFieldValue("locationDetail[1].pincode", pincode);
-        } else {
-          console.error("No sufficient details available for input:", place);
-        }
-      }
-    };
+    // const onPlaceChanged = (type) => {
+    //   if (type === "pickup" && autocompletePickup) {
+    //     const place = autocompletePickup.getPlace();
+    //     if (place.geometry && place.formatted_address) {
+    //       const latitude = place.geometry.location.lat();
+    //       const longitude = place.geometry.location.lng();
+    //       let pincode = "";
+    //       place.address_components.forEach((component) => {
+    //         if (component.types.includes("postal_code")) {
+    //           pincode = component.long_name;
+    //         }
+    //       });
+    //       formik.setFieldValue(
+    //         "locationDetail[0].location",
+    //         place.formatted_address
+    //       );
+    //       formik.setFieldValue("locationDetail[0].latitude", latitude);
+    //       formik.setFieldValue("locationDetail[0].longitude", longitude);
+    //       formik.setFieldValue("locationDetail[0].pincode", pincode);
+    //     } else {
+    //       console.error("No sufficient details available for input:", place);
+    //     }
+    //   } else if (type === "dropoff" && autocompleteDropoff) {
+    //     const place = autocompleteDropoff.getPlace();
+    //     if (place.geometry && place.formatted_address) {
+    //       const latitude = place.geometry.location.lat();
+    //       const longitude = place.geometry.location.lng();
+    //       let pincode = "";
+    //       place.address_components.forEach((component) => {
+    //         if (component.types.includes("postal_code")) {
+    //           pincode = component.long_name;
+    //         }
+    //       });
+    //       formik.setFieldValue(
+    //         "locationDetail[1].location",
+    //         place.formatted_address
+    //       );
+    //       formik.setFieldValue("locationDetail[1].latitude", latitude);
+    //       formik.setFieldValue("locationDetail[1].longitude", longitude);
+    //       formik.setFieldValue("locationDetail[1].pincode", pincode);
+    //     } else {
+    //       console.error("No sufficient details available for input:", place);
+    //     }
+    //   }
+    // };
 
     // const calculateDistance = () => {
     //   return new Promise((resolve, reject) => {
@@ -344,69 +359,44 @@ const OfficeMap = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const fetchCoordinates = async (postalCode,type,index) => {
+    const fetchCoordinates = async (postalCode, type, index) => {
       if (!postalCode) return;
-
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode},SG&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
-
+    
+      const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+      const geoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${API_KEY}`;
+    
       try {
-        const response = await fetch(url);
+        const response = await fetch(geoCodeURL);
         const data = await response.json();
-
-        if (data.status === "OK") {
-          const { lat, lng } = data.results[0].geometry.location;
-          console.log({ lat, lng });
-          if (!lat || !lng) return;
-          const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
-          try {
-            const response = await fetch(url);
-            const data = await response.json();
-            console.log("Details:",postalCode,type,index)
-            if (data.status === "OK") {
-              console.log("locate",data)
-              if (type === "pickup" ) {
-                  formik.setFieldValue(
-                    "locationDetail[0].location",
-                    postalCode
-                  );
-                  formik.setFieldValue(
-                    "locationDetail[0].address",
-                    data.results[0].formatted_address
-                  );
-                  formik.setFieldValue(
-                    "locationDetail[0].latitude",lat
-                  );
-                  formik.setFieldValue(
-                    "locationDetail[0].longitude",lng
-                  );
-                  // formik.setFieldValue("locationDetail[0].pincode", pincode);
-
-              } else if (type === "dropoff" ) {
-                  formik.setFieldValue(
-                    "locationDetail[1].location",
-                    postalCode
-                  );
-                  formik.setFieldValue(
-                    "locationDetail[1].address",
-                    data.results[0].formatted_address
-                  );
-                  formik.setFieldValue(
-                    "locationDetail[1].latitude",lat
-                  );
-                  formik.setFieldValue(
-                    "locationDetail[1].longitude",lng
-                  );
-              } else {
-                console.error("Unable to find the address");
-              }
-            } else {
-              console.log("No address found");
-            }
-          } catch (error) {
-            console.error("Error fetching address:", error);
+        const addressComponents = data?.results[0]?.address_components;
+        const country = addressComponents?.find((comp) => comp.types.includes("country"))?.short_name;
+        if(country && ["SG", "IN"].includes(country)){
+          if (data.status !== "OK") {
+            console.log("Invalid postal code or no results found.");
+            return;
           }
-        } else {
-          console.log("Invalid postal code or no results found.");
+          const { lat, lng } = data.results[0].geometry.location;
+          if (!lat || !lng) return;
+          const reverseGeoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}`;
+          const reverseResponse = await fetch(reverseGeoCodeURL);
+          const reverseData = await reverseResponse.json();
+      
+          if (reverseData.status !== "OK") {
+            console.log("No address found.");
+            return;
+          }
+          // const formattedAddress = reverseData.results[0].formatted_address?.split(" ").slice(0, -1).join(" ");
+          let formattedAddress = reverseData.results[0].formatted_address;
+          formattedAddress = [...new Set(formattedAddress.split(", "))].join(", ")?.split(" ").slice(0, -1).join(" ");
+          const locationDetailIndex = type === "pickup" ? 0 : type === "dropoff" ? 1 : index;
+          formik.setFieldValue(`locationDetail[${locationDetailIndex}].location`, postalCode);
+          formik.setFieldValue(`locationDetail[${locationDetailIndex}].address`, formattedAddress);
+          formik.setFieldValue(`locationDetail[${locationDetailIndex}].latitude`, lat);
+          formik.setFieldValue(`locationDetail[${locationDetailIndex}].longitude`, lng);
+        }else {
+          const locationDetailIndex = type === "pickup" ? 0 : type === "dropoff" ? 1 : index;
+          toast("Enter the valid code",{icon:"⚠️"})
+          formik.setFieldValue(`locationDetail[${locationDetailIndex}].address`, "");
         }
       } catch (error) {
         console.error("Error fetching coordinates:", error);
@@ -494,10 +484,10 @@ const OfficeMap = forwardRef(
                           >
                             <IoLocationSharp />
                           </span>
-                          <input
+                          <input onInput={(e) => (e.target.value = e.target.value.replace(/\D/g, ""))}
                             type="text"
                             name={`locationDetail[${index}].location`}
-                            placeholder="Enter Location"
+                            placeholder="Enter Postal Code"
                             className="form-control"
                             value={
                               formik.values.locationDetail?.[index]?.location ||

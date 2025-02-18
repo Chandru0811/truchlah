@@ -354,12 +354,12 @@ const BookingSummary = forwardRef(
                           >
                             <div className="accordion-body">
                               <div className="row">
-                                {/* <div className="col-6">
-                                  <p>Address Info:</p>
+                                <div className="col-6">
+                                  <p>Postal Code:</p>
                                 </div>
                                 <div className="col-6">
-                                  <p>{firstLocation.address}</p>
-                                </div> */}
+                                  <p>{firstLocation.location}</p>
+                                </div>
                                 <div className="col-6">
                                   <p>Contact Details:</p>
                                 </div>
@@ -493,12 +493,12 @@ const BookingSummary = forwardRef(
                               >
                                 <div className="accordion-body">
                                   <div className="row">
-                                    {/* <div className="col-6">
-                                      <p>Address Info:</p>
+                                    <div className="col-6">
+                                      <p>Postal Code:</p>
                                     </div>
                                     <div className="col-6">
-                                      <p>{stop.address}</p>
-                                    </div> */}
+                                      <p>{stop.Location}</p>
+                                    </div>
                                     <div className="col-6">
                                       <p>Contact Details:</p>
                                     </div>
@@ -550,12 +550,12 @@ const BookingSummary = forwardRef(
                           >
                             <div className="accordion-body">
                               <div className="row">
-                                {/* <div className="col-6">
-                                  <p>Address Info:</p>
+                                <div className="col-6">
+                                  <p>postal Code:</p>
                                 </div>
                                 <div className="col-6">
-                                  <p>{lastLocation.address}</p>
-                                </div> */}
+                                  <p>{lastLocation.location}</p>
+                                </div>
                                 <div className="col-6">
                                   <p>Contact Details:</p>
                                 </div>
