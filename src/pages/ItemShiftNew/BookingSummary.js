@@ -413,7 +413,7 @@ const BookingSummary = forwardRef(
                                     </div>
                                   </>
                                 )}
-                                {firstLocation.typeOfProperty === "Others" && firstLocation.propertyFloor && (
+                                {firstLocation.typeOfProperty !== "Others" && firstLocation.propertyFloor && (
                                   <>
                                     <div className="col-6">
                                       <p>Elevator:</p>
@@ -497,7 +497,7 @@ const BookingSummary = forwardRef(
                                       <p>Postal Code:</p>
                                     </div>
                                     <div className="col-6">
-                                      <p>{stop.Location}</p>
+                                      <p>{stop.location}</p>
                                     </div>
                                     <div className="col-6">
                                       <p>Contact Details:</p>
@@ -551,7 +551,7 @@ const BookingSummary = forwardRef(
                             <div className="accordion-body">
                               <div className="row">
                                 <div className="col-6">
-                                  <p>postal Code:</p>
+                                  <p>Postal Code:</p>
                                 </div>
                                 <div className="col-6">
                                   <p>{lastLocation.location}</p>
@@ -609,7 +609,7 @@ const BookingSummary = forwardRef(
                                     </div>
                                   </>
                                 )}
-                                {lastLocation.typeOfProperty === "Others" && lastLocation.propertyFloor && (
+                                {lastLocation.typeOfProperty !== "Others" && typeof lastLocation.isElevator && (
                                   <>
                                     <div className="col-6">
                                       <p>Elevator:</p>

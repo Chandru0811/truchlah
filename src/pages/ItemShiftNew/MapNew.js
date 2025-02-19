@@ -19,72 +19,83 @@ import Trucklah_moving from "../../asset/Trucklah_Moving.webp";
 
 const libraries = ["places"];
 
-const validationSchema = Yup.object().shape({
-  type: Yup.string().required("Type is required"),
-  // estKm: Yup.number().required("Estimated KM is required"),
-  locationDetail: Yup.array().of(
-    Yup.object().shape({
-      location: Yup.string()
-        .required("*Postal Code is required")
-        .length(6, "*Postal Code must be exactly 6 digits")
-        .test(
-          "unique-location",
-          "*Postal Code could not be same",
-          function (value) {
-            const { locationDetail } = this.options.context;
-            // console.log("object", locationDetail);
-            if (!value) return true;
-            if (locationDetail.length > 2) {
-              const occurrences = locationDetail.splice(1,1).filter(
-                (item) => item.location === value
-              ).length;
-              // console.log("occurrences", occurrences);
-              return occurrences === 1;
-            }
-            const occurrences = locationDetail.filter(
-              (item) => item.location === value
-            ).length;
-            return occurrences === 1;
-          }
-        ),
-      // address: Yup.string().required("*Address is required"),
-      // contactName: Yup.string().required("*Contact name is required"),
-      // countryCode: Yup.string().required("*Country code is required"),
-      // mobile: Yup.string()
-      //   .required("*Mobile number is required")
-      //   .matches(/^\d+$/, "*Mobile number must contain only digits")
-      //   .test("phone-length", function (value) {
-      //     const { countryCode } = this.parent;
-      //     if (countryCode === "65") {
-      //       return value && value.length === 8
-      //         ? true
-      //         : this.createError({
-      //             message: "*Phone number must be 8 digits only",
-      //           });
-      //     }
-      //     if (countryCode === "91") {
-      //       return value && value.length === 10
-      //         ? true
-      //         : this.createError({
-      //             message: "*Phone number must be 10 digits only",
-      //           });
-      //     }
-      //     return true;
-      //   }),
-    })
-  ),
-  // .min(2, "*At least two locations are required"),
-});
-
 const MapNew = forwardRef(
   ({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
     const { isLoaded } = useJsApiLoader({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
       libraries,
     });
-    const [autocompletePickup, setAutocompletePickup] = useState(null);
+    const [codeErrors, setCodeErrors] = useState(false);
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
     const [autocompleteStop, setAutocompleteStop] = useState(null);
+    const validationSchema = Yup.object().shape({
+      type: Yup.string().required("Type is required"),
+      locationDetail: Yup.array().of(
+        Yup.object().shape({
+          location: Yup.string()
+            .required("*Postal Code is required")
+            .length(6, "*Postal Code must be exactly 6 digits")
+            .test(
+              "unique-location",
+              "*Postal Code could not be same",
+              function (value) {
+                const { locationDetail } = this.options.context;
+                // console.log("object", locationDetail);
+                if (!value) return true;
+                if (locationDetail.length > 2) {
+                  const filteredLocationDetail = locationDetail.filter(
+                    (_, i) => i !== 1
+                  );
+                  const occurrences = filteredLocationDetail.filter(
+                    (item) => item.location === value
+                  ).length;
+
+                  // console.log("occurrences", occurrences);
+                  return occurrences === 1;
+                }
+                const occurrences = locationDetail.filter(
+                  (item) => item.location === value
+                ).length;
+                return occurrences === 1;
+              }
+            )
+            .test(
+              "valid-location",
+              "",
+              function (value) {
+                const { locationDetail } = this.options.context;
+                if (!value) return true;
+                return isValidLocation(this.options.index, locationDetail);
+              }
+            ),
+          // address: Yup.string().required("*Enter the valid postal code to fill the adress"),
+          // contactName: Yup.string().required("*Contact name is required"),
+          // countryCode: Yup.string().required("*Country code is required"),
+          // mobile: Yup.string()
+          //   .required("*Mobile number is required")
+          //   .matches(/^\d+$/, "*Mobile number must contain only digits")
+          //   .test("phone-length", function (value) {
+          //     const { countryCode } = this.parent;
+          //     if (countryCode === "65") {
+          //       return value && value.length === 8
+          //         ? true
+          //         : this.createError({
+          //             message: "*Phone number must be 8 digits only",
+          //           });
+          //     }
+          //     if (countryCode === "91") {
+          //       return value && value.length === 10
+          //         ? true
+          //         : this.createError({
+          //             message: "*Phone number must be 10 digits only",
+          //           });
+          //     }
+          //     return true;
+          //   }),
+        })
+      ),
+      // .min(2, "*At least two locations are required"),
+    });
     const userId = localStorage.getItem("userId");
     const shiftingType = localStorage.getItem("shiftType");
     const formik = useFormik({
@@ -391,7 +402,11 @@ const MapNew = forwardRef(
       newDropoffSections.splice(index, 1);
       formik.setFieldValue("locationDetail", newDropoffSections);
     };
-
+    const isValidLocation = (index, locationDetail) => {
+      const currentDetail = locationDetail[index];
+      // console.log("object", currentDetail);
+      return currentDetail?.address !== undefined && currentDetail?.address !== "";
+    };
     const fetchCoordinates = async (postalCode, type, index) => {
       if (!postalCode) return;
 
@@ -412,7 +427,7 @@ const MapNew = forwardRef(
           }
           const { lat, lng } = data.results[0].geometry.location;
           if (!lat || !lng) return;
-          console.log("object", { lat, lng });
+          // console.log("object", { lat, lng });
           const reverseGeoCodeURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}`;
 
           const reverseResponse = await fetch(reverseGeoCodeURL);
@@ -432,12 +447,12 @@ const MapNew = forwardRef(
           const locationDetailIndex =
             type === "pickup" ? 0 : type === "dropoff" ? 1 : index;
           formik.setFieldValue(
-            `locationDetail[${locationDetailIndex}].location`,
-            postalCode
-          );
-          formik.setFieldValue(
             `locationDetail[${locationDetailIndex}].address`,
             formattedAddress
+          );
+          formik.setFieldValue(
+            `locationDetail[${locationDetailIndex}].location`,
+            postalCode
           );
           formik.setFieldValue(
             `locationDetail[${locationDetailIndex}].latitude`,
@@ -450,17 +465,19 @@ const MapNew = forwardRef(
         } else {
           const locationDetailIndex =
             type === "pickup" ? 0 : type === "dropoff" ? 1 : index;
-          toast("Enter the valid code", { icon: "⚠️" });
           formik.setFieldValue(
             `locationDetail[${locationDetailIndex}].address`,
             ""
           );
+          const locationDetail = formik.values.locationDetail;
+          const isValid = isValidLocation(index, locationDetail);
+          setCodeErrors(isValid)
+          // toast("Enter the valid postal code", { icon: "⚠️" });
         }
       } catch (error) {
         console.error("Error fetching coordinates:", error);
       }
     };
-
     useImperativeHandle(ref, () => ({
       map: formik.handleSubmit,
     }));
@@ -580,6 +597,7 @@ const MapNew = forwardRef(
                           }
                           onChange={(e) => {
                             formik.handleChange(e);
+                            setCodeErrors(false)
                             if (e.target.value.length === 6) {
                               fetchCoordinates(
                                 e.target.value,
@@ -601,7 +619,7 @@ const MapNew = forwardRef(
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
                         </small>
-                      ) : null}
+                      ) : codeErrors ?<small className="text-danger">*Enter the valid postal code</small>:null}
                     </div>
 
                     {/* Address Input */}
@@ -641,12 +659,12 @@ const MapNew = forwardRef(
                           }}
                         />
                       </div>
-                      {formik.touched.locationDetail?.[index]?.address &&
+                      {/* {formik.touched.locationDetail?.[index]?.address &&
                       formik.errors.locationDetail?.[index]?.address ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].address}
                         </small>
-                      ) : null}
+                      ) : null} */}
                     </div>
 
                     {/* Contact Name and Mobile */}

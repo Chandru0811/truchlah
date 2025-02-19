@@ -18,9 +18,7 @@ function Order() {
   const [inprogressCount, setInprogressCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
   const [canceledCount, setCanceledCount] = useState(0);
-  const [showItemShift, setShowItemShift] = useState(
-    type === "ITEM" ? true : false
-  );
+  const [showItemShift, setShowItemShift] = useState(true);
   const [showHouseShift, setShowHouseShift] = useState(false);
   const [showOfficeShift, setShowOfficeShift] = useState(false);
   const [data, setData] = useState([]);
@@ -28,7 +26,6 @@ function Order() {
   console.log("Data is ", data);
   const userId = localStorage.getItem("userId");
   const shiftType = localStorage.getItem("shiftType");
-  console.log("Type:", shiftType);
 
   const houseSection = () => {
     // setIsLoaded(true);
@@ -99,6 +96,16 @@ function Order() {
       ? "COMPLETED"
       : "CANCELLED";
 
+    const shiftType = showHouseShift
+      ? "HOUSE"
+      : showOfficeShift
+      ? "OFFICE"
+      : showItemShift === "ITEM"
+      ? "ITEM"
+      : window.location.href.split("/").splice(-1)[0] === "rides"
+      ? "ITEM"
+      : type;
+
     // const fetchData = async () => {
     //   try {
     //     const response = await bookingApi.get(
@@ -116,34 +123,24 @@ function Order() {
     // };
 
     const fetchData = async () => {
-      const shiftType = showHouseShift
-        ? "HOUSE"
-        : showOfficeShift
-        ? "OFFICE"
-        : showItemShift === "ITEM"
-        ? "ITEM"
-        : false;
-      console.log("object", shiftType);
-      if (shiftType) {
-        setIsLoaded(true);
-        try {
-          const response = await bookingApi.get(
-            `fetchBookingDetailsByUser/${userId}?bookingType=${shiftType}`
-          );
-          if (response.status === 200) {
-            const responseData = response.data.responseBody;
-            setData(responseData[status]);
-            // Update badge counts
-            setDraftCount(responseData["DRAFT_BOOKING"]?.length || 0);
-            setInprogressCount(responseData["INPROGRESS"]?.length || 0);
-            setCompletedCount(responseData["COMPLETED"]?.length || 0);
-            setCanceledCount(responseData["CANCELLED"]?.length || 0);
-          }
-        } catch (error) {
-          toast.error(error.message);
-        } finally {
-          setIsLoaded(false);
+      setIsLoaded(true);
+      try {
+        const response = await bookingApi.get(
+          `fetchBookingDetailsByUser/${userId}?bookingType=${shiftType}`
+        );
+        if (response.status === 200) {
+          const responseData = response.data.responseBody;
+          setData(responseData[status]);
+          // Update badge counts
+          setDraftCount(responseData["DRAFT_BOOKING"]?.length || 0);
+          setInprogressCount(responseData["INPROGRESS"]?.length || 0);
+          setCompletedCount(responseData["COMPLETED"]?.length || 0);
+          setCanceledCount(responseData["CANCELLED"]?.length || 0);
         }
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setIsLoaded(false);
       }
     };
 
@@ -155,7 +152,6 @@ function Order() {
     showCanceledSection,
     showHouseShift,
     showItemShift,
-    showOfficeShift,
     userId,
   ]);
 
@@ -185,10 +181,7 @@ function Order() {
       setShowHouseShift(false);
       setShowOfficeShift(true);
     }
-    console.log("showItemShift", showItemShift);
-    console.log("showHouseShift", showHouseShift);
-    console.log("showOfficeShift", showOfficeShift);
-  }, [type, showOfficeShift, showHouseShift, showItemShift]);
+  }, [type]);
 
   return (
     <section className="order">

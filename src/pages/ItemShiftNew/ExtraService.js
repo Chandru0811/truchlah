@@ -52,6 +52,7 @@ const ExtraService = forwardRef(
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, [formData.extraService]);
 
+    console.log("formData",formData)
     const handleService = async () => {
       console.log("object", counts);
       setLoadIndicators(true);
@@ -65,10 +66,10 @@ const ExtraService = forwardRef(
         quantity: formData?.form3.quantity,
         msgToDriver: formData?.form3.messageToDriver,
         noOfPieces: formData?.form3.noOfPieces,
-        helper: formData?.form3.helper === "Y" ? "Y" : "N",
-        extraHelper: formData?.form3.extraHelper === "Y" ? "Y" : "N",
-        trollyRequired: formData?.form3.trollyRequired === "Y" ? "Y" : "N",
-        roundTrip: formData?.form3.roundTrip === "Y" ? "Y" : "N",
+        helper: formData?.form3?.driverAsManpower ? "Y" : "N",
+        extraHelper: formData?.form3?.extraManpower ? "Y" : "N",
+        trollyRequired: formData?.form3?.trollyRequired ? "Y" : "N",
+        roundTrip: formData?.form3?.roundTripRequired ? "Y" : "N",
         actualKm: formData.form1.estKm,
         assemblyDisassemblyCharge: counts[3],
         bubbleWrappingCharge: counts[4],
