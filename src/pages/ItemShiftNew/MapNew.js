@@ -95,7 +95,7 @@ const MapNew = forwardRef(
           //     return isValid;
           //   }
           // ),
-          // address: Yup.string().required("*Enter the valid postal code to fill the adress"),
+          address: Yup.string().required(""),
           // contactName: Yup.string().required("*Contact name is required"),
           // countryCode: Yup.string().required("*Country code is required"),
           // mobile: Yup.string()
@@ -174,13 +174,13 @@ const MapNew = forwardRef(
         }
 
         if (stops.length === 0 && pickupLocation === dropoffLocation) {
-          toast.error("!Pickup and Dropoff must be different", { icon: "⚠️" });
+          toast.error("Pickup and Dropoff must be different", { icon: "⚠️" });
           return;
         }
 
         const uniqueStops = new Set(stopLocations);
         if (uniqueStops.size !== stopLocations.length) {
-          toast.error("!Stop postal code could not be the same", {
+          toast.error("Stop postal code could not be the same", {
             icon: "⚠️",
           });
           return;
@@ -190,7 +190,7 @@ const MapNew = forwardRef(
           stopLocations.includes(pickupLocation) ||
           stopLocations.includes(dropoffLocation)
         ) {
-          toast.error("!Stops cannot match Pickup or Dropoff locations", {
+          toast.error("Stops cannot match Pickup or Dropoff locations", {
             icon: "⚠️",
           });
           return;

@@ -40,7 +40,7 @@ const validationSchema = Yup.object().shape({
                     return occurrences === 1; 
                   }
                 ),
-      // address: Yup.string().required("*Address is required"),
+      address: Yup.string().required(""),
       typeOfProperty: Yup.string().required("*Type of property is required"),
       // sizeOfProperty: Yup.string().when("typeOfProperty", {
       //   is: (val) => ["Shophouse", "Officebuilding"].includes(val),

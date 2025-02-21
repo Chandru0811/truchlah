@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
                   }
                 ),
       typeOfProperty: Yup.string().required("*Type of property is required"),
-      // address: Yup.string().required("*Address is required"),
+      address: Yup.string().required(""),
       // noOfBedrooms: Yup.string().when("typeOfProperty", {
       //   is: (val) => ["Condominium", "HBK", "Landed Property"].includes(val),
       //   then: (schema) => schema.required("*Number of bedrooms is required"),
