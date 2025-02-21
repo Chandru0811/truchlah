@@ -156,14 +156,14 @@ const BookingSummary = forwardRef(
       },
     });
 
-    // useEffect(() => {
-    //   if (formData.form4.paymentType && formData.form4.isAgreed) {
-    //     formik.setFieldValue("paymentType", formData.form4.paymentType);
-    //     formik.setFieldValue("isAgreed", formData.form4.isAgreed);
-    //   }
-    //   console.log("form4", formData);
-    //   window.scrollTo({ top: 0, behavior: "smooth" });
-    // }, []);
+    useEffect(() => {
+      if (formData.form4.paymentType && formData.form4.isAgreed) {
+        formik.setFieldValue("paymentType", formData.form4.paymentType);
+        formik.setFieldValue("isAgreed", formData.form4.isAgreed);
+      }
+      console.log("form4", formData);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
 
     const bookingTripLocations = formData?.form1?.locationDetail || [];
     const firstLocation = bookingTripLocations[0] || {};
@@ -274,7 +274,7 @@ const BookingSummary = forwardRef(
 
     const handleValidateClick = async () => {
       const errors = await formik.validateForm();
-      console.log("object", errors);
+      // console.log("object", errors);
       if (!errors.timeDate) {
         // if (Object.keys(errors.timeDate).length === 0) {
         setShow(false);
@@ -285,11 +285,13 @@ const BookingSummary = forwardRef(
     };
 
     useEffect(() => {
-      if (Array.isArray(formik.errors.timeDate)) {
+      if (Array.isArray(formik.errors.timeDate) || formik.errors.timeDate ) {
         setIsError(true);
+        // setShow(true);
       } else {
         setIsError(false);
       }
+      console.log(formik.errors.timeDate)
     }, [formik.errors.timeDate]);
     return (
       <div className="container my-4">
@@ -605,11 +607,11 @@ const BookingSummary = forwardRef(
                                       <p>Property Floor:</p>
                                     </div>
                                     <div className="col-6">
-                                      <p>{lastLocation.propertyFloor}</p>
+                                      <p>{lastLocation.propertyFloor}</p> 
                                     </div>
                                   </>
                                 )}
-                                {lastLocation.typeOfProperty !== "Others" && typeof lastLocation.isElevator && (
+                                {lastLocation.typeOfProperty !== "Others" && firstLocation.propertyFloor && (
                                   <>
                                     <div className="col-6">
                                       <p>Elevator:</p>

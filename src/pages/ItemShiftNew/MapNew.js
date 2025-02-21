@@ -3,6 +3,7 @@ import React, {
   useState,
   forwardRef,
   useImperativeHandle,
+  useRef,
 } from "react";
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 import Green from "../../asset/Ellipse 2.png";
@@ -25,7 +26,8 @@ const MapNew = forwardRef(
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
       libraries,
     });
-    const [codeErrors, setCodeErrors] = useState(false);
+    // const toastShownRef = useRef(false);
+    const [codeErrors, setCodeErrors] = useState([]);
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
     const [autocompleteStop, setAutocompleteStop] = useState(null);
     const validationSchema = Yup.object().shape({
@@ -35,39 +37,64 @@ const MapNew = forwardRef(
           location: Yup.string()
             .required("*Postal Code is required")
             .length(6, "*Postal Code must be exactly 6 digits")
-            .test(
-              "unique-location",
-              "*Postal Code could not be same",
-              function (value) {
-                const { locationDetail } = this.options.context;
-                // console.log("object", locationDetail);
-                if (!value) return true;
-                if (locationDetail.length > 2) {
-                  const filteredLocationDetail = locationDetail.filter(
-                    (_, i) => i !== 1
-                  );
-                  const occurrences = filteredLocationDetail.filter(
-                    (item) => item.location === value
-                  ).length;
+            .matches(/^\d+$/, "*Postal Code must be exactly 6 digits"),
+          // .test(
+          //   "unique-location",
+          //   "*Postal Code could not be the same",
+          //   function (value) {
+          //     const { locationDetail } = this.options.context;
+          //     if (!value) return true;
 
-                  // console.log("occurrences", occurrences);
-                  return occurrences === 1;
-                }
-                const occurrences = locationDetail.filter(
-                  (item) => item.location === value
-                ).length;
-                return occurrences === 1;
-              }
-            )
-            .test(
-              "valid-location",
-              "",
-              function (value) {
-                const { locationDetail } = this.options.context;
-                if (!value) return true;
-                return isValidLocation(this.options.index, locationDetail);
-              }
-            ),
+          //     if (!locationDetail || locationDetail.length === 0) {
+          //       return true; // No locations to validate
+          //     }
+
+          //     // Extract locations
+          //     const pickup = locationDetail.find((item) => item.type === "pickup");
+          //     const dropoff = locationDetail.find((item) => item.type === "dropoff");
+          //     const stops = locationDetail.filter((item) => item.type === "stop");
+
+          //     const pickupLocation = pickup?.location;
+          //     const dropoffLocation = dropoff?.location;
+          //     const stopLocations = stops.map((stop) => stop.location).filter(Boolean); // Remove any undefined
+          //     // console.log("codeErrors", formik.errors);
+          //     // Ensure pickup and dropoff exist
+          //     if (!pickupLocation || !dropoffLocation) {
+          //       return true;
+          //     }
+
+          //     // Case 1: Pickup and Dropoff must be different
+          //     if (stops.length === 0 && pickupLocation === dropoffLocation) {
+          //       return this.createError({ message: "*Pickup and Dropoff must be different" });
+          //     }
+
+          //     // Case 2: Stops must be unique
+          //     const uniqueStops = new Set(stopLocations);
+          //     if (uniqueStops.size !== stopLocations.length) {
+          //       return this.createError({ message: "*Each Stop must be unique" });
+
+          //     }
+          //     //  console.log("object",uniqueStops)
+          //     // Case 3: Stops should not match pickup or dropoff
+          //     if (stopLocations.includes(pickupLocation) || stopLocations.includes(dropoffLocation)) {
+          //       return this.createError({ message: "*Stops cannot match Pickup or Dropoff locations" });
+          //     }
+
+          //     return true; // Validation passed
+          //   }
+          // ),
+          // .test(
+          //   "valid-location",
+          //   "postal code is invalid",
+          //   function (value) {
+          //     const { locationDetail } = this.options.context;
+          //     if (!value) return true;
+          //     console.log("locationDetail",locationDetail)
+          //     const isValid = isValidLocation(this.options.index, locationDetail);
+          //     console.log("isValid",isValid)
+          //     return isValid;
+          //   }
+          // ),
           // address: Yup.string().required("*Enter the valid postal code to fill the adress"),
           // contactName: Yup.string().required("*Contact name is required"),
           // countryCode: Yup.string().required("*Country code is required"),
@@ -128,17 +155,49 @@ const MapNew = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        const { locationDetail } = values;
+        const pickup = locationDetail.find((item) => item.type === "pickup");
+        const dropoff = locationDetail.find((item) => item.type === "dropoff");
+        const stops = locationDetail.filter((item) => item.type === "stop");
+
+        const pickupLocation = pickup?.location;
+        const dropoffLocation = dropoff?.location;
+        const stopLocations = stops
+          .map((stop) => stop.location)
+          .filter(Boolean);
+
+        if (!pickupLocation || !dropoffLocation) {
+          toast.error("Pickup and Dropoff locations are required!", {
+            icon: "⚠️",
+          });
+          return;
+        }
+
+        if (stops.length === 0 && pickupLocation === dropoffLocation) {
+          toast.error("!Pickup and Dropoff must be different", { icon: "⚠️" });
+          return;
+        }
+
+        const uniqueStops = new Set(stopLocations);
+        if (uniqueStops.size !== stopLocations.length) {
+          toast.error("!Stop postal code could not be the same", {
+            icon: "⚠️",
+          });
+          return;
+        }
+
+        if (
+          stopLocations.includes(pickupLocation) ||
+          stopLocations.includes(dropoffLocation)
+        ) {
+          toast.error("!Stops cannot match Pickup or Dropoff locations", {
+            icon: "⚠️",
+          });
+          return;
+        }
         setLoadIndicators(true);
         console.log("Formik values is ", values);
         try {
-          // const totalEstKm = await calculateDistance();
-          // console.log("Total KM ", totalEstKm);
-
-          // if (totalEstKm < 1 || !totalEstKm) {
-          //   toast.error("Invalid locations or distance too short for a ride.");
-          //   setLoadIndicators(false);
-          //   return;
-          // }
           const reformattedLocationDetail = [
             values.locationDetail[0],
             ...values.locationDetail.slice(2).map((item) => ({
@@ -404,8 +463,10 @@ const MapNew = forwardRef(
     };
     const isValidLocation = (index, locationDetail) => {
       const currentDetail = locationDetail[index];
-      // console.log("object", currentDetail);
-      return currentDetail?.address !== undefined && currentDetail?.address !== "";
+      // console.log("currentDetail", currentDetail);
+      return (
+        currentDetail?.address !== undefined || currentDetail?.address !== ""
+      );
     };
     const fetchCoordinates = async (postalCode, type, index) => {
       if (!postalCode) return;
@@ -471,7 +532,18 @@ const MapNew = forwardRef(
           );
           const locationDetail = formik.values.locationDetail;
           const isValid = isValidLocation(index, locationDetail);
-          setCodeErrors(isValid)
+          setCodeErrors((prv) => {
+            const newErrors = [...prv];
+            const existingIndex = newErrors.findIndex(
+              (item) => item.i === index
+            );
+            if (existingIndex !== -1) {
+              newErrors[existingIndex] = { i: index, valid: isValid };
+            } else {
+              newErrors.push({ i: index, valid: isValid });
+            }
+            return newErrors;
+          });
           // toast("Enter the valid postal code", { icon: "⚠️" });
         }
       } catch (error) {
@@ -489,7 +561,7 @@ const MapNew = forwardRef(
         </div>
       );
     }
-
+    // console.log("codeErrors", codeErrors);
     return (
       <div className="container ">
         <form onSubmit={formik.handleSubmit}>
@@ -584,9 +656,9 @@ const MapNew = forwardRef(
                           <IoLocationSharp />
                         </span>
                         <input
-                          onInput={(e) =>
-                            (e.target.value = e.target.value.replace(/\D/g, ""))
-                          }
+                          // onInput={(e) =>
+                          //   (e.target.value = e.target.value.replace(/\D/g, ""))
+                          // }
                           type="text"
                           name={`locationDetail[${index}].location`}
                           placeholder="Enter Postal Code"
@@ -597,8 +669,26 @@ const MapNew = forwardRef(
                           }
                           onChange={(e) => {
                             formik.handleChange(e);
-                            setCodeErrors(false)
-                            if (e.target.value.length === 6) {
+                            setCodeErrors((prv) => {
+                              const newErrors = [...prv];
+                              const existingIndex = newErrors.findIndex(
+                                (item) => item.i === index
+                              );
+                              if (existingIndex !== -1) {
+                                newErrors[existingIndex] = {
+                                  i: index,
+                                  valid: false,
+                                };
+                              } else {
+                                newErrors.push({ i: index, valid: false });
+                              }
+                              return newErrors;
+                            });
+                            if (
+                              e.target.value.length === 6 &&
+                              !isNaN(e.target.value) &&
+                              !e.target.value.includes(" ")
+                            ) {
                               fetchCoordinates(
                                 e.target.value,
                                 location.type,
@@ -619,7 +709,9 @@ const MapNew = forwardRef(
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
                         </small>
-                      ) : codeErrors ?<small className="text-danger">*Enter the valid postal code</small>:null}
+                      ) : codeErrors.find((error) => error.i === index)?.valid ? (
+                        <small className="text-danger">*Enter the valid postal code</small>
+                      ) : null}
                     </div>
 
                     {/* Address Input */}
@@ -741,6 +833,12 @@ const MapNew = forwardRef(
                               </select>
                             </span>
                             <input
+                              onInput={(e) =>
+                                (e.target.value = e.target.value.replace(
+                                  /\D/g,
+                                  ""
+                                ))
+                              }
                               type="text"
                               name={`locationDetail[${index}].mobile`}
                               value={

@@ -423,7 +423,7 @@ function RideDetailsView() {
                               </p>
                             </>
                           )}
-                          {firstLocation.pickupTypeOfProperty !== "Others" && typeof firstLocation.pickupIsElevator && (
+                          {firstLocation.pickupTypeOfProperty !== "Others" && firstLocation.pickupPropertyFloor && (
                             <>
                               <p>
                                 <span style={{ color: "#1e1e1e" }}>
@@ -536,7 +536,7 @@ function RideDetailsView() {
                             </p>
                           </>
                         )}
-                        {lastLocation.dropoffTypeOfProperty !== "Others" && typeof lastLocation.dropoffIsElevator && (
+                        {lastLocation.dropoffTypeOfProperty !== "Others" && lastLocation.dropoffPropertyFloor && (
                           <>
                             <p>
                               <span style={{ color: "#1e1e1e" }}>

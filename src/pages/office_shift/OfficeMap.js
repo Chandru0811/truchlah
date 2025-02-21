@@ -26,6 +26,7 @@ const validationSchema = Yup.object().shape({
       location: Yup.string()
                 .required("*Postal Code is required")
                 .length(6, "*Postal Code must be exactly 6 digits")
+                .matches(/^\d+$/, "*Postal Code must be exactly 6 digits")
                 .test(
                   "unique-location",
                   "*Postal Code could not be same",
@@ -98,6 +99,7 @@ const OfficeMap = forwardRef(
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
       libraries,
     });
+        const [codeErrors, setCodeErrors] = useState([]);
     const [autocompletePickup, setAutocompletePickup] = useState(null);
     const [autocompleteDropoff, setAutocompleteDropoff] = useState(null);
 
@@ -359,6 +361,14 @@ const OfficeMap = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const isValidLocation = (index, locationDetail) => {
+      const currentDetail = locationDetail[index];
+      // console.log("currentDetail", currentDetail);
+      return (
+        currentDetail?.address !== undefined || currentDetail?.address !== ""
+      );
+    };
+
     const fetchCoordinates = async (postalCode, type, index) => {
       if (!postalCode) return;
     
@@ -394,10 +404,27 @@ const OfficeMap = forwardRef(
           formik.setFieldValue(`locationDetail[${locationDetailIndex}].latitude`, lat);
           formik.setFieldValue(`locationDetail[${locationDetailIndex}].longitude`, lng);
         }else {
-          const locationDetailIndex = type === "pickup" ? 0 : type === "dropoff" ? 1 : index;
-          toast("Enter the valid code",{icon:"⚠️"})
-          formik.setFieldValue(`locationDetail[${locationDetailIndex}].address`, "");
-        }
+          const locationDetailIndex =
+          type === "pickup" ? 0 : type === "dropoff" ? 1 : index;
+        formik.setFieldValue(
+          `locationDetail[${locationDetailIndex}].address`,
+          ""
+        );
+        const locationDetail = formik.values.locationDetail;
+        const isValid = isValidLocation(index, locationDetail);
+        setCodeErrors((prv) => {
+          const newErrors = [...prv];
+          const existingIndex = newErrors.findIndex(
+            (item) => item.i === index
+          );
+          if (existingIndex !== -1) {
+            newErrors[existingIndex] = { i: index, valid: isValid };
+          } else {
+            newErrors.push({ i: index, valid: isValid });
+          }
+          return newErrors;
+        });
+      }
       } catch (error) {
         console.error("Error fetching coordinates:", error);
       }
@@ -484,34 +511,58 @@ const OfficeMap = forwardRef(
                           >
                             <IoLocationSharp />
                           </span>
-                          <input onInput={(e) => (e.target.value = e.target.value.replace(/\D/g, ""))}
-                            type="text"
-                            name={`locationDetail[${index}].location`}
-                            placeholder="Enter Postal Code"
-                            className="form-control"
-                            value={
-                              formik.values.locationDetail?.[index]?.location ||
-                              ""
-                            }
-                            onChange={(e) => {
-                              formik.handleChange(e);
-                              if (e.target.value.length === 6) {
-                                fetchCoordinates(e.target.value,location.type,index);
+                          <input
+                          // onInput={(e) =>
+                          //   (e.target.value = e.target.value.replace(/\D/g, ""))
+                          // }
+                          type="text"
+                          name={`locationDetail[${index}].location`}
+                          placeholder="Enter Postal Code"
+                          className="form-control"
+                          value={
+                            formik.values.locationDetail?.[index]?.location ||
+                            ""
+                          }
+                          onChange={(e) => {
+                            formik.handleChange(e);
+                            setCodeErrors((prv) => {
+                              const newErrors = [...prv];
+                              const existingIndex = newErrors.findIndex(
+                                (item) => item.i === index
+                              );
+                              if (existingIndex !== -1) {
+                                newErrors[existingIndex] = {
+                                  i: index,
+                                  valid: false,
+                                };
+                              } else {
+                                newErrors.push({ i: index, valid: false });
                               }
-                            }}
-                            onBlur={formik.handleBlur}
-                            style={{
-                              borderLeft: "none",
-                              borderRadius: "0 10px 10px 0",
-                            }}
-                          />
+                              return newErrors;
+                            });
+                            if (e.target.value.length === 6 &&!isNaN(e.target.value) && !e.target.value.includes(" ")) {
+                              fetchCoordinates(
+                                e.target.value,
+                                location.type,
+                                index
+                              );
+                            }
+                          }}
+                          onBlur={formik.handleBlur}
+                          style={{
+                            borderLeft: "none",
+                            borderRadius: "0 10px 10px 0",
+                          }}
+                        />
                         </div>
                       {/* </Autocomplete> */}
                       {formik.touched.locationDetail?.[index]?.location &&
-                        formik.errors.locationDetail?.[index]?.location ? (
+                      formik.errors.locationDetail?.[index]?.location ? (
                         <small className="text-danger">
                           {formik.errors.locationDetail[index].location}
                         </small>
+                      ) : codeErrors.find((error) => error.i === index)?.valid ? (
+                        <small className="text-danger">*Enter the valid postal code</small>
                       ) : null}
                     </div>
 
@@ -632,7 +683,7 @@ const OfficeMap = forwardRef(
                                 <option value="91">+91</option>
                               </select>
                             </span>
-                            <input
+                            <input onInput={(e) =>(e.target.value = e.target.value.replace(/\D/g,"" ))}
                               type="text"
                               name={`locationDetail[${index}].mobile`}
                               value={
