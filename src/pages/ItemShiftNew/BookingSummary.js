@@ -803,18 +803,18 @@ const BookingSummary = forwardRef(
                 </div> */}
 
                 <div className="card-body">
-                  <h4 className="mt-3 mb-2 ">
-                    Our scheduled visit for on-site quote
-                  </h4>
+                  <h5 className="mt-3 mb-3 fw-semibol">
+                    Our scheduled visit for On-site quote
+                  </h5>
                   <p className="mb-4">
                     To avoid inaccurate quotes, our team of experts will
                     manually visit and inspect your site / goods. Once
-                    completed, you will be offered t he best and lowest price in
+                    completed, you will be offered the best and lowest price in
                     the market for moving your goods and items in the safest way
                     possible without any damage.
                   </p>
                   <div className="">
-                    <h6 className="mb-1">
+                    <h6 className="mb-3">
                       Preferred Visit Date
                       <span class="text-danger">*</span>
                     </h6>
@@ -962,7 +962,7 @@ const BookingSummary = forwardRef(
                     </div>
                   )}
                   <div className="mb-3 mt-4">
-                    <h6 className="mb-2">
+                    <h6 className="mb-3">
                       Additional Info{" "}
                       <span className="text-muted ms-1">(Optional)</span>
                     </h6>
