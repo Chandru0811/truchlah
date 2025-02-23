@@ -333,10 +333,11 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingOne">
                             <button
-                              className={`accordion-button ${expandedAccordion === "Pickup"
-                                ? ""
-                                : "collapsed"
-                                }`}
+                              className={`accordion-button ${
+                                expandedAccordion === "Pickup"
+                                  ? ""
+                                  : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseOne"
@@ -349,8 +350,9 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseOne"
-                            className={`accordion-collapse collapse ${expandedAccordion === "Pickup" ? "show" : ""
-                              }`}
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Pickup" ? "show" : ""
+                            }`}
                             aria-labelledby="headingOne"
                             data-bs-parent="#accordionExample"
                           >
@@ -367,10 +369,20 @@ const BookingSummary = forwardRef(
                                 </div>
                                 <div className="col-6">
                                   <p>
-                                    {firstLocation.contactName ? `${firstLocation.contactName} |` : ""}
-                                    {firstLocation.countryCode ? `+${firstLocation.countryCode}` : ""}
-                                    {firstLocation.mobile ? ` ${firstLocation.mobile}` : ""}
-                                    {!firstLocation.contactName && !firstLocation.countryCode && !firstLocation.mobile ? "--" : ""}
+                                    {firstLocation.contactName
+                                      ? `${firstLocation.contactName} |`
+                                      : ""}
+                                    {firstLocation.countryCode
+                                      ? `+${firstLocation.countryCode}`
+                                      : ""}
+                                    {firstLocation.mobile
+                                      ? ` ${firstLocation.mobile}`
+                                      : ""}
+                                    {!firstLocation.contactName &&
+                                    !firstLocation.countryCode &&
+                                    !firstLocation.mobile
+                                      ? "--"
+                                      : ""}
                                   </p>
                                 </div>
                                 {firstLocation.typeOfProperty ? (
@@ -385,50 +397,54 @@ const BookingSummary = forwardRef(
                                 ) : (
                                   <></>
                                 )}
-                                {firstLocation.typeOfProperty !== "Others" && firstLocation.noOfBedrooms && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>No of Bedrooms:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>{firstLocation.noOfBedrooms}</p>
-                                    </div>
-                                  </>
-                                )}
-                                {firstLocation.typeOfProperty !== "Others" && firstLocation.sizeOfProperty && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>Size of property:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>{firstLocation.sizeOfProperty}</p>
-                                    </div>
-                                  </>
-                                )}
-                                {firstLocation.typeOfProperty !== "Others" && firstLocation.propertyFloor && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>Property Floor:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>{firstLocation.propertyFloor}</p>
-                                    </div>
-                                  </>
-                                )}
-                                {firstLocation.typeOfProperty !== "Others" && firstLocation.propertyFloor && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>Elevator:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>
-                                        {firstLocation.isElevator
-                                          ? "Yes"
-                                          : "No"}
-                                      </p>
-                                    </div>
-                                  </>
-                                )}
+                                {firstLocation.typeOfProperty !== "Others" &&
+                                  firstLocation.noOfBedrooms && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>No of Bedrooms:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>{firstLocation.noOfBedrooms}</p>
+                                      </div>
+                                    </>
+                                  )}
+                                {firstLocation.typeOfProperty !== "Others" &&
+                                  firstLocation.sizeOfProperty && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>Size of property:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>{firstLocation.sizeOfProperty}</p>
+                                      </div>
+                                    </>
+                                  )}
+                                {firstLocation.typeOfProperty !== "Others" &&
+                                  firstLocation.propertyFloor && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>Property Floor:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>{firstLocation.propertyFloor}</p>
+                                      </div>
+                                    </>
+                                  )}
+                                {firstLocation.typeOfProperty !== "Others" &&
+                                  firstLocation.propertyFloor && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>Elevator:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>
+                                          {firstLocation.isElevator
+                                            ? "Yes"
+                                            : "No"}
+                                        </p>
+                                      </div>
+                                    </>
+                                  )}
                                 {firstLocation.typeOfProperty === "Others" ? (
                                   <>
                                     <div className="col-6">
@@ -466,10 +482,11 @@ const BookingSummary = forwardRef(
                                 id={`heading${index}`}
                               >
                                 <button
-                                  className={`accordion-button ${expandedAccordion === `stop${index}`
-                                    ? ""
-                                    : "collapsed"
-                                    }`}
+                                  className={`accordion-button ${
+                                    expandedAccordion === `stop${index}`
+                                      ? ""
+                                      : "collapsed"
+                                  }`}
                                   type="button"
                                   data-bs-toggle="collapse"
                                   data-bs-target={`#collapse${index}`}
@@ -486,10 +503,11 @@ const BookingSummary = forwardRef(
                               </h2>
                               <div
                                 id={`collapse${index}`}
-                                className={`accordion-collapse collapse ${expandedAccordion === `stop${index}`
-                                  ? "show"
-                                  : ""
-                                  }`}
+                                className={`accordion-collapse collapse ${
+                                  expandedAccordion === `stop${index}`
+                                    ? "show"
+                                    : ""
+                                }`}
                                 aria-labelledby={`heading${index}`}
                                 data-bs-parent={`#accordionExample${index}`}
                               >
@@ -531,8 +549,9 @@ const BookingSummary = forwardRef(
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingTwo">
                             <button
-                              className={`accordion-button ${expandedAccordion === "Drop" ? "" : "collapsed"
-                                }`}
+                              className={`accordion-button ${
+                                expandedAccordion === "Drop" ? "" : "collapsed"
+                              }`}
                               type="button"
                               data-bs-toggle="collapse"
                               data-bs-target="#collapseTwo"
@@ -545,8 +564,9 @@ const BookingSummary = forwardRef(
                           </h2>
                           <div
                             id="collapseTwo"
-                            className={`accordion-collapse collapse ${expandedAccordion === "Drop" ? "show" : ""
-                              }`}
+                            className={`accordion-collapse collapse ${
+                              expandedAccordion === "Drop" ? "show" : ""
+                            }`}
                             aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample1"
                           >
@@ -563,10 +583,20 @@ const BookingSummary = forwardRef(
                                 </div>
                                 <div className="col-6">
                                   <p>
-                                    {lastLocation.contactName ? `${lastLocation.contactName} |` : ""}
-                                    {lastLocation.countryCode ? `+${lastLocation.countryCode}` : ""}
-                                    {lastLocation.mobile ? ` ${lastLocation.mobile}` : ""}
-                                    {!lastLocation.contactName && !lastLocation.countryCode && !lastLocation.mobile ? "--" : ""}
+                                    {lastLocation.contactName
+                                      ? `${lastLocation.contactName} |`
+                                      : ""}
+                                    {lastLocation.countryCode
+                                      ? `+${lastLocation.countryCode}`
+                                      : ""}
+                                    {lastLocation.mobile
+                                      ? ` ${lastLocation.mobile}`
+                                      : ""}
+                                    {!lastLocation.contactName &&
+                                    !lastLocation.countryCode &&
+                                    !lastLocation.mobile
+                                      ? "--"
+                                      : ""}
                                   </p>
                                 </div>
                                 {lastLocation.typeOfProperty ? (
@@ -581,50 +611,54 @@ const BookingSummary = forwardRef(
                                 ) : (
                                   <></>
                                 )}
-                                {lastLocation.typeOfProperty !== "Others" && lastLocation.noOfBedrooms && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>No of Bedrooms:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>{lastLocation.noOfBedrooms}</p>
-                                    </div>
-                                  </>
-                                )}
-                                {lastLocation.typeOfProperty !== "Others" && lastLocation.sizeOfProperty && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>Size of property:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>{lastLocation.sizeOfProperty}</p>
-                                    </div>
-                                  </>
-                                )}
-                                {lastLocation.typeOfProperty !== "Others" && lastLocation.propertyFloor && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>Property Floor:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>{lastLocation.propertyFloor}</p> 
-                                    </div>
-                                  </>
-                                )}
-                                {lastLocation.typeOfProperty !== "Others" && firstLocation.propertyFloor && (
-                                  <>
-                                    <div className="col-6">
-                                      <p>Elevator:</p>
-                                    </div>
-                                    <div className="col-6">
-                                      <p>
-                                        {lastLocation.isElevator
-                                          ? "Yes"
-                                          : "No"}
-                                      </p>
-                                    </div>
-                                  </>
-                                )}
+                                {lastLocation.typeOfProperty !== "Others" &&
+                                  lastLocation.noOfBedrooms && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>No of Bedrooms:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>{lastLocation.noOfBedrooms}</p>
+                                      </div>
+                                    </>
+                                  )}
+                                {lastLocation.typeOfProperty !== "Others" &&
+                                  lastLocation.sizeOfProperty && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>Size of property:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>{lastLocation.sizeOfProperty}</p>
+                                      </div>
+                                    </>
+                                  )}
+                                {lastLocation.typeOfProperty !== "Others" &&
+                                  lastLocation.propertyFloor && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>Property Floor:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>{lastLocation.propertyFloor}</p>
+                                      </div>
+                                    </>
+                                  )}
+                                {lastLocation.typeOfProperty !== "Others" &&
+                                  firstLocation.propertyFloor && (
+                                    <>
+                                      <div className="col-6">
+                                        <p>Elevator:</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>
+                                          {lastLocation.isElevator
+                                            ? "Yes"
+                                            : "No"}
+                                        </p>
+                                      </div>
+                                    </>
+                                  )}
                                 {lastLocation.typeOfProperty === "Others" ? (
                                   <>
                                     <div className="col-6">
@@ -831,8 +865,9 @@ const BookingSummary = forwardRef(
                                 data.sdate
                               ).toLocaleString("default", {
                                 month: "short",
-                              })}${i < formik.values.timeDate.length - 1 ? "," : ""
-                                }`}
+                              })}${
+                                i < formik.values.timeDate.length - 1 ? "," : ""
+                              }`}
                             </span>
                           ))
                         ) : (
@@ -846,11 +881,11 @@ const BookingSummary = forwardRef(
                     {Array.isArray(formik.errors.timeDate)
                       ? null
                       : formik.errors.timeDate &&
-                      formik.touched.timeDate && (
-                        <small className="text-danger">
-                          {formik.errors.timeDate}
-                        </small>
-                      )}
+                        formik.touched.timeDate && (
+                          <small className="text-danger">
+                            {formik.errors.timeDate}
+                          </small>
+                        )}
                   </div>
 
                   {/* <div className="mb-3 mt-4">
@@ -1060,7 +1095,13 @@ const BookingSummary = forwardRef(
                       {...formik.getFieldProps("isAgreed")}
                     />
                     <label className="form-check-label" htmlFor="isAgreed">
-                      I agree to the terms and conditions
+                      I agree to the{" "}
+                      <a
+                        href="https://trucklah.com/termsandconditions"
+                        target="_blank"
+                      >
+                        Terms and Conditions
+                      </a>
                     </label>
                     {formik.errors.isAgreed && formik.touched.isAgreed && (
                       <div>
@@ -1101,7 +1142,7 @@ const BookingSummary = forwardRef(
           centered
           size="lg"
           backdrop={"static"}
-        // style={{ overflow: "hidden" }}
+          // style={{ overflow: "hidden" }}
         >
           <Modal.Header closeButton>
             <Modal.Title>Inspection Date & Time</Modal.Title>
@@ -1139,18 +1180,21 @@ const BookingSummary = forwardRef(
                   {Array.isArray(formik.errors.timeDate)
                     ? null
                     : formik.errors.timeDate &&
-                    formik.touched.timeDate && (
-                      <small className="text-danger">
-                        {formik.errors.timeDate}
-                      </small>
-                    )}
+                      formik.touched.timeDate && (
+                        <small className="text-danger">
+                          {formik.errors.timeDate}
+                        </small>
+                      )}
                 </div>
                 <div className="col-md-6 col-12">
                   <h5 className="mb-4 text-center">
                     You can select multiple preferred dates.
                   </h5>
                   <p>Selected Slots:</p>
-                  <div className="pt-2 custom-scrollbar" style={{ height: "280px", overflow: "auto" }}>
+                  <div
+                    className="pt-2 custom-scrollbar"
+                    style={{ height: "280px", overflow: "auto" }}
+                  >
                     {formik.values.timeDate
                       .slice()
                       .sort((a, b) => new Date(a.sdate) - new Date(b.sdate))

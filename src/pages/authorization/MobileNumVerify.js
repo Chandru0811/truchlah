@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/custom.css";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { GiCancel } from "react-icons/gi";
@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { userApi } from "../../config/URL";
-import img from"../../asset/e-commerce_verification-512.webp"
+import img from "../../asset/e-commerce_verification-512.webp";
 
 const validationSchema = Yup.object().shape({
   countryCode: Yup.string().required("*Country code is required"),
@@ -36,25 +36,26 @@ const MobileNumVerify = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = location.state || {};
-  const id =localStorage.getItem("userId")
-console.log("id",id)
+  const id = localStorage.getItem("userId");
+  console.log("id", id);
   const formik = useFormik({
     initialValues: {
       countryCode: "",
-      mobileNo: "", 
+      mobileNo: "",
     },
     validationSchema,
     onSubmit: async (data, { setSubmitting, resetForm }) => {
       setSubmitting(true);
-      const payload ={
-        newMobileNumber:data.mobileNo,
-        countryCode:data.countryCode
-      }
+      const payload = {
+        newMobileNumber: data.mobileNo,
+        countryCode: data.countryCode,
+      };
       const mobileNo = `${data.countryCode}${data.mobileNo}`;
       try {
-        const userIds =id ? id : userId
+        const userIds = id ? id : userId;
         const otpResponse = await userApi.put(
-          `user/updateMobile/${userIds}`,payload
+          `user/updateMobile/${userIds}`,
+          payload
         );
         if (otpResponse.status === 200) {
           try {
@@ -70,9 +71,9 @@ console.log("id",id)
           }
         }
       } catch (error) {
-        if (error.response.status === 409) {        
+        if (error.response.status === 409) {
           toast.warning(error.response.data.errorList[0].errorMessage);
-        }else if (error.response.status === 400) {
+        } else if (error.response.status === 400) {
           toast.warning(error.response.data.errorList[0].errorMessage);
           console.log("object", error.response.data.errorList[0].errorMessage);
         } else {
@@ -83,6 +84,10 @@ console.log("id",id)
       }
     },
   });
+
+  useEffect(() => {
+    formik.setFieldValue("countryCode", "65");
+  }, []);
 
   return (
     <section className="PaymentUnsuccessful" style={{ background: "#faf5f6" }}>
@@ -95,7 +100,12 @@ console.log("id",id)
                 <div className="card">
                   <center>
                     <div className="d-flex justify-content-center align-items-center mt-5">
-                        <img src={img} className="img-fluid" alt="..." style={{width:"100px"}} />
+                      <img
+                        src={img}
+                        className="img-fluid"
+                        alt="..."
+                        style={{ width: "100px" }}
+                      />
                       {/* <GiCancel className="text-danger my-5" size={70} /> */}
                     </div>
                   </center>
@@ -117,9 +127,10 @@ console.log("id",id)
                           style={{ maxWidth: "80px" }}
                           {...formik.getFieldProps("countryCode")}
                         >
-                          <option value=""></option>
+                          <option value="65" select>
+                            +65
+                          </option>
                           <option value="91">+91</option>
-                          <option value="65">+65</option>
                         </select>
                         <input
                           type="text"
