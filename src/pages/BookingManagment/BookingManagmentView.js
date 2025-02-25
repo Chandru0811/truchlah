@@ -231,10 +231,11 @@ function BookingManagmentView() {
                       <div className="d-flex justify-content-end align-items-center">
                         <div className="w-25 me-3">
                           <select
-                            className={`form-select ${formik.touched.status && formik.errors.status
-                              ? "is-invalid"
-                              : ""
-                              }`}
+                            className={`form-select ${
+                              formik.touched.status && formik.errors.status
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             name="driverId"
                             value={formik.values.driverId}
                             onChange={(e) => {
@@ -253,7 +254,7 @@ function BookingManagmentView() {
                               Select Driver
                             </option>
                             {Array.isArray(driversListData) &&
-                              driversListData.length > 0 ? (
+                            driversListData.length > 0 ? (
                               driversListData.map((driver) => (
                                 <option key={driver.id} value={driver.id}>
                                   {driver.driverName}
@@ -681,33 +682,23 @@ function BookingManagmentView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 {data?.booking?.visitingDate?.length > 0 &&
-                                  data?.booking?.visitingTime?.length > 0 ? (
-                                  <ul className="mb-0" style={{ color: "#494949", paddingLeft: "15px" }}>
-                                    {data?.booking?.visitingDate?.length > 0 &&
-                                      data?.booking?.visitingTime?.length > 0 ? (
-                                      [...data.booking.visitingDate]
-                                        .map((date, index) => ({ date, time: data.booking.visitingTime[index] }))
-                                        .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sorting dates in ascending order
-                                        .map(({ date, time }, index) => {
-                                          const formattedDate = new Date(date).toLocaleDateString("en-US", {
-                                            weekday: "short",
-                                            month: "short",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                          }).replace(",", "");
-
-                                          // Format date as "Thu (Feb 13 2025)"
-                                          const dateParts = formattedDate.split(" ");
-                                          const finalDate = `${dateParts[0]} (${dateParts[1]} ${dateParts[2]} ${dateParts[3]})`;
-
-                                          return (
-                                            <li className="mb-0" key={index}>
-                                              {finalDate} - {time}
-                                            </li>
-                                          );
-                                        })
-                                    ) : (
-                                      <li>N/A</li>
+                                data?.booking?.visitingTime?.length > 0 ? (
+                                  <ul
+                                    className="mb-0"
+                                    style={{
+                                      color: "#494949",
+                                      paddingLeft: "15px",
+                                    }}
+                                  >
+                                    {data.booking.visitingDate.map(
+                                      (date, index) => (
+                                        <li className="mb-0" key={index}>
+                                          {date.replace(/\[|\]/g, "")} -{" "}
+                                          {data.booking.visitingTime[
+                                            index
+                                          ]?.replace(/\[|\]/g, "") || "N/A"}
+                                        </li>
+                                      )
                                     )}
                                   </ul>
                                 ) : (
@@ -725,28 +716,28 @@ function BookingManagmentView() {
                               </p>
                             </div>
                             <div className="col-9 text-muted">
-                              {data?.booking?.fileAttachments?.length > 0 ? (
-                                data.booking.fileAttachments.map((image, index) => (
-                                  <img
-                                    key={index}
-                                    src={image}
-                                    className="me-3 mb-3"
-                                    alt={`Uploaded ${index + 1}`}
-                                    style={{
-                                      width: "200px",
-                                      height: "200px",
-                                      borderRadius: "8px",
-                                      objectFit: "cover",
-                                      border: "1px solid #ddd",
-                                      padding: "5px",
-                                      cursor: "pointer",
-                                    }}
-                                    onClick={() => handleImageClick(image)}
-                                  />
-                                ))
-                              ) : (
-                                "N/A"
-                              )}
+                              {data?.booking?.fileAttachments?.length > 0
+                                ? data.booking.fileAttachments.map(
+                                    (image, index) => (
+                                      <img
+                                        key={index}
+                                        src={image}
+                                        className="me-3 mb-3"
+                                        alt={`Uploaded ${index + 1}`}
+                                        style={{
+                                          width: "200px",
+                                          height: "200px",
+                                          borderRadius: "8px",
+                                          objectFit: "cover",
+                                          border: "1px solid #ddd",
+                                          padding: "5px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => handleImageClick(image)}
+                                      />
+                                    )
+                                  )
+                                : "N/A"}
                             </div>
                           </div>
                         </div>
@@ -775,10 +766,16 @@ function BookingManagmentView() {
                             />
                           </Modal.Body>
                           <Modal.Footer>
-                            <button className="btn btn-sm btn-light" onClick={handleClose}>
+                            <button
+                              className="btn btn-sm btn-light"
+                              onClick={handleClose}
+                            >
                               Close
                             </button>
-                            <button className="btn btn-sm btn-button" onClick={handleDownload}>
+                            <button
+                              className="btn btn-sm btn-button"
+                              onClick={handleDownload}
+                            >
                               {/* <MdOutlineDownloadForOffline /> */}
                               Download
                             </button>
@@ -894,7 +891,7 @@ function BookingManagmentView() {
                                 </div>
                               </div>
                             </div>
-                            {location.pickupNoOfBedrooms ?
+                            {location.pickupNoOfBedrooms ? (
                               <>
                                 <div className="col-md-6 col-12">
                                   <div className="row mb-3">
@@ -911,9 +908,10 @@ function BookingManagmentView() {
                                   </div>
                                 </div>
                               </>
-                              : (<></>
-                              )}
-                            {location.pickupSizeOfProperty ?
+                            ) : (
+                              <></>
+                            )}
+                            {location.pickupSizeOfProperty ? (
                               <>
                                 <div className="col-md-6 col-12">
                                   <div className="row mb-3">
@@ -930,47 +928,53 @@ function BookingManagmentView() {
                                   </div>
                                 </div>
                               </>
-                              : (<></>
-                              )}
-                            {location.pickupTypeOfProperty === "Others" ?
-                              <></> : (
-                                <>
-                                  <div className="col-md-6 col-12">
-                                    <div className="row mb-3">
-                                      <div className="col-6 d-flex justify-content-start align-items-center">
-                                        <p className="text-sm">
-                                          <b>Property Floor</b>
-                                        </p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p className="text-muted text-sm">
-                                          : {location.pickupPropertyFloor || ""}
-                                        </p>
-                                      </div>
+                            ) : (
+                              <></>
+                            )}
+                            {location.pickupTypeOfProperty === "Others" ? (
+                              <></>
+                            ) : (
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Property Floor</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.pickupPropertyFloor || ""}
+                                      </p>
                                     </div>
                                   </div>
-                                </>
-                              )}
-                            {location.pickupTypeOfProperty === "Others" ?
-                              <></> : (
-                                <>
-                                  <div className="col-md-6 col-12">
-                                    <div className="row mb-3">
-                                      <div className="col-6 d-flex justify-content-start align-items-center">
-                                        <p className="text-sm">
-                                          <b>Elevator</b>
-                                        </p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p className="text-muted text-sm">
-                                          : {location.pickupIsElevator ? "Yes" : "No"}
-                                        </p>
-                                      </div>
+                                </div>
+                              </>
+                            )}
+                            {location.pickupTypeOfProperty === "Others" ? (
+                              <></>
+                            ) : (
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Elevator</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        :{" "}
+                                        {location.pickupIsElevator
+                                          ? "Yes"
+                                          : "No"}
+                                      </p>
                                     </div>
                                   </div>
-                                </>
-                              )}
-                            {location.pickupTypeOfProperty === "Others" ?
+                                </div>
+                              </>
+                            )}
+                            {location.pickupTypeOfProperty === "Others" ? (
                               <>
                                 <div className="col-md-6 col-12">
                                   <div className="row mb-3">
@@ -981,14 +985,17 @@ function BookingManagmentView() {
                                     </div>
                                     <div className="col-6">
                                       <p className="text-muted text-sm">
-                                        : {location.pickupPropertyDescription || "--"}
+                                        :{" "}
+                                        {location.pickupPropertyDescription ||
+                                          "--"}
                                       </p>
                                     </div>
                                   </div>
                                 </div>
                               </>
-                              : (<></>
-                              )}
+                            ) : (
+                              <></>
+                            )}
                             <div className="row my-3"></div>
                             <div className="col-md-6 col-12">
                               <div className="row mb-3">
@@ -1061,7 +1068,7 @@ function BookingManagmentView() {
                                 </div>
                               </div>
                             </div>
-                            {location.dropoffNoOfBedrooms ?
+                            {location.dropoffNoOfBedrooms ? (
                               <>
                                 <div className="col-md-6 col-12">
                                   <div className="row mb-3">
@@ -1078,9 +1085,10 @@ function BookingManagmentView() {
                                   </div>
                                 </div>
                               </>
-                              : (<></>
-                              )}
-                            {location.dropoffSizeOfProperty ?
+                            ) : (
+                              <></>
+                            )}
+                            {location.dropoffSizeOfProperty ? (
                               <>
                                 <div className="col-md-6 col-12">
                                   <div className="row mb-3">
@@ -1097,47 +1105,53 @@ function BookingManagmentView() {
                                   </div>
                                 </div>
                               </>
-                              : (<></>
-                              )}
-                            {location.dropoffTypeOfProperty === "Others" ?
-                              <></> : (
-                                <>
-                                  <div className="col-md-6 col-12">
-                                    <div className="row mb-3">
-                                      <div className="col-6 d-flex justify-content-start align-items-center">
-                                        <p className="text-sm">
-                                          <b>Property Floor</b>
-                                        </p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p className="text-muted text-sm">
-                                          : {location.dropoffPropertyFloor || ""}
-                                        </p>
-                                      </div>
+                            ) : (
+                              <></>
+                            )}
+                            {location.dropoffTypeOfProperty === "Others" ? (
+                              <></>
+                            ) : (
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Property Floor</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        : {location.dropoffPropertyFloor || ""}
+                                      </p>
                                     </div>
                                   </div>
-                                </>
-                              )}
-                            {location.dropoffTypeOfProperty === "Others" ?
-                              <></> : (
-                                <>
-                                  <div className="col-md-6 col-12">
-                                    <div className="row mb-3">
-                                      <div className="col-6 d-flex justify-content-start align-items-center">
-                                        <p className="text-sm">
-                                          <b>Elevator</b>
-                                        </p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p className="text-muted text-sm">
-                                          : {location.dropoffIsElevator ? "Yes" : "No"}
-                                        </p>
-                                      </div>
+                                </div>
+                              </>
+                            )}
+                            {location.dropoffTypeOfProperty === "Others" ? (
+                              <></>
+                            ) : (
+                              <>
+                                <div className="col-md-6 col-12">
+                                  <div className="row mb-3">
+                                    <div className="col-6 d-flex justify-content-start align-items-center">
+                                      <p className="text-sm">
+                                        <b>Elevator</b>
+                                      </p>
+                                    </div>
+                                    <div className="col-6">
+                                      <p className="text-muted text-sm">
+                                        :{" "}
+                                        {location.dropoffIsElevator
+                                          ? "Yes"
+                                          : "No"}
+                                      </p>
                                     </div>
                                   </div>
-                                </>
-                              )}
-                            {location.dropoffTypeOfProperty === "Others" ?
+                                </div>
+                              </>
+                            )}
+                            {location.dropoffTypeOfProperty === "Others" ? (
                               <>
                                 <div className="col-md-6 col-12">
                                   <div className="row mb-3">
@@ -1148,14 +1162,17 @@ function BookingManagmentView() {
                                     </div>
                                     <div className="col-6">
                                       <p className="text-muted text-sm">
-                                        : {location.dropoffPropertyDescription || "--"}
+                                        :{" "}
+                                        {location.dropoffPropertyDescription ||
+                                          "--"}
                                       </p>
                                     </div>
                                   </div>
                                 </div>
                               </>
-                              : (<></>
-                              )}
+                            ) : (
+                              <></>
+                            )}
                             <div className="row my-2"></div>
                             <div className="col-md-6 col-12">
                               <div className="row mb-3">
@@ -1264,7 +1281,11 @@ function BookingManagmentView() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data?.transactionDetails?.txnRef.replace(/_/g, " ")}
+                                :{" "}
+                                {data?.transactionDetails?.txnRef.replace(
+                                  /_/g,
+                                  " "
+                                )}
                               </p>
                             </div>
                           </div>
@@ -1542,92 +1563,92 @@ function BookingManagmentView() {
                   )}
                   {data.review.ratingByUser !==
                     "User rating not yet available." && (
-                      <>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header">
-                            <button
-                              class="accordion-button collapsed"
-                              type="button"
-                              data-bs-toggle="collapse"
-                              data-bs-target="#panelsStayOpen-collapseSeven"
-                              aria-expanded="false"
-                              aria-controls="panelsStayOpen-collapseSeven"
-                            >
-                              Review
-                            </button>
-                          </h2>
-                          <div
-                            id="panelsStayOpen-collapseSeven"
-                            class="accordion-collapse collapse"
+                    <>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseSeven"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseSeven"
                           >
-                            <div class="accordion-body row mt-2 p-3">
-                              <div className="col-md-6 col-12">
+                            Review
+                          </button>
+                        </h2>
+                        <div
+                          id="panelsStayOpen-collapseSeven"
+                          class="accordion-collapse collapse"
+                        >
+                          <div class="accordion-body row mt-2 p-3">
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Rating By User</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    : {data?.review?.ratingByUser || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12 position-relative">
+                              {data.review.ratingByDriver !==
+                                "Driver rating not yet available." && (
                                 <div className="row mb-3">
                                   <div className="col-6 d-flex justify-content-start align-items-center">
                                     <p className="text-sm">
-                                      <b>Rating By User</b>
+                                      <b>Rating By Driver</b>
                                     </p>
                                   </div>
                                   <div className="col-6">
                                     <p className="text-muted text-sm">
-                                      : {data?.review?.ratingByUser || ""}
+                                      : {data?.review.ratingByDriver}
                                     </p>
                                   </div>
                                 </div>
+                              )}
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-3">
+                                <div className="col-6 d-flex justify-content-start align-items-center">
+                                  <p className="text-sm">
+                                    <b>Review By User</b>
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{data?.review?.reviewByUser || ""}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="col-md-6 col-12 position-relative">
-                                {data.review.ratingByDriver !==
-                                  "Driver rating not yet available." && (
-                                    <div className="row mb-3">
-                                      <div className="col-6 d-flex justify-content-start align-items-center">
-                                        <p className="text-sm">
-                                          <b>Rating By Driver</b>
-                                        </p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p className="text-muted text-sm">
-                                          : {data?.review.ratingByDriver}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="col-md-6 col-12">
+                            </div>
+                            <div className="col-md-6 col-12">
+                              {data.review.ratingByDriver !==
+                                "Driver rating not yet available." && (
                                 <div className="row mb-3">
                                   <div className="col-6 d-flex justify-content-start align-items-center">
                                     <p className="text-sm">
-                                      <b>Review By User</b>
+                                      <b>Review By Driver</b>
                                     </p>
                                   </div>
                                   <div className="col-6">
                                     <p className="text-muted text-sm">
-                                      :{data?.review?.reviewByUser || ""}
+                                      :{data?.review?.reviewByDriver || ""}
                                     </p>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="col-md-6 col-12">
-                                {data.review.ratingByDriver !==
-                                  "Driver rating not yet available." && (
-                                    <div className="row mb-3">
-                                      <div className="col-6 d-flex justify-content-start align-items-center">
-                                        <p className="text-sm">
-                                          <b>Review By Driver</b>
-                                        </p>
-                                      </div>
-                                      <div className="col-6">
-                                        <p className="text-muted text-sm">
-                                          :{data?.review?.reviewByDriver || ""}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  )}
-                              </div>
+                              )}
                             </div>
                           </div>
                         </div>
-                      </>
-                    )}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

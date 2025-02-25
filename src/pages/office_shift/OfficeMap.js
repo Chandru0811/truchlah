@@ -65,29 +65,29 @@ const validationSchema = Yup.object().shape({
             .nullable(),
         otherwise: (schema) => schema.nullable(),
       }),
-      // contactName: Yup.string().required("*Contact name is required"),
-      // countryCode: Yup.string().required("*Country code is required"),
-      // mobile: Yup.string()
-      //   .required("*Mobile number is required")
-      //   .matches(/^\d+$/, "*Mobile number must contain only digits")
-      //   .test("phone-length", function (value) {
-      //     const { countryCode } = this.parent;
-      //     if (countryCode === "65") {
-      //       return value && value.length === 8
-      //         ? true
-      //         : this.createError({
-      //             message: "*Phone number must be 8 digits only",
-      //           });
-      //     }
-      //     if (countryCode === "91") {
-      //       return value && value.length === 10
-      //         ? true
-      //         : this.createError({
-      //             message: "*Phone number must be 10 digits only",
-      //           });
-      //     }
-      //     return true;
-      //   }),
+      contactName: Yup.string().notRequired().max(30, "*Contact Name cannot exceed 30 characters"),
+      countryCode: Yup.string().notRequired(),
+      mobile: Yup.string()
+        .notRequired()
+        .matches(/^\d+$/, "*Mobile number must contain only digits")
+        .test("phone-length", function (value) {
+          const { countryCode } = this.parent;
+          if (countryCode === "65") {
+            return value && value.length === 8
+              ? true
+              : this.createError({
+                  message: "*Phone number must be 8 digits only",
+                });
+          }
+          if (countryCode === "91") {
+            return value && value.length === 10
+              ? true
+              : this.createError({
+                  message: "*Phone number must be 10 digits only",
+                });
+          }
+          return true;
+        }),
     })
   ),
   // .min(2, "*At least two locations are required"),
@@ -314,52 +314,57 @@ const OfficeMap = forwardRef(
       }
     };
 
-    useEffect(() => {
-      if (formData.type) {
-        formik.setFieldValue("type", formData.type);
-      }
-      if (formData && Object.keys(formData).length > 0) {
-        formik.setValues({
-          ...formik.initialValues,
-          ...formData.form1,
-        });
-      } else {
-        formik.setValues({
-          ...formik.initialValues,
-          locationDetail: [
-            {
-              type: "pickup",
-              location: "",
-              address: "",
-              typeOfProperty: "",
-              sizeOfProperty: "",
-              propertyFloor: "",
-              propertyDescription: "",
-              isElevator: "",
-              contactName: "",
-              countryCode: "",
-              mobile: "",
-            },
-            {
-              type: "dropoff",
-              location: "",
-              address: "",
-              typeOfProperty: "",
-              sizeOfProperty: "",
-              propertyFloor: "",
-              propertyDescription: "",
-              isElevator: "",
-              contactName: "",
-              countryCode: "",
-              mobile: "",
-            },
-          ],
-        });
-      }
-      fetchData();
-      console.log("formik", formik.values);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+   useEffect(() => {
+         setTimeout(() => {
+           if (formData.type) {
+             formik.setFieldValue("type", formData.type);
+           }
+       
+           if (formData && Object.keys(formData).length > 0) {
+             formik.setValues({
+               ...formik.initialValues,
+               ...formData.form1,
+             });
+           } else {
+             formik.setValues({
+               ...formik.initialValues,
+               locationDetail: [
+                 {
+                   type: "pickup",
+                   location: "",
+                   address: "",
+                   contactName: "",
+                   countryCode: "",
+                   mobile: "",
+                 },
+                 {
+                   type: "dropoff",
+                   location: "",
+                   address: "",
+                   contactName: "",
+                   countryCode: "",
+                   mobile: "",
+                 },
+               ],
+             });
+           }
+           fetchData();
+           console.log("FormData", formData);
+         }, 0); // Ensures `formik` is ready before setting values
+       }, [formData]); 
+       
+       useEffect(() => {
+         const updatedLocationDetail = formik.values.locationDetail.map((loc) => {
+           if (loc.mobile.length > 0 && !loc.countryCode) {
+             return { ...loc, countryCode: "65" };
+           } else if (loc.mobile.length === 0 && loc.countryCode !== "") {
+             return { ...loc, countryCode: "" };
+           }
+           return loc;
+         });
+       
+         formik.setFieldValue("locationDetail", updatedLocationDetail);
+       },[formik.values.locationDetail.map((loc) => loc.mobile).join("")]);
 
     const isValidLocation = (index, locationDetail) => {
       const currentDetail = locationDetail[index];
@@ -737,7 +742,7 @@ const OfficeMap = forwardRef(
                                             typeOfProperty: selectedValue,
                                             sizeOfProperty: "",
                                             propertyFloor: "",
-                                            isElevator: null,
+                                            isElevator: false,
                                             propertyDescription: "",
                                           }
                                           : item

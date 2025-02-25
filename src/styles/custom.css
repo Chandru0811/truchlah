@@ -2581,3 +2581,35 @@ abbr[title] {
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
+
+.login-btn-2 {
+  background-color: #acff3b;
+  color: #333;
+  padding: 4px 25px !important;
+  border-radius: 3px;
+  font-weight: 400;
+  font-size: 1.2rem;
+  border: 1px solid #ffffff !important;
+}
+.login-btn-2:hover {
+  background-color: #95f70d;
+  color: #333;
+  border-radius: 3px;
+  border: 1px solid #ffffff !important;
+}
+.login-btn-2:active {
+  background-color: #95f70d !important;
+  color: #333 !important;
+  border: 1px solid #333 !important;
+}
+
+.btn-outline-black {
+  background-color: #ffffff !important;
+  color: #333 !important;
+  border: 1px solid #333 !important;
+}
+.btn-outline-black:hover {
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+  border: 1px solid #dc3545 !important;
+}

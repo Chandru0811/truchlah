@@ -29,6 +29,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function Login({ handleLogin, handleAdminLogin }) {
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   // const [profile, setProfile] = useState(null);
   const togglePasswordVisibility = () => {
@@ -47,6 +48,7 @@ function Login({ handleLogin, handleAdminLogin }) {
     onSubmit: async (data, { resetForm }) => {
       console.log("Form submission data:", data);
       data.appCode = "TRUCK_USER";
+      setLoading(true)
       // if (data.username === "admin@gmail.com" && data.password === "12345678") {
       //   toast.success("Login Successful!");
       //   navigate("/");
@@ -82,6 +84,7 @@ function Login({ handleLogin, handleAdminLogin }) {
           toast.error(response.data.message);
         }
       } catch (error) {
+        setLoading(false)
         if (error.response.status === 409) {
           toast.warning(error.response.data.errorList[0].errorMessage)
           const userId=error.response.data.errorList[0].userId; 
@@ -104,6 +107,8 @@ function Login({ handleLogin, handleAdminLogin }) {
         } else {
           toast.error(error.response.data?.errorList[0]?.errorMessage);
         }
+      }finally {
+        setLoading(false)
       }
       // }
     },
@@ -144,7 +149,7 @@ function Login({ handleLogin, handleAdminLogin }) {
   const handleGoogleLoginSuccess = async (credentialResponse) => {
     const decodedToken = jwtDecode(credentialResponse.credential);
     // console.log("Google Login Response:", decodedToken);
-
+    setLoading(true);
     const payload = {
       firstName: decodedToken.given_name,
       lastName: decodedToken.family_name,
@@ -177,6 +182,7 @@ function Login({ handleLogin, handleAdminLogin }) {
         toast.error(response.data.message);
       }
     } catch (error) {
+      setLoading(false);
       if (error.response.status === 409) {
         toast.warning(error.response.data.errorList[0].errorMessage)
         const userId=error.response.data.errorList[0].userId; 
@@ -202,6 +208,8 @@ function Login({ handleLogin, handleAdminLogin }) {
       } else {
         toast.error(error.response.data?.errorList[0]?.errorMessage);
       }
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -407,10 +415,9 @@ function Login({ handleLogin, handleAdminLogin }) {
                     <div className="text-center">
                       <button
                         type="submit"
-                        className="btn btn-primary py-2 border-0"
-                        style={{ width: "100%",backgroundColor:"#333" }}
-                      >
-                        Login{" "}
+                        className="login-btn-2 w-100"
+                      >{loading && <span className="spinner-border spinner-border-sm me-2"></span>}
+                        Login
                       </button>
                     </div>
                   </form>

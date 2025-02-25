@@ -283,7 +283,7 @@ const BookingSummary = forwardRef(
         // }
       }
     };
-
+    console.log("object",typeof firstLocation.isElevator)
     useEffect(() => {
       if (Array.isArray(formik.errors.timeDate) || formik.errors.timeDate ) {
         setIsError(true);
@@ -645,7 +645,7 @@ const BookingSummary = forwardRef(
                                     </>
                                   )}
                                 {lastLocation.typeOfProperty !== "Others" &&
-                                  firstLocation.propertyFloor && (
+                                 typeof firstLocation.isElevator === "boolean" && (
                                     <>
                                       <div className="col-6">
                                         <p>Elevator:</p>
@@ -838,11 +838,10 @@ const BookingSummary = forwardRef(
 
                 <div className="card-body">
                   <h5 className="mt-3 mb-3 fw-semibol">
-                    Our scheduled visit for On-site quote
+                  Our scheduled visit for On-site Quote / Virtual Inspection
                   </h5>
-                  <p className="mb-4">
-                    To avoid inaccurate quotes, our team of experts will
-                    manually visit and inspect your site / goods. Once
+                  <p className="mb-4">{formData?.form1?.type==="ITEM"?"To avoid inaccurate quotes, our team of experts will either manually visit or do a virtual inspection of your site/goods.":`To avoid inaccurate quotes, our team of experts will
+                    manually visit and inspect your site / goods.`} Once
                     completed, you will be offered the best and lowest price in
                     the market for moving your goods and items in the safest way
                     possible without any damage.

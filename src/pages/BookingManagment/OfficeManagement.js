@@ -106,6 +106,9 @@ const HouseManagement = () => {
                   S.NO
                 </th>
                 <th scope="col" className="text-center">
+                 User Name
+                </th>
+                <th scope="col" className="text-center">
                   Booking ID
                 </th>
                 <th scope="col" className="text-center">
@@ -128,6 +131,7 @@ const HouseManagement = () => {
               {(datas ? datas : []).map((data, index) => (
                 <tr>
                   <td className="text-center">{index + 1}</td>
+                  <td className="text-center">{data.username || ""}</td>
                   <td className="text-center">{data.bookingId || ""}</td>
                   <td className="text-center">
                     {data.bookingTime ? (

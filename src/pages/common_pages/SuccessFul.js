@@ -165,7 +165,7 @@ function Successfull() {
               </>
             )}
             {result === "success" ? (
-              <span className="mt-4 fw-bold">
+              <span className="mt-4">
                 Our team of experts will soon arrive to deliver the On-site Quote
               </span>
             ) : (

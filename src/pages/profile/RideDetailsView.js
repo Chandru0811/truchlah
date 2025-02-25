@@ -1276,7 +1276,7 @@ function RideDetailsView() {
                     </span>
                     <span>
                       <button
-                        className="btn btn-outline-danger px-5"
+                        className="btn btn-outline-black px-5"
                         onClick={handleShow}
                         style={{ borderRadius: "20px" }}
                       >
