@@ -722,8 +722,7 @@ function Register({ handleLogin }) {
                   </div>
                   <button
                     type="submit"
-                    style={{ width: "100%", backgroundColor: "#333" }}
-                    className="btn btn-primary border-0"
+                    className="login-btn-2 w-100 rounded-3"
                   >
                     Submit
                   </button>

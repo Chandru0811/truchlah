@@ -166,7 +166,7 @@ function Successfull() {
             )}
             {result === "success" ? (
               <span className="mt-4">
-                Our team of experts will soon arrive to deliver the On-site Quote
+                Our team of experts will soon provide you with the best price after manual / virtual inspection
               </span>
             ) : (
               <></>

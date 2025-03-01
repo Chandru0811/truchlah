@@ -838,7 +838,7 @@ const BookingSummary = forwardRef(
 
                 <div className="card-body">
                   <h5 className="mt-3 mb-3 fw-semibol">
-                  Our scheduled visit for On-site Quote / Virtual Inspection
+                  Pick a time for On-Site / Virtual Inspection
                   </h5>
                   <p className="mb-4">{formData?.form1?.type==="ITEM"?"To avoid inaccurate quotes, our team of experts will either manually visit or do a virtual inspection of your site/goods.":`To avoid inaccurate quotes, our team of experts will
                     manually visit and inspect your site / goods.`} Once
