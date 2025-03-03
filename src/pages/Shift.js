@@ -3,7 +3,7 @@ import "../styles/custom.css";
 import house from "../asset/house.png";
 import item from "../asset/item.png";
 import truck from "../asset/Trucklah.png";
-import office from "../asset/Office.webp";
+import office from "../asset/officemoving.png";
 import { Link } from "react-router-dom";
 
 function Shift() {
