@@ -38,6 +38,13 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.visitingTimes=values.visitingTimes.sort();
+      // console.log("object",uniqueValues.size, values.visitingTimes.length)
+      const uniqueValues = new Set(values.visitingTimes);
+      if (uniqueValues.size !== values.visitingTimes.length) { // Corrected condition
+        toast.warning("Batch times should not be duplicate");
+        return; // Prevent form submission
+      }
       try {
         const response = await bookingApi.put(
           `/updateVisitingDayWithTime/${id}`,
@@ -98,7 +105,6 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
     setIsModified(false);
     getData();
   };
-
   const addFields = () => {
     setFields([...fields, { id: null, visitingTimes: "" }]);
 
@@ -200,7 +206,7 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
                         </span>
                       </div>
                       <input
-                        type="text"
+                        type="time"
                         className={`form-control ${
                           formik.touched.visitingTimes?.[index] &&
                           formik.errors.visitingTimes?.[index]
@@ -208,12 +214,14 @@ function TimeSlotEdit({ id, day, visitingTimes, onSuccess }) {
                             : ""
                         }`}
                         value={formik.values.visitingTimes[index] || ""}
-                        onChange={(e) =>
-                          formik.setFieldValue(
-                            `visitingTimes[${index}]`,
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => {
+                          const newTime = `${e.target.value}:00`;
+                          // if (formik.values.visitingTimes.includes(newTime)) {
+                          //   toast.warning("This time is already selected!");
+                          // } else {
+                            formik.setFieldValue(`visitingTimes[${index}]`, newTime);
+                          // }
+                        }}
                       />
 
                       {formik.touched.visitingTimes?.[index] &&

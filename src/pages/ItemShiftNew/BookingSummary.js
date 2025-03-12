@@ -60,7 +60,7 @@ const BookingSummary = forwardRef(
             : [...prev, accordionKey] // Add key to expanded list
       );
     };
-    
+
     const [previews, setPreviews] = useState([]);
     const [files, setFiles] = useState([]);
     const fileInputRef = useRef(null);
@@ -203,7 +203,10 @@ const BookingSummary = forwardRef(
       fetchData();
       TimeData(today);
     }, []);
-
+    function timeToMinutes(time) {
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    }
     const handleDateModelChange = async (date, event) => {
       if (typeof date === "string") {
         const dateString = date;
@@ -225,6 +228,7 @@ const BookingSummary = forwardRef(
         // let updatedDates = [...selectedDates];
         let updatedDates = [...formik.values.timeDate];
         let response;
+        let availableSlot = [];
         const yyyy = new Date(date).getFullYear();
         const mm = String(new Date(date).getMonth() + 1).padStart(2, "0");
         const dd = String(new Date(date).getDate()).padStart(2, "0");
@@ -234,15 +238,29 @@ const BookingSummary = forwardRef(
           response = await bookingApi.get(
             `booking/getAvailableVisitingTime?visitingDate=${formattedDate}`
           );
+          availableSlot = response.data.responseBody;
           if (updatedDates.some((d) => d.sdate === dateString)) {
             updatedDates = updatedDates.filter((d) => d.sdate !== dateString);
           } else {
+            const today = new Date().toISOString().split("T")[0];
+            const currentTime = new Date().toTimeString().slice(0, 8);
+            // console.log("object", formattedDate === today);
+            if (formattedDate === today) {
+              const timesAfterFilter = availableSlot.reduce((acc, time) => {
+                if (timeToMinutes(time) > timeToMinutes(currentTime)) {
+                  acc.push(time);
+                } else {
+                }
+                return acc;
+              }, []);
+              availableSlot = timesAfterFilter;
+            } else {
+              availableSlot = availableSlot;
+            }
             updatedDates.push({
               sdate: dateString,
               sTime: "",
-              option: response.data?.responseBody
-                ? response.data.responseBody
-                : [],
+              option: availableSlot ? availableSlot : [],
             });
           }
         } catch (error) {
@@ -263,7 +281,7 @@ const BookingSummary = forwardRef(
       }
     }, [show]);
 
-    useEffect(() => { }, [formik.values.timeDate]);
+    useEffect(() => {}, [formik.values.timeDate]);
 
     const handleDateDelete = (sdate) => {
       const updatedDates = formik.values.timeDate.filter(
@@ -283,15 +301,14 @@ const BookingSummary = forwardRef(
         // }
       }
     };
-    console.log("object",typeof firstLocation.isElevator)
     useEffect(() => {
-      if (Array.isArray(formik.errors.timeDate) || formik.errors.timeDate ) {
+      if (Array.isArray(formik.errors.timeDate) || formik.errors.timeDate) {
         setIsError(true);
         // setShow(true);
       } else {
         setIsError(false);
       }
-      console.log(formik.errors.timeDate)
+      // console.log(formik.errors.timeDate);
     }, [formik.errors.timeDate]);
     return (
       <div className="container my-4">
@@ -645,7 +662,8 @@ const BookingSummary = forwardRef(
                                     </>
                                   )}
                                 {lastLocation.typeOfProperty !== "Others" &&
-                                 typeof firstLocation.isElevator === "boolean" && (
+                                  typeof firstLocation.isElevator ===
+                                    "boolean" && (
                                     <>
                                       <div className="col-6">
                                         <p>Elevator:</p>
@@ -838,13 +856,16 @@ const BookingSummary = forwardRef(
 
                 <div className="card-body">
                   <h5 className="mt-3 mb-3 fw-semibol">
-                  Pick a time for On-Site / Virtual Inspection
+                    Pick a time for On-Site / Virtual Inspection
                   </h5>
-                  <p className="mb-4">{formData?.form1?.type==="ITEM"?"To avoid inaccurate quotes, our team of experts will either manually visit or do a virtual inspection of your site/goods.":`To avoid inaccurate quotes, our team of experts will
-                    manually visit and inspect your site / goods.`} Once
-                    completed, you will be offered the best and lowest price in
-                    the market for moving your goods and items in the safest way
-                    possible without any damage.
+                  <p className="mb-4">
+                    {formData?.form1?.type === "ITEM"
+                      ? "To avoid inaccurate quotes, our team of experts will either manually visit or do a virtual inspection of your site/goods."
+                      : `To avoid inaccurate quotes, our team of experts will
+                    manually visit and inspect your site / goods.`}{" "}
+                    Once completed, you will be offered the best and lowest
+                    price in the market for moving your goods and items in the
+                    safest way possible without any damage.
                   </p>
                   <div className="">
                     <h6 className="mb-3">
@@ -1222,7 +1243,13 @@ const BookingSummary = forwardRef(
                                       <option value="">Select slots</option>
                                       {date?.option.map((t, i) => (
                                         <option key={i} value={t}>
-                                          {t}
+                                          {new Date(
+                                            `1970-01-01T${t}`
+                                          ).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: true,
+                                          })}
                                         </option>
                                       ))}
                                     </>
